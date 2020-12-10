@@ -3,7 +3,6 @@ package command;
 import geometry.Donut;
 
 public class CmdModifyDonut implements Command {
-
 	Donut oldState;
 	Donut newState;
 	Donut original = new Donut();

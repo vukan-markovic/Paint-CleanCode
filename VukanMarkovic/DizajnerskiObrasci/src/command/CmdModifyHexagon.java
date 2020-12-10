@@ -3,7 +3,6 @@ package command;
 import geometry.HexagonAdapter;
 
 public class CmdModifyHexagon implements Command {
-
 	private HexagonAdapter oldState;
 	private HexagonAdapter newState;
 	private HexagonAdapter original = new HexagonAdapter();

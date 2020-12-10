@@ -6,7 +6,6 @@ import geometry.Shape;
 import mvc.DrawingModel;
 
 public class CmdToBack implements Command {
-
 	private DrawingModel model;
 	private Shape s;
 	private int index;

@@ -3,7 +3,6 @@ package command;
 import geometry.Circle;
 
 public class CmdModifyCircle implements Command {
-
 	private Circle oldState;
 	private Circle newState;
 	private Circle original = new Circle();

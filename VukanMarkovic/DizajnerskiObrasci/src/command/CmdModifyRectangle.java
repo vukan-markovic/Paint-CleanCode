@@ -3,7 +3,6 @@ package command;
 import geometry.Rectangle;
 
 public class CmdModifyRectangle implements Command {
-
 	private Rectangle oldState;
 	private Rectangle newState;
 	private Rectangle original = new Rectangle();

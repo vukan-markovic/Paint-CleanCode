@@ -4,7 +4,6 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 public class Observer {
-
 	private boolean btnDeleteEnable;
 	private boolean btnModifyEnable;
 	private boolean btnUndoEnable;
@@ -14,16 +13,16 @@ public class Observer {
 	private boolean btnSendToBackEnable;
 	private boolean btnBringToFrontEnable;
 	private PropertyChangeSupport propertyChangeSupport;
-	
+
 	public Observer() {
 		super();
 		this.propertyChangeSupport = new PropertyChangeSupport(this);
 	}
-	
+
 	public void addPropertyChangeListener(PropertyChangeListener pcl) {
 		propertyChangeSupport.addPropertyChangeListener(pcl);
 	}
-	
+
 	public void removePropertyChangeListener(PropertyChangeListener pcl) {
 		propertyChangeSupport.removePropertyChangeListener(pcl);
 	}
@@ -67,10 +66,4 @@ public class Observer {
 		propertyChangeSupport.firePropertyChange("btnBringToFront", this.btnBringToFrontEnable, btnBringToFrontEnable);
 		this.btnBringToFrontEnable = btnBringToFrontEnable;
 	}
-	
-	
-	
-	
-	
-	
 }

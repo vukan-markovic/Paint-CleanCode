@@ -3,7 +3,6 @@ package command;
 import geometry.Line;
 
 public class CmdModifyLine implements Command {
-
 	private Line oldState;
 	private Line newState;
 	private Line original = new Line();

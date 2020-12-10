@@ -4,7 +4,6 @@ import geometry.Shape;
 import mvc.DrawingModel;
 
 public class CmdRemove implements Command {
-
 	private DrawingModel model;
 	private Shape shape;
 

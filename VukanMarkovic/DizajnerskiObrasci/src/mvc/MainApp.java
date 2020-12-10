@@ -12,7 +12,5 @@ public class MainApp {
 		frame.setController(controller);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
-
 	}
-
 }

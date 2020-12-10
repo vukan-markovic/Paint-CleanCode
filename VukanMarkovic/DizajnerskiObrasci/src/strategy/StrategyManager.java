@@ -1,10 +1,9 @@
 package strategy;
 
 public class StrategyManager {
-
 	private Save strategy;
-	
-	public void save (String filePath) {
+
+	public void save(String filePath) {
 		strategy.saveFile(filePath);
 	}
 
@@ -15,6 +14,4 @@ public class StrategyManager {
 	public void setStrategy(Save strategy) {
 		this.strategy = strategy;
 	}
-	
-	
 }

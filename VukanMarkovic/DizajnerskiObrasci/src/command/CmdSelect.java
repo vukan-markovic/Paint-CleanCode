@@ -4,7 +4,6 @@ import geometry.Shape;
 import mvc.DrawingModel;
 
 public class CmdSelect implements Command {
-
 	Shape shape;
 	DrawingModel model;
 

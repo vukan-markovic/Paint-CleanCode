@@ -4,7 +4,6 @@ import geometry.Shape;
 import mvc.DrawingModel;
 
 public class CmdBringToFront implements Command {
-
 	private DrawingModel model;
 	private Shape shape;
 	private int index;
