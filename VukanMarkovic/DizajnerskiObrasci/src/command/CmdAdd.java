@@ -3,12 +3,10 @@ package command;
 import geometry.Shape;
 import mvc.DrawingModel;
 
-public class CmdAdd implements Command{
-	
+public class CmdAdd implements Command {
+
 	private DrawingModel model;
 	private Shape shape;
-	
-	
 
 	public CmdAdd(DrawingModel model, Shape shape) {
 		super();
@@ -21,23 +19,12 @@ public class CmdAdd implements Command{
 		shape.setSelected(false);
 		System.out.println(shape.isSelected());
 		model.add(shape);
-		
+
 	}
 
 	@Override
 	public void unexecute() {
 		model.remove(shape);
-		
+
 	}
-
-
-	
-	
-
-	
-
-
-
-
-
 }

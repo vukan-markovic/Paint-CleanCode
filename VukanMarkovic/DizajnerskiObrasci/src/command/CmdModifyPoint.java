@@ -2,13 +2,11 @@ package command;
 
 import geometry.Point;
 
-public class CmdModifyPoint implements Command{
-	
+public class CmdModifyPoint implements Command {
+
 	private Point oldState;
 	private Point newState;
 	private Point original = new Point();
-	
-	
 
 	public CmdModifyPoint(Point oldState, Point newState) {
 		super();
@@ -18,13 +16,11 @@ public class CmdModifyPoint implements Command{
 
 	@Override
 	public void execute() {
-		
 		original = oldState.clone();
 		oldState.setX(newState.getX());
 		oldState.setY(newState.getY());
 		oldState.setBorder_Color(newState.getBorder_Color());
 		oldState.setSelected(newState.isSelected());
-		
 	}
 
 	@Override
@@ -33,7 +29,5 @@ public class CmdModifyPoint implements Command{
 		oldState.setY(original.getY());
 		oldState.setBorder_Color(original.getBorder_Color());
 		oldState.setSelected(original.isSelected());
-		
 	}
-
 }

@@ -3,22 +3,19 @@ package command;
 import geometry.Rectangle;
 
 public class CmdModifyRectangle implements Command {
-	
+
 	private Rectangle oldState;
 	private Rectangle newState;
 	private Rectangle original = new Rectangle();
-	
-	
-	public CmdModifyRectangle(Rectangle oldState,Rectangle newState) {
+
+	public CmdModifyRectangle(Rectangle oldState, Rectangle newState) {
 		super();
 		this.oldState = oldState;
 		this.newState = newState;
 	}
-	
-	
+
 	@Override
 	public void execute() {
-		
 		original = oldState.clone();
 		oldState.setUpperLeftPoint(newState.getUpperLeftPoint());
 		oldState.setHeight(newState.getHeight());
@@ -30,7 +27,6 @@ public class CmdModifyRectangle implements Command {
 
 	@Override
 	public void unexecute() {
-		
 		oldState.setUpperLeftPoint(original.getUpperLeftPoint());
 		oldState.setHeight(original.getHeight());
 		oldState.setWidth(original.getWidth());
@@ -38,5 +34,4 @@ public class CmdModifyRectangle implements Command {
 		oldState.setFill_Color(original.getFill_Color());
 		oldState.setSelected(original.isSelected());
 	}
-
 }
