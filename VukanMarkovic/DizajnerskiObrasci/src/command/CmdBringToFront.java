@@ -26,4 +26,8 @@ public class CmdBringToFront implements Command {
 		model.getShapes().remove(shape);
 		model.getShapes().add(index, shape);
 	}
+	
+	public int getIndex() {
+		return index;
+	}
 }

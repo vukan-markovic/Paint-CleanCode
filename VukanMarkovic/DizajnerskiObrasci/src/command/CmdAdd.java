@@ -12,11 +12,10 @@ public class CmdAdd implements Command {
 		this.model = model;
 		this.shape = shape;
 	}
-
+ 
 	@Override
 	public void execute() {
 		shape.setSelected(false);
-		System.out.println(shape.isSelected());
 		model.add(shape);
 	}
 
