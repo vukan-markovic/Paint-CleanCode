@@ -13,14 +13,13 @@ public class Rectangle extends FillShape {
 	}
 
 	public Rectangle(Point upperLeftPoint, int height, int width) {
-		super();
 		this.upperLeftPoint = upperLeftPoint;
 		this.height = height;
 		this.width = width;
 	}
 
 	public Rectangle(Point p, int height, int width, boolean selected, Color b, Color f) {
-		this.upperLeftPoint = p;
+		upperLeftPoint = p;
 		setHeight(height);
 		setWidth(width);
 		setSelected(selected);
@@ -29,8 +28,8 @@ public class Rectangle extends FillShape {
 	}
 
 	public Rectangle clone() {
-		Rectangle cloneRect = new Rectangle(this.getUpperLeftPoint(), this.getHeight(), this.getWidth(),
-				this.isSelected(), this.getBorder_Color(), this.getFill_Color());
+		Rectangle cloneRect = new Rectangle(upperLeftPoint.clone(), height, width,
+				isSelected(), getBorder_Color(), getFill_Color());
 		return cloneRect;
 	}
 
@@ -38,22 +37,22 @@ public class Rectangle extends FillShape {
 	public void draw(Graphics g) {
 		fill_shape(g);
 		g.setColor(getBorder_Color());
-		g.drawRect(this.getUpperLeftPoint().getX(), this.getUpperLeftPoint().getY(), this.getWidth(), this.getHeight());
+		g.drawRect(upperLeftPoint.getX(), upperLeftPoint.getY(), width, height);
 		g.setColor(Color.BLUE);
 
 		if (isSelected()) {
-			g.drawRect(this.getUpperLeftPoint().getX() - 3, this.getUpperLeftPoint().getY() - 3, 6, 6);
-			g.drawRect(this.getUpperLeftPoint().getX() - 3 + getWidth(), this.getUpperLeftPoint().getY() - 3, 6, 6);
-			g.drawRect(this.getUpperLeftPoint().getX() - 3, this.getUpperLeftPoint().getY() - 3 + getHeight(), 6, 6);
-			g.drawRect(this.getUpperLeftPoint().getX() + getWidth() - 3,
-					this.getUpperLeftPoint().getY() + getHeight() - 3, 6, 6);
+			g.drawRect(upperLeftPoint.getX() - 3, upperLeftPoint.getY() - 3, 6, 6);
+			g.drawRect(upperLeftPoint.getX() - 3 + width, upperLeftPoint.getY() - 3, 6, 6);
+			g.drawRect(upperLeftPoint.getX() - 3, upperLeftPoint.getY() - 3 + height, 6, 6);
+			g.drawRect(upperLeftPoint.getX() + width - 3,
+					upperLeftPoint.getY() + height - 3, 6, 6);
 		}
 	}
 
 	@Override
 	public void fill_shape(Graphics g) {
 		g.setColor(getFill_Color());
-		g.fillRect(this.upperLeftPoint.getX(), this.upperLeftPoint.getY(), this.getWidth(), this.getHeight());
+		g.fillRect(upperLeftPoint.getX(), upperLeftPoint.getY(), width, height);
 
 	}
 
@@ -70,15 +69,15 @@ public class Rectangle extends FillShape {
 	}
 
 	public boolean contains(int x, int y) {
-		if (this.getUpperLeftPoint().getX() <= x && x <= this.getUpperLeftPoint().getX() + width
-				&& this.getUpperLeftPoint().getY() <= y && y <= this.getUpperLeftPoint().getY() + height)
+		if (upperLeftPoint.getX() <= x && x <= upperLeftPoint.getX() + width
+				&& upperLeftPoint.getY() <= y && y <= upperLeftPoint.getY() + height)
 			return true;
 		return false;
 	}
 
 	public boolean contains(Point p) {
-		if (this.getUpperLeftPoint().getX() <= p.getX() && p.getX() <= this.getUpperLeftPoint().getX() + width
-				&& this.getUpperLeftPoint().getY() <= p.getY() && p.getY() <= this.getUpperLeftPoint().getY() + height)
+		if (upperLeftPoint.getX() <= p.getX() && p.getX() <= upperLeftPoint.getX() + width
+				&& upperLeftPoint.getY() <= p.getY() && p.getY() <= upperLeftPoint.getY() + height)
 			return true;
 		return false;
 	}
@@ -87,10 +86,8 @@ public class Rectangle extends FillShape {
 		if (obj instanceof Rectangle) {
 			Rectangle r = (Rectangle) obj;
 
-			if (this.upperLeftPoint.equals(r.getUpperLeftPoint()) && this.height == r.getHeight()
-					&& this.width == r.getWidth())
+			if (upperLeftPoint.equals(r.upperLeftPoint) && height == r.height && width == r.width)
 				return true;
-			return false;
 		}
 
 		return false;

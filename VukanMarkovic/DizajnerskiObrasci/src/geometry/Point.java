@@ -12,7 +12,6 @@ public class Point extends Shape {
 	}
 
 	public Point(int x, int y) {
-		super();
 		this.x = x;
 		this.y = y;
 	}
@@ -25,39 +24,38 @@ public class Point extends Shape {
 	}
 
 	public Point clone() {
-		Point clonePoint = new Point(this.getX(), this.getY(), this.isSelected(), this.getBorder_Color());
-		return clonePoint;
+		return new Point(x, y, isSelected(), getBorder_Color());
 	}
 
 	@Override
 	public void draw(Graphics g) {
 		g.setColor(getBorder_Color());
-		g.drawLine(this.x - 2, y, this.x + 2, y);
-		g.drawLine(x, this.y - 2, x, this.y + 2);
+		g.drawLine(x - 2, y, x + 2, y);
+		g.drawLine(x, y - 2, x, y + 2);
 		g.setColor(Color.BLUE);
 
 		if (isSelected())
-			g.drawRect(this.x - 3, this.y - 3, 6, 6);
+			g.drawRect(x - 3, y - 3, 6, 6);
 	}
 
 	@Override
 	public void moveBy(int byX, int byY) {
-		this.x = this.x + byX;
-		this.y += byY;
+		x += byX;
+		y += byY;
 	}
 
 	@Override
 	public int compareTo(Object o) {
 		if (o instanceof Point) {
 			Point start = new Point(0, 0, false, getBorder_Color());
-			return (int) (this.distance(start.getX(), start.getY()) - ((Point) o).distance(start.getX(), start.getY()));
+			return (int) (distance(start.x, start.y) - ((Point) o).distance(start.x, start.y));
 		}
 
 		return 0;
 	}
 
 	public boolean contains(int x, int y) {
-		if (this.distance(x, y) <= 3)
+		if (distance(x, y) <= 3)
 			return true;
 		return false;
 	}
@@ -66,7 +64,7 @@ public class Point extends Shape {
 		if (obj instanceof Point) {
 			Point p = (Point) obj;
 
-			if (this.x == p.getX() && this.y == p.getY())
+			if (x == p.x && y == p.y)
 				return true;
 			return false;
 		}
@@ -75,14 +73,14 @@ public class Point extends Shape {
 	}
 
 	public double distance(int x2, int y2) {
-		double dx = this.x - x2;
-		double dy = this.y - y2;
+		double dx = x - x2;
+		double dy = y - y2;
 		double d = Math.sqrt(dx * dx + dy * dy);
 		return d;
 	}
 
 	public int getX() {
-		return this.x;
+		return x;
 	}
 
 	public void setX(int x) {
@@ -90,7 +88,7 @@ public class Point extends Shape {
 	}
 
 	public int getY() {
-		return this.y;
+		return y;
 	}
 
 	public void setY(int y) {

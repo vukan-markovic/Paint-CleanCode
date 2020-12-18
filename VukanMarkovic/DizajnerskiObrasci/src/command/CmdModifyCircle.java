@@ -5,10 +5,9 @@ import geometry.Circle;
 public class CmdModifyCircle implements Command {
 	private Circle oldState;
 	private Circle newState;
-	private Circle original = new Circle();
+	private Circle original;
 
 	public CmdModifyCircle(Circle oldState, Circle newState) {
-		super();
 		this.oldState = oldState;
 		this.newState = newState;
 	}
@@ -17,13 +16,7 @@ public class CmdModifyCircle implements Command {
 	public void execute() {
 		original = oldState.clone();
 		oldState.setCenter(newState.getCenter());
-
-		try {
-			oldState.setRadius(newState.getRadius());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
+		oldState.setRadius(newState.getRadius());
 		oldState.setBorder_Color(newState.getBorder_Color());
 		oldState.setFill_Color(newState.getFill_Color());
 		oldState.setSelected(newState.isSelected());
@@ -32,13 +25,7 @@ public class CmdModifyCircle implements Command {
 	@Override
 	public void unexecute() {
 		oldState.setCenter(original.getCenter());
-
-		try {
-			oldState.setRadius(original.getRadius());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
+		oldState.setRadius(original.getRadius());
 		oldState.setBorder_Color(original.getBorder_Color());
 		oldState.setFill_Color(original.getFill_Color());
 		oldState.setSelected(original.isSelected());

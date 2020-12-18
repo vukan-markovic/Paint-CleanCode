@@ -8,7 +8,6 @@ public class CmdSelect implements Command {
 	DrawingModel model;
 
 	public CmdSelect(Shape shape, DrawingModel model) {
-		super();
 		this.shape = shape;
 		this.model = model;
 	}
@@ -19,7 +18,6 @@ public class CmdSelect implements Command {
 			if (model.getShapes().get(i).equals(shape)) {
 				model.getShapes().get(i).setSelected(true);
 				model.getSelectedShapes().add(shape);
-				System.out.println(shape.isSelected());
 			}
 		}
 	}

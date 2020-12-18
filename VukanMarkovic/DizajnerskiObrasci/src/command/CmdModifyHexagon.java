@@ -5,10 +5,9 @@ import geometry.HexagonAdapter;
 public class CmdModifyHexagon implements Command {
 	private HexagonAdapter oldState;
 	private HexagonAdapter newState;
-	private HexagonAdapter original = new HexagonAdapter();
+	private HexagonAdapter original;
 
 	public CmdModifyHexagon(HexagonAdapter oldState, HexagonAdapter newState) {
-		super();
 		this.oldState = oldState;
 		this.newState = newState;
 	}

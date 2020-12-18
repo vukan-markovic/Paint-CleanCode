@@ -190,8 +190,17 @@ public class DialogDonut extends JDialog {
 					@Override
 					public void mouseClicked(MouseEvent e) {
 						try {
-							accepted = true;
-							setVisible(false);
+							if (Integer.parseInt(getSmallRadius().getText()) <= 0) {
+								JOptionPane.showMessageDialog(new JFrame(), "Unutrašnji radius mora biti veæi od 0!",
+										"Oops, greska!", JOptionPane.ERROR_MESSAGE);
+							} else if (Integer.parseInt(getSmallRadius().getText()) >= Integer
+									.parseInt(getRadius().getText())) {
+								JOptionPane.showMessageDialog(new JFrame(), "Unutrašnji radius mora biti veæi od spoljašnjeg!",
+										"Oops, greska!", JOptionPane.ERROR_MESSAGE);
+							} else {
+								accepted = true;
+								setVisible(false);
+							}
 						} catch (NumberFormatException a) {
 							JOptionPane.showMessageDialog(new JFrame(), "Niste popunili sva polja, pokusajte ponovo!",
 									"Oops, greska!", JOptionPane.ERROR_MESSAGE);

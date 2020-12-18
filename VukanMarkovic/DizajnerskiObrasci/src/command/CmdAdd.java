@@ -8,7 +8,6 @@ public class CmdAdd implements Command {
 	private Shape shape;
 
 	public CmdAdd(DrawingModel model, Shape shape) {
-		super();
 		this.model = model;
 		this.shape = shape;
 	}

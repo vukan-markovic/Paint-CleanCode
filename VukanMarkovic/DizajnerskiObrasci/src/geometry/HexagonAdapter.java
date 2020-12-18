@@ -27,8 +27,8 @@ public class HexagonAdapter extends FillShape {
 	}
 
 	public HexagonAdapter clone() {
-		HexagonAdapter cloneHex = new HexagonAdapter(this.getX(), this.getY(), this.getR(), this.getBorder_Color(),
-				this.getInnerColor(), this.isSelected());
+		HexagonAdapter cloneHex = new HexagonAdapter(getX(), getY(), getR(), getBorder_Color(), getInnerColor(),
+				isSelected());
 		return cloneHex;
 	}
 
@@ -111,7 +111,6 @@ public class HexagonAdapter extends FillShape {
 
 			if (getR() == (c.getR()) && getX() == c.getX() && getY() == c.getY())
 				return true;
-			return false;
 		}
 
 		return false;

@@ -163,8 +163,13 @@ public class DialogCircle extends JDialog {
 					@Override
 					public void mouseClicked(MouseEvent e) {
 						try {
-							accepted = true;
-							setVisible(false);
+							if (Integer.parseInt(getRadius().getText()) <= 0) {
+								JOptionPane.showMessageDialog(new JFrame(), "Radius mora biti veæi od 0!",
+										"Oops, greska!", JOptionPane.ERROR_MESSAGE);
+							} else {
+								accepted = true;
+								setVisible(false);
+							}
 						} catch (NumberFormatException a) {
 							JOptionPane.showMessageDialog(new JFrame(), "Niste popunili sva polja, pokusajte ponovo!",
 									"Oops, greska!", JOptionPane.ERROR_MESSAGE);

@@ -8,7 +8,6 @@ public class CmdRemove implements Command {
 	private Shape shape;
 
 	public CmdRemove(DrawingModel model, Shape shape) {
-		super();
 		this.model = model;
 		this.shape = shape;
 	}

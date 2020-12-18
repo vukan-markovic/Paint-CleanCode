@@ -7,7 +7,7 @@ import java.io.Serializable;
 public abstract class Shape implements Moveable, Comparable<Object>, Cloneable, Serializable {
 	private static final long serialVersionUID = 1L;
 	private boolean selected;
-	private Color border_Color;
+	private Color border_Color = Color.BLACK;
 	private int id;
 
 	public Shape() {

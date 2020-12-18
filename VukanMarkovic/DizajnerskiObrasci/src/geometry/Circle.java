@@ -12,7 +12,6 @@ public class Circle extends FillShape {
 	}
 
 	public Circle(Point center, int radius) {
-		super();
 		this.center = center;
 		this.radius = radius;
 	}
@@ -26,39 +25,35 @@ public class Circle extends FillShape {
 	}
 
 	public Circle clone() {
-		Circle cloneCircle = new Circle(this.getCenter(), this.getRadius(), this.isSelected(), this.getBorder_Color(),
-				this.getFill_Color());
-		return cloneCircle;
+		return new Circle(center.clone(), radius, isSelected(), getBorder_Color(), getFill_Color());
 	}
 
 	@Override
 	public void draw(Graphics g) {
 		g.setColor(getBorder_Color());
-		g.drawOval(this.getCenter().getX() - this.getRadius(), this.getCenter().getY() - this.getRadius(),
-				this.getRadius() * 2, this.getRadius() * 2);
+		g.drawOval(center.getX() - radius, center.getY() - radius, radius * 2, radius * 2);
 		fill_shape(g);
 		g.setColor(Color.BLUE);
 
 		if (isSelected()) {
-			g.drawRect(this.getCenter().getX() - 3, this.getCenter().getY() - 3, 6, 6);
-			g.drawRect(this.getCenter().getX() + getRadius() - 3, this.getCenter().getY() - 3, 6, 6);
-			g.drawRect(this.getCenter().getX() - getRadius() - 3, this.getCenter().getY() - 3, 6, 6);
-			g.drawRect(this.getCenter().getX() - 3, this.getCenter().getY() + getRadius() - 3, 6, 6);
-			g.drawRect(this.getCenter().getX() - 3, this.getCenter().getY() - getRadius() - 3, 6, 6);
+			g.drawRect(center.getX() - 3, center.getY() - 3, 6, 6);
+			g.drawRect(center.getX() + getRadius() - 3, center.getY() - 3, 6, 6);
+			g.drawRect(center.getX() - getRadius() - 3, center.getY() - 3, 6, 6);
+			g.drawRect(center.getX() - 3, center.getY() + radius - 3, 6, 6);
+			g.drawRect(center.getX() - 3, center.getY() - radius - 3, 6, 6);
 		}
 	}
 
 	@Override
 	public void fill_shape(Graphics g) {
 		g.setColor(getFill_Color());
-		g.fillOval(this.getCenter().getX() - this.getRadius(), this.getCenter().getY() - this.getRadius(),
-				this.getRadius() * 2, this.getRadius() * 2);
+		g.fillOval(center.getX() - radius, center.getY() - radius, radius * 2, radius * 2);
 	}
 
 	@Override
 	public int compareTo(Object o) {
 		if (o instanceof Circle)
-			return (this.radius - ((Circle) o).radius);
+			return (radius - ((Circle) o).radius);
 		return 0;
 	}
 
@@ -68,11 +63,11 @@ public class Circle extends FillShape {
 	}
 
 	public boolean contains(int x, int y) {
-		return this.getCenter().distance(x, y) <= radius;
+		return center.distance(x, y) <= radius;
 	}
 
 	public boolean contains(Point p) {
-		if (p.distance(getCenter().getX(), getCenter().getY()) <= radius)
+		if (p.distance(center.getX(), center.getY()) <= radius)
 			return true;
 		return false;
 	}
@@ -80,10 +75,7 @@ public class Circle extends FillShape {
 	public boolean equals(Object obj) {
 		if (obj instanceof Circle) {
 			Circle c = (Circle) obj;
-
-			if (this.center.equals(c.getCenter()) && this.radius == c.getRadius())
-				return true;
-			return false;
+			return center.equals(c.center) && this.radius == c.radius;
 		}
 
 		return false;
@@ -105,11 +97,8 @@ public class Circle extends FillShape {
 		return radius;
 	}
 
-	public void setRadius(int radius) throws Exception {
-		if (radius > 0)
-			this.radius = radius;
-		else
-			throw new NumberFormatException("Radius has to be a value greater than 0");
+	public void setRadius(int radius) {
+		this.radius = radius;
 	}
 
 	public String toString() {

@@ -8,7 +8,6 @@ public class CmdModifyRectangle implements Command {
 	private Rectangle original = new Rectangle();
 
 	public CmdModifyRectangle(Rectangle oldState, Rectangle newState) {
-		super();
 		this.oldState = oldState;
 		this.newState = newState;
 	}

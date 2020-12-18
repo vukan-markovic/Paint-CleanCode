@@ -7,18 +7,17 @@ import mvc.DrawingModel;
 
 public class CmdToFront implements Command {
 	private DrawingModel model;
-	private Shape s;
+	private Shape shape;
 	private int index;
 
-	public CmdToFront(DrawingModel model, Shape s) {
-		super();
+	public CmdToFront(DrawingModel model, Shape shape) {
 		this.model = model;
-		this.s = s;
+		this.shape = shape;
 	}
 
 	@Override
 	public void execute() {
-		index = model.indexOfShape(s);
+		index = model.indexOfShape(shape);
 		
 		if (index != model.getShapes().size() - 1)
 			Collections.swap(model.getShapes(), index + 1, index);

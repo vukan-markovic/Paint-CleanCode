@@ -36,7 +36,14 @@ public class TestCmdAdd {
 	}
 
 	@Test
+	public void testUnexecuteShapeRemovedFromModelShapesExecuteNotCalled() {
+		cmdAdd.unexecute();
+		assertFalse(model.getShapes().contains(shape));
+	}
+	
+	@Test
 	public void testUnexecuteShapeRemovedFromModelShapes() {
+		cmdAdd.execute();
 		cmdAdd.unexecute();
 		assertFalse(model.getShapes().contains(shape));
 	}

@@ -8,7 +8,6 @@ public class CmdDeselect implements Command {
 	DrawingModel model;
 
 	public CmdDeselect(Shape shape, DrawingModel model) {
-		super();
 		this.shape = shape;
 		this.model = model;
 	}

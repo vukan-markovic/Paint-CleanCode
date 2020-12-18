@@ -8,7 +8,6 @@ public class CmdModifyPoint implements Command {
 	private Point original = new Point();
 
 	public CmdModifyPoint(Point oldState, Point newState) {
-		super();
 		this.oldState = oldState;
 		this.newState = newState;
 	}

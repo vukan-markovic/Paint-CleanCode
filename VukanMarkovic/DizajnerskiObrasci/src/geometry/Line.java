@@ -12,7 +12,6 @@ public class Line extends Shape {
 	}
 
 	public Line(Point startPoint, Point endPoint) {
-		super();
 		this.startPoint = startPoint;
 		this.endPoint = endPoint;
 	}
@@ -25,29 +24,25 @@ public class Line extends Shape {
 	}
 
 	public Line clone() {
-		Line cloneLine = new Line(this.getStartPoint(), this.getEndPoint(), this.isSelected(), this.getBorder_Color());
-		return cloneLine;
+		return new Line(startPoint.clone(), endPoint.clone(), isSelected(), getBorder_Color());
 	}
 
 	@Override
 	public void draw(Graphics g) {
 		g.setColor(getBorder_Color());
-		g.drawLine(this.getStartPoint().getX(), this.getStartPoint().getY(), this.getEndPoint().getX(),
-				this.getEndPoint().getY());
+		g.drawLine(startPoint.getX(), startPoint.getY(), endPoint.getX(), endPoint.getY());
 		g.setColor(Color.BLUE);
 
 		if (isSelected()) {
-			g.drawRect(this.getStartPoint().getX() - 3, this.getStartPoint().getY() - 3, 6, 6);
-			g.drawRect(this.getEndPoint().getX() - 3, this.getEndPoint().getY() - 3, 6, 6);
+			g.drawRect(startPoint.getX() - 3, startPoint.getY() - 3, 6, 6);
+			g.drawRect(endPoint.getX() - 3, endPoint.getY() - 3, 6, 6);
 			g.drawRect(middleOfLine().getX() - 3, middleOfLine().getY() - 3, 6, 6);
 		}
 	}
 
 	public Point middleOfLine() {
-		int middleByX = (this.getStartPoint().getX() + this.getEndPoint().getX()) / 2;
-		int middleByY = (this.getStartPoint().getY() + this.getEndPoint().getY()) / 2;
-		Point p = new Point(middleByX, middleByY, false, getBorder_Color());
-		return p;
+		return new Point((startPoint.getX() + endPoint.getX()) / 2, (startPoint.getY() + endPoint.getY()) / 2, false,
+				getBorder_Color());
 	}
 
 	@Override
@@ -59,7 +54,7 @@ public class Line extends Shape {
 	@Override
 	public int compareTo(Object o) {
 		if (o instanceof Line)
-			return (int) (this.length() - ((Line) o).length());
+			return (int) (length() - ((Line) o).length());
 		return 0;
 	}
 
@@ -73,9 +68,8 @@ public class Line extends Shape {
 		if (obj instanceof Line) {
 			Line l = (Line) obj;
 
-			if (this.startPoint.equals(l.getStartPoint()) && this.endPoint.equals(l.getEndPoint()))
+			if (this.startPoint.equals(l.startPoint) && this.endPoint.equals(l.endPoint))
 				return true;
-			return false;
 		}
 
 		return false;

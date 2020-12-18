@@ -9,7 +9,6 @@ public class CmdBringToFront implements Command {
 	private int index;
 
 	public CmdBringToFront(DrawingModel model, Shape shape) {
-		super();
 		this.model = model;
 		this.shape = shape;
 	}
@@ -25,9 +24,5 @@ public class CmdBringToFront implements Command {
 	public void unexecute() {
 		model.getShapes().remove(shape);
 		model.getShapes().add(index, shape);
-	}
-	
-	public int getIndex() {
-		return index;
 	}
 }

@@ -1,18 +1,19 @@
 package test.testCommand;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotEquals;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import command.CmdBringToFront;
+import command.CmdSendToBack;
+import geometry.Line;
 import geometry.Point;
 import geometry.Shape;
 import mvc.DrawingModel;
 
-public class TestCmdBringToFront {
-	private CmdBringToFront cmdBringToFront;
+public class TestCmdSendToBack {
+	private CmdSendToBack cmdSendToBack;
 	private DrawingModel model;
 	private Shape shape;
 	private int index;
@@ -21,27 +22,28 @@ public class TestCmdBringToFront {
 	public void setUp() {
 		model = new DrawingModel();
 		shape = new Point();
+		model.add(new Line());
 		model.add(shape);
 		index = model.indexOfShape(shape);
-		cmdBringToFront = new CmdBringToFront(model, shape);
+		cmdSendToBack = new CmdSendToBack(model, shape);
 	}
 
 	@Test
 	public void testExecuteShapeAddedToModelShapes() {
-		cmdBringToFront.execute();
-		assertTrue(model.getShapes().contains(shape));
+		cmdSendToBack.execute();
+		assertEquals(0, model.indexOfShape(shape));
 	}
 
 	@Test
 	public void testUnexecuteShapeAddedToModelShapesAtIndexExecuteNotCalled() {
-		cmdBringToFront.unexecute();
-		assertEquals(index, model.indexOfShape(shape));
+		cmdSendToBack.unexecute();
+		assertNotEquals(index, model.indexOfShape(shape));
 	}
 	
 	@Test
 	public void testUnexecuteShapeAddedToModelShapesAtIndex() {
-		cmdBringToFront.execute();
-		cmdBringToFront.unexecute();
+		cmdSendToBack.execute();
+		cmdSendToBack.unexecute();
 		assertEquals(index, model.indexOfShape(shape));
 	}
 }

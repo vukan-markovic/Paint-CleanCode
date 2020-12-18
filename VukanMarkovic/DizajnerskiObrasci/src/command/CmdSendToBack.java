@@ -9,7 +9,6 @@ public class CmdSendToBack implements Command {
 	private int index;
 
 	public CmdSendToBack(DrawingModel model, Shape shape) {
-		super();
 		this.model = model;
 		this.shape = shape;
 	}

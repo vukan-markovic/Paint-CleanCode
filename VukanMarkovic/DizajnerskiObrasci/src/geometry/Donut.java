@@ -20,8 +20,8 @@ public class Donut extends Circle {
 	}
 
 	public Donut clone() {
-		Donut cloneDonut = new Donut(this.getCenter(), this.getRadius(), this.getInnerRadius(), this.isSelected(),
-				this.getBorder_Color(), this.getFill_Color());
+		Donut cloneDonut = new Donut(getCenter(), getRadius(), innerRadius, isSelected(), getBorder_Color(),
+				getFill_Color());
 		return cloneDonut;
 	}
 
@@ -40,11 +40,11 @@ public class Donut extends Circle {
 		 * this.getInnerRadius()*2);
 		 */
 
-		Ellipse2D innerCircle = new Ellipse2D.Double((this.getCenter().getX() - this.getInnerRadius()),
-				(this.getCenter().getY() - this.getInnerRadius()), this.getInnerRadius() * 2, this.innerRadius * 2);
+		Ellipse2D innerCircle = new Ellipse2D.Double((getCenter().getX() - innerRadius),
+				(getCenter().getY() - innerRadius), innerRadius * 2, innerRadius * 2);
 		Area inner = new Area(innerCircle);
 		Ellipse2D outerCircle = new Ellipse2D.Double(getCenter().getX() - getRadius(), getCenter().getY() - getRadius(),
-				this.getRadius() * 2, this.getRadius() * 2);
+				getRadius() * 2, getRadius() * 2);
 		Area donut = new Area(outerCircle);
 		donut.subtract(inner);
 		Graphics2D gr = (Graphics2D) g;
@@ -66,17 +66,17 @@ public class Donut extends Circle {
 
 	public int compareTo(Object o) {
 		if (o instanceof Donut)
-			return (int) (this.area() - ((Donut) o).area());
+			return (int) (area() - ((Donut) o).area());
 		return 0;
 	}
 
 	public boolean contains(int x, int y) {
-		double dFromCenter = this.getCenter().distance(x, y);
+		double dFromCenter = getCenter().distance(x, y);
 		return super.contains(x, y) && dFromCenter > innerRadius;
 	}
 
 	public boolean contains(Point p) {
-		double dFromCenter = this.getCenter().distance(p.getX(), p.getY());
+		double dFromCenter = getCenter().distance(p.getX(), p.getY());
 		return super.contains(p.getX(), p.getY()) && dFromCenter > innerRadius;
 	}
 
@@ -88,10 +88,8 @@ public class Donut extends Circle {
 		if (obj instanceof Donut) {
 			Donut d = (Donut) obj;
 
-			if (this.getCenter().equals(d.getCenter()) && this.getRadius() == d.getRadius()
-					&& this.innerRadius == d.getInnerRadius())
+			if (getCenter().equals(d.getCenter()) && getRadius() == d.getRadius() && innerRadius == d.innerRadius)
 				return true;
-			return false;
 		}
 
 		return false;
@@ -101,13 +99,8 @@ public class Donut extends Circle {
 		return innerRadius;
 	}
 
-	public void setInnerRadius(int innerRadius) throws Exception {
-		if (innerRadius <= 0)
-			throw new NumberFormatException("Inner radius has to be a value greater than 0");
-		else if (innerRadius >= super.getRadius())
-			throw new NumberFormatException("Radius has to be a value greater than inner radius");
-		else
-			this.innerRadius = innerRadius;
+	public void setInnerRadius(int innerRadius) {
+		this.innerRadius = innerRadius;
 	}
 
 	public String toString() {

@@ -6,45 +6,45 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-import command.CmdDeselect;
+import command.CmdSelect;
 import geometry.Point;
 import geometry.Shape;
 import mvc.DrawingModel;
 
-public class TestCmdDeselect {
+public class TestCmdSelect {
 	private Shape shape;
 	private DrawingModel model;
-	private CmdDeselect cmdDeselect;
-	
-	@Before 
+	private CmdSelect cmdSelect;
+
+	@Before
 	public void setUp() {
 		model = new DrawingModel();
 		shape = new Point();
 		model.add(shape);
-		cmdDeselect = new CmdDeselect(shape, model);
+		cmdSelect = new CmdSelect(shape, model);
 	}
 
-	@Test 
+	@Test
 	public void testExecuteShapeUnselected() {
-		cmdDeselect.execute();
-		assertFalse(model.get(model.indexOfShape(shape)).isSelected());
-	}
-	
-	@Test 
-	public void testExecuteShapeRemovedFromSelectedShapes() {
-		cmdDeselect.execute();
-		assertFalse(model.getSelectedShapes().contains(shape));
-	}
-	
-	@Test 
-	public void testUnexecuteShapeSelected() {
-		cmdDeselect.unexecute();
+		cmdSelect.execute();
 		assertTrue(model.get(model.indexOfShape(shape)).isSelected());
 	}
-	
-	@Test 
-	public void testUnexecuteShapeAddedToSelectedShapes() {
-		cmdDeselect.unexecute();
+
+	@Test
+	public void testExecuteShapeRemovedFromSelectedShapes() {
+		cmdSelect.execute();
 		assertTrue(model.getSelectedShapes().contains(shape));
+	}
+
+	@Test
+	public void testUnexecuteShapeSelected() {
+		cmdSelect.unexecute();
+		assertFalse(model.get(model.indexOfShape(shape)).isSelected());
+	}
+
+	@Test
+	public void testUnexecuteShapeAddedToSelectedShapes() {
+		cmdSelect.unexecute();
+		assertFalse(model.getSelectedShapes().contains(shape));
 	}
 }
