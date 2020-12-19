@@ -14,18 +14,18 @@ public class DrawingModel {
 	private PropertyChangeSupport propertyChangeSupport;
 
 	public void selectShape(Shape shape) {
-		for (int i = 0; i < shapes.size(); i++) {
-			if (shapes.get(i).equals(shape)) {
-				shapes.get(i).setSelected(true);
+		for (int index = 0; index < shapes.size(); index++) {
+			if (shapes.get(index).equals(shape)) {
+				shapes.get(index).setSelected(true);
 				selectedShapes.add(shape);
 			}
 		}
 	}
 
 	public void deselectShape(Shape shape) {
-		for (int i = 0; i < shapes.size(); i++) {
-			if (shapes.get(i).equals(shape)) {
-				shapes.get(i).setSelected(false);
+		for (int index = 0; index < shapes.size(); index++) {
+			if (shapes.get(index).equals(shape)) {
+				shapes.get(index).setSelected(false);
 				selectedShapes.remove(shape);
 			}
 		}
@@ -40,12 +40,12 @@ public class DrawingModel {
 		return oneSelectedShape;
 	}
 
-	public int indexOfShape(Shape s) {
+	public int indexOfShape(Shape shape) {
 		int size = shapes.size() - 1;
 
-		for (int i = 0; i <= size; i++) {
-			if (shapes.get(i).equals(s))
-				return i;
+		for (int index = 0; index <= size; index++) {
+			if (shapes.get(index).equals(shape))
+				return index;
 		}
 
 		return -1;
@@ -79,15 +79,15 @@ public class DrawingModel {
 		shapes.remove(shape);
 	}
 
-	public Shape get(int i) {
-		return shapes.get(i);
+	public Shape get(int index) {
+		return shapes.get(index);
 	}
 
-	public void addPropertyChangeListener(PropertyChangeListener pcl) {
-		propertyChangeSupport.addPropertyChangeListener(pcl);
+	public void addPropertyChangeListener(PropertyChangeListener propertyChangeListener) {
+		propertyChangeSupport.addPropertyChangeListener(propertyChangeListener);
 	}
 
-	public void removePropertyChangeListener(PropertyChangeListener pcl) {
-		propertyChangeSupport.removePropertyChangeListener(pcl);
+	public void removePropertyChangeListener(PropertyChangeListener propertyChangeListener) {
+		propertyChangeSupport.removePropertyChangeListener(propertyChangeListener);
 	}
 }

@@ -18,8 +18,8 @@ public class CmdModifyHexagon implements Command {
 		oldState.setX(newState.getX());
 		oldState.setY(newState.getY());
 		oldState.setR(newState.getR());
-		oldState.setBorderColor(newState.getBorder_Color());
-		oldState.setInnerColor(newState.getInnerColor());
+		oldState.setBorderColor(newState.getBorderColor());
+		oldState.setFillColor(newState.getFillColor());
 	}
 
 	@Override
@@ -27,7 +27,7 @@ public class CmdModifyHexagon implements Command {
 		oldState.setX(original.getX());
 		oldState.setY(original.getY());
 		oldState.setR(original.getR());
-		oldState.setBorderColor(original.getBorder_Color());
-		oldState.setInnerColor(original.getInnerColor());
+		oldState.setBorderColor(original.getBorderColor());
+		oldState.setFillColor(original.getFillColor());
 	}
 }

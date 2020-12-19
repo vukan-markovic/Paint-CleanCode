@@ -16,26 +16,25 @@ public class Point extends Shape {
 		this.y = y;
 	}
 
-	public Point(int x, int y, boolean selected, Color b) {
+	public Point(int x, int y, boolean selected, Color color) {
+		super(selected, color);
 		this.x = x;
 		this.y = y;
-		setSelected(selected);
-		setBorder_Color(b);
 	}
 
 	public Point clone() {
-		return new Point(x, y, isSelected(), getBorder_Color());
+		return new Point(x, y, isSelected(), getBorderColor());
 	}
 
 	@Override
-	public void draw(Graphics g) {
-		g.setColor(getBorder_Color());
-		g.drawLine(x - 2, y, x + 2, y);
-		g.drawLine(x, y - 2, x, y + 2);
-		g.setColor(Color.BLUE);
+	public void draw(Graphics graphics) {
+		graphics.setColor(getBorderColor());
+		graphics.drawLine(x - 2, y, x + 2, y);
+		graphics.drawLine(x, y - 2, x, y + 2);
+		graphics.setColor(Color.BLUE);
 
 		if (isSelected())
-			g.drawRect(x - 3, y - 3, 6, 6);
+			graphics.drawRect(x - 3, y - 3, 6, 6);
 	}
 
 	@Override
@@ -45,10 +44,10 @@ public class Point extends Shape {
 	}
 
 	@Override
-	public int compareTo(Object o) {
-		if (o instanceof Point) {
-			Point start = new Point(0, 0, false, getBorder_Color());
-			return (int) (distance(start.x, start.y) - ((Point) o).distance(start.x, start.y));
+	public int compareTo(Object object) {
+		if (object instanceof Point) {
+			Point start = new Point(0, 0, false, getBorderColor());
+			return (int) (distance(start.x, start.y) - ((Point) object).distance(start.x, start.y));
 		}
 
 		return 0;
@@ -60,13 +59,12 @@ public class Point extends Shape {
 		return false;
 	}
 
-	public boolean equals(Object obj) {
-		if (obj instanceof Point) {
-			Point p = (Point) obj;
+	public boolean equals(Object object) {
+		if (object instanceof Point) {
+			Point p = (Point) object;
 
 			if (x == p.x && y == p.y)
 				return true;
-			return false;
 		}
 
 		return false;
@@ -75,8 +73,7 @@ public class Point extends Shape {
 	public double distance(int x2, int y2) {
 		double dx = x - x2;
 		double dy = y - y2;
-		double d = Math.sqrt(dx * dx + dy * dy);
-		return d;
+		return Math.sqrt(dx * dx + dy * dy);
 	}
 
 	public int getX() {
@@ -96,6 +93,6 @@ public class Point extends Shape {
 	}
 
 	public String toString() {
-		return "(x: " + x + " , y: " + y + " , Border color: " + getBorder_Color().getRGB() + " )";
+		return "(x: " + x + " , y: " + y + " , Border color: " + getBorderColor().getRGB() + " )";
 	}
 }

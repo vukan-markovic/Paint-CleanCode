@@ -17,8 +17,8 @@ public class CmdModifyCircle implements Command {
 		original = oldState.clone();
 		oldState.setCenter(newState.getCenter());
 		oldState.setRadius(newState.getRadius());
-		oldState.setBorder_Color(newState.getBorder_Color());
-		oldState.setFill_Color(newState.getFill_Color());
+		oldState.setBorderColor(newState.getBorderColor());
+		oldState.setFillColor(newState.getFillColor());
 		oldState.setSelected(newState.isSelected());
 	}
 
@@ -26,8 +26,8 @@ public class CmdModifyCircle implements Command {
 	public void unexecute() {
 		oldState.setCenter(original.getCenter());
 		oldState.setRadius(original.getRadius());
-		oldState.setBorder_Color(original.getBorder_Color());
-		oldState.setFill_Color(original.getFill_Color());
+		oldState.setBorderColor(original.getBorderColor());
+		oldState.setFillColor(original.getFillColor());
 		oldState.setSelected(original.isSelected());
 	}
 }

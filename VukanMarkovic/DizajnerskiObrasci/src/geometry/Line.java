@@ -16,33 +16,32 @@ public class Line extends Shape {
 		this.endPoint = endPoint;
 	}
 
-	public Line(Point startPoint, Point endPoint, boolean selected, Color b) {
-		this.startPoint = startPoint;
-		this.endPoint = endPoint;
+	public Line(Point startPoint, Point endPoint, boolean selected, Color color) {
+		this(startPoint, endPoint);
 		setSelected(selected);
-		setBorder_Color(b);
+		setBorderColor(color);
 	}
 
 	public Line clone() {
-		return new Line(startPoint.clone(), endPoint.clone(), isSelected(), getBorder_Color());
+		return new Line(startPoint.clone(), endPoint.clone(), isSelected(), getBorderColor());
 	}
 
 	@Override
-	public void draw(Graphics g) {
-		g.setColor(getBorder_Color());
-		g.drawLine(startPoint.getX(), startPoint.getY(), endPoint.getX(), endPoint.getY());
-		g.setColor(Color.BLUE);
+	public void draw(Graphics graphics) {
+		graphics.setColor(getBorderColor());
+		graphics.drawLine(startPoint.getX(), startPoint.getY(), endPoint.getX(), endPoint.getY());
+		graphics.setColor(Color.BLUE);
 
 		if (isSelected()) {
-			g.drawRect(startPoint.getX() - 3, startPoint.getY() - 3, 6, 6);
-			g.drawRect(endPoint.getX() - 3, endPoint.getY() - 3, 6, 6);
-			g.drawRect(middleOfLine().getX() - 3, middleOfLine().getY() - 3, 6, 6);
+			graphics.drawRect(startPoint.getX() - 3, startPoint.getY() - 3, 6, 6);
+			graphics.drawRect(endPoint.getX() - 3, endPoint.getY() - 3, 6, 6);
+			graphics.drawRect(middleOfLine().getX() - 3, middleOfLine().getY() - 3, 6, 6);
 		}
 	}
 
 	public Point middleOfLine() {
 		return new Point((startPoint.getX() + endPoint.getX()) / 2, (startPoint.getY() + endPoint.getY()) / 2, false,
-				getBorder_Color());
+				getBorderColor());
 	}
 
 	@Override
@@ -52,9 +51,9 @@ public class Line extends Shape {
 	}
 
 	@Override
-	public int compareTo(Object o) {
-		if (o instanceof Line)
-			return (int) (length() - ((Line) o).length());
+	public int compareTo(Object object) {
+		if (object instanceof Line)
+			return (int) (length() - ((Line) object).length());
 		return 0;
 	}
 
@@ -64,9 +63,9 @@ public class Line extends Shape {
 		return false;
 	}
 
-	public boolean equals(Object obj) {
-		if (obj instanceof Line) {
-			Line l = (Line) obj;
+	public boolean equals(Object object) {
+		if (object instanceof Line) {
+			Line l = (Line) object;
 
 			if (this.startPoint.equals(l.startPoint) && this.endPoint.equals(l.endPoint))
 				return true;
@@ -97,6 +96,6 @@ public class Line extends Shape {
 
 	public String toString() {
 		return "Start point: " + startPoint + ", " + "End point: " + endPoint + ", Border color: "
-				+ getBorder_Color().getRGB();
+				+ getBorderColor().getRGB();
 	}
 }

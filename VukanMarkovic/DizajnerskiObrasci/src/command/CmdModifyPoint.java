@@ -17,7 +17,7 @@ public class CmdModifyPoint implements Command {
 		original = oldState.clone();
 		oldState.setX(newState.getX());
 		oldState.setY(newState.getY());
-		oldState.setBorder_Color(newState.getBorder_Color());
+		oldState.setBorderColor(newState.getBorderColor());
 		oldState.setSelected(newState.isSelected());
 	}
 
@@ -25,7 +25,7 @@ public class CmdModifyPoint implements Command {
 	public void unexecute() {
 		oldState.setX(original.getX());
 		oldState.setY(original.getY());
-		oldState.setBorder_Color(original.getBorder_Color());
+		oldState.setBorderColor(original.getBorderColor());
 		oldState.setSelected(original.isSelected());
 	}
 }

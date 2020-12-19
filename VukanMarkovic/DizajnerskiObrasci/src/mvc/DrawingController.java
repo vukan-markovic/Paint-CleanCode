@@ -45,6 +45,7 @@ import geometry.Line;
 import geometry.Point;
 import geometry.Rectangle;
 import geometry.Shape;
+import hexagon.Hexagon;
 import observer.Observer;
 import observer.PropertyManager;
 import strategy.SaveLog;
@@ -258,8 +259,8 @@ public class DrawingController {
 
 				if (dialogH.isAccepted()) {
 					int radius = Integer.parseInt(dialogH.getRadius().getText());
-					HexagonAdapter hexagon = new HexagonAdapter(center.getX(), center.getY(), radius, colOuter,
-							colInner);
+					HexagonAdapter hexagon = new HexagonAdapter(new Hexagon(center.getX(), center.getY(), radius),
+							colOuter, colInner);
 					CmdAdd addHexagonComm = new CmdAdd(model, hexagon);
 					addHexagonComm.execute();
 					commandsReverse = new Stack<Command>();
@@ -287,7 +288,7 @@ public class DrawingController {
 			DialogPoint dialogP = new DialogPoint();
 			dialogP.getxCoord().setText(String.valueOf(((Point) selected).getX()));
 			dialogP.getyCoord().setText(String.valueOf(((Point) selected).getY()));
-			dialogP.setOuterColor(((Point) selected).getBorder_Color());
+			dialogP.setOuterColor(((Point) selected).getBorderColor());
 			dialogP.getBtnSetOuterColor().setBackground(dialogP.getOuterColor());
 			dialogP.setVisible(true);
 
@@ -311,7 +312,7 @@ public class DrawingController {
 			dialogL.getY1Coord().setText(String.valueOf(((Line) selected).getStartPoint().getY()));
 			dialogL.getX2Coord().setText(String.valueOf(((Line) selected).getEndPoint().getX()));
 			dialogL.getY2Coord().setText(String.valueOf(((Line) selected).getEndPoint().getY()));
-			dialogL.setOuterColor(((Line) selected).getBorder_Color());
+			dialogL.setOuterColor(((Line) selected).getBorderColor());
 			dialogL.getBtnSetOuterColor().setBackground(dialogL.getOuterColor());
 			dialogL.setVisible(true);
 
@@ -341,8 +342,8 @@ public class DrawingController {
 				dialogR.getyCoord().setText(String.valueOf(((Rectangle) selected).getUpperLeftPoint().getY()));
 				dialogR.getheight().setText(String.valueOf(((Rectangle) selected).getHeight()));
 				dialogR.getwidth().setText(String.valueOf(((Rectangle) selected).getWidth()));
-				dialogR.setOuterColor(((Rectangle) selected).getBorder_Color());
-				dialogR.setInnerColor(((Rectangle) selected).getFill_Color());
+				dialogR.setOuterColor(((Rectangle) selected).getBorderColor());
+				dialogR.setInnerColor(((Rectangle) selected).getFillColor());
 				dialogR.getBtnSetBorderColor().setBackground(dialogR.getOuterColor());
 				dialogR.getBtnSetFillColor().setBackground(dialogR.getInnerColor());
 				dialogR.setVisible(true);
@@ -376,8 +377,8 @@ public class DrawingController {
 				dialogD.getyCoord().setText(String.valueOf(((Donut) selected).getCenter().getY()));
 				dialogD.getRadius().setText(String.valueOf(((Donut) selected).getRadius()));
 				dialogD.getSmallRadius().setText(String.valueOf(((Donut) selected).getInnerRadius()));
-				dialogD.setOuterColor(((Donut) selected).getBorder_Color());
-				dialogD.setInnerColor(((Donut) selected).getFill_Color());
+				dialogD.setOuterColor(((Donut) selected).getBorderColor());
+				dialogD.setInnerColor(((Donut) selected).getFillColor());
 				dialogD.getBtnSetOuterColor().setBackground(dialogD.getOuterColor());
 				dialogD.getBtnSetInnerColor().setBackground(dialogD.getInnerColor());
 				dialogD.setVisible(true);
@@ -411,8 +412,8 @@ public class DrawingController {
 				dialogC.getxCoord().setText(String.valueOf(((Circle) selected).getCenter().getX()));
 				dialogC.getyCoord().setText(String.valueOf(((Circle) selected).getCenter().getY()));
 				dialogC.getRadius().setText(String.valueOf(((Circle) selected).getRadius()));
-				dialogC.setOuterColor(((Circle) selected).getBorder_Color());
-				dialogC.setInnerColor(((Circle) selected).getFill_Color());
+				dialogC.setOuterColor(((Circle) selected).getBorderColor());
+				dialogC.setInnerColor(((Circle) selected).getFillColor());
 				dialogC.getBtnSetOuterColor().setBackground(dialogC.getOuterColor());
 				dialogC.getBtnSetInnerColor().setBackground(dialogC.getInnerColor());
 				dialogC.setVisible(true);
@@ -445,8 +446,8 @@ public class DrawingController {
 				dialogH.getxCoord().setText(String.valueOf(((HexagonAdapter) selected).getX()));
 				dialogH.getyCoord().setText(String.valueOf(((HexagonAdapter) selected).getY()));
 				dialogH.getRadius().setText(String.valueOf(((HexagonAdapter) selected).getR()));
-				dialogH.setOuterColor(((HexagonAdapter) selected).getBorder_Color());
-				dialogH.setInnerColor(((HexagonAdapter) selected).getInnerColor());
+				dialogH.setOuterColor(((HexagonAdapter) selected).getBorderColor());
+				dialogH.setInnerColor(((HexagonAdapter) selected).getFillColor());
 				dialogH.getBtnSetOuterColor().setBackground(dialogH.getOuterColor());
 				dialogH.getBtnSetInnerColor().setBackground(dialogH.getInnerColor());
 				dialogH.setVisible(true);

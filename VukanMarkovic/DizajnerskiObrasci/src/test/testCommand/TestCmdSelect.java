@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import command.CmdSelect;
+import geometry.Line;
 import geometry.Point;
 import geometry.Shape;
 import mvc.DrawingModel;
@@ -25,6 +26,16 @@ public class TestCmdSelect {
 	}
 
 	@Test
+	public void testExecuteShapeIsNotEqual() {
+		Line line = new Line(new Point(1, 1), new Point(2, 2));
+		model.add(line);
+		cmdSelect = new CmdSelect(shape, model);
+		cmdSelect.execute();
+		assertFalse(model.get(model.indexOfShape(line)).isSelected());
+		assertFalse(model.getSelectedShapes().contains(line));
+	}
+
+	@Test
 	public void testExecuteShapeUnselected() {
 		cmdSelect.execute();
 		assertTrue(model.get(model.indexOfShape(shape)).isSelected());
@@ -34,6 +45,17 @@ public class TestCmdSelect {
 	public void testExecuteShapeRemovedFromSelectedShapes() {
 		cmdSelect.execute();
 		assertTrue(model.getSelectedShapes().contains(shape));
+	}
+
+	@Test
+	public void testUnexecuteShapeIsNotEqual() {
+		Line line = new Line(new Point(1, 1), new Point(2, 2));
+		model.add(line);
+		model.selectShape(line);
+		cmdSelect = new CmdSelect(shape, model);
+		cmdSelect.unexecute();
+		assertTrue(model.get(model.indexOfShape(line)).isSelected());
+		assertTrue(model.getSelectedShapes().contains(line));
 	}
 
 	@Test

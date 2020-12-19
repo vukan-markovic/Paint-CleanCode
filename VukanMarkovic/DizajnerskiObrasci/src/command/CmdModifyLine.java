@@ -17,7 +17,7 @@ public class CmdModifyLine implements Command {
 		original = oldState.clone();
 		oldState.setStartPoint(newState.getStartPoint());
 		oldState.setEndPoint(newState.getEndPoint());
-		oldState.setBorder_Color(newState.getBorder_Color());
+		oldState.setBorderColor(newState.getBorderColor());
 		oldState.setSelected(newState.isSelected());
 	}
 
@@ -25,7 +25,7 @@ public class CmdModifyLine implements Command {
 	public void unexecute() {
 		oldState.setStartPoint(original.getStartPoint());
 		oldState.setEndPoint(original.getEndPoint());
-		oldState.setBorder_Color(original.getBorder_Color());
+		oldState.setBorderColor(original.getBorderColor());
 		oldState.setSelected(original.isSelected());
 	}
 }

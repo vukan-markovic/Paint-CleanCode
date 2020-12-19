@@ -17,14 +17,38 @@ import test.testCommand.TestCmdSelect;
 import test.testCommand.TestCmdSendToBack;
 import test.testCommand.TestCmdToBack;
 import test.testCommand.TestCmdToFront;
+import test.testDialogs.TestDialogCircle;
+import test.testDialogs.TestDialogDonut;
+import test.testDialogs.TestDialogHexagon;
+import test.testDialogs.TestDialogLine;
+import test.testDialogs.TestDialogPoint;
+import test.testDialogs.TestDialogRectangle;
+import test.testGeometry.TestCircle;
+import test.testGeometry.TestDonut;
+import test.testGeometry.TestHexagonAdapter;
+import test.testGeometry.TestLine;
+import test.testGeometry.TestPoint;
+import test.testGeometry.TestRectangle;
+import test.testMVC.TestDrawingController;
+import test.testMVC.TestDrawingFrame;
+import test.testMVC.TestDrawingModel;
+import test.testMVC.TestDrawingView;
+import test.testMVC.TestMainApp;
+import test.testObserver.TestObserver;
+import test.testObserver.TestPropertyManager;
+import test.testStrategy.TestSaveLog;
+import test.testStrategy.TestSavePainting;
+import test.testStrategy.TestStrategyManager;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ 
-	TestCmdAdd.class, TestCmdBringToFront.class, TestCmdDeselect.class, 
-	TestCmdModifyCircle.class, TestCmdModifyDonut.class, TestCmdModifyHexagon.class, 
-	TestCmdModifyLine.class, TestCmdModifyPoint.class, TestCmdModifyRectangle.class, 
-	TestCmdRemove.class, TestCmdSelect.class, TestCmdSendToBack.class, 
-	TestCmdToBack.class, TestCmdToFront.class
-})
+@Suite.SuiteClasses({ TestCmdAdd.class, TestCmdBringToFront.class, TestCmdDeselect.class, TestCmdModifyCircle.class,
+		TestCmdModifyDonut.class, TestCmdModifyHexagon.class, TestCmdModifyLine.class, TestCmdModifyPoint.class,
+		TestCmdModifyRectangle.class, TestCmdRemove.class, TestCmdSelect.class, TestCmdSendToBack.class,
+		TestCmdToBack.class, TestCmdToFront.class, TestDialogCircle.class, TestDialogDonut.class,
+		TestDialogHexagon.class, TestDialogLine.class, TestDialogPoint.class, TestDialogRectangle.class,
+		TestCircle.class, TestDonut.class, TestHexagonAdapter.class, TestLine.class, TestPoint.class,
+		TestRectangle.class, TestDrawingController.class, TestDrawingFrame.class, TestDrawingModel.class,
+		TestDrawingView.class, TestMainApp.class, TestObserver.class, TestPropertyManager.class, TestSaveLog.class,
+		TestSavePainting.class, TestStrategyManager.class })
 public class TestSuite {
 }

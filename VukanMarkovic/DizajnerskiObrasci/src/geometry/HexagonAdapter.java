@@ -13,31 +13,28 @@ public class HexagonAdapter extends FillShape {
 		hexagon = new Hexagon(0, 0, 0);
 	}
 
-	public HexagonAdapter(int x, int y, int r, Color outerColor, Color innerColor) {
-		hexagon = new Hexagon(x, y, r);
-		hexagon.setBorderColor(outerColor);
-		hexagon.setAreaColor(innerColor);
+	public HexagonAdapter(Hexagon hexagon, Color borderColor, Color fillColor) {
+		this.hexagon = hexagon;
+		hexagon.setBorderColor(borderColor);
+		hexagon.setAreaColor(fillColor);
 	}
 
-	public HexagonAdapter(int x, int y, int r, Color outerColor, Color innerColor, boolean selected) {
-		hexagon = new Hexagon(x, y, r);
-		hexagon.setBorderColor(outerColor);
-		hexagon.setAreaColor(innerColor);
+	public HexagonAdapter(int x, int y, int r, Color borderColor, Color fillColor, boolean selected) {
+		this(new Hexagon(x, y, r), borderColor, fillColor);
 		setSelected(selected);
 	}
 
 	public HexagonAdapter clone() {
-		HexagonAdapter cloneHex = new HexagonAdapter(getX(), getY(), getR(), getBorder_Color(), getInnerColor(),
-				isSelected());
-		return cloneHex;
+		return new HexagonAdapter(getX(), getY(), getR(), getBorderColor(), getFillColor(), isSelected());
 	}
 
 	@Override
 	public void moveBy(int byX, int byY) {
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public int compareTo(Object o) {
+	public int compareTo(Object object) {
 		return 0;
 	}
 
@@ -47,15 +44,15 @@ public class HexagonAdapter extends FillShape {
 	}
 
 	@Override
-	public void draw(Graphics g) {
-		hexagon.paint(g);
+	public void draw(Graphics graphics) {
+		hexagon.paint(graphics);
 	}
 
-	public Color getInnerColor() {
+	public Color getFillColor() {
 		return hexagon.getAreaColor();
 	}
 
-	public Color getBorder_Color() {
+	public Color getBorderColor() {
 		return hexagon.getBorderColor();
 	}
 
@@ -71,12 +68,12 @@ public class HexagonAdapter extends FillShape {
 		return hexagon.getR();
 	}
 
-	public void setInnerColor(Color innerColor) {
-		hexagon.setAreaColor(innerColor);
+	public void setFillColor(Color fillColor) {
+		hexagon.setAreaColor(fillColor);
 	}
 
-	public void setBorderColor(Color outerColor) {
-		hexagon.setBorderColor(outerColor);
+	public void setBorderColor(Color borderColor) {
+		hexagon.setBorderColor(borderColor);
 	}
 
 	public void setX(int x) {
@@ -101,13 +98,13 @@ public class HexagonAdapter extends FillShape {
 
 	public String toString() {
 		return "Center: " + (new Point(hexagon.getX(), hexagon.getY(), false, new Color(250, 128, 114))) + ", radius: "
-				+ hexagon.getR() + " , Border color: " + getBorder_Color().getRGB() + " , Fill color: "
-				+ getInnerColor().getRGB();
+				+ hexagon.getR() + " , Border color: " + getBorderColor().getRGB() + " , Fill color: "
+				+ getFillColor().getRGB();
 	}
 
-	public boolean equals(Object obj) {
-		if (obj instanceof HexagonAdapter) {
-			HexagonAdapter c = (HexagonAdapter) obj;
+	public boolean equals(Object object) {
+		if (object instanceof HexagonAdapter) {
+			HexagonAdapter c = (HexagonAdapter) object;
 
 			if (getR() == (c.getR()) && getX() == c.getX() && getY() == c.getY())
 				return true;
@@ -117,6 +114,7 @@ public class HexagonAdapter extends FillShape {
 	}
 
 	@Override
-	public void fill_shape(Graphics g) {
+	public void fillShape(Graphics graphics) {
+		throw new UnsupportedOperationException();
 	}
 }

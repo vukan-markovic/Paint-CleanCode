@@ -2,10 +2,12 @@ package mvc;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.Iterator;
 
 import javax.swing.JPanel;
 
+import geometry.Donut;
 import geometry.Shape;
 
 public class DrawingView extends JPanel {
@@ -16,12 +18,18 @@ public class DrawingView extends JPanel {
 		this.model = model;
 	}
 
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		Iterator<Shape> it = model.getShapes().iterator();
-		
-		while (it.hasNext())
-			it.next().draw(g);
+	public void paintComponent(Graphics graphics) {
+		super.paintComponent(graphics);
+		Iterator<Shape> iterator = model.getShapes().iterator();
+
+		while (iterator.hasNext()) {
+			Shape shape = iterator.next();
+
+			if (shape instanceof Donut)
+				((Donut) shape).draw(graphics, (Graphics2D) graphics);
+			else
+				shape.draw(graphics);
+		}
 	}
 
 	/**

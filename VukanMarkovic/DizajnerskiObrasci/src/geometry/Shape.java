@@ -7,20 +7,19 @@ import java.io.Serializable;
 public abstract class Shape implements Moveable, Comparable<Object>, Cloneable, Serializable {
 	private static final long serialVersionUID = 1L;
 	private boolean selected;
-	private Color border_Color = Color.BLACK;
-	private int id;
+	private Color borderColor = Color.BLACK;
 
 	public Shape() {
 	}
 
-	public Shape(boolean selected, Color b) {
+	public Shape(boolean selected, Color borderColor) {
 		this.selected = selected;
-		this.border_Color = b;
+		this.borderColor = borderColor;
 	}
 
 	public abstract boolean contains(int x, int y);
 
-	public abstract void draw(Graphics g);
+	public abstract void draw(Graphics graphics);
 
 	public boolean isSelected() {
 		return selected;
@@ -30,19 +29,11 @@ public abstract class Shape implements Moveable, Comparable<Object>, Cloneable, 
 		this.selected = selected;
 	}
 
-	public Color getBorder_Color() {
-		return border_Color;
+	public Color getBorderColor() {
+		return borderColor;
 	}
 
-	public void setBorder_Color(Color border_Color) {
-		this.border_Color = border_Color;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
+	public void setBorderColor(Color borderColor) {
+		this.borderColor = borderColor;
 	}
 }
