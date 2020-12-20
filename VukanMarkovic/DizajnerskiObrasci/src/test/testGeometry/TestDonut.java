@@ -1,8 +1,8 @@
 package test.testGeometry;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -106,7 +106,7 @@ public class TestDonut {
 	@Test
 	public void testArea() {
 		assertEquals(donut.getRadius() * donut.getRadius() * Math.PI
-				- donut.getInnerRadius() * donut.getInnerRadius() * Math.PI, donut.area());
+				- donut.getInnerRadius() * donut.getInnerRadius() * Math.PI, donut.area(), 0);
 	}
 
 	@Test

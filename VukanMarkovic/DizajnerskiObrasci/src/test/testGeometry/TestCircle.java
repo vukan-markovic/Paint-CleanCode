@@ -9,9 +9,9 @@ import org.junit.Test;
 import geometry.Circle;
 import geometry.Point;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class TestCircle {
@@ -100,7 +100,7 @@ public class TestCircle {
 
 	@Test
 	public void testArea() {
-		assertEquals(radius * radius * Math.PI, circle.area());
+		assertEquals(radius * radius * Math.PI, circle.area(), 0);
 	}
 
 	@Test

@@ -1,6 +1,5 @@
 package strategy;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -13,16 +12,12 @@ public class SavePainting implements Save {
 
 	@Override
 	public void saveFile(String filePath) {
-
 		try {
-			FileOutputStream fos = new FileOutputStream(filePath);
-			ObjectOutputStream oos = new ObjectOutputStream(fos);
-			oos.writeObject(shapes);
-			oos.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+			ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(filePath));
+			objectOutputStream.writeObject(shapes);
+			objectOutputStream.close();
+		} catch (IOException exception) {
+			System.out.println(exception.getMessage());
 		}
 	}
 

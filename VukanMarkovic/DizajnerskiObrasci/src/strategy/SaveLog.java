@@ -13,8 +13,8 @@ public class SaveLog implements Save {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
 			writer.write(log);
 			writer.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException exception) {
+			System.out.println(exception.getMessage());
 		}
 	}
 

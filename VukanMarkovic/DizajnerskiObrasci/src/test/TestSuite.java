@@ -37,7 +37,6 @@ import test.testMVC.TestMainApp;
 import test.testObserver.TestObserver;
 import test.testStrategy.TestSaveLog;
 import test.testStrategy.TestSavePainting;
-import test.testStrategy.TestStrategyManager;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ TestCmdAdd.class, TestCmdBringToFront.class, TestCmdDeselect.class, TestCmdModifyCircle.class,
@@ -47,7 +46,6 @@ import test.testStrategy.TestStrategyManager;
 		TestDialogHexagon.class, TestDialogLine.class, TestDialogPoint.class, TestDialogRectangle.class,
 		TestCircle.class, TestDonut.class, TestHexagonAdapter.class, TestLine.class, TestPoint.class,
 		TestRectangle.class, TestDrawingController.class, TestDrawingFrame.class, TestDrawingModel.class,
-		TestDrawingView.class, TestMainApp.class, TestObserver.class, TestSaveLog.class,
-		TestSavePainting.class, TestStrategyManager.class })
+		TestDrawingView.class, TestMainApp.class, TestObserver.class, TestSaveLog.class, TestSavePainting.class })
 public class TestSuite {
 }
