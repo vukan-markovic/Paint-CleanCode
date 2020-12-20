@@ -54,7 +54,7 @@ import strategy.StrategyManager;
 
 public class DrawingController {
 	DrawingModel model;
-	DrawingFrame main_frame;
+	DrawingFrame mainFrame;
 	private Color colInner = new Color(255, 235, 205);
 	private Color colOuter = new Color(250, 128, 114);
 	private Point startPoint;
@@ -88,11 +88,10 @@ public class DrawingController {
 		this.commandsReverse = commandsReverse;
 	}
 
-	public DrawingController(DrawingModel model, DrawingFrame main_frame) {
-		super();
+	public DrawingController(DrawingModel model, DrawingFrame mainFrame) {
 		this.model = model;
-		this.main_frame = main_frame;
-		manager = new PropertyManager(main_frame);
+		this.mainFrame = mainFrame;
+		manager = new PropertyManager(mainFrame);
 		observer.addPropertyChangeListener(manager);
 	}
 
@@ -105,7 +104,7 @@ public class DrawingController {
 	}
 
 	public void mouseClicked(MouseEvent e) {
-		if (main_frame.getTglbtnSelect().isSelected() == true) {
+		if (mainFrame.getTglbtnSelect().isSelected() == true) {
 			if (model.getShapes().size() != 0) {
 				for (int i = model.getShapes().size() - 1; i >= 0; i--) {
 					Shape s = model.get(i);
@@ -116,7 +115,7 @@ public class DrawingController {
 						commandsNormal.push(deselect);
 						fireEvents();
 						System.out.println(model.getSelectedShapes().size());
-						main_frame.getlModel().addElement("Deselect - " + model.get(i).getClass().getSimpleName() + " "
+						mainFrame.getlModel().addElement("Deselect - " + model.get(i).getClass().getSimpleName() + " "
 								+ model.get(i).toString());
 						break;
 					} else if (s.contains(e.getX(), e.getY()) && !s.isSelected()) {
@@ -125,7 +124,7 @@ public class DrawingController {
 						commandsNormal.push(select);
 						fireEvents();
 						System.out.println(model.getSelectedShapes().size());
-						main_frame.getlModel().addElement(
+						mainFrame.getlModel().addElement(
 								"Select - " + model.get(i).getClass().getSimpleName() + " " + model.get(i).toString());
 						// System.out.println(model.getSelectedShapes().size());
 						break;
@@ -135,7 +134,7 @@ public class DrawingController {
 							Command deselect = new CmdDeselect(deselected, model);
 							deselect.execute();
 							commandsNormal.push(deselect);
-							main_frame.getlModel().addElement("Deselect - " + deselected.getClass().getSimpleName()
+							mainFrame.getlModel().addElement("Deselect - " + deselected.getClass().getSimpleName()
 									+ " " + deselected.toString());
 							fireEvents();
 						}
@@ -145,16 +144,16 @@ public class DrawingController {
 			}
 		}
 
-		else if (main_frame.getTglbtnPoint().isSelected() == true) {
+		else if (mainFrame.getTglbtnPoint().isSelected() == true) {
 			Point p = new Point(e.getX(), e.getY(), false, colOuter);
 			CmdAdd addPointComm = new CmdAdd(model, p);
 			addPointComm.execute();
 			commandsReverse = new Stack<Command>();
 			commandsNormal.push(addPointComm);
-			main_frame.getlModel().addElement("Add - " + p.getClass().getSimpleName() + " " + p);
+			mainFrame.getlModel().addElement("Add - " + p.getClass().getSimpleName() + " " + p);
 		}
 
-		else if (main_frame.getTglbtnLine().isSelected() == true) {
+		else if (mainFrame.getTglbtnLine().isSelected() == true) {
 			if (startPoint == null)
 				startPoint = new Point(e.getX(), e.getY(), false, colOuter);
 			else {
@@ -164,10 +163,10 @@ public class DrawingController {
 				addLineComm.execute();
 				commandsReverse = new Stack<Command>();
 				commandsNormal.push(addLineComm);
-				main_frame.getlModel().addElement("Add - " + l.getClass().getSimpleName() + " " + l);
+				mainFrame.getlModel().addElement("Add - " + l.getClass().getSimpleName() + " " + l);
 				startPoint = null;
 			}
-		} else if (main_frame.getTglbtnRectangle().isSelected() == true) {
+		} else if (mainFrame.getTglbtnRectangle().isSelected() == true) {
 			try {
 				Point p = new Point(e.getX(), e.getY(), false, colOuter);
 				DialogRectangle dialogR = new DialogRectangle();
@@ -187,13 +186,13 @@ public class DrawingController {
 					addRectComm.execute();
 					commandsReverse = new Stack<Command>();
 					commandsNormal.push(addRectComm);
-					main_frame.getlModel().addElement("Add - " + rect.getClass().getSimpleName() + " " + rect);
+					mainFrame.getlModel().addElement("Add - " + rect.getClass().getSimpleName() + " " + rect);
 				}
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(new JFrame(), "Fill all the fields!", "Error",
 						JOptionPane.WARNING_MESSAGE);
 			}
-		} else if (main_frame.getTglbtnCircle().isSelected() == true) {
+		} else if (mainFrame.getTglbtnCircle().isSelected() == true) {
 			try {
 				Point center = new Point(e.getX(), e.getY(), false, colOuter);
 				DialogCircle dialogC = new DialogCircle();
@@ -212,13 +211,13 @@ public class DrawingController {
 					addCircleComm.execute();
 					commandsReverse = new Stack<Command>();
 					commandsNormal.push(addCircleComm);
-					main_frame.getlModel().addElement("Add - " + circle.getClass().getSimpleName() + " " + circle);
+					mainFrame.getlModel().addElement("Add - " + circle.getClass().getSimpleName() + " " + circle);
 				}
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(new JFrame(), "Fill all the fields!", "Error",
 						JOptionPane.WARNING_MESSAGE);
 			}
-		} else if (main_frame.getTglbtnDonut().isSelected() == true) {
+		} else if (mainFrame.getTglbtnDonut().isSelected() == true) {
 			try {
 				Point center = new Point(e.getX(), e.getY(), false, colOuter);
 				DialogDonut dialogD = new DialogDonut();
@@ -238,14 +237,14 @@ public class DrawingController {
 					addDonutComm.execute();
 					commandsReverse = new Stack<Command>();
 					commandsNormal.push(addDonutComm);
-					main_frame.getlModel().addElement("Add - " + donut.getClass().getSimpleName() + " " + donut);
+					mainFrame.getlModel().addElement("Add - " + donut.getClass().getSimpleName() + " " + donut);
 				}
 
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(new JFrame(), "Fill all the fields!", "Error",
 						JOptionPane.WARNING_MESSAGE);
 			}
-		} else if (main_frame.getTglbtnHexagon().isSelected() == true) {
+		} else if (mainFrame.getTglbtnHexagon().isSelected() == true) {
 			try {
 				Point center = new Point(e.getX(), e.getY(), false, colOuter);
 				DialogHexagon dialogH = new DialogHexagon();
@@ -265,7 +264,7 @@ public class DrawingController {
 					addHexagonComm.execute();
 					commandsReverse = new Stack<Command>();
 					commandsNormal.push(addHexagonComm);
-					main_frame.getlModel().addElement("Add - " + hexagon.getClass().getSimpleName() + " " + hexagon);
+					mainFrame.getlModel().addElement("Add - " + hexagon.getClass().getSimpleName() + " " + hexagon);
 				}
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(new JFrame(), "Fill all the fields!", "Error",
@@ -273,7 +272,7 @@ public class DrawingController {
 			}
 		}
 
-		main_frame.getView().repaint();
+		mainFrame.getView().repaint();
 		fireUndoRedo();
 	}
 
@@ -297,7 +296,7 @@ public class DrawingController {
 				newState = new Point(Integer.parseInt(dialogP.getxCoord().getText()),
 						Integer.parseInt(dialogP.getyCoord().getText()), oldState.isSelected(),
 						dialogP.getOuterColor());
-				main_frame.getlModel().addElement("Modify - " + newState.getClass().getSimpleName() + " from "
+				mainFrame.getlModel().addElement("Modify - " + newState.getClass().getSimpleName() + " from "
 						+ oldState + " to " + " " + newState);
 				CmdModifyPoint pointM = new CmdModifyPoint(oldState, (Point) newState);
 				pointM.execute();
@@ -305,7 +304,7 @@ public class DrawingController {
 				commandsNormal.push(pointM);
 			}
 
-			main_frame.getView().repaint();
+			mainFrame.getView().repaint();
 		} else if (selected instanceof Line) {
 			DialogLine dialogL = new DialogLine();
 			dialogL.getX1Coord().setText(String.valueOf(((Line) selected).getStartPoint().getX()));
@@ -326,7 +325,7 @@ public class DrawingController {
 						dialogL.getOuterColor());
 				newState = new Line(newStartPoint, newEndPoint, oldState.isSelected(), dialogL.getOuterColor());
 
-				main_frame.getlModel().addElement("Modify - " + newState.getClass().getSimpleName() + " from "
+				mainFrame.getlModel().addElement("Modify - " + newState.getClass().getSimpleName() + " from "
 						+ oldState + " to " + " " + newState);
 				CmdModifyLine lineM = new CmdModifyLine(oldState, (Line) newState);
 				lineM.execute();
@@ -334,7 +333,7 @@ public class DrawingController {
 				commandsNormal.push(lineM);
 			}
 
-			main_frame.getView().repaint();
+			mainFrame.getView().repaint();
 		} else if (selected instanceof Rectangle) {
 			try {
 				DialogRectangle dialogR = new DialogRectangle();
@@ -357,7 +356,7 @@ public class DrawingController {
 					int newWidth = Integer.parseInt(dialogR.getwidth().getText());
 					newState = new Rectangle(newUpperLeftPoint, newHeight, newWidth, oldState.isSelected(),
 							dialogR.getOuterColor(), dialogR.getInnerColor());
-					main_frame.getlModel().addElement("Modify - " + newState.getClass().getSimpleName() + " from "
+					mainFrame.getlModel().addElement("Modify - " + newState.getClass().getSimpleName() + " from "
 							+ oldState + " to " + " " + newState);
 					CmdModifyRectangle rectangleM = new CmdModifyRectangle(oldState, (Rectangle) newState);
 					rectangleM.execute();
@@ -365,7 +364,7 @@ public class DrawingController {
 					commandsNormal.push(rectangleM);
 				}
 
-				main_frame.getView().repaint();
+				mainFrame.getView().repaint();
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(new JFrame(), "Fill all the fields!", "Error",
 						JOptionPane.WARNING_MESSAGE);
@@ -393,7 +392,7 @@ public class DrawingController {
 					newState = new Donut(newCenter, newRadius, newSmallRadius, oldState.isSelected(),
 							dialogD.getOuterColor(), dialogD.getInnerColor());
 
-					main_frame.getlModel().addElement("Modify - " + newState.getClass().getSimpleName() + " from "
+					mainFrame.getlModel().addElement("Modify - " + newState.getClass().getSimpleName() + " from "
 							+ oldState + " to " + " " + newState);
 					CmdModifyDonut donutM = new CmdModifyDonut(oldState, (Donut) newState);
 					donutM.execute();
@@ -401,7 +400,7 @@ public class DrawingController {
 					commandsNormal.push(donutM);
 				}
 
-				main_frame.getView().repaint();
+				mainFrame.getView().repaint();
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(new JFrame(), "Fill all the fields!", "Error",
 						JOptionPane.WARNING_MESSAGE);
@@ -426,7 +425,7 @@ public class DrawingController {
 					int newRadius = Integer.parseInt(dialogC.getRadius().getText());
 					newState = new Circle(newCenter, newRadius, oldState.isSelected(), dialogC.getOuterColor(),
 							dialogC.getInnerColor());
-					main_frame.getlModel().addElement("Modify - " + newState.getClass().getSimpleName() + " from "
+					mainFrame.getlModel().addElement("Modify - " + newState.getClass().getSimpleName() + " from "
 							+ oldState + " to " + " " + newState);
 					CmdModifyCircle circleM = new CmdModifyCircle(oldState, (Circle) newState);
 					circleM.execute();
@@ -434,7 +433,7 @@ public class DrawingController {
 					commandsNormal.push(circleM);
 				}
 
-				main_frame.getView().repaint();
+				mainFrame.getView().repaint();
 
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(new JFrame(), "Fill all the fields!", "Error",
@@ -459,7 +458,7 @@ public class DrawingController {
 							Integer.parseInt(dialogH.getRadius().getText()), dialogH.getOuterColor(),
 							dialogH.getInnerColor(), oldState.isSelected());
 
-					main_frame.getlModel().addElement("Modify - " + newState.getClass().getSimpleName() + " from "
+					mainFrame.getlModel().addElement("Modify - " + newState.getClass().getSimpleName() + " from "
 							+ oldState + " to " + " " + newState);
 					CmdModifyHexagon hexagonM = new CmdModifyHexagon(oldState, (HexagonAdapter) newState);
 					hexagonM.execute();
@@ -467,7 +466,7 @@ public class DrawingController {
 					commandsNormal.push(hexagonM);
 				}
 
-				main_frame.getView().repaint();
+				mainFrame.getView().repaint();
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(new JFrame(), "Fill all the fields!", "Error",
 						JOptionPane.WARNING_MESSAGE);
@@ -486,8 +485,8 @@ public class DrawingController {
 
 		if (questionDialog == JOptionPane.YES_OPTION) {
 			deleteForLogs();
-			main_frame.getlModel().addElement("Deleted");
-			main_frame.getView().repaint();
+			mainFrame.getlModel().addElement("Deleted");
+			mainFrame.getView().repaint();
 			fireEvents();
 		}
 	}
@@ -511,8 +510,8 @@ public class DrawingController {
 			return;
 
 		undoForLog();
-		main_frame.getlModel().addElement("Undo");
-		main_frame.getView().repaint();
+		mainFrame.getlModel().addElement("Undo");
+		mainFrame.getView().repaint();
 		fireUndoRedo();
 		fireEvents();
 	}
@@ -528,8 +527,8 @@ public class DrawingController {
 			return;
 
 		redoForLog();
-		main_frame.getlModel().addElement("Redo");
-		main_frame.getView().repaint();
+		mainFrame.getlModel().addElement("Redo");
+		mainFrame.getView().repaint();
 		fireUndoRedo();
 		fireEvents();
 	}
@@ -545,14 +544,14 @@ public class DrawingController {
 		colOuter = JColorChooser.showDialog(null, "Choose a color!", colOuter);
 
 		if (colOuter != null)
-			main_frame.getBtnOuterCol().setBackground(colOuter);
+			mainFrame.getBtnOuterCol().setBackground(colOuter);
 	}
 
 	public void innerColor() {
 		colInner = JColorChooser.showDialog(null, "Choose a color!", colInner);
 
 		if (colInner != null)
-			main_frame.getBtnInnerCol().setBackground(colInner);
+			mainFrame.getBtnInnerCol().setBackground(colInner);
 	}
 
 	public void toBack() {
@@ -562,8 +561,8 @@ public class DrawingController {
 			comm.execute();
 			commandsReverse = new Stack<Command>();
 			commandsNormal.push(comm);
-			main_frame.getlModel().addElement("ToBack - " + shape.getClass().getSimpleName() + " " + shape.toString());
-			main_frame.getView().repaint();
+			mainFrame.getlModel().addElement("ToBack - " + shape.getClass().getSimpleName() + " " + shape.toString());
+			mainFrame.getView().repaint();
 		}
 	}
 
@@ -574,8 +573,8 @@ public class DrawingController {
 			comm.execute();
 			commandsReverse = new Stack<Command>();
 			commandsNormal.push(comm);
-			main_frame.getlModel().addElement("ToFront - " + shape.getClass().getSimpleName() + " " + shape.toString());
-			main_frame.getView().repaint();
+			mainFrame.getlModel().addElement("ToFront - " + shape.getClass().getSimpleName() + " " + shape.toString());
+			mainFrame.getView().repaint();
 		}
 	}
 
@@ -586,9 +585,9 @@ public class DrawingController {
 			comm.execute();
 			commandsReverse = new Stack<Command>();
 			commandsNormal.push(comm);
-			main_frame.getlModel()
+			mainFrame.getlModel()
 					.addElement("SendToBack - " + shape.getClass().getSimpleName() + " " + shape.toString());
-			main_frame.getView().repaint();
+			mainFrame.getView().repaint();
 		}
 	}
 
@@ -599,9 +598,9 @@ public class DrawingController {
 			comm.execute();
 			commandsReverse = new Stack<Command>();
 			commandsNormal.push(comm);
-			main_frame.getlModel()
+			mainFrame.getlModel()
 					.addElement("BringToFront - " + shape.getClass().getSimpleName() + " " + shape.toString());
-			main_frame.getView().repaint();
+			mainFrame.getView().repaint();
 		}
 	}
 
@@ -631,35 +630,35 @@ public class DrawingController {
 		fileCh.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		// System.out.println("Nije ispisao");
 
-		if (fileCh.showSaveDialog(main_frame) == JFileChooser.APPROVE_OPTION) {
+		if (fileCh.showSaveDialog(mainFrame) == JFileChooser.APPROVE_OPTION) {
 			StrategyManager strategy = new StrategyManager();
 			SaveLog saveLog = new SaveLog();
 			SavePainting painting = new SavePainting();
 			String log = "";
 
-			for (int i = 0; i < main_frame.getlModel().getSize(); i++)
-				log = log + main_frame.getlModel().get(i) + "\n";
+			for (int i = 0; i < mainFrame.getlModel().getSize(); i++)
+				log = log + mainFrame.getlModel().get(i) + "\n";
 
 			saveLog.setLog(log);
 			strategy.setStrategy(saveLog);
 			strategy.save(
-					fileCh.getSelectedFile().getAbsolutePath() + "\\" + main_frame.getFileName().getText() + ".txt");
+					fileCh.getSelectedFile().getAbsolutePath() + "\\" + mainFrame.getFileName().getText() + ".txt");
 			painting.setShapes(model.getShapes());
 			strategy.setStrategy(painting);
 			strategy.save(
-					fileCh.getSelectedFile().getAbsolutePath() + "\\" + main_frame.getFileName().getText() + ".bin");
+					fileCh.getSelectedFile().getAbsolutePath() + "\\" + mainFrame.getFileName().getText() + ".bin");
 			System.out.println("Ispisao");
 		}
 	}
 
 	public void loadLog() {
-		main_frame.getBtnNext().setEnabled(true);
+		mainFrame.getBtnNext().setEnabled(true);
 		setLoggComm(new LinkedList<String>());
 		JFileChooser fileCh = new JFileChooser();
 		fileCh.setDialogTitle("Specify the log you want to open");
 		fileCh.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
-		if (fileCh.showOpenDialog(main_frame) == JFileChooser.APPROVE_OPTION) {
+		if (fileCh.showOpenDialog(mainFrame) == JFileChooser.APPROVE_OPTION) {
 			try {
 				BufferedReader buffer = new BufferedReader(new FileReader(fileCh.getSelectedFile().getAbsolutePath()));
 				String text = "";
@@ -678,12 +677,12 @@ public class DrawingController {
 		fileCh.setDialogTitle("Specify the painting you want to open");
 		fileCh.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
-		if (fileCh.showOpenDialog(main_frame) == JFileChooser.APPROVE_OPTION) {
+		if (fileCh.showOpenDialog(mainFrame) == JFileChooser.APPROVE_OPTION) {
 			try {
 				FileInputStream fis = new FileInputStream(fileCh.getSelectedFile().getAbsoluteFile());
 				ObjectInputStream ois = new ObjectInputStream(fis);
 				model.setShapes((List<Shape>) ois.readObject());
-				main_frame.getView().repaint();
+				mainFrame.getView().repaint();
 			} catch (Exception ex) {
 				System.out.println(ex.getMessage());
 			}
@@ -1035,12 +1034,12 @@ public class DrawingController {
 			sendToBack();
 
 		if (getLoggComm().size() == 1)
-			main_frame.getBtnNext().setEnabled(false);
+			mainFrame.getBtnNext().setEnabled(false);
 
 		// System.out.println(getLoggComm().size());
 		fireEvents();
 		fireUndoRedo();
-		main_frame.getView().repaint();
-		main_frame.getlModel().addElement(getLoggComm().poll());
+		mainFrame.getView().repaint();
+		mainFrame.getlModel().addElement(getLoggComm().poll());
 	}
 }

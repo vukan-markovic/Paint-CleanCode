@@ -35,7 +35,6 @@ import test.testMVC.TestDrawingModel;
 import test.testMVC.TestDrawingView;
 import test.testMVC.TestMainApp;
 import test.testObserver.TestObserver;
-import test.testObserver.TestPropertyManager;
 import test.testStrategy.TestSaveLog;
 import test.testStrategy.TestSavePainting;
 import test.testStrategy.TestStrategyManager;
@@ -48,7 +47,7 @@ import test.testStrategy.TestStrategyManager;
 		TestDialogHexagon.class, TestDialogLine.class, TestDialogPoint.class, TestDialogRectangle.class,
 		TestCircle.class, TestDonut.class, TestHexagonAdapter.class, TestLine.class, TestPoint.class,
 		TestRectangle.class, TestDrawingController.class, TestDrawingFrame.class, TestDrawingModel.class,
-		TestDrawingView.class, TestMainApp.class, TestObserver.class, TestPropertyManager.class, TestSaveLog.class,
+		TestDrawingView.class, TestMainApp.class, TestObserver.class, TestSaveLog.class,
 		TestSavePainting.class, TestStrategyManager.class })
 public class TestSuite {
 }

@@ -15,16 +15,15 @@ public class Observer {
 	private PropertyChangeSupport propertyChangeSupport;
 
 	public Observer() {
-		super();
-		this.propertyChangeSupport = new PropertyChangeSupport(this);
+		propertyChangeSupport = new PropertyChangeSupport(this);
 	}
 
-	public void addPropertyChangeListener(PropertyChangeListener pcl) {
-		propertyChangeSupport.addPropertyChangeListener(pcl);
+	public void addPropertyChangeListener(PropertyChangeListener propertyChangeListener) {
+		propertyChangeSupport.addPropertyChangeListener(propertyChangeListener);
 	}
 
-	public void removePropertyChangeListener(PropertyChangeListener pcl) {
-		propertyChangeSupport.removePropertyChangeListener(pcl);
+	public void removePropertyChangeListener(PropertyChangeListener propertyChangeListener) {
+		propertyChangeSupport.removePropertyChangeListener(propertyChangeListener);
 	}
 
 	public void setBtnDeleteEnable(boolean btnDeleteEnable) {

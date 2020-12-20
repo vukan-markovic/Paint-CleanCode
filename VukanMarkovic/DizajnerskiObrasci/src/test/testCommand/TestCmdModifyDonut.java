@@ -1,7 +1,6 @@
 package test.testCommand;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
 import java.awt.Color;
 
@@ -25,11 +24,10 @@ public class TestCmdModifyDonut {
 		cmdModifyDonut = new CmdModifyDonut(oldState, newState);
 	}
 
-	@Test()
-	public void testExecuteOldStateNotEqualsNewState() {
+	@Test(expected = NullPointerException.class)
+	public void testExecuteExceptionExpected() {
 		cmdModifyDonut = new CmdModifyDonut(new Donut(), new Donut());
 		cmdModifyDonut.execute();
-		assertNotEquals(newState, oldState);
 	}
 
 	@Test
