@@ -30,15 +30,12 @@ public class DialogHexagon extends JDialog {
 	private JTextField xCoord;
 	private JTextField yCoord;
 	private JTextField radius;
-	boolean accepted = false;
+	private boolean accepted = false;
 	private JButton btnSetOuterColor;
 	private JButton btnSetInnerColor;
-	Color outerColor = Color.BLACK;
-	Color innerColor = new Color(0, 0, 0, 0);
+	private Color outerColor = Color.BLACK;
+	private Color innerColor = new Color(0, 0, 0, 0);
 
-	/**
-	 * Create the dialog.
-	 */
 	public DialogHexagon() {
 		setTitle("Hexagon dialog");
 		setModal(true);
@@ -195,16 +192,8 @@ public class DialogHexagon extends JDialog {
 		return xCoord;
 	}
 
-	public void setxCoord(JTextField xCoord) {
-		this.xCoord = xCoord;
-	}
-
 	public JTextField getyCoord() {
 		return yCoord;
-	}
-
-	public void setyCoord(JTextField yCoord) {
-		this.yCoord = yCoord;
 	}
 
 	public JTextField getRadius() {

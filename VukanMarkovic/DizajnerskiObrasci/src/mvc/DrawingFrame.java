@@ -25,7 +25,7 @@ import javax.swing.border.EmptyBorder;
 public class DrawingFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private DrawingView view = new DrawingView();
+	private DrawingView view;
 	private DrawingController controller;
 	private final JToggleButton tglbtnPoint;
 	private final JToggleButton tglbtnLine;
@@ -46,55 +46,21 @@ public class DrawingFrame extends JFrame {
 	private final JButton btnToFront;
 	private final JButton btnSave;
 	private final JButton btnLoadPainting;
-	private DefaultListModel<String> lModel = new DefaultListModel<>();
+	private DefaultListModel<String> lModel;
 	private JButton btnLoadLog;
 	private JButton btnNext;
 	private JTextField fileName;
 
-	public JTextField getFileName() {
-		return fileName;
-	}
-
-	public void setFileName(JTextField fileName) {
-		this.fileName = fileName;
-	}
-
-	public DefaultListModel<String> getlModel() {
-		return lModel;
-	}
-
-	public void setlModel(DefaultListModel<String> lModel) {
-		this.lModel = lModel;
-	}
-
-	public DrawingController getController() {
-		return controller;
-	}
-
-	public void setController(DrawingController controller) {
-		this.controller = controller;
-	}
-
-	public DrawingView getView() {
-		return view;
-	}
-
-	public void setView(DrawingView view) {
-		this.view = view;
-	}
-
-	/**
-	 * Create the frame.
-	 */
 	public DrawingFrame() {
-		setTitle("Mina Topalovic IT28/2017");
+		setTitle("Vukan Markoviæ I7 18/2020");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 580, 600);
+		lModel = new DefaultListModel<>();
+		view = new DrawingView();
 		contentPane = new JPanel();
 		contentPane.setBackground(SystemColor.menu);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout());
-		// FlowLayout flowLayout = (FlowLayout) view.getLayout();
 		view.setPreferredSize(new Dimension(600, 400));
 		contentPane.add(view, BorderLayout.CENTER);
 		view.setBackground(SystemColor.controlLtHighlight);
@@ -157,7 +123,7 @@ public class DrawingFrame extends JFrame {
 		btnModify.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				controller.Modify();
+				controller.modify();
 			}
 		});
 
@@ -168,7 +134,7 @@ public class DrawingFrame extends JFrame {
 		btnDelete.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				controller.Delete();
+				controller.delete();
 			}
 		});
 
@@ -301,7 +267,7 @@ public class DrawingFrame extends JFrame {
 
 		btnNext.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				controller.nextComm();
+				controller.nextCommand();
 			}
 		});
 
@@ -320,6 +286,26 @@ public class DrawingFrame extends JFrame {
 		scrollPane.setViewportView(list);
 		list.setModel(lModel);
 		setContentPane(contentPane);
+	}
+	
+	public JTextField getFileName() {
+		return fileName;
+	}
+	
+	DefaultListModel<String> getlModel() {
+		return lModel;
+	}
+
+	public DrawingController getController() {
+		return controller;
+	}
+
+	public void setController(DrawingController controller) {
+		this.controller = controller;
+	}
+
+	public DrawingView getView() {
+		return view;
 	}
 
 	public JButton getBtnNext() {
@@ -397,11 +383,15 @@ public class DrawingFrame extends JFrame {
 	public JButton getBtnToFront() {
 		return btnToFront;
 	}
-
+	
 	public JButton getBtnSave() {
 		return btnSave;
 	}
-
+	
+	public JButton getBtnLoadLog() {
+		return btnLoadLog;
+	}
+	
 	public JButton getBtnLoadPainting() {
 		return btnLoadPainting;
 	}

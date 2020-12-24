@@ -5,9 +5,9 @@ import java.awt.Graphics;
 
 import hexagon.Hexagon;
 
-public class HexagonAdapter extends FillShape {
+public class HexagonAdapter extends Shape {
 	private static final long serialVersionUID = 1L;
-	Hexagon hexagon;
+	private Hexagon hexagon;
 
 	public HexagonAdapter() {
 		hexagon = new Hexagon(0, 0, 0);
@@ -26,16 +26,6 @@ public class HexagonAdapter extends FillShape {
 
 	public HexagonAdapter clone() {
 		return new HexagonAdapter(getX(), getY(), getR(), getBorderColor(), getFillColor(), isSelected());
-	}
-
-	@Override
-	public void moveBy(int byX, int byY) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public int compareTo(Object object) {
-		return 0;
 	}
 
 	@Override
@@ -111,10 +101,5 @@ public class HexagonAdapter extends FillShape {
 		}
 
 		return false;
-	}
-
-	@Override
-	public void fillShape(Graphics graphics) {
-		throw new UnsupportedOperationException();
 	}
 }

@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.io.Serializable;
 
-public abstract class Shape implements Moveable, Comparable<Object>, Cloneable, Serializable {
+public abstract class Shape implements Cloneable, Serializable {
 	private static final long serialVersionUID = 1L;
 	private boolean selected;
 	private Color borderColor = Color.BLACK;
@@ -12,7 +12,7 @@ public abstract class Shape implements Moveable, Comparable<Object>, Cloneable, 
 	public Shape() {
 	}
 
-	public Shape(boolean selected, Color borderColor) {
+	Shape(boolean selected, Color borderColor) {
 		this.selected = selected;
 		this.borderColor = borderColor;
 	}

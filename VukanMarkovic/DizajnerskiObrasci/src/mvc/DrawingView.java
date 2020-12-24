@@ -12,13 +12,19 @@ import geometry.Shape;
 
 public class DrawingView extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private DrawingModel model = new DrawingModel();
+	private DrawingModel model;
 
-	public void setModel(DrawingModel model) {
-		this.model = model;
+	/**
+	 * Create the panel.
+	 */
+	public DrawingView() {
+		model = new DrawingModel();
+		setBackground(Color.WHITE);
+		setVisible(true);
 	}
-
-	public void paintComponent(Graphics graphics) {
+	
+	@Override
+	public void paint(Graphics graphics) {
 		super.paintComponent(graphics);
 		Iterator<Shape> iterator = model.getShapes().iterator();
 
@@ -32,11 +38,11 @@ public class DrawingView extends JPanel {
 		}
 	}
 
-	/**
-	 * Create the panel.
-	 */
-	public DrawingView() {
-		setBackground(Color.WHITE);
-		setVisible(true);
+	public void setModel(DrawingModel model) {
+		this.model = model;
+	}
+
+	public DrawingModel getModel() {
+		return model;
 	}
 }

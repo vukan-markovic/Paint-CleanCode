@@ -39,7 +39,7 @@ public class TestCmdSendToBack {
 		cmdSendToBack.unexecute();
 		assertNotEquals(index, model.indexOfShape(shape));
 	}
-	
+
 	@Test
 	public void testUnexecuteShapeAddedToModelShapesAtIndex() {
 		cmdSendToBack.execute();

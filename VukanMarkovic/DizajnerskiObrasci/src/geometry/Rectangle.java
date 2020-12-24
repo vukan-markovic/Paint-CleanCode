@@ -51,18 +51,6 @@ public class Rectangle extends FillShape {
 		graphics.fillRect(upperLeftPoint.getX(), upperLeftPoint.getY(), width, height);
 	}
 
-	@Override
-	public void moveBy(int byX, int byY) {
-		upperLeftPoint.moveBy(byX, byY);
-	}
-
-	@Override
-	public int compareTo(Object object) {
-		if (object instanceof Rectangle)
-			return (int) (this.area() - ((Rectangle) object).area());
-		return 0;
-	}
-
 	public boolean contains(int x, int y) {
 		if (upperLeftPoint.getX() <= x && x <= upperLeftPoint.getX() + width && upperLeftPoint.getY() <= y
 				&& y <= upperLeftPoint.getY() + height)
@@ -79,10 +67,6 @@ public class Rectangle extends FillShape {
 		}
 
 		return false;
-	}
-
-	public int area() {
-		return width * height;
 	}
 
 	public Point getUpperLeftPoint() {

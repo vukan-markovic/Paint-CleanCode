@@ -44,19 +44,6 @@ public class Line extends Shape {
 				getBorderColor());
 	}
 
-	@Override
-	public void moveBy(int byX, int byY) {
-		startPoint.moveBy(byX, byY);
-		endPoint.moveBy(byX, byY);
-	}
-
-	@Override
-	public int compareTo(Object object) {
-		if (object instanceof Line)
-			return (int) (length() - ((Line) object).length());
-		return 0;
-	}
-
 	public boolean contains(int x, int y) {
 		if ((startPoint.distance(x, y) + endPoint.distance(x, y)) - length() <= 0.05)
 			return true;

@@ -104,12 +104,6 @@ public class TestDonut {
 	}
 
 	@Test
-	public void testArea() {
-		assertEquals(donut.getRadius() * donut.getRadius() * Math.PI
-				- donut.getInnerRadius() * donut.getInnerRadius() * Math.PI, donut.area(), 0);
-	}
-
-	@Test
 	public void testToString() {
 		assertEquals(
 				"Center: " + donut.getCenter() + ", radius: " + donut.getRadius() + " , Border color: "
@@ -117,25 +111,5 @@ public class TestDonut {
 						+ " , inner radius: " + donut.getInnerRadius() + " , Border color: "
 						+ donut.getBorderColor().getRGB() + " , Fill Color: " + donut.getFillColor().getRGB(),
 				donut.toString());
-	}
-
-	@Test
-	public void testCompareToNotSameType() {
-		assertEquals(0, donut.compareTo(new Point()));
-	}
-
-	@Test
-	public void testCompareToEquals() {
-		assertEquals(0, donut.compareTo(new Donut(new Point(1, 2), 3, 2, false, Color.WHITE, Color.BLACK)));
-	}
-
-	@Test
-	public void testCompareToLessThan() {
-		assertEquals(15, donut.compareTo(new Donut(new Point(1, 2), 1, 1, false, Color.WHITE, Color.BLACK)));
-	}
-
-	@Test
-	public void testCompareToGreaterThan() {
-		assertEquals(-2953, donut.compareTo(new Donut(new Point(1, 2), 33, 12, false, Color.WHITE, Color.BLACK)));
 	}
 }

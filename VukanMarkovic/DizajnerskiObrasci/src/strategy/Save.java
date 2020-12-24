@@ -1,5 +1,5 @@
 package strategy;
 
-public interface Save {
+interface Save {
 	void saveFile(String filePath);
 }

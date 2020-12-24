@@ -60,15 +60,6 @@ public class TestLine {
 	}
 
 	@Test
-	public void testMoveBy() {
-		line.moveBy(1, 2);
-		assertEquals(2, line.getStartPoint().getX());
-		assertEquals(4, line.getStartPoint().getY());
-		assertEquals(4, line.getEndPoint().getX());
-		assertEquals(6, line.getEndPoint().getY());
-	}
-
-	@Test
 	public void testContainsTrueExcepted() {
 		assertTrue(line.contains(1, 2));
 	}
@@ -100,33 +91,13 @@ public class TestLine {
 
 	@Test
 	public void testLength() {
-		assertEquals(line.getStartPoint().distance(line.getEndPoint().getX(), line.getEndPoint().getY()),
-				line.length(), 0);
+		assertEquals(line.getStartPoint().distance(line.getEndPoint().getX(), line.getEndPoint().getY()), line.length(),
+				0);
 	}
 
 	@Test
 	public void testToString() {
 		assertEquals("Start point: " + line.getStartPoint() + ", " + "End point: " + line.getEndPoint()
 				+ ", Border color: " + line.getBorderColor().getRGB(), line.toString());
-	}
-
-	@Test
-	public void testCompareToNotSameType() {
-		assertEquals(0, line.compareTo(new Point()));
-	}
-
-	@Test
-	public void testCompareToEquals() {
-		assertEquals(0, line.compareTo(new Line(new Point(1, 2), new Point(3, 4), false, Color.BLACK)));
-	}
-
-	@Test
-	public void testCompareToLessThan() {
-		assertEquals(1, line.compareTo(new Line(new Point(0, 1), new Point(1, 1), false, Color.BLACK)));
-	}
-
-	@Test
-	public void testCompareToGreaterThan() {
-		assertEquals(-1, line.compareTo(new Line(new Point(1, 5), new Point(5, 4), false, Color.BLACK)));
 	}
 }

@@ -18,7 +18,7 @@ public class CmdToFront implements Command {
 	@Override
 	public void execute() {
 		index = model.indexOfShape(shape);
-		
+
 		if (index != model.getShapes().size() - 1)
 			Collections.swap(model.getShapes(), index + 1, index);
 	}

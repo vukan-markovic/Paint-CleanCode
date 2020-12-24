@@ -52,18 +52,8 @@ public class Donut extends Circle {
 		}
 	}
 
-	public int compareTo(Object object) {
-		if (object instanceof Donut)
-			return (int) (area() - ((Donut) object).area());
-		return 0;
-	}
-
 	public boolean contains(int x, int y) {
 		return super.contains(x, y) && getCenter().distance(x, y) > innerRadius;
-	}
-
-	public double area() {
-		return super.area() - innerRadius * innerRadius * Math.PI;
 	}
 
 	public boolean equals(Object object) {

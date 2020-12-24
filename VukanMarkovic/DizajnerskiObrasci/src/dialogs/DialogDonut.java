@@ -31,15 +31,12 @@ public class DialogDonut extends JDialog {
 	private JTextField yCoord;
 	private JTextField radius;
 	private JTextField smallRadius;
-	boolean accepted = false;
+	private boolean accepted = false;
 	private JButton btnSetOuterColor;
 	private JButton btnSetInnerColor;
-	Color outerColor = Color.BLACK;
-	Color innerColor = new Color(0, 0, 0, 0);
+	private Color outerColor = Color.BLACK;
+	private Color innerColor = new Color(0, 0, 0, 0);
 
-	/**
-	 * Create the dialog.
-	 */
 	public DialogDonut() {
 		setTitle("Donut dialog");
 		setModal(true);
@@ -195,8 +192,9 @@ public class DialogDonut extends JDialog {
 										"Oops, greska!", JOptionPane.ERROR_MESSAGE);
 							} else if (Integer.parseInt(getSmallRadius().getText()) >= Integer
 									.parseInt(getRadius().getText())) {
-								JOptionPane.showMessageDialog(new JFrame(), "Unutrašnji radius mora biti veæi od spoljašnjeg!",
-										"Oops, greska!", JOptionPane.ERROR_MESSAGE);
+								JOptionPane.showMessageDialog(new JFrame(),
+										"Unutrašnji radius mora biti veæi od spoljašnjeg!", "Oops, greska!",
+										JOptionPane.ERROR_MESSAGE);
 							} else {
 								accepted = true;
 								setVisible(false);
@@ -232,16 +230,8 @@ public class DialogDonut extends JDialog {
 		return xCoord;
 	}
 
-	public void setxCoord(JTextField xCoord) {
-		this.xCoord = xCoord;
-	}
-
 	public JTextField getyCoord() {
 		return yCoord;
-	}
-
-	public void setyCoord(JTextField yCoord) {
-		this.yCoord = yCoord;
 	}
 
 	public JTextField getRadius() {

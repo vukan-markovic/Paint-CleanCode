@@ -16,8 +16,8 @@ public class TestCmdDeselect {
 	private Shape shape;
 	private DrawingModel model;
 	private CmdDeselect cmdDeselect;
-	
-	@Before 
+
+	@Before
 	public void setUp() {
 		model = new DrawingModel();
 		shape = new Point();
@@ -25,8 +25,8 @@ public class TestCmdDeselect {
 		model.selectShape(shape);
 		cmdDeselect = new CmdDeselect(shape, model);
 	}
-	
-	@Test 
+
+	@Test
 	public void testExecuteShapeIsNotEqual() {
 		Line line = new Line(new Point(1, 1), new Point(2, 2));
 		model.add(line);
@@ -37,19 +37,19 @@ public class TestCmdDeselect {
 		assertTrue(model.getSelectedShapes().contains(line));
 	}
 
-	@Test 
+	@Test
 	public void testExecuteShapeUnselected() {
 		cmdDeselect.execute();
 		assertFalse(model.get(model.indexOfShape(shape)).isSelected());
 	}
-	
-	@Test 
+
+	@Test
 	public void testExecuteShapeRemovedFromSelectedShapes() {
 		cmdDeselect.execute();
 		assertFalse(model.getSelectedShapes().contains(shape));
 	}
-	
-	@Test 
+
+	@Test
 	public void testUnexecuteShapeIsNotEqual() {
 		Line line = new Line(new Point(1, 1), new Point(2, 2));
 		model.add(line);
@@ -58,14 +58,14 @@ public class TestCmdDeselect {
 		assertFalse(model.get(model.indexOfShape(line)).isSelected());
 		assertFalse(model.getSelectedShapes().contains(line));
 	}
-	
-	@Test 
+
+	@Test
 	public void testUnexecuteShapeSelected() {
 		cmdDeselect.unexecute();
 		assertTrue(model.get(model.indexOfShape(shape)).isSelected());
 	}
-	
-	@Test 
+
+	@Test
 	public void testUnexecuteShapeAddedToSelectedShapes() {
 		cmdDeselect.unexecute();
 		assertTrue(model.getSelectedShapes().contains(shape));

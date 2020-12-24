@@ -1,6 +1,5 @@
 package test.testGeometry;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -73,25 +72,5 @@ public class TestPoint {
 	@Test
 	public void testEqualsTrueExpected() {
 		assertTrue(point.equals(new Point(1, 2)));
-	}
-
-	@Test
-	public void testCompareToNotSameType() {
-		assertEquals(0, point.compareTo(new Line()));
-	}
-
-	@Test
-	public void testCompareToEquals() {
-		assertEquals(0, point.compareTo((new Point(1, 2))));
-	}
-
-	@Test
-	public void testCompareToLessThan() {
-		assertEquals(1, point.compareTo(new Point(0, 1)));
-	}
-
-	@Test
-	public void testCompareToGreaterThan() {
-		assertEquals(-2, point.compareTo(new Point(3, 4)));
 	}
 }

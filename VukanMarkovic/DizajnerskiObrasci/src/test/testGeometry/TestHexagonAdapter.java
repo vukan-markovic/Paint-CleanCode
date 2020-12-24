@@ -35,16 +35,6 @@ public class TestHexagonAdapter {
 		verify(hexagonMock).paint(graphics);
 	}
 
-	@Test(expected = UnsupportedOperationException.class)
-	public void testMoveBy() {
-		hexagonAdapter.moveBy(1, 2);
-	}
-
-	@Test(expected = UnsupportedOperationException.class)
-	public void testFillShape() {
-		hexagonAdapter.fillShape(graphics);
-	}
-
 	@Test
 	public void testContainsTrueExcepted() {
 		assertTrue(hexagonAdapter.contains(1, 1));
@@ -86,10 +76,5 @@ public class TestHexagonAdapter {
 				+ (new Point(hexagonAdapter.getX(), hexagonAdapter.getY(), false, new Color(250, 128, 114)))
 				+ ", radius: " + hexagonAdapter.getR() + " , Border color: " + hexagonAdapter.getBorderColor().getRGB()
 				+ " , Fill color: " + hexagonAdapter.getFillColor().getRGB(), hexagonAdapter.toString());
-	}
-
-	@Test
-	public void testCompareTo() {
-		assertEquals(0, hexagonAdapter.compareTo(new Point()));
 	}
 }

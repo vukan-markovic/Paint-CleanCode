@@ -1,5 +1,11 @@
 package test.testGeometry;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
 import java.awt.Color;
 import java.awt.Graphics;
 
@@ -8,11 +14,6 @@ import org.junit.Test;
 
 import geometry.Circle;
 import geometry.Point;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.*;
 
 public class TestCircle {
 	private Point center;
@@ -62,13 +63,6 @@ public class TestCircle {
 	}
 
 	@Test
-	public void testMoveBy() {
-		circle.moveBy(1, 2);
-		assertEquals(2, circle.getCenter().getX());
-		assertEquals(4, circle.getCenter().getY());
-	}
-
-	@Test
 	public void testContainsTrueExcepted() {
 		assertTrue(circle.contains(1, 1));
 	}
@@ -108,25 +102,5 @@ public class TestCircle {
 		assertEquals("Center: " + center + ", radius: " + radius + " , Border color: "
 				+ circle.getBorderColor().getRGB() + " , Fill color: " + circle.getFillColor().getRGB(),
 				circle.toString());
-	}
-
-	@Test
-	public void testCompareToNotSameType() {
-		assertEquals(0, circle.compareTo(new Point()));
-	}
-
-	@Test
-	public void testCompareToEquals() {
-		assertEquals(0, circle.compareTo(new Circle(new Point(1, 1), radius)));
-	}
-
-	@Test
-	public void testCompareToLessThan() {
-		assertEquals(1, circle.compareTo(new Circle(new Point(1, 1), 2)));
-	}
-
-	@Test
-	public void testCompareToGreaterThan() {
-		assertEquals(-1, circle.compareTo(new Circle(new Point(1, 1), 4)));
 	}
 }

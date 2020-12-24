@@ -68,13 +68,6 @@ public class TestRectangle {
 	}
 
 	@Test
-	public void testMoveBy() {
-		rectangle.moveBy(1, 2);
-		assertEquals(2, rectangle.getUpperLeftPoint().getX());
-		assertEquals(4, rectangle.getUpperLeftPoint().getY());
-	}
-
-	@Test
 	public void testContainsTrueExcepted() {
 		assertTrue(rectangle.contains(1, 2));
 	}
@@ -110,36 +103,11 @@ public class TestRectangle {
 	}
 
 	@Test
-	public void testArea() {
-		assertEquals(rectangle.getWidth() * rectangle.getHeight(), rectangle.area());
-	}
-
-	@Test
 	public void testToString() {
 		assertEquals(
 				"Upper left point: " + rectangle.getUpperLeftPoint() + ", height: " + rectangle.getHeight()
 						+ " , width: " + rectangle.getWidth() + " , Border color: "
 						+ rectangle.getBorderColor().getRGB() + " , Fill color: " + rectangle.getFillColor().getRGB(),
 				rectangle.toString());
-	}
-
-	@Test
-	public void testCompareToNotSameType() {
-		assertEquals(0, rectangle.compareTo(new Point()));
-	}
-
-	@Test
-	public void testCompareToEquals() {
-		assertEquals(0, rectangle.compareTo(new Rectangle(new Point(1, 2), 1, 2)));
-	}
-
-	@Test
-	public void testCompareToLessThan() {
-		assertEquals(1, rectangle.compareTo(new Rectangle(new Point(1, 2), 1, 1)));
-	}
-
-	@Test
-	public void testCompareToGreaterThan() {
-		assertEquals(-2, rectangle.compareTo(new Rectangle(new Point(1, 2), 2, 2)));
 	}
 }

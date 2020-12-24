@@ -40,7 +40,7 @@ public class TestCmdAdd {
 		cmdAdd.unexecute();
 		assertFalse(model.getShapes().contains(shape));
 	}
-	
+
 	@Test
 	public void testUnexecuteShapeRemovedFromModelShapes() {
 		cmdAdd.execute();

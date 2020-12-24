@@ -49,18 +49,6 @@ public class Circle extends FillShape {
 		graphics.fillOval(center.getX() - radius, center.getY() - radius, radius * 2, radius * 2);
 	}
 
-	@Override
-	public int compareTo(Object object) {
-		if (object instanceof Circle)
-			return (radius - ((Circle) object).radius);
-		return 0;
-	}
-
-	@Override
-	public void moveBy(int byX, int byY) {
-		center.moveBy(byX, byY);
-	}
-
 	public boolean contains(int x, int y) {
 		return center.distance(x, y) <= radius;
 	}

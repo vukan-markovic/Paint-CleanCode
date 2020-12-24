@@ -37,22 +37,6 @@ public class Point extends Shape {
 			graphics.drawRect(x - 3, y - 3, 6, 6);
 	}
 
-	@Override
-	public void moveBy(int byX, int byY) {
-		x += byX;
-		y += byY;
-	}
-
-	@Override
-	public int compareTo(Object object) {
-		if (object instanceof Point) {
-			Point start = new Point(0, 0, false, getBorderColor());
-			return (int) (distance(start.x, start.y) - ((Point) object).distance(start.x, start.y));
-		}
-
-		return 0;
-	}
-
 	public boolean contains(int x, int y) {
 		if (distance(x, y) <= 3)
 			return true;

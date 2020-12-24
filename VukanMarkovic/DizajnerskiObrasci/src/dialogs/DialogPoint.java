@@ -29,13 +29,10 @@ public class DialogPoint extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 	private final JTextField xCoord;
 	private final JTextField yCoord;
-	boolean accepted;
+	private boolean accepted;
 	private final JButton btnSetOuterColor;
-	Color outerColor;
+	private Color outerColor;
 
-	/**
-	 * Create the dialog.
-	 */
 	public DialogPoint() {
 		setTitle("Point dialog");
 		setBounds(100, 100, 450, 303);

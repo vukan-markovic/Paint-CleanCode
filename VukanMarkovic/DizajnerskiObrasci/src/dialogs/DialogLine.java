@@ -29,13 +29,10 @@ public class DialogLine extends JDialog {
 	private final JTextField y1Coord;
 	private final JTextField x2Coord;
 	private final JTextField y2Coord;
-	boolean accepted = false;
+	private boolean accepted = false;
 	private JButton btnSetOuterColor;
-	Color outerColor = new Color(250, 128, 114);
+	private Color outerColor = new Color(250, 128, 114);
 
-	/**
-	 * Create the dialog.
-	 */
 	public DialogLine() {
 		setTitle("Line dialog");
 		setModal(true);

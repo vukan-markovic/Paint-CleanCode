@@ -37,7 +37,7 @@ public class TestCmdBringToFront {
 		cmdBringToFront.unexecute();
 		assertEquals(index, model.indexOfShape(shape));
 	}
-	
+
 	@Test
 	public void testUnexecuteShapeAddedToModelShapesAtIndex() {
 		cmdBringToFront.execute();

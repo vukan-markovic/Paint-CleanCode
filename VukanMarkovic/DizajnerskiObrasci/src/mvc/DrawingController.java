@@ -53,15 +53,15 @@ import strategy.SavePainting;
 import strategy.StrategyManager;
 
 public class DrawingController {
-	DrawingModel model;
-	DrawingFrame mainFrame;
+	private DrawingModel model;
+	private DrawingFrame mainFrame;
 	private Color colInner = new Color(255, 235, 205);
 	private Color colOuter = new Color(250, 128, 114);
 	private Point startPoint;
 	private Stack<Command> commandsNormal = new Stack<Command>();
 	private Stack<Command> commandsReverse = new Stack<Command>();
-	Observer observer = new Observer();
-	PropertyManager manager;
+	private Observer observer = new Observer();
+	private PropertyManager manager;
 	private Queue<String> loggComm = new LinkedList<String>();
 
 	public Queue<String> getLoggComm() {
@@ -95,14 +95,6 @@ public class DrawingController {
 		observer.addPropertyChangeListener(manager);
 	}
 
-	public void deselectAll() {
-		for (Shape shape : model.getShapes()) {
-			Command deselectAll = new CmdDeselect(shape, model);
-			deselectAll.execute();
-			commandsNormal.push(deselectAll);
-		}
-	}
-
 	public void mouseClicked(MouseEvent e) {
 		if (mainFrame.getTglbtnSelect().isSelected() == true) {
 			if (model.getShapes().size() != 0) {
@@ -114,7 +106,6 @@ public class DrawingController {
 						deselect.execute();
 						commandsNormal.push(deselect);
 						fireEvents();
-						System.out.println(model.getSelectedShapes().size());
 						mainFrame.getlModel().addElement("Deselect - " + model.get(i).getClass().getSimpleName() + " "
 								+ model.get(i).toString());
 						break;
@@ -123,10 +114,8 @@ public class DrawingController {
 						select.execute();
 						commandsNormal.push(select);
 						fireEvents();
-						System.out.println(model.getSelectedShapes().size());
 						mainFrame.getlModel().addElement(
 								"Select - " + model.get(i).getClass().getSimpleName() + " " + model.get(i).toString());
-						// System.out.println(model.getSelectedShapes().size());
 						break;
 					} else if (i == 0) {
 						for (int j = 0; model.getSelectedShapes().size() > 0;) {
@@ -134,11 +123,10 @@ public class DrawingController {
 							Command deselect = new CmdDeselect(deselected, model);
 							deselect.execute();
 							commandsNormal.push(deselect);
-							mainFrame.getlModel().addElement("Deselect - " + deselected.getClass().getSimpleName()
-									+ " " + deselected.toString());
+							mainFrame.getlModel().addElement("Deselect - " + deselected.getClass().getSimpleName() + " "
+									+ deselected.toString());
 							fireEvents();
 						}
-						// main_frame.getlModel().addElement("DeselectAll");
 					}
 				}
 			}
@@ -188,7 +176,7 @@ public class DrawingController {
 					commandsNormal.push(addRectComm);
 					mainFrame.getlModel().addElement("Add - " + rect.getClass().getSimpleName() + " " + rect);
 				}
-			} catch (Exception ex) {
+			} catch (Exception exception) {
 				JOptionPane.showMessageDialog(new JFrame(), "Fill all the fields!", "Error",
 						JOptionPane.WARNING_MESSAGE);
 			}
@@ -213,7 +201,7 @@ public class DrawingController {
 					commandsNormal.push(addCircleComm);
 					mainFrame.getlModel().addElement("Add - " + circle.getClass().getSimpleName() + " " + circle);
 				}
-			} catch (Exception ex) {
+			} catch (Exception exception) {
 				JOptionPane.showMessageDialog(new JFrame(), "Fill all the fields!", "Error",
 						JOptionPane.WARNING_MESSAGE);
 			}
@@ -240,7 +228,7 @@ public class DrawingController {
 					mainFrame.getlModel().addElement("Add - " + donut.getClass().getSimpleName() + " " + donut);
 				}
 
-			} catch (Exception ex) {
+			} catch (Exception exception) {
 				JOptionPane.showMessageDialog(new JFrame(), "Fill all the fields!", "Error",
 						JOptionPane.WARNING_MESSAGE);
 			}
@@ -266,7 +254,7 @@ public class DrawingController {
 					commandsNormal.push(addHexagonComm);
 					mainFrame.getlModel().addElement("Add - " + hexagon.getClass().getSimpleName() + " " + hexagon);
 				}
-			} catch (Exception ex) {
+			} catch (Exception exception) {
 				JOptionPane.showMessageDialog(new JFrame(), "Fill all the fields!", "Error",
 						JOptionPane.WARNING_MESSAGE);
 			}
@@ -276,7 +264,7 @@ public class DrawingController {
 		fireUndoRedo();
 	}
 
-	public void Modify() {
+	public void modify() {
 		Shape selected = model.getOneSelectedShape();
 		Shape newState;
 
@@ -296,8 +284,8 @@ public class DrawingController {
 				newState = new Point(Integer.parseInt(dialogP.getxCoord().getText()),
 						Integer.parseInt(dialogP.getyCoord().getText()), oldState.isSelected(),
 						dialogP.getOuterColor());
-				mainFrame.getlModel().addElement("Modify - " + newState.getClass().getSimpleName() + " from "
-						+ oldState + " to " + " " + newState);
+				mainFrame.getlModel().addElement("Modify - " + newState.getClass().getSimpleName() + " from " + oldState
+						+ " to " + " " + newState);
 				CmdModifyPoint pointM = new CmdModifyPoint(oldState, (Point) newState);
 				pointM.execute();
 				commandsReverse = new Stack<Command>();
@@ -325,8 +313,8 @@ public class DrawingController {
 						dialogL.getOuterColor());
 				newState = new Line(newStartPoint, newEndPoint, oldState.isSelected(), dialogL.getOuterColor());
 
-				mainFrame.getlModel().addElement("Modify - " + newState.getClass().getSimpleName() + " from "
-						+ oldState + " to " + " " + newState);
+				mainFrame.getlModel().addElement("Modify - " + newState.getClass().getSimpleName() + " from " + oldState
+						+ " to " + " " + newState);
 				CmdModifyLine lineM = new CmdModifyLine(oldState, (Line) newState);
 				lineM.execute();
 				commandsReverse = new Stack<Command>();
@@ -476,7 +464,7 @@ public class DrawingController {
 		fireUndoRedo();
 	}
 
-	public void Delete() {
+	public void delete() {
 		if (model.getSelectedShapes().size() == 0)
 			return;
 
@@ -534,7 +522,6 @@ public class DrawingController {
 	}
 
 	public void redoForLog() {
-		System.out.println(commandsReverse.peek());
 		commandsReverse.peek().execute();
 		commandsNormal.push(commandsReverse.peek());
 		commandsReverse.pop();
@@ -628,7 +615,6 @@ public class DrawingController {
 		JFileChooser fileCh = new JFileChooser();
 		fileCh.setDialogTitle("Specify the location where you want to save your drawing");
 		fileCh.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		// System.out.println("Nije ispisao");
 
 		if (fileCh.showSaveDialog(mainFrame) == JFileChooser.APPROVE_OPTION) {
 			StrategyManager strategy = new StrategyManager();
@@ -647,7 +633,6 @@ public class DrawingController {
 			strategy.setStrategy(painting);
 			strategy.save(
 					fileCh.getSelectedFile().getAbsolutePath() + "\\" + mainFrame.getFileName().getText() + ".bin");
-			System.out.println("Ispisao");
 		}
 	}
 
@@ -665,8 +650,8 @@ public class DrawingController {
 
 				while ((text = buffer.readLine()) != null)
 					getLoggComm().add(text);
-			} catch (Exception ex) {
-				System.out.println(ex.getMessage());
+			} catch (Exception exception) {
+				System.out.println(exception.getMessage());
 			}
 		}
 	}
@@ -683,13 +668,13 @@ public class DrawingController {
 				ObjectInputStream ois = new ObjectInputStream(fis);
 				model.setShapes((List<Shape>) ois.readObject());
 				mainFrame.getView().repaint();
-			} catch (Exception ex) {
-				System.out.println(ex.getMessage());
+			} catch (Exception exception) {
+				System.out.println(exception.getMessage());
 			}
 		}
 	}
 
-	public void nextComm() {
+	public void nextCommand() {
 		String[] line = getLoggComm().peek().split(" ");
 
 		if (line[0].equals("Add")) {
@@ -1035,8 +1020,6 @@ public class DrawingController {
 
 		if (getLoggComm().size() == 1)
 			mainFrame.getBtnNext().setEnabled(false);
-
-		// System.out.println(getLoggComm().size());
 		fireEvents();
 		fireUndoRedo();
 		mainFrame.getView().repaint();
