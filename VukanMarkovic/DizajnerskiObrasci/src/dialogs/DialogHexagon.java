@@ -26,21 +26,24 @@ import javax.swing.border.EmptyBorder;
 
 public class DialogHexagon extends JDialog {
 	private static final long serialVersionUID = 1L;
-	private final JPanel contentPanel = new JPanel();
+	private final JPanel contentPanel;
 	private JTextField xCoord;
 	private JTextField yCoord;
 	private JTextField radius;
 	private boolean accepted = false;
 	private JButton btnSetOuterColor;
 	private JButton btnSetInnerColor;
-	private Color outerColor = Color.BLACK;
-	private Color innerColor = new Color(0, 0, 0, 0);
+	private Color outerColor;
+	private Color innerColor;
 
 	public DialogHexagon() {
 		setTitle("Hexagon dialog");
 		setModal(true);
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
+		innerColor = new Color(0, 0, 0, 0);
+		outerColor = Color.BLACK;
+		contentPanel = new JPanel();
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		getContentPane().add(contentPanel, BorderLayout.WEST);
@@ -188,11 +191,11 @@ public class DialogHexagon extends JDialog {
 		}
 	}
 
-	public JTextField getxCoord() {
+	public JTextField getXcoordinate() {
 		return xCoord;
 	}
 
-	public JTextField getyCoord() {
+	public JTextField getYcoordinate() {
 		return yCoord;
 	}
 

@@ -14,9 +14,6 @@ public class DrawingView extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private DrawingModel model;
 
-	/**
-	 * Create the panel.
-	 */
 	public DrawingView() {
 		model = new DrawingModel();
 		setBackground(Color.WHITE);

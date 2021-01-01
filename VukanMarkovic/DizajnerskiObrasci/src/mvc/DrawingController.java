@@ -55,412 +55,441 @@ import strategy.StrategyManager;
 public class DrawingController {
 	private DrawingModel model;
 	private DrawingFrame mainFrame;
-	private Color colInner = new Color(255, 235, 205);
-	private Color colOuter = new Color(250, 128, 114);
+	private Color colInner;
+	private Color colOuter;
 	private Point startPoint;
-	private Stack<Command> commandsNormal = new Stack<Command>();
-	private Stack<Command> commandsReverse = new Stack<Command>();
-	private Observer observer = new Observer();
+	private Stack<Command> commandsNormal;
+	private Stack<Command> commandsReverse;
+	private Observer observer;
 	private PropertyManager manager;
-	private Queue<String> loggComm = new LinkedList<String>();
+	private Queue<String> logCommands;
+	private CmdAdd cmdAdd;
+	private CmdRemove cmdRemove;
+	private DialogRectangle dialogRectangle;
+	private DialogCircle dialogCircle;
+	private DialogDonut dialogDonut;
+	private DialogHexagon dialogHexagon;
+	private DialogPoint dialogPoint;
+	private DialogLine dialogLine;
+	private Point point;
+	private CmdModifyCircle cmdModifyCircle;
+	private CmdModifyDonut cmdModifyDonut;
+	private CmdModifyLine cmdModifyLine;
+	private CmdModifyHexagon cmdModifyHexagon;
+	private CmdModifyPoint cmdModifyPoint;
+	private CmdModifyRectangle cmdModifyRectangle;
+	private CmdToBack cmdToBack;
+	private CmdToFront cmdToFront;
+	private CmdBringToFront cmdBringToFront;
+	private CmdSendToBack cmdSendToBack;
+	private CmdSelect cmdSelect;
+	private CmdDeselect cmdDeselect;
+	private StrategyManager strategy;
+	private SaveLog saveLog;
+	private SavePainting painting;
+	private JFileChooser fileChooser;
+	private String log;
 
-	public Queue<String> getLoggComm() {
-		return loggComm;
+	public DrawingController() {
 	}
 
-	public void setLoggComm(Queue<String> loggComm) {
-		this.loggComm = loggComm;
-	}
-
-	public Stack<Command> getCommandsNormal() {
-		return commandsNormal;
-	}
-
-	public void setCommandsNormal(Stack<Command> commandsNormal) {
-		this.commandsNormal = commandsNormal;
-	}
-
-	public Stack<Command> getCommandsReverse() {
-		return commandsReverse;
-	}
-
-	public void setCommandsReverse(Stack<Command> commandsReverse) {
-		this.commandsReverse = commandsReverse;
-	}
-
-	public DrawingController(DrawingModel model, DrawingFrame mainFrame) {
+	public void setController(DrawingModel model, DrawingFrame mainFrame) {
 		this.model = model;
 		this.mainFrame = mainFrame;
+		colInner = new Color(255, 235, 205);
+		colOuter = new Color(250, 128, 114);
+		observer = new Observer();
+		logCommands = new LinkedList<String>();
 		manager = new PropertyManager(mainFrame);
 		observer.addPropertyChangeListener(manager);
+		commandsNormal = new Stack<Command>();
+		commandsReverse = new Stack<Command>();
 	}
 
-	public void mouseClicked(MouseEvent e) {
-		if (mainFrame.getTglbtnSelect().isSelected() == true) {
-			if (model.getShapes().size() != 0) {
-				for (int i = model.getShapes().size() - 1; i >= 0; i--) {
-					Shape s = model.get(i);
+	public void executeCommand(Command command) {
+		command.execute();
+		commandsNormal.push(command);
+	}
 
-					if (s.contains(e.getX(), e.getY()) && s.isSelected()) {
-						Command deselect = new CmdDeselect(model.get(i), model);
-						deselect.execute();
-						commandsNormal.push(deselect);
+	public void logCommand(String command) {
+		mainFrame.getlModel().addElement(command);
+	}
+
+	public void btnSelectClicked(MouseEvent click) {
+		if (model.getShapes().size() != 0) {
+			for (int i = model.getShapes().size() - 1; i >= 0; i--) {
+				Shape s = model.get(i);
+
+				if (s.contains(click.getX(), click.getY()) && s.isSelected()) {
+					executeCommand(new CmdDeselect(model.get(i), model));
+					logCommand("Deselect - " + model.get(i).getClass().getSimpleName() + " " + model.get(i).toString());
+					fireEvents();
+					break;
+				} else if (s.contains(click.getX(), click.getY()) && !s.isSelected()) {
+					executeCommand(new CmdSelect(model.get(i), model));
+					logCommand("Select - " + model.get(i).getClass().getSimpleName() + " " + model.get(i).toString());
+					fireEvents();
+					break;
+				} else if (i == 0) {
+					for (int j = 0; model.getSelectedShapes().size() > 0;) {
+						Shape deselected = model.getSelectedShapes().get(j);
+						executeCommand(new CmdDeselect(deselected, model));
+						logCommand("Deselect - " + deselected.getClass().getSimpleName() + " " + deselected.toString());
 						fireEvents();
-						mainFrame.getlModel().addElement("Deselect - " + model.get(i).getClass().getSimpleName() + " "
-								+ model.get(i).toString());
-						break;
-					} else if (s.contains(e.getX(), e.getY()) && !s.isSelected()) {
-						Command select = new CmdSelect(model.get(i), model);
-						select.execute();
-						commandsNormal.push(select);
-						fireEvents();
-						mainFrame.getlModel().addElement(
-								"Select - " + model.get(i).getClass().getSimpleName() + " " + model.get(i).toString());
-						break;
-					} else if (i == 0) {
-						for (int j = 0; model.getSelectedShapes().size() > 0;) {
-							Shape deselected = model.getSelectedShapes().get(j);
-							Command deselect = new CmdDeselect(deselected, model);
-							deselect.execute();
-							commandsNormal.push(deselect);
-							mainFrame.getlModel().addElement("Deselect - " + deselected.getClass().getSimpleName() + " "
-									+ deselected.toString());
-							fireEvents();
-						}
 					}
 				}
 			}
 		}
+	}
 
-		else if (mainFrame.getTglbtnPoint().isSelected() == true) {
-			Point p = new Point(e.getX(), e.getY(), false, colOuter);
-			CmdAdd addPointComm = new CmdAdd(model, p);
-			addPointComm.execute();
-			commandsReverse = new Stack<Command>();
-			commandsNormal.push(addPointComm);
-			mainFrame.getlModel().addElement("Add - " + p.getClass().getSimpleName() + " " + p);
+	public void btnPointClicked(MouseEvent click) {
+		addPoint(click);
+		clearStack();
+	}
+
+	public void addPoint(MouseEvent click) {
+		Point point = new Point(click.getX(), click.getY(), false, colOuter);
+		cmdAdd = new CmdAdd(model, point);
+		executeCommand(cmdAdd);
+		logCommand("Add - " + point.getClass().getSimpleName() + " " + point);
+	}
+
+	public void clearStack() {
+		commandsReverse.clear();
+	}
+
+	public void addLine(MouseEvent click) {
+		Point endPoint = new Point(click.getX(), click.getY(), false, colOuter);
+		Line line = new Line(startPoint, endPoint, false, colOuter);
+		cmdAdd = new CmdAdd(model, line);
+		executeCommand(cmdAdd);
+		logCommand("Add - " + line.getClass().getSimpleName() + " " + line);
+	}
+
+	public void btnLineClicked(MouseEvent click) {
+		if (startPoint == null)
+			startPoint = new Point(click.getX(), click.getY(), false, colOuter);
+		else {
+			addLine(click);
+			clearStack();
+			startPoint = null;
 		}
+	}
 
-		else if (mainFrame.getTglbtnLine().isSelected() == true) {
-			if (startPoint == null)
-				startPoint = new Point(e.getX(), e.getY(), false, colOuter);
-			else {
-				Point endPoint = new Point(e.getX(), e.getY(), false, colOuter);
-				Line l = new Line(startPoint, endPoint, false, colOuter);
-				CmdAdd addLineComm = new CmdAdd(model, l);
-				addLineComm.execute();
-				commandsReverse = new Stack<Command>();
-				commandsNormal.push(addLineComm);
-				mainFrame.getlModel().addElement("Add - " + l.getClass().getSimpleName() + " " + l);
-				startPoint = null;
-			}
-		} else if (mainFrame.getTglbtnRectangle().isSelected() == true) {
-			try {
-				Point p = new Point(e.getX(), e.getY(), false, colOuter);
-				DialogRectangle dialogR = new DialogRectangle();
-				dialogR.getBtnSetBorderColor().setVisible(false);
-				dialogR.getBtnSetFillColor().setVisible(false);
-				dialogR.getxCoord().setText(String.valueOf(p.getX()));
-				dialogR.getyCoord().setText(String.valueOf(p.getY()));
-				dialogR.getxCoord().setEditable(false);
-				dialogR.getyCoord().setEditable(false);
-				dialogR.setVisible(true);
+	public void addRectangle(DialogRectangle dialogRectangle, Point point) {
+		Rectangle rectangle = new Rectangle(point, Integer.parseInt(dialogRectangle.getheight().getText()),
+				Integer.parseInt(dialogRectangle.getwidth().getText()), false, colOuter, colInner);
+		cmdAdd = new CmdAdd(model, rectangle);
+		executeCommand(cmdAdd);
+		clearStack();
+		logCommand("Add - " + rectangle.getClass().getSimpleName() + " " + rectangle);
+	}
 
-				if (dialogR.isAccepted()) {
-					int height = Integer.parseInt(dialogR.getheight().getText());
-					int width = Integer.parseInt(dialogR.getwidth().getText());
-					Rectangle rect = new Rectangle(p, height, width, false, colOuter, colInner);
-					CmdAdd addRectComm = new CmdAdd(model, rect);
-					addRectComm.execute();
-					commandsReverse = new Stack<Command>();
-					commandsNormal.push(addRectComm);
-					mainFrame.getlModel().addElement("Add - " + rect.getClass().getSimpleName() + " " + rect);
-				}
-			} catch (Exception exception) {
-				JOptionPane.showMessageDialog(new JFrame(), "Fill all the fields!", "Error",
-						JOptionPane.WARNING_MESSAGE);
-			}
-		} else if (mainFrame.getTglbtnCircle().isSelected() == true) {
-			try {
-				Point center = new Point(e.getX(), e.getY(), false, colOuter);
-				DialogCircle dialogC = new DialogCircle();
-				dialogC.getBtnSetOuterColor().setVisible(false);
-				dialogC.getBtnSetInnerColor().setVisible(false);
-				dialogC.getxCoord().setText(String.valueOf(center.getX()));
-				dialogC.getyCoord().setText(String.valueOf(center.getY()));
-				dialogC.getxCoord().setEditable(false);
-				dialogC.getyCoord().setEditable(false);
-				dialogC.setVisible(true);
+	public void createRectangleDialog(Point point) {
+		dialogRectangle.getBtnSetBorderColor().setVisible(false);
+		dialogRectangle.getBtnSetFillColor().setVisible(false);
+		dialogRectangle.getXcoordinate().setText(String.valueOf(point.getX()));
+		dialogRectangle.getYcoordinate().setText(String.valueOf(point.getY()));
+		dialogRectangle.getXcoordinate().setEditable(false);
+		dialogRectangle.getYcoordinate().setEditable(false);
+		dialogRectangle.setVisible(true);
+	}
 
-				if (dialogC.isAccepted()) {
-					int radius = Integer.parseInt(dialogC.getRadius().getText());
-					Circle circle = new Circle(center, radius, false, colOuter, colInner);
-					CmdAdd addCircleComm = new CmdAdd(model, circle);
-					addCircleComm.execute();
-					commandsReverse = new Stack<Command>();
-					commandsNormal.push(addCircleComm);
-					mainFrame.getlModel().addElement("Add - " + circle.getClass().getSimpleName() + " " + circle);
-				}
-			} catch (Exception exception) {
-				JOptionPane.showMessageDialog(new JFrame(), "Fill all the fields!", "Error",
-						JOptionPane.WARNING_MESSAGE);
-			}
-		} else if (mainFrame.getTglbtnDonut().isSelected() == true) {
-			try {
-				Point center = new Point(e.getX(), e.getY(), false, colOuter);
-				DialogDonut dialogD = new DialogDonut();
-				dialogD.getBtnSetOuterColor().setVisible(false);
-				dialogD.getBtnSetInnerColor().setVisible(false);
-				dialogD.getxCoord().setText(String.valueOf(center.getX()));
-				dialogD.getyCoord().setText(String.valueOf(center.getY()));
-				dialogD.getxCoord().setEditable(false);
-				dialogD.getyCoord().setEditable(false);
-				dialogD.setVisible(true);
+	public void btnRectangleClicked(MouseEvent click) {
+		point = new Point(click.getX(), click.getY(), false, colOuter);
+		dialogRectangle = new DialogRectangle();
+		createRectangleDialog(point);
 
-				if (dialogD.isAccepted()) {
-					int radius = Integer.parseInt(dialogD.getRadius().getText());
-					int smallRadius = Integer.parseInt(dialogD.getSmallRadius().getText());
-					Donut donut = new Donut(center, radius, smallRadius, false, colOuter, colInner);
-					CmdAdd addDonutComm = new CmdAdd(model, donut);
-					addDonutComm.execute();
-					commandsReverse = new Stack<Command>();
-					commandsNormal.push(addDonutComm);
-					mainFrame.getlModel().addElement("Add - " + donut.getClass().getSimpleName() + " " + donut);
-				}
+		if (dialogRectangle.isAccepted())
+			addRectangle(dialogRectangle, point);
+	}
 
-			} catch (Exception exception) {
-				JOptionPane.showMessageDialog(new JFrame(), "Fill all the fields!", "Error",
-						JOptionPane.WARNING_MESSAGE);
-			}
-		} else if (mainFrame.getTglbtnHexagon().isSelected() == true) {
-			try {
-				Point center = new Point(e.getX(), e.getY(), false, colOuter);
-				DialogHexagon dialogH = new DialogHexagon();
-				dialogH.getBtnSetOuterColor().setVisible(false);
-				dialogH.getBtnSetInnerColor().setVisible(false);
-				dialogH.getxCoord().setText(String.valueOf(center.getX()));
-				dialogH.getyCoord().setText(String.valueOf(center.getY()));
-				dialogH.getxCoord().setEditable(false);
-				dialogH.getyCoord().setEditable(false);
-				dialogH.setVisible(true);
+	public void createCircleDialog(Point center) {
+		dialogCircle.getBtnSetOuterColor().setVisible(false);
+		dialogCircle.getBtnSetInnerColor().setVisible(false);
+		dialogCircle.getXcoordinate().setText(String.valueOf(center.getX()));
+		dialogCircle.getYcoordinate().setText(String.valueOf(center.getY()));
+		dialogCircle.getXcoordinate().setEditable(false);
+		dialogCircle.getYcoordinate().setEditable(false);
+		dialogCircle.setVisible(true);
+	}
 
-				if (dialogH.isAccepted()) {
-					int radius = Integer.parseInt(dialogH.getRadius().getText());
-					HexagonAdapter hexagon = new HexagonAdapter(new Hexagon(center.getX(), center.getY(), radius),
-							colOuter, colInner);
-					CmdAdd addHexagonComm = new CmdAdd(model, hexagon);
-					addHexagonComm.execute();
-					commandsReverse = new Stack<Command>();
-					commandsNormal.push(addHexagonComm);
-					mainFrame.getlModel().addElement("Add - " + hexagon.getClass().getSimpleName() + " " + hexagon);
-				}
-			} catch (Exception exception) {
-				JOptionPane.showMessageDialog(new JFrame(), "Fill all the fields!", "Error",
-						JOptionPane.WARNING_MESSAGE);
-			}
-		}
+	public void addCircle(DialogCircle dialogCircle, Point center) {
+		Circle circle = new Circle(center, Integer.parseInt(dialogCircle.getRadius().getText()), false, colOuter,
+				colInner);
+		cmdAdd = new CmdAdd(model, circle);
+		executeCommand(cmdAdd);
+		clearStack();
+		logCommand("Add - " + circle.getClass().getSimpleName() + " " + circle);
+	}
 
-		mainFrame.getView().repaint();
-		fireUndoRedo();
+	public void btnCircleClicked(MouseEvent click) {
+		point = new Point(click.getX(), click.getY(), false, colOuter);
+		dialogCircle = new DialogCircle();
+		createCircleDialog(point);
+
+		if (dialogCircle.isAccepted())
+			addCircle(dialogCircle, point);
+	}
+
+	public void createDonutDialog(Point center) {
+		dialogDonut.getBtnSetOuterColor().setVisible(false);
+		dialogDonut.getBtnSetInnerColor().setVisible(false);
+		dialogDonut.getXcoordinate().setText(String.valueOf(center.getX()));
+		dialogDonut.getYcoordinate().setText(String.valueOf(center.getY()));
+		dialogDonut.getXcoordinate().setEditable(false);
+		dialogDonut.getYcoordinate().setEditable(false);
+		dialogDonut.setVisible(true);
+	}
+
+	public void addDonut(DialogDonut dialogDonut, Point center) {
+		Donut donut = new Donut(center, Integer.parseInt(dialogDonut.getRadius().getText()),
+				Integer.parseInt(dialogDonut.getSmallRadius().getText()), false, colOuter, colInner);
+
+		cmdAdd = new CmdAdd(model, donut);
+		executeCommand(cmdAdd);
+		clearStack();
+		logCommand("Add - " + donut.getClass().getSimpleName() + " " + donut);
+	}
+
+	public void btnDonutClicked(MouseEvent click) {
+		point = new Point(click.getX(), click.getY(), false, colOuter);
+		dialogDonut = new DialogDonut();
+		createDonutDialog(point);
+
+		if (dialogDonut.isAccepted())
+			addDonut(dialogDonut, point);
+	}
+
+	public void createHexagonDialog(Point center) {
+		dialogHexagon.getBtnSetOuterColor().setVisible(false);
+		dialogHexagon.getBtnSetInnerColor().setVisible(false);
+		dialogHexagon.getXcoordinate().setText(String.valueOf(center.getX()));
+		dialogHexagon.getYcoordinate().setText(String.valueOf(center.getY()));
+		dialogHexagon.getXcoordinate().setEditable(false);
+		dialogHexagon.getYcoordinate().setEditable(false);
+		dialogHexagon.setVisible(true);
+	}
+
+	public void addHexagon(DialogHexagon dialogHexagon, Point center) {
+		HexagonAdapter hexagon = new HexagonAdapter(
+				new Hexagon(center.getX(), center.getY(), Integer.parseInt(dialogHexagon.getRadius().getText())),
+				colOuter, colInner);
+		cmdAdd = new CmdAdd(model, hexagon);
+		executeCommand(cmdAdd);
+		clearStack();
+		logCommand("Add - " + hexagon.getClass().getSimpleName() + " " + hexagon);
+	}
+
+	public void btnHexagonClicked(MouseEvent click) {
+		point = new Point(click.getX(), click.getY(), false, colOuter);
+		dialogHexagon = new DialogHexagon();
+		createHexagonDialog(point);
+
+		if (dialogHexagon.isAccepted())
+			addHexagon(dialogHexagon, point);
+	}
+
+	public void createPointDialog(Shape selectedShape) {
+		dialogPoint.getXcoordinate().setText(String.valueOf(((Point) selectedShape).getX()));
+		dialogPoint.getYcoordinate().setText(String.valueOf(((Point) selectedShape).getY()));
+		dialogPoint.setOuterColor(((Point) selectedShape).getBorderColor());
+		dialogPoint.getBtnSetOuterColor().setBackground(dialogPoint.getOuterColor());
+		dialogPoint.setVisible(true);
+	}
+
+	public void modifyPoint(Shape selectedShape, DialogPoint dialogPoint) {
+		Point oldState = (Point) selectedShape;
+
+		Point newState = new Point(Integer.parseInt(dialogPoint.getXcoordinate().getText()),
+				Integer.parseInt(dialogPoint.getYcoordinate().getText()), oldState.isSelected(),
+				dialogPoint.getOuterColor());
+
+		logCommand("Modify - " + newState.getClass().getSimpleName() + " from " + oldState + " to " + " " + newState);
+		cmdModifyPoint = new CmdModifyPoint(oldState, (Point) newState);
+		executeCommand(cmdModifyPoint);
+		clearStack();
+	}
+
+	public void createLineDialog(Shape selectedShape) {
+		dialogLine.getX1coordinate().setText(String.valueOf(((Line) selectedShape).getStartPoint().getX()));
+		dialogLine.getY1coordinate().setText(String.valueOf(((Line) selectedShape).getStartPoint().getY()));
+		dialogLine.getX2coordinate().setText(String.valueOf(((Line) selectedShape).getEndPoint().getX()));
+		dialogLine.getY2coordinate().setText(String.valueOf(((Line) selectedShape).getEndPoint().getY()));
+		dialogLine.setOuterColor(((Line) selectedShape).getBorderColor());
+		dialogLine.getBtnSetOuterColor().setBackground(dialogLine.getOuterColor());
+		dialogLine.setVisible(true);
+	}
+
+	public void modifyLine(Shape selectedShape, DialogLine dialogLine) {
+		Line oldState = (Line) selectedShape;
+
+		Line newState = new Line(
+				new Point(Integer.parseInt(dialogLine.getX1coordinate().getText()),
+						Integer.parseInt(dialogLine.getY1coordinate().getText()), oldState.isSelected(),
+						dialogLine.getOuterColor()),
+				new Point(Integer.parseInt(dialogLine.getX2coordinate().getText()),
+						Integer.parseInt(dialogLine.getY2coordinate().getText()), oldState.isSelected(),
+						dialogLine.getOuterColor()),
+				oldState.isSelected(), dialogLine.getOuterColor());
+
+		logCommand("Modify - " + newState.getClass().getSimpleName() + " from " + oldState + " to " + " " + newState);
+		cmdModifyLine = new CmdModifyLine(oldState, (Line) newState);
+		executeCommand(cmdModifyLine);
+		clearStack();
+	}
+
+	public void createRectangleModifyDialog(Shape selectedShape) {
+		dialogRectangle.getXcoordinate()
+				.setText(String.valueOf(((Rectangle) selectedShape).getUpperLeftPoint().getX()));
+		dialogRectangle.getYcoordinate()
+				.setText(String.valueOf(((Rectangle) selectedShape).getUpperLeftPoint().getY()));
+		dialogRectangle.getheight().setText(String.valueOf(((Rectangle) selectedShape).getHeight()));
+		dialogRectangle.getwidth().setText(String.valueOf(((Rectangle) selectedShape).getWidth()));
+		dialogRectangle.setOuterColor(((Rectangle) selectedShape).getBorderColor());
+		dialogRectangle.setInnerColor(((Rectangle) selectedShape).getFillColor());
+		dialogRectangle.getBtnSetBorderColor().setBackground(dialogRectangle.getOuterColor());
+		dialogRectangle.getBtnSetFillColor().setBackground(dialogRectangle.getInnerColor());
+		dialogRectangle.setVisible(true);
+	}
+
+	public void modifyRectangle(Shape selectedShape, DialogRectangle dialogRectangle) {
+		Rectangle oldState = (Rectangle) selectedShape;
+
+		Rectangle newState = new Rectangle(
+				new Point(Integer.parseInt(dialogRectangle.getXcoordinate().getText()),
+						Integer.parseInt(dialogRectangle.getYcoordinate().getText()), oldState.isSelected(),
+						dialogRectangle.getOuterColor()),
+				Integer.parseInt(dialogRectangle.getheight().getText()),
+				Integer.parseInt(dialogRectangle.getwidth().getText()), oldState.isSelected(),
+				dialogRectangle.getOuterColor(), dialogRectangle.getInnerColor());
+
+		logCommand("Modify - " + newState.getClass().getSimpleName() + " from " + oldState + " to " + " " + newState);
+		cmdModifyRectangle = new CmdModifyRectangle(oldState, (Rectangle) newState);
+		executeCommand(cmdModifyRectangle);
+		clearStack();
+	}
+
+	public void createDonutModifyDialog(Shape selectedShape) {
+		dialogDonut.getXcoordinate().setText(String.valueOf(((Donut) selectedShape).getCenter().getX()));
+		dialogDonut.getYcoordinate().setText(String.valueOf(((Donut) selectedShape).getCenter().getY()));
+		dialogDonut.getRadius().setText(String.valueOf(((Donut) selectedShape).getRadius()));
+		dialogDonut.getSmallRadius().setText(String.valueOf(((Donut) selectedShape).getInnerRadius()));
+		dialogDonut.setOuterColor(((Donut) selectedShape).getBorderColor());
+		dialogDonut.setInnerColor(((Donut) selectedShape).getFillColor());
+		dialogDonut.getBtnSetOuterColor().setBackground(dialogDonut.getOuterColor());
+		dialogDonut.getBtnSetInnerColor().setBackground(dialogDonut.getInnerColor());
+		dialogDonut.setVisible(true);
+	}
+
+	public void modifyDonut(Shape selectedShape, DialogDonut dialogDonut) {
+		Donut oldState = (Donut) selectedShape;
+
+		Donut newState = new Donut(
+				new Point(Integer.parseInt(dialogDonut.getXcoordinate().getText()),
+						Integer.parseInt(dialogDonut.getYcoordinate().getText()), oldState.isSelected(),
+						dialogDonut.getOuterColor()),
+				Integer.parseInt(dialogDonut.getRadius().getText()),
+				Integer.parseInt(dialogDonut.getSmallRadius().getText()), oldState.isSelected(),
+				dialogDonut.getOuterColor(), dialogDonut.getInnerColor());
+
+		logCommand("Modify - " + newState.getClass().getSimpleName() + " from " + oldState + " to " + " " + newState);
+		cmdModifyDonut = new CmdModifyDonut(oldState, (Donut) newState);
+		executeCommand(cmdModifyDonut);
+		clearStack();
+	}
+
+	public void createCircleModifyDialog(Shape selectedShape) {
+		dialogCircle.getXcoordinate().setText(String.valueOf(((Circle) selectedShape).getCenter().getX()));
+		dialogCircle.getYcoordinate().setText(String.valueOf(((Circle) selectedShape).getCenter().getY()));
+		dialogCircle.getRadius().setText(String.valueOf(((Circle) selectedShape).getRadius()));
+		dialogCircle.setOuterColor(((Circle) selectedShape).getBorderColor());
+		dialogCircle.setInnerColor(((Circle) selectedShape).getFillColor());
+		dialogCircle.getBtnSetOuterColor().setBackground(dialogCircle.getOuterColor());
+		dialogCircle.getBtnSetInnerColor().setBackground(dialogCircle.getInnerColor());
+		dialogCircle.setVisible(true);
+	}
+
+	public void modifyCircle(Shape selectedShape, DialogCircle dialogCircle) {
+		Circle oldState = (Circle) selectedShape;
+
+		Circle newState = new Circle(
+				new Point(Integer.parseInt(dialogCircle.getXcoordinate().getText()),
+						Integer.parseInt(dialogCircle.getYcoordinate().getText()), oldState.isSelected(),
+						dialogCircle.getOuterColor()),
+				Integer.parseInt(dialogCircle.getRadius().getText()), oldState.isSelected(),
+				dialogCircle.getOuterColor(), dialogCircle.getInnerColor());
+
+		logCommand("Modify - " + newState.getClass().getSimpleName() + " from " + oldState + " to " + " " + newState);
+		cmdModifyCircle = new CmdModifyCircle(oldState, (Circle) newState);
+		executeCommand(cmdModifyCircle);
+		clearStack();
+	}
+
+	public void createHexagonModifyDialog(Shape selectedShape) {
+		dialogHexagon.getXcoordinate().setText(String.valueOf(((HexagonAdapter) selectedShape).getX()));
+		dialogHexagon.getYcoordinate().setText(String.valueOf(((HexagonAdapter) selectedShape).getY()));
+		dialogHexagon.getRadius().setText(String.valueOf(((HexagonAdapter) selectedShape).getR()));
+		dialogHexagon.setOuterColor(((HexagonAdapter) selectedShape).getBorderColor());
+		dialogHexagon.setInnerColor(((HexagonAdapter) selectedShape).getFillColor());
+		dialogHexagon.getBtnSetOuterColor().setBackground(dialogHexagon.getOuterColor());
+		dialogHexagon.getBtnSetInnerColor().setBackground(dialogHexagon.getInnerColor());
+		dialogHexagon.setVisible(true);
+	}
+
+	public void modifyHexagon(Shape selectedShape, DialogHexagon dialogHexagon) {
+		HexagonAdapter oldState = (HexagonAdapter) selectedShape;
+
+		HexagonAdapter newState = new HexagonAdapter(Integer.parseInt(dialogHexagon.getXcoordinate().getText()),
+				Integer.parseInt(dialogHexagon.getYcoordinate().getText()),
+				Integer.parseInt(dialogHexagon.getRadius().getText()), dialogHexagon.getOuterColor(),
+				dialogHexagon.getInnerColor(), oldState.isSelected());
+
+		logCommand("Modify - " + newState.getClass().getSimpleName() + " from " + oldState + " to " + " " + newState);
+		cmdModifyHexagon = new CmdModifyHexagon(oldState, (HexagonAdapter) newState);
+		executeCommand(cmdModifyHexagon);
+		clearStack();
 	}
 
 	public void modify() {
-		Shape selected = model.getOneSelectedShape();
-		Shape newState;
+		Shape selectedShape = model.getOneSelectedShape();
 
 		if (model.getSelectedShapes().size() != 1)
 			return;
 
-		if (selected instanceof Point) {
-			DialogPoint dialogP = new DialogPoint();
-			dialogP.getxCoord().setText(String.valueOf(((Point) selected).getX()));
-			dialogP.getyCoord().setText(String.valueOf(((Point) selected).getY()));
-			dialogP.setOuterColor(((Point) selected).getBorderColor());
-			dialogP.getBtnSetOuterColor().setBackground(dialogP.getOuterColor());
-			dialogP.setVisible(true);
-
-			if (dialogP.isAccepted()) {
-				Point oldState = (Point) selected;
-				newState = new Point(Integer.parseInt(dialogP.getxCoord().getText()),
-						Integer.parseInt(dialogP.getyCoord().getText()), oldState.isSelected(),
-						dialogP.getOuterColor());
-				mainFrame.getlModel().addElement("Modify - " + newState.getClass().getSimpleName() + " from " + oldState
-						+ " to " + " " + newState);
-				CmdModifyPoint pointM = new CmdModifyPoint(oldState, (Point) newState);
-				pointM.execute();
-				commandsReverse = new Stack<Command>();
-				commandsNormal.push(pointM);
-			}
-
-			mainFrame.getView().repaint();
-		} else if (selected instanceof Line) {
-			DialogLine dialogL = new DialogLine();
-			dialogL.getX1Coord().setText(String.valueOf(((Line) selected).getStartPoint().getX()));
-			dialogL.getY1Coord().setText(String.valueOf(((Line) selected).getStartPoint().getY()));
-			dialogL.getX2Coord().setText(String.valueOf(((Line) selected).getEndPoint().getX()));
-			dialogL.getY2Coord().setText(String.valueOf(((Line) selected).getEndPoint().getY()));
-			dialogL.setOuterColor(((Line) selected).getBorderColor());
-			dialogL.getBtnSetOuterColor().setBackground(dialogL.getOuterColor());
-			dialogL.setVisible(true);
-
-			if (dialogL.isAccepted()) {
-				Line oldState = (Line) selected;
-				Point newStartPoint = new Point(Integer.parseInt(dialogL.getX1Coord().getText()),
-						Integer.parseInt(dialogL.getY1Coord().getText()), oldState.isSelected(),
-						dialogL.getOuterColor());
-				Point newEndPoint = new Point(Integer.parseInt(dialogL.getX2Coord().getText()),
-						Integer.parseInt(dialogL.getY2Coord().getText()), oldState.isSelected(),
-						dialogL.getOuterColor());
-				newState = new Line(newStartPoint, newEndPoint, oldState.isSelected(), dialogL.getOuterColor());
-
-				mainFrame.getlModel().addElement("Modify - " + newState.getClass().getSimpleName() + " from " + oldState
-						+ " to " + " " + newState);
-				CmdModifyLine lineM = new CmdModifyLine(oldState, (Line) newState);
-				lineM.execute();
-				commandsReverse = new Stack<Command>();
-				commandsNormal.push(lineM);
-			}
-
-			mainFrame.getView().repaint();
-		} else if (selected instanceof Rectangle) {
-			try {
-				DialogRectangle dialogR = new DialogRectangle();
-				dialogR.getxCoord().setText(String.valueOf(((Rectangle) selected).getUpperLeftPoint().getX()));
-				dialogR.getyCoord().setText(String.valueOf(((Rectangle) selected).getUpperLeftPoint().getY()));
-				dialogR.getheight().setText(String.valueOf(((Rectangle) selected).getHeight()));
-				dialogR.getwidth().setText(String.valueOf(((Rectangle) selected).getWidth()));
-				dialogR.setOuterColor(((Rectangle) selected).getBorderColor());
-				dialogR.setInnerColor(((Rectangle) selected).getFillColor());
-				dialogR.getBtnSetBorderColor().setBackground(dialogR.getOuterColor());
-				dialogR.getBtnSetFillColor().setBackground(dialogR.getInnerColor());
-				dialogR.setVisible(true);
-
-				if (dialogR.isAccepted()) {
-					Rectangle oldState = (Rectangle) selected;
-					Point newUpperLeftPoint = new Point(Integer.parseInt(dialogR.getxCoord().getText()),
-							Integer.parseInt(dialogR.getyCoord().getText()), oldState.isSelected(),
-							dialogR.getOuterColor());
-					int newHeight = Integer.parseInt(dialogR.getheight().getText());
-					int newWidth = Integer.parseInt(dialogR.getwidth().getText());
-					newState = new Rectangle(newUpperLeftPoint, newHeight, newWidth, oldState.isSelected(),
-							dialogR.getOuterColor(), dialogR.getInnerColor());
-					mainFrame.getlModel().addElement("Modify - " + newState.getClass().getSimpleName() + " from "
-							+ oldState + " to " + " " + newState);
-					CmdModifyRectangle rectangleM = new CmdModifyRectangle(oldState, (Rectangle) newState);
-					rectangleM.execute();
-					commandsReverse = new Stack<Command>();
-					commandsNormal.push(rectangleM);
-				}
-
-				mainFrame.getView().repaint();
-			} catch (Exception ex) {
-				JOptionPane.showMessageDialog(new JFrame(), "Fill all the fields!", "Error",
-						JOptionPane.WARNING_MESSAGE);
-			}
-		} else if (selected instanceof Donut) {
-			try {
-				DialogDonut dialogD = new DialogDonut();
-				dialogD.getxCoord().setText(String.valueOf(((Donut) selected).getCenter().getX()));
-				dialogD.getyCoord().setText(String.valueOf(((Donut) selected).getCenter().getY()));
-				dialogD.getRadius().setText(String.valueOf(((Donut) selected).getRadius()));
-				dialogD.getSmallRadius().setText(String.valueOf(((Donut) selected).getInnerRadius()));
-				dialogD.setOuterColor(((Donut) selected).getBorderColor());
-				dialogD.setInnerColor(((Donut) selected).getFillColor());
-				dialogD.getBtnSetOuterColor().setBackground(dialogD.getOuterColor());
-				dialogD.getBtnSetInnerColor().setBackground(dialogD.getInnerColor());
-				dialogD.setVisible(true);
-
-				if (dialogD.isAccepted()) {
-					Donut oldState = (Donut) selected;
-					Point newCenter = new Point(Integer.parseInt(dialogD.getxCoord().getText()),
-							Integer.parseInt(dialogD.getyCoord().getText()), oldState.isSelected(),
-							dialogD.getOuterColor());
-					int newRadius = Integer.parseInt(dialogD.getRadius().getText());
-					int newSmallRadius = Integer.parseInt(dialogD.getSmallRadius().getText());
-					newState = new Donut(newCenter, newRadius, newSmallRadius, oldState.isSelected(),
-							dialogD.getOuterColor(), dialogD.getInnerColor());
-
-					mainFrame.getlModel().addElement("Modify - " + newState.getClass().getSimpleName() + " from "
-							+ oldState + " to " + " " + newState);
-					CmdModifyDonut donutM = new CmdModifyDonut(oldState, (Donut) newState);
-					donutM.execute();
-					commandsReverse = new Stack<Command>();
-					commandsNormal.push(donutM);
-				}
-
-				mainFrame.getView().repaint();
-			} catch (Exception ex) {
-				JOptionPane.showMessageDialog(new JFrame(), "Fill all the fields!", "Error",
-						JOptionPane.WARNING_MESSAGE);
-			}
-		} else if (selected instanceof Circle) {
-			try {
-				DialogCircle dialogC = new DialogCircle();
-				dialogC.getxCoord().setText(String.valueOf(((Circle) selected).getCenter().getX()));
-				dialogC.getyCoord().setText(String.valueOf(((Circle) selected).getCenter().getY()));
-				dialogC.getRadius().setText(String.valueOf(((Circle) selected).getRadius()));
-				dialogC.setOuterColor(((Circle) selected).getBorderColor());
-				dialogC.setInnerColor(((Circle) selected).getFillColor());
-				dialogC.getBtnSetOuterColor().setBackground(dialogC.getOuterColor());
-				dialogC.getBtnSetInnerColor().setBackground(dialogC.getInnerColor());
-				dialogC.setVisible(true);
-
-				if (dialogC.isAccepted()) {
-					Circle oldState = (Circle) selected;
-					Point newCenter = new Point(Integer.parseInt(dialogC.getxCoord().getText()),
-							Integer.parseInt(dialogC.getyCoord().getText()), oldState.isSelected(),
-							dialogC.getOuterColor());
-					int newRadius = Integer.parseInt(dialogC.getRadius().getText());
-					newState = new Circle(newCenter, newRadius, oldState.isSelected(), dialogC.getOuterColor(),
-							dialogC.getInnerColor());
-					mainFrame.getlModel().addElement("Modify - " + newState.getClass().getSimpleName() + " from "
-							+ oldState + " to " + " " + newState);
-					CmdModifyCircle circleM = new CmdModifyCircle(oldState, (Circle) newState);
-					circleM.execute();
-					commandsReverse = new Stack<Command>();
-					commandsNormal.push(circleM);
-				}
-
-				mainFrame.getView().repaint();
-
-			} catch (Exception ex) {
-				JOptionPane.showMessageDialog(new JFrame(), "Fill all the fields!", "Error",
-						JOptionPane.WARNING_MESSAGE);
-			}
-		} else if (selected instanceof HexagonAdapter) {
-			try {
-				DialogHexagon dialogH = new DialogHexagon();
-				dialogH.getxCoord().setText(String.valueOf(((HexagonAdapter) selected).getX()));
-				dialogH.getyCoord().setText(String.valueOf(((HexagonAdapter) selected).getY()));
-				dialogH.getRadius().setText(String.valueOf(((HexagonAdapter) selected).getR()));
-				dialogH.setOuterColor(((HexagonAdapter) selected).getBorderColor());
-				dialogH.setInnerColor(((HexagonAdapter) selected).getFillColor());
-				dialogH.getBtnSetOuterColor().setBackground(dialogH.getOuterColor());
-				dialogH.getBtnSetInnerColor().setBackground(dialogH.getInnerColor());
-				dialogH.setVisible(true);
-
-				if (dialogH.isAccepted()) {
-					HexagonAdapter oldState = (HexagonAdapter) selected;
-					newState = new HexagonAdapter(Integer.parseInt(dialogH.getxCoord().getText()),
-							Integer.parseInt(dialogH.getyCoord().getText()),
-							Integer.parseInt(dialogH.getRadius().getText()), dialogH.getOuterColor(),
-							dialogH.getInnerColor(), oldState.isSelected());
-
-					mainFrame.getlModel().addElement("Modify - " + newState.getClass().getSimpleName() + " from "
-							+ oldState + " to " + " " + newState);
-					CmdModifyHexagon hexagonM = new CmdModifyHexagon(oldState, (HexagonAdapter) newState);
-					hexagonM.execute();
-					commandsReverse = new Stack<Command>();
-					commandsNormal.push(hexagonM);
-				}
-
-				mainFrame.getView().repaint();
-			} catch (Exception ex) {
-				JOptionPane.showMessageDialog(new JFrame(), "Fill all the fields!", "Error",
-						JOptionPane.WARNING_MESSAGE);
-			}
+		if (selectedShape instanceof Point) {
+			dialogPoint = new DialogPoint();
+			createPointDialog(selectedShape);
+			if (dialogPoint.isAccepted())
+				modifyPoint(selectedShape, dialogPoint);
+		} else if (selectedShape instanceof Line) {
+			dialogLine = new DialogLine();
+			createLineDialog(selectedShape);
+			if (dialogLine.isAccepted())
+				modifyLine(selectedShape, dialogLine);
+		} else if (selectedShape instanceof Rectangle) {
+			dialogRectangle = new DialogRectangle();
+			createRectangleModifyDialog(selectedShape);
+			if (dialogRectangle.isAccepted())
+				modifyRectangle(selectedShape, dialogRectangle);
+		} else if (selectedShape instanceof Donut) {
+			dialogDonut = new DialogDonut();
+			createDonutModifyDialog(selectedShape);
+			if (dialogDonut.isAccepted())
+				modifyDonut(selectedShape, dialogDonut);
+		} else if (selectedShape instanceof Circle) {
+			dialogCircle = new DialogCircle();
+			createCircleModifyDialog(selectedShape);
+			if (dialogCircle.isAccepted())
+				modifyCircle(selectedShape, dialogCircle);
+		} else if (selectedShape instanceof HexagonAdapter) {
+			dialogHexagon = new DialogHexagon();
+			createHexagonModifyDialog(selectedShape);
+			if (dialogHexagon.isAccepted())
+				modifyHexagon(selectedShape, dialogHexagon);
 		}
 
+		mainFrame.getView().repaint();
 		fireUndoRedo();
 	}
 
@@ -468,12 +497,10 @@ public class DrawingController {
 		if (model.getSelectedShapes().size() == 0)
 			return;
 
-		int questionDialog = JOptionPane.showConfirmDialog(new JFrame(),
-				"Are you sure you want to delete selected shape/shapes?", "Delete it?", JOptionPane.YES_NO_OPTION);
-
-		if (questionDialog == JOptionPane.YES_OPTION) {
+		if (JOptionPane.showConfirmDialog(new JFrame(), "Are you sure you want to delete selected shape/shapes?",
+				"Delete it?", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 			deleteForLogs();
-			mainFrame.getlModel().addElement("Deleted");
+			logCommand("Deleted");
 			mainFrame.getView().repaint();
 			fireEvents();
 		}
@@ -481,10 +508,9 @@ public class DrawingController {
 
 	public void deleteForLogs() {
 		for (int i = 0; i < model.getSelectedShapes().size(); i++) {
-			CmdRemove cmd = new CmdRemove(model, model.getSelectedShapes().get(i));
-			cmd.execute();
-			commandsReverse = new Stack<Command>();
-			commandsNormal.push(cmd);
+			cmdRemove = new CmdRemove(model, model.getSelectedShapes().get(i));
+			executeCommand(cmdRemove);
+			clearStack();
 			// main_frame.getlModel().addElement("Deleted - " +
 			// model.getSelectedShapes().get(i).getClass().getSimpleName()
 			// + " " + model.getSelectedShapes().get(i).toString());
@@ -498,7 +524,7 @@ public class DrawingController {
 			return;
 
 		undoForLog();
-		mainFrame.getlModel().addElement("Undo");
+		logCommand("Undo");
 		mainFrame.getView().repaint();
 		fireUndoRedo();
 		fireEvents();
@@ -515,7 +541,7 @@ public class DrawingController {
 			return;
 
 		redoForLog();
-		mainFrame.getlModel().addElement("Redo");
+		logCommand("Redo");
 		mainFrame.getView().repaint();
 		fireUndoRedo();
 		fireEvents();
@@ -544,11 +570,10 @@ public class DrawingController {
 	public void toBack() {
 		if (model.getSelectedShapes().size() == 1) {
 			Shape shape = model.getOneSelectedShape();
-			CmdToBack comm = new CmdToBack(model, shape);
-			comm.execute();
-			commandsReverse = new Stack<Command>();
-			commandsNormal.push(comm);
-			mainFrame.getlModel().addElement("ToBack - " + shape.getClass().getSimpleName() + " " + shape.toString());
+			cmdToBack = new CmdToBack(model, shape);
+			executeCommand(cmdToBack);
+			clearStack();
+			logCommand("ToBack - " + shape.getClass().getSimpleName() + " " + shape.toString());
 			mainFrame.getView().repaint();
 		}
 	}
@@ -556,11 +581,10 @@ public class DrawingController {
 	public void toFront() {
 		if (model.getSelectedShapes().size() == 1) {
 			Shape shape = model.getOneSelectedShape();
-			CmdToFront comm = new CmdToFront(model, shape);
-			comm.execute();
-			commandsReverse = new Stack<Command>();
-			commandsNormal.push(comm);
-			mainFrame.getlModel().addElement("ToFront - " + shape.getClass().getSimpleName() + " " + shape.toString());
+			cmdToFront = new CmdToFront(model, shape);
+			executeCommand(cmdToFront);
+			clearStack();
+			logCommand("ToFront - " + shape.getClass().getSimpleName() + " " + shape.toString());
 			mainFrame.getView().repaint();
 		}
 	}
@@ -568,12 +592,10 @@ public class DrawingController {
 	public void sendToBack() {
 		if (model.getSelectedShapes().size() == 1) {
 			Shape shape = model.getOneSelectedShape();
-			CmdSendToBack comm = new CmdSendToBack(model, shape);
-			comm.execute();
-			commandsReverse = new Stack<Command>();
-			commandsNormal.push(comm);
-			mainFrame.getlModel()
-					.addElement("SendToBack - " + shape.getClass().getSimpleName() + " " + shape.toString());
+			cmdSendToBack = new CmdSendToBack(model, shape);
+			executeCommand(cmdSendToBack);
+			clearStack();
+			logCommand("SendToBack - " + shape.getClass().getSimpleName() + " " + shape.toString());
 			mainFrame.getView().repaint();
 		}
 	}
@@ -581,12 +603,10 @@ public class DrawingController {
 	public void bringToFront() {
 		if (model.getSelectedShapes().size() == 1) {
 			Shape shape = model.getOneSelectedShape();
-			CmdBringToFront comm = new CmdBringToFront(model, shape);
-			comm.execute();
-			commandsReverse = new Stack<Command>();
-			commandsNormal.push(comm);
-			mainFrame.getlModel()
-					.addElement("BringToFront - " + shape.getClass().getSimpleName() + " " + shape.toString());
+			cmdBringToFront = new CmdBringToFront(model, shape);
+			executeCommand(cmdBringToFront);
+			clearStack();
+			logCommand("BringToFront - " + shape.getClass().getSimpleName() + " " + shape.toString());
 			mainFrame.getView().repaint();
 		}
 	}
@@ -605,6 +625,35 @@ public class DrawingController {
 		observer.setBtnRedoEnable(commandsReverse.size() > 0);
 	}
 
+	public void saveDrawing() {
+		painting.setShapes(model.getShapes());
+		strategy.setStrategy(painting);
+		strategy.save(
+				fileChooser.getSelectedFile().getAbsolutePath() + "\\" + mainFrame.getFileName().getText() + ".bin");
+	}
+
+	public void saveLog() {
+		log = "";
+
+		for (int i = 0; i < mainFrame.getlModel().getSize(); i++)
+			log = log + mainFrame.getlModel().get(i) + "\n";
+
+		saveLog.setLog(log);
+		strategy.setStrategy(saveLog);
+		strategy.save(
+				fileChooser.getSelectedFile().getAbsolutePath() + "\\" + mainFrame.getFileName().getText() + ".txt");
+	}
+
+	public String getLog() {
+		return log;
+	}
+
+	public int showFileChooser(String title, int mode) {
+		fileChooser.setDialogTitle(title);
+		fileChooser.setFileSelectionMode(mode);
+		return fileChooser.showSaveDialog(mainFrame);
+	}
+
 	public void save() {
 		if (model.getShapes().size() == 0) {
 			JOptionPane.showMessageDialog(null, "You can't save because you haven't draw anythig yet!", "Error",
@@ -612,397 +661,433 @@ public class DrawingController {
 			return;
 		}
 
-		JFileChooser fileCh = new JFileChooser();
-		fileCh.setDialogTitle("Specify the location where you want to save your drawing");
-		fileCh.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		fileChooser = new JFileChooser();
 
-		if (fileCh.showSaveDialog(mainFrame) == JFileChooser.APPROVE_OPTION) {
-			StrategyManager strategy = new StrategyManager();
-			SaveLog saveLog = new SaveLog();
-			SavePainting painting = new SavePainting();
-			String log = "";
+		if (showFileChooser("Specify the location where you want to save your drawing",
+				JFileChooser.DIRECTORIES_ONLY) == JFileChooser.APPROVE_OPTION) {
 
-			for (int i = 0; i < mainFrame.getlModel().getSize(); i++)
-				log = log + mainFrame.getlModel().get(i) + "\n";
+			saveLog = new SaveLog();
+			strategy = new StrategyManager();
+			saveLog();
 
-			saveLog.setLog(log);
-			strategy.setStrategy(saveLog);
-			strategy.save(
-					fileCh.getSelectedFile().getAbsolutePath() + "\\" + mainFrame.getFileName().getText() + ".txt");
-			painting.setShapes(model.getShapes());
-			strategy.setStrategy(painting);
-			strategy.save(
-					fileCh.getSelectedFile().getAbsolutePath() + "\\" + mainFrame.getFileName().getText() + ".bin");
+			painting = new SavePainting();
+			strategy = new StrategyManager();
+			saveDrawing();
 		}
 	}
 
 	public void loadLog() {
 		mainFrame.getBtnNext().setEnabled(true);
-		setLoggComm(new LinkedList<String>());
-		JFileChooser fileCh = new JFileChooser();
-		fileCh.setDialogTitle("Specify the log you want to open");
-		fileCh.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		setLogCommands(new LinkedList<String>());
+		fileChooser = new JFileChooser();
 
-		if (fileCh.showOpenDialog(mainFrame) == JFileChooser.APPROVE_OPTION) {
-			try {
-				BufferedReader buffer = new BufferedReader(new FileReader(fileCh.getSelectedFile().getAbsolutePath()));
-				String text = "";
+		if (showFileChooser("Specify the log you want to open", JFileChooser.FILES_ONLY) == JFileChooser.APPROVE_OPTION)
+			addLog();
+	}
 
-				while ((text = buffer.readLine()) != null)
-					getLoggComm().add(text);
-			} catch (Exception exception) {
-				System.out.println(exception.getMessage());
-			}
+	public void addLog() {
+		try {
+			BufferedReader buffer = new BufferedReader(new FileReader(fileChooser.getSelectedFile().getAbsolutePath()));
+			String text = "";
+
+			while ((text = buffer.readLine()) != null)
+				logCommands.add(text);
+		} catch (Exception exception) {
+			System.out.println(exception.getMessage());
+		}
+	}
+
+	public void addPainting() {
+		try {
+			FileInputStream fis = new FileInputStream(fileChooser.getSelectedFile().getAbsoluteFile());
+			ObjectInputStream ois = new ObjectInputStream(fis);
+			model.setShapes((List<Shape>) ois.readObject());
+			mainFrame.getView().repaint();
+		} catch (Exception exception) {
+			System.out.println(exception.getMessage());
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	public void loadPainting() {
-		JFileChooser fileCh = new JFileChooser();
-		fileCh.setDialogTitle("Specify the painting you want to open");
-		fileCh.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		fileChooser = new JFileChooser();
+		showFileChooser("Specify the painting you want to open", JFileChooser.FILES_ONLY);
 
-		if (fileCh.showOpenDialog(mainFrame) == JFileChooser.APPROVE_OPTION) {
-			try {
-				FileInputStream fis = new FileInputStream(fileCh.getSelectedFile().getAbsoluteFile());
-				ObjectInputStream ois = new ObjectInputStream(fis);
-				model.setShapes((List<Shape>) ois.readObject());
-				mainFrame.getView().repaint();
-			} catch (Exception exception) {
-				System.out.println(exception.getMessage());
-			}
-		}
+		if (fileChooser.showOpenDialog(mainFrame) == JFileChooser.APPROVE_OPTION)
+			addPainting();
+	}
+
+	public void addPointFromLog(String[] line) {
+		Point point = new Point(Integer.parseInt(line[4]), Integer.parseInt(line[7]), false,
+				(Integer.parseInt(line[11]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[11]))));
+
+		cmdAdd = new CmdAdd(model, point);
+		executeCommand(cmdAdd);
+	}
+
+	public void addLineFromLog(String[] line) {
+		Point startPoint = new Point(Integer.parseInt(line[6]), Integer.parseInt(line[9]), false,
+				(Integer.parseInt(line[13]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[13]))));
+
+		Point endPoint = new Point(Integer.parseInt(line[18]), Integer.parseInt(line[21]), false,
+				(Integer.parseInt(line[25]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[25]))));
+
+		Line lineShape = new Line(startPoint, endPoint, false,
+				(Integer.parseInt(line[29]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[29]))));
+
+		cmdAdd = new CmdAdd(model, lineShape);
+		executeCommand(cmdAdd);
+	}
+
+	public void addRectangleFromLog(String[] line) {
+		Point point = new Point(Integer.parseInt(line[7]), Integer.parseInt(line[10]), false,
+				(Integer.parseInt(line[14]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[14]))));
+
+		Rectangle rectangle = new Rectangle(point, Integer.parseInt(line[17]), Integer.parseInt(line[20]), false,
+				(Integer.parseInt(line[24]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[24]))),
+				(Integer.parseInt(line[28]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[28]))));
+
+		cmdAdd = new CmdAdd(model, rectangle);
+		executeCommand(cmdAdd);
+	}
+
+	public void addCircleFromLog(String[] line) {
+		Point point = new Point(Integer.parseInt(line[5]), Integer.parseInt(line[8]), false,
+				(Integer.parseInt(line[12]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[12]))));
+
+		Circle circle = new Circle(point, Integer.parseInt(line[15]), false,
+				(Integer.parseInt(line[19]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[19]))),
+				(Integer.parseInt(line[23]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[23]))));
+
+		cmdAdd = new CmdAdd(model, circle);
+		executeCommand(cmdAdd);
+	}
+
+	public void addDonutFromLog(String[] line) {
+		Point point = new Point(Integer.parseInt(line[5]), Integer.parseInt(line[8]), false,
+				(Integer.parseInt(line[12]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[12]))));
+
+		Donut donut = new Donut(point, Integer.parseInt(line[15]), Integer.parseInt(line[27]), false,
+				(Integer.parseInt(line[31]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[31]))),
+				(Integer.parseInt(line[35]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[35]))));
+
+		cmdAdd = new CmdAdd(model, donut);
+		executeCommand(cmdAdd);
+	}
+
+	public void addHexagonFromLog(String[] line) {
+		Point point = new Point(Integer.parseInt(line[5]), Integer.parseInt(line[8]), false,
+				(Integer.parseInt(line[12]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[12]))));
+
+		HexagonAdapter hexagon = new HexagonAdapter(point.getX(), point.getY(), Integer.parseInt(line[15]),
+				(Integer.parseInt(line[19]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[19]))),
+				(Integer.parseInt(line[23]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[23]))),
+				false);
+
+		cmdAdd = new CmdAdd(model, hexagon);
+		executeCommand(cmdAdd);
+	}
+
+	public void selectPoint(String[] line) {
+		Point point = new Point(Integer.parseInt(line[4]), Integer.parseInt(line[7]), false,
+				(Integer.parseInt(line[11]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[11]))));
+
+		cmdSelect = new CmdSelect(point, model);
+		executeCommand(cmdSelect);
+	}
+
+	public void selectLine(String[] line) {
+		Point startPoint = new Point(Integer.parseInt(line[6]), Integer.parseInt(line[9]), false,
+				(Integer.parseInt(line[13]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[13]))));
+
+		Point endPoint = new Point(Integer.parseInt(line[18]), Integer.parseInt(line[21]), false,
+				(Integer.parseInt(line[25]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[25]))));
+
+		Line lineShape = new Line(startPoint, endPoint, true,
+				(Integer.parseInt(line[29]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[29]))));
+
+		cmdSelect = new CmdSelect(lineShape, model);
+		executeCommand(cmdSelect);
+	}
+
+	public void selectRectangle(String[] line) {
+		Point point = new Point(Integer.parseInt(line[7]), Integer.parseInt(line[10]), false,
+				(Integer.parseInt(line[14]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[14]))));
+
+		Rectangle rectangle = new Rectangle(point, Integer.parseInt(line[17]), Integer.parseInt(line[20]), true,
+				(Integer.parseInt(line[24]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[24]))),
+				(Integer.parseInt(line[28]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[28]))));
+
+		cmdSelect = new CmdSelect(rectangle, model);
+		executeCommand(cmdSelect);
+	}
+
+	public void selectCircle(String[] line) {
+		Point point = new Point(Integer.parseInt(line[5]), Integer.parseInt(line[8]), false,
+				(Integer.parseInt(line[12]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[12]))));
+
+		Circle circle = new Circle(point, Integer.parseInt(line[15]), true,
+				(Integer.parseInt(line[19]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[19]))),
+				(Integer.parseInt(line[23]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[23]))));
+
+		cmdSelect = new CmdSelect(circle, model);
+		executeCommand(cmdSelect);
+	}
+
+	public void selectDonut(String[] line) {
+		Point point = new Point(Integer.parseInt(line[5]), Integer.parseInt(line[8]), false,
+				(Integer.parseInt(line[12]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[12]))));
+
+		Donut donut = new Donut(point, Integer.parseInt(line[15]), Integer.parseInt(line[27]), true,
+				(Integer.parseInt(line[31]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[31]))),
+				(Integer.parseInt(line[35]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[35]))));
+
+		cmdSelect = new CmdSelect(donut, model);
+		executeCommand(cmdSelect);
+	}
+
+	public void selectHexagon(String[] line) {
+		Point point = new Point(Integer.parseInt(line[5]), Integer.parseInt(line[8]), false,
+				(Integer.parseInt(line[12]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[12]))));
+
+		HexagonAdapter hexagon = new HexagonAdapter(point.getX(), point.getY(), Integer.parseInt(line[15]),
+				(Integer.parseInt(line[19]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[19]))),
+				(Integer.parseInt(line[23]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[23]))),
+				false);
+
+		cmdSelect = new CmdSelect(hexagon, model);
+		executeCommand(cmdSelect);
+	}
+
+	public void deselectPoint(String[] line) {
+		Point point = new Point(Integer.parseInt(line[4]), Integer.parseInt(line[7]), true,
+				(Integer.parseInt(line[11]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[11]))));
+
+		cmdDeselect = new CmdDeselect(point, model);
+		executeCommand(cmdDeselect);
+	}
+
+	public void deselectLine(String[] line) {
+		Point startPoint = new Point(Integer.parseInt(line[6]), Integer.parseInt(line[9]), false,
+				(Integer.parseInt(line[13]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[13]))));
+
+		Point endPoint = new Point(Integer.parseInt(line[18]), Integer.parseInt(line[21]), false,
+				(Integer.parseInt(line[25]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[25]))));
+
+		Line lineShape = new Line(startPoint, endPoint, true,
+				(Integer.parseInt(line[29]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[29]))));
+
+		cmdDeselect = new CmdDeselect(lineShape, model);
+		executeCommand(cmdDeselect);
+	}
+
+	public void deselectRectangle(String[] line) {
+		Point point = new Point(Integer.parseInt(line[7]), Integer.parseInt(line[10]), false,
+				(Integer.parseInt(line[14]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[14]))));
+
+		Rectangle rectangle = new Rectangle(point, Integer.parseInt(line[17]), Integer.parseInt(line[20]), true,
+				(Integer.parseInt(line[24]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[24]))),
+				(Integer.parseInt(line[28]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[28]))));
+
+		cmdDeselect = new CmdDeselect(rectangle, model);
+		executeCommand(cmdDeselect);
+	}
+
+	public void deselectCircle(String[] line) {
+		Point point = new Point(Integer.parseInt(line[5]), Integer.parseInt(line[8]), false,
+				(Integer.parseInt(line[12]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[12]))));
+
+		Circle circle = new Circle(point, Integer.parseInt(line[15]), true,
+				(Integer.parseInt(line[19]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[19]))),
+				(Integer.parseInt(line[23]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[23]))));
+
+		cmdDeselect = new CmdDeselect(circle, model);
+		executeCommand(cmdDeselect);
+	}
+
+	public void deselectDonut(String[] line) {
+		Point point = new Point(Integer.parseInt(line[5]), Integer.parseInt(line[8]), false,
+				(Integer.parseInt(line[12]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[12]))));
+
+		Donut donut = new Donut(point, Integer.parseInt(line[15]), Integer.parseInt(line[27]), true,
+				(Integer.parseInt(line[31]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[31]))),
+				(Integer.parseInt(line[35]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[35]))));
+
+		cmdDeselect = new CmdDeselect(donut, model);
+		executeCommand(cmdDeselect);
+	}
+
+	public void deselectHexagon(String[] line) {
+		Point point = new Point(Integer.parseInt(line[5]), Integer.parseInt(line[8]), false,
+				(Integer.parseInt(line[12]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[12]))));
+
+		HexagonAdapter hexagon = new HexagonAdapter(point.getX(), point.getY(), Integer.parseInt(line[15]),
+				(Integer.parseInt(line[19]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[19]))),
+				(Integer.parseInt(line[23]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[23]))),
+				true);
+
+		cmdDeselect = new CmdDeselect(hexagon, model);
+		executeCommand(cmdDeselect);
+	}
+
+	public void modifyPointFromLog(String[] line, Shape selectedShape) {
+		Point oldState = (Point) selectedShape;
+
+		Point newState = new Point(Integer.parseInt(line[17]), Integer.parseInt(line[20]), true,
+				(Integer.parseInt(line[24]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[24]))));
+
+		model.getSelectedShapes().remove(oldState);
+		model.getSelectedShapes().add(newState);
+
+		cmdModifyPoint = new CmdModifyPoint(oldState, newState);
+		executeCommand(cmdModifyPoint);
+	}
+
+	public void modifyLineFromLog(String[] line, Shape selectedShape) {
+		Line oldState = (Line) selectedShape;
+
+		Point startPoint = new Point(Integer.parseInt(line[36]), Integer.parseInt(line[39]), false,
+				(Integer.parseInt(line[43]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[43]))));
+
+		Point endPoint = new Point(Integer.parseInt(line[48]), Integer.parseInt(line[51]), false,
+				(Integer.parseInt(line[55]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[55]))));
+
+		Line newState = new Line(startPoint, endPoint, true,
+				(Integer.parseInt(line[59]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[59]))));
+
+		model.getSelectedShapes().remove(oldState);
+		model.getSelectedShapes().add(newState);
+
+		cmdModifyLine = new CmdModifyLine(oldState, newState);
+		executeCommand(cmdModifyLine);
+	}
+
+	public void modifyRectangleFromLog(String[] line, Shape selectedShape) {
+		Rectangle oldState = (Rectangle) selectedShape;
+
+		Point point = new Point(Integer.parseInt(line[36]), Integer.parseInt(line[39]), false,
+				(Integer.parseInt(line[43]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[43]))));
+
+		Rectangle newState = new Rectangle(point, Integer.parseInt(line[46]), Integer.parseInt(line[49]), true,
+				(Integer.parseInt(line[53]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[53]))),
+				(Integer.parseInt(line[57]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[57]))));
+
+		model.getSelectedShapes().remove(oldState);
+		model.getSelectedShapes().add(newState);
+
+		cmdModifyRectangle = new CmdModifyRectangle(oldState, newState);
+		executeCommand(cmdModifyRectangle);
+	}
+
+	public void modifyCircleFromLog(String[] line, Shape selectedShape) {
+		Circle oldState = (Circle) selectedShape;
+
+		Point point = new Point(Integer.parseInt(line[29]), Integer.parseInt(line[32]), false,
+				(Integer.parseInt(line[36]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[36]))));
+
+		Circle newState = new Circle(point, Integer.parseInt(line[39]), true,
+				(Integer.parseInt(line[43]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[43]))),
+				(Integer.parseInt(line[47]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[47]))));
+
+		model.getSelectedShapes().remove(oldState);
+		model.getSelectedShapes().add(newState);
+
+		cmdModifyCircle = new CmdModifyCircle(oldState, newState);
+		executeCommand(cmdModifyCircle);
+	}
+
+	public void modifyDonutFromLog(String[] line, Shape selectedShape) {
+		Donut oldState = (Donut) selectedShape;
+
+		Point point = new Point(Integer.parseInt(line[41]), Integer.parseInt(line[44]), false,
+				(Integer.parseInt(line[48]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[48]))));
+
+		Donut newState = new Donut(point, Integer.parseInt(line[51]), Integer.parseInt(line[63]), true,
+				(Integer.parseInt(line[67]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[67]))),
+				(Integer.parseInt(line[71]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[71]))));
+
+		model.getSelectedShapes().remove(oldState);
+		model.getSelectedShapes().add(newState);
+
+		cmdModifyDonut = new CmdModifyDonut(oldState, newState);
+		executeCommand(cmdModifyDonut);
+	}
+
+	public void modifyHexagonFromLog(String[] line, Shape selectedShape) {
+		HexagonAdapter oldState = (HexagonAdapter) selectedShape;
+
+		Point point = new Point(Integer.parseInt(line[29]), Integer.parseInt(line[32]), false,
+				(Integer.parseInt(line[36]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[36]))));
+
+		HexagonAdapter newState = new HexagonAdapter(point.getX(), point.getY(), Integer.parseInt(line[39]),
+				(Integer.parseInt(line[43]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[43]))),
+				(Integer.parseInt(line[47]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[47]))),
+				true);
+
+		model.getSelectedShapes().remove(oldState);
+		model.getSelectedShapes().add(newState);
+
+		cmdModifyHexagon = new CmdModifyHexagon(oldState, newState);
+		executeCommand(cmdModifyHexagon);
 	}
 
 	public void nextCommand() {
-		String[] line = getLoggComm().peek().split(" ");
+		String[] line = logCommands.peek().split(" ");
 
 		if (line[0].equals("Add")) {
-			if (line[2].equals("Point")) {
-				Point p = new Point(Integer.parseInt(line[4]), Integer.parseInt(line[7]), false,
-						(Integer.parseInt(line[11]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[11]))));
-				Command addPoint = new CmdAdd(model, p);
-				addPoint.execute();
-				commandsNormal.add(addPoint);
-
-			} else if (line[2].equals("Line")) {
-				Point p1 = new Point(Integer.parseInt(line[6]), Integer.parseInt(line[9]), false,
-						(Integer.parseInt(line[13]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[13]))));
-				Point p2 = new Point(Integer.parseInt(line[18]), Integer.parseInt(line[21]), false,
-						(Integer.parseInt(line[25]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[25]))));
-				Line l = new Line(p1, p2, false, (Integer.parseInt(line[29]) == 0 ? new Color(0, 0, 0, 0)
-						: new Color(Integer.parseInt(line[29]))));
-				Command addLine = new CmdAdd(model, l);
-				addLine.execute();
-				commandsNormal.add(addLine);
-			} else if (line[2].equals("Rectangle")) {
-				Point p = new Point(Integer.parseInt(line[7]), Integer.parseInt(line[10]), false,
-						(Integer.parseInt(line[14]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[14]))));
-				int height = Integer.parseInt(line[17]);
-				int width = Integer.parseInt(line[20]);
-				Rectangle r = new Rectangle(p, height, width, false,
-						(Integer.parseInt(line[24]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[24]))),
-						(Integer.parseInt(line[28]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[28]))));
-				Command addRect = new CmdAdd(model, r);
-				addRect.execute();
-				commandsNormal.add(addRect);
-			} else if (line[2].equals("Circle")) {
-				Point p = new Point(Integer.parseInt(line[5]), Integer.parseInt(line[8]), false,
-						(Integer.parseInt(line[12]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[12]))));
-				int radius = Integer.parseInt(line[15]);
-				Circle c = new Circle(p, radius, false,
-						(Integer.parseInt(line[19]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[19]))),
-						(Integer.parseInt(line[23]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[23]))));
-				Command addCircle = new CmdAdd(model, c);
-				addCircle.execute();
-				commandsNormal.add(addCircle);
-			} else if (line[2].equals("Donut")) {
-				Point p = new Point(Integer.parseInt(line[5]), Integer.parseInt(line[8]), false,
-						(Integer.parseInt(line[12]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[12]))));
-				int radius = Integer.parseInt(line[15]);
-				int innerRadius = Integer.parseInt(line[27]);
-				Donut d = new Donut(p, radius, innerRadius, false,
-						(Integer.parseInt(line[31]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[31]))),
-						(Integer.parseInt(line[35]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[35]))));
-				Command addDonut = new CmdAdd(model, d);
-				addDonut.execute();
-				commandsNormal.add(addDonut);
-			} else if (line[2].equals("HexagonAdapter")) {
-				Point p = new Point(Integer.parseInt(line[5]), Integer.parseInt(line[8]), false,
-						(Integer.parseInt(line[12]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[12]))));
-				int radius = Integer.parseInt(line[15]);
-				HexagonAdapter h = new HexagonAdapter(p.getX(), p.getY(), radius,
-						(Integer.parseInt(line[19]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[19]))),
-						(Integer.parseInt(line[23]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[23]))),
-						false);
-				Command addHex = new CmdAdd(model, h);
-				addHex.execute();
-				commandsNormal.add(addHex);
-			}
+			if (line[2].equals("Point"))
+				addPointFromLog(line);
+			else if (line[2].equals("Line"))
+				addLineFromLog(line);
+			else if (line[2].equals("Rectangle"))
+				addRectangleFromLog(line);
+			else if (line[2].equals("Circle"))
+				addCircleFromLog(line);
+			else if (line[2].equals("Donut"))
+				addDonutFromLog(line);
+			else if (line[2].equals("HexagonAdapter"))
+				addHexagonFromLog(line);
 		} else if (line[0].equals("Select")) {
-			if (line[2].equals("Point")) {
-				Point p = new Point(Integer.parseInt(line[4]), Integer.parseInt(line[7]), false,
-						(Integer.parseInt(line[11]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[11]))));
-				Command selectPoint = new CmdSelect(p, model);
-				selectPoint.execute();
-				commandsNormal.add(selectPoint);
-			} else if (line[2].equals("Line")) {
-				Point p1 = new Point(Integer.parseInt(line[6]), Integer.parseInt(line[9]), false,
-						(Integer.parseInt(line[13]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[13]))));
-				Point p2 = new Point(Integer.parseInt(line[18]), Integer.parseInt(line[21]), false,
-						(Integer.parseInt(line[25]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[25]))));
-				Line l = new Line(p1, p2, true, (Integer.parseInt(line[29]) == 0 ? new Color(0, 0, 0, 0)
-						: new Color(Integer.parseInt(line[29]))));
-				Command selectLine = new CmdSelect(l, model);
-				selectLine.execute();
-				commandsNormal.add(selectLine);
-			} else if (line[2].equals("Rectangle")) {
-				Point p = new Point(Integer.parseInt(line[7]), Integer.parseInt(line[10]), false,
-						(Integer.parseInt(line[14]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[14]))));
-				int height = Integer.parseInt(line[17]);
-				int width = Integer.parseInt(line[20]);
-				Rectangle r = new Rectangle(p, height, width, true,
-						(Integer.parseInt(line[24]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[24]))),
-						(Integer.parseInt(line[28]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[28]))));
-				Command selectRect = new CmdSelect(r, model);
-				selectRect.execute();
-				commandsNormal.add(selectRect);
-			} else if (line[2].equals("Circle")) {
-				Point p = new Point(Integer.parseInt(line[5]), Integer.parseInt(line[8]), false,
-						(Integer.parseInt(line[12]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[12]))));
-				int radius = Integer.parseInt(line[15]);
-				Circle c = new Circle(p, radius, true,
-						(Integer.parseInt(line[19]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[19]))),
-						(Integer.parseInt(line[23]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[23]))));
-				Command selectCircle = new CmdSelect(c, model);
-				selectCircle.execute();
-				commandsNormal.add(selectCircle);
-			} else if (line[2].equals("Donut")) {
-				Point p = new Point(Integer.parseInt(line[5]), Integer.parseInt(line[8]), false,
-						(Integer.parseInt(line[12]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[12]))));
-				int radius = Integer.parseInt(line[15]);
-				int innerRadius = Integer.parseInt(line[27]);
-				Donut d = new Donut(p, radius, innerRadius, true,
-						(Integer.parseInt(line[31]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[31]))),
-						(Integer.parseInt(line[35]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[35]))));
-				Command selectDonut = new CmdSelect(d, model);
-				selectDonut.execute();
-				commandsNormal.add(selectDonut);
-			} else if (line[2].equals("HexagonAdapter")) {
-				Point p = new Point(Integer.parseInt(line[5]), Integer.parseInt(line[8]), false,
-						(Integer.parseInt(line[12]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[12]))));
-				int radius = Integer.parseInt(line[15]);
-				HexagonAdapter h = new HexagonAdapter(p.getX(), p.getY(), radius,
-						(Integer.parseInt(line[19]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[19]))),
-						(Integer.parseInt(line[23]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[23]))),
-						false);
-				Command selectHex = new CmdSelect(h, model);
-				selectHex.execute();
-				commandsNormal.add(selectHex);
-			}
+			if (line[2].equals("Point"))
+				selectPoint(line);
+			else if (line[2].equals("Line"))
+				selectLine(line);
+			else if (line[2].equals("Rectangle"))
+				selectRectangle(line);
+			else if (line[2].equals("Circle"))
+				selectCircle(line);
+			else if (line[2].equals("Donut"))
+				selectDonut(line);
+			else if (line[2].equals("HexagonAdapter"))
+				selectHexagon(line);
 		} else if (line[0].equals("Deselect")) {
-			if (line[2].equals("Point")) {
-				Point p = new Point(Integer.parseInt(line[4]), Integer.parseInt(line[7]), true,
-						(Integer.parseInt(line[11]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[11]))));
-				Command deselect = new CmdDeselect(p, model);
-				deselect.execute();
-				commandsNormal.add(deselect);
-			} else if (line[2].equals("Line")) {
-				Point p1 = new Point(Integer.parseInt(line[6]), Integer.parseInt(line[9]), false,
-						(Integer.parseInt(line[13]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[13]))));
-				Point p2 = new Point(Integer.parseInt(line[18]), Integer.parseInt(line[21]), false,
-						(Integer.parseInt(line[25]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[25]))));
-				Line l = new Line(p1, p2, true, (Integer.parseInt(line[29]) == 0 ? new Color(0, 0, 0, 0)
-						: new Color(Integer.parseInt(line[29]))));
-				Command deselect = new CmdDeselect(l, model);
-				deselect.execute();
-				commandsNormal.add(deselect);
-			} else if (line[2].equals("Rectangle")) {
-				Point p = new Point(Integer.parseInt(line[7]), Integer.parseInt(line[10]), false,
-						(Integer.parseInt(line[14]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[14]))));
-				int height = Integer.parseInt(line[17]);
-				int width = Integer.parseInt(line[20]);
-				Rectangle r = new Rectangle(p, height, width, true,
-						(Integer.parseInt(line[24]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[24]))),
-						(Integer.parseInt(line[28]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[28]))));
-				Command deselect = new CmdDeselect(r, model);
-				deselect.execute();
-				commandsNormal.add(deselect);
-			} else if (line[2].equals("Circle")) {
-				Point p = new Point(Integer.parseInt(line[5]), Integer.parseInt(line[8]), false,
-						(Integer.parseInt(line[12]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[12]))));
-				int radius = Integer.parseInt(line[15]);
-				Circle c = new Circle(p, radius, true,
-						(Integer.parseInt(line[19]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[19]))),
-						(Integer.parseInt(line[23]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[23]))));
-				Command deselect = new CmdDeselect(c, model);
-				deselect.execute();
-				commandsNormal.add(deselect);
-			} else if (line[2].equals("Donut")) {
-				Point p = new Point(Integer.parseInt(line[5]), Integer.parseInt(line[8]), false,
-						(Integer.parseInt(line[12]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[12]))));
-				int radius = Integer.parseInt(line[15]);
-				int innerRadius = Integer.parseInt(line[27]);
-				Donut d = new Donut(p, radius, innerRadius, true,
-						(Integer.parseInt(line[31]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[31]))),
-						(Integer.parseInt(line[35]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[35]))));
-				Command deselect = new CmdDeselect(d, model);
-				deselect.execute();
-				commandsNormal.add(deselect);
-			} else if (line[2].equals("HexagonAdapter")) {
-				Point p = new Point(Integer.parseInt(line[5]), Integer.parseInt(line[8]), false,
-						(Integer.parseInt(line[12]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[12]))));
-				int radius = Integer.parseInt(line[15]);
-				HexagonAdapter h = new HexagonAdapter(p.getX(), p.getY(), radius,
-						(Integer.parseInt(line[19]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[19]))),
-						(Integer.parseInt(line[23]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[23]))),
-						true);
-				Command deselect = new CmdDeselect(h, model);
-				deselect.execute();
-				commandsNormal.add(deselect);
-			}
-
+			if (line[2].equals("Point"))
+				deselectPoint(line);
+			else if (line[2].equals("Line"))
+				deselectLine(line);
+			else if (line[2].equals("Rectangle"))
+				deselectRectangle(line);
+			else if (line[2].equals("Circle"))
+				deselectCircle(line);
+			else if (line[2].equals("Donut"))
+				deselectDonut(line);
+			else if (line[2].equals("HexagonAdapter"))
+				deselectHexagon(line);
 		} else if (line[0].equals("Modify")) {
-			Shape selected = model.getOneSelectedShape();
+			Shape selectedShape = model.getOneSelectedShape();
 
-			if (line[2].equals("Point")) {
-				Point oldState = (Point) selected;
-				Point newState = new Point(Integer.parseInt(line[17]), Integer.parseInt(line[20]), true,
-						(Integer.parseInt(line[24]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[24]))));
-				model.getSelectedShapes().remove(oldState);
-				model.getSelectedShapes().add(newState);
-				Command modify = new CmdModifyPoint(oldState, newState);
-				modify.execute();
-				commandsNormal.add(modify);
-			} else if (line[2].equals("Line")) {
-				Line oldState = (Line) selected;
-				Point p1 = new Point(Integer.parseInt(line[36]), Integer.parseInt(line[39]), false,
-						(Integer.parseInt(line[43]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[43]))));
-				Point p2 = new Point(Integer.parseInt(line[48]), Integer.parseInt(line[51]), false,
-						(Integer.parseInt(line[55]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[55]))));
-				Line newState = new Line(p1, p2, true, (Integer.parseInt(line[59]) == 0 ? new Color(0, 0, 0, 0)
-						: new Color(Integer.parseInt(line[59]))));
-				model.getSelectedShapes().remove(oldState);
-				model.getSelectedShapes().add(newState);
-				Command modify = new CmdModifyLine(oldState, newState);
-				modify.execute();
-				commandsNormal.add(modify);
-			} else if (line[2].equals("Rectangle")) {
-				Rectangle oldState = (Rectangle) selected;
-				Point p = new Point(Integer.parseInt(line[36]), Integer.parseInt(line[39]), false,
-						(Integer.parseInt(line[43]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[43]))));
-				int height = Integer.parseInt(line[46]);
-				int width = Integer.parseInt(line[49]);
-				Rectangle newState = new Rectangle(p, height, width, true,
-						(Integer.parseInt(line[53]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[53]))),
-						(Integer.parseInt(line[57]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[57]))));
-				model.getSelectedShapes().remove(oldState);
-				model.getSelectedShapes().add(newState);
-				Command modify = new CmdModifyRectangle(oldState, newState);
-				modify.execute();
-				commandsNormal.add(modify);
-			} else if (line[2].equals("Circle")) {
-				Circle oldState = (Circle) selected;
-				Point p = new Point(Integer.parseInt(line[29]), Integer.parseInt(line[32]), false,
-						(Integer.parseInt(line[36]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[36]))));
-				int radius = Integer.parseInt(line[39]);
-				Circle newState = new Circle(p, radius, true,
-						(Integer.parseInt(line[43]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[43]))),
-						(Integer.parseInt(line[47]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[47]))));
-				model.getSelectedShapes().remove(oldState);
-				model.getSelectedShapes().add(newState);
-				Command modify = new CmdModifyCircle(oldState, newState);
-				modify.execute();
-				commandsNormal.add(modify);
-			} else if (line[2].equals("Donut")) {
-				Donut oldState = (Donut) selected;
-				Point p = new Point(Integer.parseInt(line[41]), Integer.parseInt(line[44]), false,
-						(Integer.parseInt(line[48]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[48]))));
-				int radius = Integer.parseInt(line[51]);
-				int innerRadius = Integer.parseInt(line[63]);
-				Donut newState = new Donut(p, radius, innerRadius, true,
-						(Integer.parseInt(line[67]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[67]))),
-						(Integer.parseInt(line[71]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[71]))));
-				model.getSelectedShapes().remove(oldState);
-				model.getSelectedShapes().add(newState);
-				Command modify = new CmdModifyDonut(oldState, newState);
-				modify.execute();
-				commandsNormal.add(modify);
-			} else if (line[2].equals("HexagonAdapter")) {
-				HexagonAdapter oldState = (HexagonAdapter) selected;
-				Point p = new Point(Integer.parseInt(line[29]), Integer.parseInt(line[32]), false,
-						(Integer.parseInt(line[36]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[36]))));
-				int radius = Integer.parseInt(line[39]);
-				HexagonAdapter newState = new HexagonAdapter(p.getX(), p.getY(), radius,
-						(Integer.parseInt(line[43]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[43]))),
-						(Integer.parseInt(line[47]) == 0 ? new Color(0, 0, 0, 0)
-								: new Color(Integer.parseInt(line[47]))),
-						true);
-				model.getSelectedShapes().remove(oldState);
-				model.getSelectedShapes().add(newState);
-				Command modify = new CmdModifyHexagon(oldState, newState);
-				modify.execute();
-				commandsNormal.add(modify);
-			}
+			if (line[2].equals("Point"))
+				modifyPointFromLog(line, selectedShape);
+			else if (line[2].equals("Line"))
+				modifyLineFromLog(line, selectedShape);
+			else if (line[2].equals("Rectangle"))
+				modifyRectangleFromLog(line, selectedShape);
+			else if (line[2].equals("Circle"))
+				modifyCircleFromLog(line, selectedShape);
+			else if (line[2].equals("Donut"))
+				modifyDonutFromLog(line, selectedShape);
+			else if (line[2].equals("HexagonAdapter"))
+				modifyHexagonFromLog(line, selectedShape);
 		} else if (line[0].equals("Deleted"))
 			deleteForLogs();
 		else if (line[0].equals("Undo"))
@@ -1018,11 +1103,248 @@ public class DrawingController {
 		else if (line[0].equals("SendToBack"))
 			sendToBack();
 
-		if (getLoggComm().size() == 1)
+		if (getLogCommands().size() == 1)
 			mainFrame.getBtnNext().setEnabled(false);
+
 		fireEvents();
 		fireUndoRedo();
 		mainFrame.getView().repaint();
-		mainFrame.getlModel().addElement(getLoggComm().poll());
+		mainFrame.getlModel().addElement(getLogCommands().poll());
+	}
+
+	public Queue<String> getLogCommands() {
+		return logCommands;
+	}
+
+	public void setLogCommands(Queue<String> loggComm) {
+		this.logCommands = loggComm;
+	}
+
+	public Stack<Command> getCommandsNormal() {
+		return commandsNormal;
+	}
+
+	public void setCommandsNormal(Stack<Command> commandsNormal) {
+		this.commandsNormal = commandsNormal;
+	}
+
+	public Stack<Command> getCommandsReverse() {
+		return commandsReverse;
+	}
+
+	public void setCommandsReverse(Stack<Command> commandsReverse) {
+		this.commandsReverse = commandsReverse;
+	}
+
+	public Point getStartPoint() {
+		return startPoint;
+	}
+
+	public void setStartPoint(Point startPoint) {
+		this.startPoint = startPoint;
+	}
+
+	public CmdAdd getCmdAdd() {
+		return cmdAdd;
+	}
+
+	public CmdRemove getCmdRemove() {
+		return cmdRemove;
+	}
+
+	public void setCmdRemove(CmdRemove cmdRemove) {
+		this.cmdRemove = cmdRemove;
+	}
+
+	public CmdModifyCircle getCmdModifyCircle() {
+		return cmdModifyCircle;
+	}
+
+	public void setCmdModifyCircle(CmdModifyCircle cmdModifyCircle) {
+		this.cmdModifyCircle = cmdModifyCircle;
+	}
+
+	public CmdModifyDonut getCmdModifyDonut() {
+		return cmdModifyDonut;
+	}
+
+	public void setCmdModifyDonut(CmdModifyDonut cmdModifyDonut) {
+		this.cmdModifyDonut = cmdModifyDonut;
+	}
+
+	public CmdModifyLine getCmdModifyLine() {
+		return cmdModifyLine;
+	}
+
+	public void setCmdModifyLine(CmdModifyLine cmdModifyLine) {
+		this.cmdModifyLine = cmdModifyLine;
+	}
+
+	public CmdModifyHexagon getCmdModifyHexagon() {
+		return cmdModifyHexagon;
+	}
+
+	public void setCmdModifyHexagon(CmdModifyHexagon cmdModifyHexagon) {
+		this.cmdModifyHexagon = cmdModifyHexagon;
+	}
+
+	public CmdModifyPoint getCmdModifyPoint() {
+		return cmdModifyPoint;
+	}
+
+	public void setCmdModifyPoint(CmdModifyPoint cmdModifyPoint) {
+		this.cmdModifyPoint = cmdModifyPoint;
+	}
+
+	public CmdModifyRectangle getCmdModifyRectangle() {
+		return cmdModifyRectangle;
+	}
+
+	public void setCmdModifyRectangle(CmdModifyRectangle cmdModifyRectangle) {
+		this.cmdModifyRectangle = cmdModifyRectangle;
+	}
+
+	public CmdToBack getCmdToBack() {
+		return cmdToBack;
+	}
+
+	public void setCmdToBack(CmdToBack cmdToBack) {
+		this.cmdToBack = cmdToBack;
+	}
+
+	public CmdToFront getCmdToFront() {
+		return cmdToFront;
+	}
+
+	public void setCmdToFront(CmdToFront cmdToFront) {
+		this.cmdToFront = cmdToFront;
+	}
+
+	public CmdBringToFront getCmdBringToFront() {
+		return cmdBringToFront;
+	}
+
+	public void setCmdBringToFront(CmdBringToFront cmdBringToFront) {
+		this.cmdBringToFront = cmdBringToFront;
+	}
+
+	public CmdSendToBack getCmdSendToBack() {
+		return cmdSendToBack;
+	}
+
+	public void setCmdSendToBack(CmdSendToBack cmdSendToBack) {
+		this.cmdSendToBack = cmdSendToBack;
+	}
+
+	public CmdSelect getCmdSelect() {
+		return cmdSelect;
+	}
+
+	public void setCmdSelect(CmdSelect cmdSelect) {
+		this.cmdSelect = cmdSelect;
+	}
+
+	public CmdDeselect getCmdDeselect() {
+		return cmdDeselect;
+	}
+
+	public void setCmdDeselect(CmdDeselect cmdDeselect) {
+		this.cmdDeselect = cmdDeselect;
+	}
+
+	public Color getInnerColor() {
+		return colInner;
+	}
+
+	public Color getOuterColor() {
+		return colOuter;
+	}
+
+	public void setDialogRectangle(DialogRectangle dialogRectangle) {
+		this.dialogRectangle = dialogRectangle;
+	}
+
+	public DialogRectangle getDialogRectangle() {
+		return dialogRectangle;
+	}
+
+	public DialogCircle getDialogCircle() {
+		return dialogCircle;
+	}
+
+	public void setDialogCircle(DialogCircle dialogCircle) {
+		this.dialogCircle = dialogCircle;
+	}
+
+	public DialogDonut getDialogDonut() {
+		return dialogDonut;
+	}
+
+	public void setDialogDonut(DialogDonut dialogDonut) {
+		this.dialogDonut = dialogDonut;
+	}
+
+	public DialogHexagon getDialogHexagon() {
+		return dialogHexagon;
+	}
+
+	public void setDialogHexagon(DialogHexagon dialogHexagon) {
+		this.dialogHexagon = dialogHexagon;
+	}
+
+	public DialogPoint getDialogPoint() {
+		return dialogPoint;
+	}
+
+	public void setDialogPoint(DialogPoint dialogPoint) {
+		this.dialogPoint = dialogPoint;
+	}
+
+	public DialogLine getDialogLine() {
+		return dialogLine;
+	}
+
+	public void setDialogLine(DialogLine dialogLine) {
+		this.dialogLine = dialogLine;
+	}
+
+	public void setPoint(Point point) {
+		this.point = point;
+	}
+
+	public Point getPoint() {
+		return point;
+	}
+
+	public StrategyManager getStrategy() {
+		return strategy;
+	}
+
+	public void setStrategy(StrategyManager strategy) {
+		this.strategy = strategy;
+	}
+
+	public SaveLog getSaveLog() {
+		return saveLog;
+	}
+
+	public void setSaveLog(SaveLog saveLog) {
+		this.saveLog = saveLog;
+	}
+
+	public SavePainting getPainting() {
+		return painting;
+	}
+
+	public void setPainting(SavePainting painting) {
+		this.painting = painting;
+	}
+
+	public JFileChooser getFileChooser() {
+		return fileChooser;
+	}
+
+	public void setFileChooser(JFileChooser fileChooser) {
+		this.fileChooser = fileChooser;
 	}
 }

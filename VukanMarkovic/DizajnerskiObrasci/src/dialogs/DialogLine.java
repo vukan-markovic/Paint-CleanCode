@@ -24,20 +24,22 @@ import javax.swing.border.EmptyBorder;
 
 public class DialogLine extends JDialog {
 	private static final long serialVersionUID = 1L;
-	private final JPanel contentPanel = new JPanel();
+	private final JPanel contentPanel;
 	private final JTextField x1Coord;
 	private final JTextField y1Coord;
 	private final JTextField x2Coord;
 	private final JTextField y2Coord;
 	private boolean accepted = false;
 	private JButton btnSetOuterColor;
-	private Color outerColor = new Color(250, 128, 114);
+	private Color outerColor;
 
 	public DialogLine() {
 		setTitle("Line dialog");
 		setModal(true);
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
+		outerColor = new Color(250, 128, 114);
+		contentPanel = new JPanel();
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		x1Coord = new JTextField();
@@ -181,19 +183,19 @@ public class DialogLine extends JDialog {
 		this.outerColor = outerColor;
 	}
 
-	public JTextField getX1Coord() {
+	public JTextField getX1coordinate() {
 		return x1Coord;
 	}
 
-	public JTextField getY1Coord() {
+	public JTextField getY1coordinate() {
 		return y1Coord;
 	}
 
-	public JTextField getX2Coord() {
+	public JTextField getX2coordinate() {
 		return x2Coord;
 	}
 
-	public JTextField getY2Coord() {
+	public JTextField getY2coordinate() {
 		return y2Coord;
 	}
 }

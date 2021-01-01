@@ -68,8 +68,24 @@ public class DrawingFrame extends JFrame {
 
 		view.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
-				controller.mouseClicked(e);
+			public void mouseClicked(MouseEvent click) {
+				if (tglbtnSelect.isSelected())
+					controller.btnSelectClicked(click);
+				else if (tglbtnPoint.isSelected())
+					controller.btnPointClicked(click);
+				else if (tglbtnLine.isSelected())
+					controller.btnLineClicked(click);
+				else if (tglbtnRectangle.isSelected())
+					controller.btnRectangleClicked(click);
+				else if (tglbtnCircle.isSelected())
+					controller.btnCircleClicked(click);
+				else if (tglbtnDonut.isSelected())
+					controller.btnDonutClicked(click);
+				else if (tglbtnHexagon.isSelected())
+					controller.btnHexagonClicked(click);
+
+				view.repaint();
+				controller.fireUndoRedo();
 			}
 		});
 
@@ -120,9 +136,8 @@ public class DrawingFrame extends JFrame {
 		buttonGroup.add(btnModify);
 		btnModify.setToolTipText("Modify");
 
-		btnModify.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
+		btnModify.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				controller.modify();
 			}
 		});
@@ -131,9 +146,8 @@ public class DrawingFrame extends JFrame {
 		btnDelete.setEnabled(false);
 		btnDelete.setToolTipText("Delete");
 
-		btnDelete.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				controller.delete();
 			}
 		});
@@ -146,9 +160,8 @@ public class DrawingFrame extends JFrame {
 		contentPane.add(toolBar_1, BorderLayout.EAST);
 		btnOuterCol = new JButton("Set outer color");
 
-		btnOuterCol.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
+		btnOuterCol.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				controller.outerColor();
 			}
 		});
@@ -157,9 +170,8 @@ public class DrawingFrame extends JFrame {
 		toolBar_1.add(btnOuterCol);
 		btnInnerCol = new JButton("Set inner color");
 
-		btnInnerCol.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
+		btnInnerCol.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				controller.innerColor();
 			}
 		});
@@ -169,9 +181,8 @@ public class DrawingFrame extends JFrame {
 		btnUndo = new JButton("Undo");
 		btnUndo.setEnabled(false);
 
-		btnUndo.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
+		btnUndo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				controller.undo();
 			}
 		});
@@ -180,9 +191,8 @@ public class DrawingFrame extends JFrame {
 		btnRedo = new JButton("Redo");
 		btnRedo.setEnabled(false);
 
-		btnRedo.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
+		btnRedo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				controller.redo();
 			}
 		});
@@ -191,9 +201,8 @@ public class DrawingFrame extends JFrame {
 		btnSendToBack = new JButton("Send to back");
 		btnSendToBack.setEnabled(false);
 
-		btnSendToBack.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
+		btnSendToBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				controller.sendToBack();
 			}
 		});
@@ -202,9 +211,8 @@ public class DrawingFrame extends JFrame {
 		btnBringToFront = new JButton("Bring to front");
 		btnBringToFront.setEnabled(false);
 
-		btnBringToFront.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
+		btnBringToFront.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				controller.bringToFront();
 			}
 		});
@@ -213,9 +221,8 @@ public class DrawingFrame extends JFrame {
 		btnToBack = new JButton("To back");
 		btnToBack.setEnabled(false);
 
-		btnToBack.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
+		btnToBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				controller.toBack();
 			}
 		});
@@ -224,9 +231,8 @@ public class DrawingFrame extends JFrame {
 		btnToFront = new JButton("To front");
 		btnToFront.setEnabled(false);
 
-		btnToFront.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
+		btnToFront.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				controller.toFront();
 			}
 		});
@@ -234,9 +240,8 @@ public class DrawingFrame extends JFrame {
 		toolBar_1.add(btnToFront);
 		btnSave = new JButton("Save");
 
-		btnSave.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
+		btnSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				controller.save();
 			}
 		});
@@ -244,9 +249,8 @@ public class DrawingFrame extends JFrame {
 		toolBar_1.add(btnSave);
 		btnLoadLog = new JButton("Load log");
 
-		btnLoadLog.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
+		btnLoadLog.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				controller.loadLog();
 			}
 		});
@@ -254,9 +258,8 @@ public class DrawingFrame extends JFrame {
 		toolBar_1.add(btnLoadLog);
 		btnLoadPainting = new JButton("Load painting");
 
-		btnLoadPainting.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
+		btnLoadPainting.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				controller.loadPainting();
 			}
 		});
@@ -287,12 +290,12 @@ public class DrawingFrame extends JFrame {
 		list.setModel(lModel);
 		setContentPane(contentPane);
 	}
-	
+
 	public JTextField getFileName() {
 		return fileName;
 	}
-	
-	DefaultListModel<String> getlModel() {
+
+	public DefaultListModel<String> getlModel() {
 		return lModel;
 	}
 
@@ -310,10 +313,6 @@ public class DrawingFrame extends JFrame {
 
 	public JButton getBtnNext() {
 		return btnNext;
-	}
-
-	public void setBtnNext(JButton btnNext) {
-		this.btnNext = btnNext;
 	}
 
 	public JToggleButton getTglbtnPoint() {
@@ -383,15 +382,15 @@ public class DrawingFrame extends JFrame {
 	public JButton getBtnToFront() {
 		return btnToFront;
 	}
-	
+
 	public JButton getBtnSave() {
 		return btnSave;
 	}
-	
+
 	public JButton getBtnLoadLog() {
 		return btnLoadLog;
 	}
-	
+
 	public JButton getBtnLoadPainting() {
 		return btnLoadPainting;
 	}

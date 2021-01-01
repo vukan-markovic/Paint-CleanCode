@@ -10,11 +10,11 @@ public class TestDialogCircle {
 
 	@Before
 	public void setUp() {
-
+		dialogCircle = new DialogCircle();
 	}
 
 	@Test
 	public void test() {
-
+		dialogCircle.getX();
 	}
 }

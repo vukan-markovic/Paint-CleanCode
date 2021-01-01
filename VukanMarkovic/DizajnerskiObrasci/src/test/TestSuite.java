@@ -46,8 +46,8 @@ import test.testStrategy.TestSavePainting;
 //		TestDialogCircle.class, TestDialogDonut.class,
 //		TestDialogHexagon.class, TestDialogLine.class, TestDialogPoint.class, TestDialogRectangle.class,
 		TestCircle.class, TestDonut.class, TestHexagonAdapter.class, TestLine.class, TestPoint.class,
-		TestRectangle.class, 
-//		TestDrawingController.class, TestDrawingFrame.class, 
+		TestRectangle.class, TestDrawingController.class, 
+		TestDrawingFrame.class, 
 		TestDrawingModel.class,
 		TestDrawingView.class, TestMainApp.class, TestObserver.class, TestSaveLog.class, TestSavePainting.class })
 public class TestSuite {

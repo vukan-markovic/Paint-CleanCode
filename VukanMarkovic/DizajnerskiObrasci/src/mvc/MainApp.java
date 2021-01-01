@@ -14,6 +14,8 @@ public class MainApp {
 	public static void main(String[] args) {
 		DrawingModel drawingModel = new DrawingModel();
 		DrawingFrame drawingFrame = new DrawingFrame();
-		createAndShowGUI(drawingModel, drawingFrame, new DrawingController(drawingModel, drawingFrame));
+		DrawingController drawingController = new DrawingController();
+		drawingController.setController(drawingModel, drawingFrame);
+		createAndShowGUI(drawingModel, drawingFrame, drawingController);
 	}
 }

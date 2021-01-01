@@ -26,9 +26,9 @@ import javax.swing.border.EmptyBorder;
 
 public class DialogPoint extends JDialog {
 	private static final long serialVersionUID = 1L;
-	private final JPanel contentPanel = new JPanel();
-	private final JTextField xCoord;
-	private final JTextField yCoord;
+	private final JPanel contentPanel;
+	private final JTextField xCoordinate;
+	private final JTextField yCoordinate;
 	private boolean accepted;
 	private final JButton btnSetOuterColor;
 	private Color outerColor;
@@ -38,16 +38,18 @@ public class DialogPoint extends JDialog {
 		setBounds(100, 100, 450, 303);
 		setModal(true);
 		getContentPane().setLayout(new BorderLayout());
+		outerColor = new Color(250, 128, 114);
+		contentPanel = new JPanel();
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		{
-			xCoord = new JTextField();
-			xCoord.setColumns(10);
+			xCoordinate = new JTextField();
+			xCoordinate.setColumns(10);
 		}
 		{
-			yCoord = new JTextField();
-			yCoord.setColumns(10);
+			yCoordinate = new JTextField();
+			yCoordinate.setColumns(10);
 		}
 
 		JLabel lblX = new JLabel("X:");
@@ -83,9 +85,9 @@ public class DialogPoint extends JDialog {
 										.createParallelGroup(Alignment.TRAILING).addComponent(lblX).addComponent(lblY))
 								.addGap(30)
 								.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-										.addComponent(xCoord, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE,
+										.addComponent(xCoordinate, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(yCoord, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE,
+										.addComponent(yCoordinate, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 								.addPreferredGap(ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
 								.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE))
@@ -96,12 +98,12 @@ public class DialogPoint extends JDialog {
 						.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_contentPanel.createSequentialGroup()
 								.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
-										.addComponent(xCoord, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										.addComponent(xCoordinate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 												GroupLayout.PREFERRED_SIZE)
 										.addComponent(lblX))
 								.addGap(45)
 								.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
-										.addComponent(yCoord, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										.addComponent(yCoordinate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 												GroupLayout.PREFERRED_SIZE)
 										.addComponent(lblY))
 								.addGap(18))
@@ -154,12 +156,12 @@ public class DialogPoint extends JDialog {
 		}
 	}
 
-	public JTextField getxCoord() {
-		return xCoord;
+	public JTextField getXcoordinate() {
+		return xCoordinate;
 	}
 
-	public JTextField getyCoord() {
-		return yCoord;
+	public JTextField getYcoordinate() {
+		return yCoordinate;
 	}
 
 	public boolean isAccepted() {

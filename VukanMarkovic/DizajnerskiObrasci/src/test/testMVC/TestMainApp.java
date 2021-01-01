@@ -22,7 +22,8 @@ public class TestMainApp {
 	public void setUp() {
 		drawingModel = new DrawingModel();
 		drawingFrame = new DrawingFrame();
-		drawingController = new DrawingController(drawingModel, drawingFrame);
+		drawingController = new DrawingController();
+		drawingController.setController(drawingModel, drawingFrame);
 	}
 
 	@Test

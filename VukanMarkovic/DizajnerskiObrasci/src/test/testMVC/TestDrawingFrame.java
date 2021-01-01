@@ -8,111 +8,115 @@ import org.junit.Test;
 
 import mvc.DrawingController;
 import mvc.DrawingFrame;
+import mvc.DrawingModel;
 
 public class TestDrawingFrame {
 	private DrawingFrame drawingFrame;
 	private DrawingController drawingController;
-	
-	@Before 
+	private DrawingModel drawingModel;
+
+	@Before
 	public void setUp() {
 		drawingController = mock(DrawingController.class);
 		drawingFrame = new DrawingFrame();
+		drawingModel = new DrawingModel();
+		drawingController.setController(drawingModel, drawingFrame);
 		drawingFrame.setController(drawingController);
 	}
-	
-	@Test 
+
+	@Test
 	public void testViewClicked() {
-		
+		drawingFrame.getView();
 	}
-	
-	@Test 
+
+	@Test
 	public void testBtnModifyClicked() {
 		drawingFrame.getBtnModify().setEnabled(true);
 		drawingFrame.getBtnModify().doClick();
 		verify(drawingController).modify();
 	}
-	
-	@Test 
+
+	@Test
 	public void testBtnDeleteClicked() {
 		drawingFrame.getBtnDelete().setEnabled(true);
 		drawingFrame.getBtnDelete().doClick();
 		verify(drawingController).delete();
 	}
-	
-	@Test 
+
+	@Test
 	public void testBtnOuterColorClicked() {
 		drawingFrame.getBtnOuterCol().doClick();
 		verify(drawingController).outerColor();
 	}
-	
-	@Test 
+
+	@Test
 	public void testBtnInnerColorClicked() {
 		drawingFrame.getBtnInnerCol().doClick();
 		verify(drawingController).innerColor();
 	}
-	
-	@Test 
+
+	@Test
 	public void testBtnUndoClicked() {
 		drawingFrame.getBtnUndo().setEnabled(true);
 		drawingFrame.getBtnUndo().doClick();
 		verify(drawingController).undo();
 	}
-	
-	@Test 
+
+	@Test
 	public void testBtnRedoClicked() {
 		drawingFrame.getBtnRedo().setEnabled(true);
 		drawingFrame.getBtnRedo().doClick();
 		verify(drawingController).redo();
 	}
-	
-	@Test 
+
+	@Test
 	public void testBtnSendToBackClicked() {
 		drawingFrame.getBtnSendToBack().setEnabled(true);
 		drawingFrame.getBtnSendToBack().doClick();
 		verify(drawingController).sendToBack();
 	}
-	
-	@Test 
+
+	@Test
 	public void testBtnBringToFrontClicked() {
 		drawingFrame.getBtnBringToFront().setEnabled(true);
 		drawingFrame.getBtnBringToFront().doClick();
 		verify(drawingController).bringToFront();
 	}
-	
-	@Test 
+
+	@Test
 	public void testBtnToBackClicked() {
 		drawingFrame.getBtnToBack().setEnabled(true);
 		drawingFrame.getBtnToBack().doClick();
 		verify(drawingController).toBack();
 	}
-	
-	@Test 
+
+	@Test
 	public void testBtnToFrontClicked() {
 		drawingFrame.getBtnToFront().setEnabled(true);
 		drawingFrame.getBtnToFront().doClick();
 		verify(drawingController).toFront();
 	}
-	
-	@Test 
+
+	@Test
 	public void testBtnSaveClicked() {
 		drawingFrame.getBtnSave().doClick();
 		verify(drawingController).save();
 	}
-	
-	@Test 
+
+	@Test
 	public void testBtnLoadLogClicked() {
 		drawingFrame.getBtnLoadLog().setEnabled(true);
 		drawingFrame.getBtnLoadLog().doClick();
 		verify(drawingController).loadLog();
 	}
-	
-	@Test 
+
+	@Test
 	public void testBtnLoadPaintingClicked() {
 		drawingFrame.getBtnLoadPainting().doClick();
 		verify(drawingController).loadPainting();
 	}
-	
-	@Test 
+
+	@Test
 	public void testBtnNextClicked() {
 		drawingFrame.getBtnNext().setEnabled(true);
 		drawingFrame.getBtnNext().doClick();
