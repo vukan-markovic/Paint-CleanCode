@@ -5,24 +5,24 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class SaveLog implements Save {
-	private String log;
+	private String commandsLog;
 
 	@Override
 	public void saveFile(String filePath) {
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
-			writer.write(log);
+			writer.write(commandsLog);
 			writer.close();
 		} catch (IOException exception) {
 			System.out.println(exception.getMessage());
 		}
 	}
 
-	public String getLog() {
-		return log;
+	public String getCommandsLog() {
+		return commandsLog;
 	}
 
-	public void setLog(String log) {
-		this.log = log;
+	public void setCommandsLog(String commandsLog) {
+		this.commandsLog = commandsLog;
 	}
 }

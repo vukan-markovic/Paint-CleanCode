@@ -7,8 +7,8 @@ import java.util.Iterator;
 
 import javax.swing.JPanel;
 
-import geometry.Donut;
-import geometry.Shape;
+import shapes.Donut;
+import shapes.Shape;
 
 public class DrawingView extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -19,19 +19,19 @@ public class DrawingView extends JPanel {
 		setBackground(Color.WHITE);
 		setVisible(true);
 	}
-	
+
 	@Override
 	public void paint(Graphics graphics) {
 		super.paintComponent(graphics);
-		Iterator<Shape> iterator = model.getShapes().iterator();
+		Iterator<Shape> shapesIterator = model.getShapes().iterator();
 
-		while (iterator.hasNext()) {
-			Shape shape = iterator.next();
+		while (shapesIterator.hasNext()) {
+			Shape drawingShape = shapesIterator.next();
 
-			if (shape instanceof Donut)
-				((Donut) shape).draw(graphics, (Graphics2D) graphics);
+			if (drawingShape instanceof Donut)
+				((Donut) drawingShape).draw(graphics, (Graphics2D) graphics);
 			else
-				shape.draw(graphics);
+				drawingShape.draw(graphics);
 		}
 	}
 

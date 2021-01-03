@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.List;
 
-import geometry.Shape;
+import shapes.Shape;
 
 public class SavePainting implements Save {
 	private List<Shape> shapes;
@@ -13,9 +13,9 @@ public class SavePainting implements Save {
 	@Override
 	public void saveFile(String filePath) {
 		try {
-			ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(filePath));
-			objectOutputStream.writeObject(shapes);
-			objectOutputStream.close();
+			ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(filePath));
+			outputStream.writeObject(shapes);
+			outputStream.close();
 		} catch (IOException exception) {
 			System.out.println(exception.getMessage());
 		}

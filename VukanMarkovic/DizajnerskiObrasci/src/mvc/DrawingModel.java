@@ -3,22 +3,27 @@ package mvc;
 import java.util.ArrayList;
 import java.util.List;
 
-import geometry.Shape;
+import shapes.Shape;
 
 public class DrawingModel {
-	private List<Shape> shapes = new ArrayList<Shape>();
-	private List<Shape> selectedShapes = new ArrayList<Shape>();
+	private List<Shape> shapes;
+	private List<Shape> selectedShapes;
+
+	public DrawingModel() {
+		shapes = new ArrayList<Shape>();
+		selectedShapes = new ArrayList<Shape>();
+	}
 
 	public void selectShape(Shape shape) {
-		for (int index = 0; index < shapes.size(); index++) {
-			if (shapes.get(index).equals(shape)) {
-				shapes.get(index).setSelected(true);
+		for (int indexOfShape = 0; indexOfShape < shapes.size(); indexOfShape++) {
+			if (shapes.get(indexOfShape).equals(shape)) {
+				shapes.get(indexOfShape).setSelected(true);
 				selectedShapes.add(shape);
 			}
 		}
 	}
 
-	public Shape getOneSelectedShape() {
+	public Shape getFirstSelectedShape() {
 		for (Shape shape : shapes) {
 			if (shape != null && shape.isSelected())
 				return shape;
@@ -27,7 +32,7 @@ public class DrawingModel {
 		return null;
 	}
 
-	public int indexOfShape(Shape shape) {
+	public int getIndexOfShape(Shape shape) {
 		return shapes.indexOf(shape);
 	}
 
@@ -47,15 +52,15 @@ public class DrawingModel {
 		return shapes;
 	}
 
-	public void add(Shape shape) {
+	public void addShape(Shape shape) {
 		shapes.add(shape);
 	}
 
-	public void remove(Shape shape) {
+	public void removeShape(Shape shape) {
 		shapes.remove(shape);
 	}
 
-	public Shape get(int index) {
-		return shapes.get(index);
+	public Shape getShapeByIndex(int indexOfShape) {
+		return shapes.get(indexOfShape);
 	}
 }

@@ -3,7 +3,6 @@ package dialogs;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -27,15 +26,15 @@ import javax.swing.border.EmptyBorder;
 public class DialogRectangle extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel;
-	private JTextField xCoord;
-	private JTextField yCoord;
+	private JTextField xCoordinateOfUpperLeftPoint;
+	private JTextField yCoordinateOfUpperLeftPoint;
 	private JTextField height;
 	private JTextField width;
 	private boolean accepted = false;
-	private JButton btnSetOuterColor;
-	private JButton btnSetInnerColor;
-	private JButton cancelButton;
-	private JButton okButton;
+	private JButton btnOuterColor;
+	private JButton btnInnerColor;
+	private JButton btnCancel;
+	private JButton btnOk;
 	private Color outerColor;
 	private Color innerColor;
 
@@ -45,7 +44,7 @@ public class DialogRectangle extends JDialog {
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		outerColor = Color.BLACK;
-		innerColor = new Color(0, 0, 0, 0);
+		innerColor = Color.WHITE;
 		contentPanel = new JPanel();
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -55,12 +54,14 @@ public class DialogRectangle extends JDialog {
 
 			height.addKeyListener(new KeyAdapter() {
 				@Override
-				public void keyTyped(KeyEvent e) {
-					char c = e.getKeyChar();
+				public void keyTyped(KeyEvent event) {
+					char heightInputChar = event.getKeyChar();
 
-					if (!((c >= '0') && (c <= '9') || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE))) {
+					if (!((heightInputChar >= '0') && (heightInputChar <= '9')
+							|| (heightInputChar == KeyEvent.VK_BACK_SPACE)
+							|| (heightInputChar == KeyEvent.VK_DELETE))) {
 						getToolkit().beep();
-						e.consume();
+						event.consume();
 					}
 				}
 			});
@@ -72,71 +73,75 @@ public class DialogRectangle extends JDialog {
 
 		width.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				char c = e.getKeyChar();
+			public void keyTyped(KeyEvent event) {
+				char widthInputChar = event.getKeyChar();
 
-				if (!((c >= '0') && (c <= '9') || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE))) {
+				if (!((widthInputChar >= '0') && (widthInputChar <= '9') || (widthInputChar == KeyEvent.VK_BACK_SPACE)
+						|| (widthInputChar == KeyEvent.VK_DELETE))) {
 					getToolkit().beep();
-					e.consume();
+					event.consume();
 				}
 			}
 		});
 
 		width.setColumns(10);
-		xCoord = new JTextField();
-		xCoord.setColumns(10);
-		yCoord = new JTextField();
-		yCoord.setColumns(10);
+		xCoordinateOfUpperLeftPoint = new JTextField();
+		xCoordinateOfUpperLeftPoint.setColumns(10);
+		yCoordinateOfUpperLeftPoint = new JTextField();
+		yCoordinateOfUpperLeftPoint.setColumns(10);
 		JLabel lblHeight = new JLabel("Height:");
 		JLabel lblWidth = new JLabel("Width:");
 		JLabel lblX = new JLabel("X:");
 		JLabel lblY = new JLabel("Y:");
-		btnSetOuterColor = new JButton("Outer color");
+		btnOuterColor = new JButton("Outer color");
 
-		xCoord.addKeyListener(new KeyAdapter() {
+		xCoordinateOfUpperLeftPoint.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				char c = e.getKeyChar();
+			public void keyTyped(KeyEvent event) {
+				char xCoordinateOfUpperLeftPointInputChar = event.getKeyChar();
 
-				if (!((c >= '0') && (c <= '9') || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE))) {
+				if (!((xCoordinateOfUpperLeftPointInputChar >= '0') && (xCoordinateOfUpperLeftPointInputChar <= '9')
+						|| (xCoordinateOfUpperLeftPointInputChar == KeyEvent.VK_BACK_SPACE)
+						|| (xCoordinateOfUpperLeftPointInputChar == KeyEvent.VK_DELETE))) {
 					getToolkit().beep();
-					e.consume();
+					event.consume();
 				}
 			}
 		});
 
-		yCoord.addKeyListener(new KeyAdapter() {
+		yCoordinateOfUpperLeftPoint.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				char c = e.getKeyChar();
+			public void keyTyped(KeyEvent event) {
+				char yCoordinateOfUpperLeftPointInputChar = event.getKeyChar();
 
-				if (!((c >= '0') && (c <= '9') || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE))) {
+				if (!((yCoordinateOfUpperLeftPointInputChar >= '0') && (yCoordinateOfUpperLeftPointInputChar <= '9')
+						|| (yCoordinateOfUpperLeftPointInputChar == KeyEvent.VK_BACK_SPACE)
+						|| (yCoordinateOfUpperLeftPointInputChar == KeyEvent.VK_DELETE))) {
 					getToolkit().beep();
-					e.consume();
+					event.consume();
 				}
 			}
 		});
 
-		btnSetOuterColor.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				outerColor = JColorChooser.showDialog(getContentPane(), "Choose Border Color", outerColor);
-				btnSetOuterColor.setBackground(outerColor);
+		btnOuterColor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				outerColor = JColorChooser.showDialog(getContentPane(), "Choose outer color", outerColor);
+				btnOuterColor.setBackground(outerColor);
 			}
 		});
 
-		btnSetInnerColor = new JButton("Inner color");
+		btnInnerColor = new JButton("Inner color");
 
-		btnSetInnerColor.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				innerColor = JColorChooser.showDialog(getContentPane(), "Choose Fill Color", innerColor);
-				btnSetInnerColor.setBackground(innerColor);
+		btnInnerColor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				innerColor = JColorChooser.showDialog(getContentPane(), "Choose inner color", innerColor);
+				btnInnerColor.setBackground(innerColor);
 			}
 		});
 
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		Image img = new ImageIcon(this.getClass().getResource("/rect.png")).getImage();
-		lblNewLabel.setIcon(new ImageIcon(img));
+		JLabel lblIcon = new JLabel("");
+		lblIcon.setHorizontalAlignment(SwingConstants.CENTER);
+		lblIcon.setIcon(new ImageIcon(new ImageIcon(this.getClass().getResource("/rect.png")).getImage()));
 		GroupLayout gl_contentPanel = new GroupLayout(contentPanel);
 
 		gl_contentPanel.setHorizontalGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
@@ -145,26 +150,26 @@ public class DialogRectangle extends JDialog {
 								.addComponent(lblY).addComponent(lblHeight).addComponent(lblWidth))
 						.addGap(18)
 						.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING)
-								.addComponent(yCoord, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
+								.addComponent(yCoordinateOfUpperLeftPoint, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
 										.addComponent(width, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 												GroupLayout.PREFERRED_SIZE)
-										.addComponent(xCoord, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE)
+										.addComponent(xCoordinateOfUpperLeftPoint, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(height, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 												GroupLayout.PREFERRED_SIZE)))
 						.addPreferredGap(ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
 						.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING)
 								.addGroup(gl_contentPanel.createSequentialGroup()
-										.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 145,
+										.addComponent(lblIcon, GroupLayout.PREFERRED_SIZE, 145,
 												GroupLayout.PREFERRED_SIZE)
 										.addGap(39))
 								.addGroup(gl_contentPanel.createSequentialGroup().addGroup(gl_contentPanel
 										.createParallelGroup(Alignment.TRAILING, false)
-										.addComponent(btnSetInnerColor, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+										.addComponent(btnInnerColor, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
 												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(btnSetOuterColor, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+										.addComponent(btnOuterColor, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
 												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 										.addGap(63)))));
 
@@ -173,12 +178,12 @@ public class DialogRectangle extends JDialog {
 						.addGroup(gl_contentPanel.createSequentialGroup().addGap(37).addGroup(gl_contentPanel
 								.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPanel.createSequentialGroup()
 										.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
-												.addComponent(xCoord, GroupLayout.PREFERRED_SIZE,
+												.addComponent(xCoordinateOfUpperLeftPoint, GroupLayout.PREFERRED_SIZE,
 														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 												.addComponent(lblX))
 										.addGap(18)
 										.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
-												.addComponent(yCoord, GroupLayout.PREFERRED_SIZE,
+												.addComponent(yCoordinateOfUpperLeftPoint, GroupLayout.PREFERRED_SIZE,
 														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 												.addComponent(lblY))
 										.addGap(18)
@@ -186,7 +191,7 @@ public class DialogRectangle extends JDialog {
 												.addComponent(height, GroupLayout.PREFERRED_SIZE,
 														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 												.addComponent(lblHeight)))
-								.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE))
+								.addComponent(lblIcon, GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE))
 								.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
 										.addGroup(gl_contentPanel.createSequentialGroup().addGap(18)
 												.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
@@ -194,9 +199,8 @@ public class DialogRectangle extends JDialog {
 																GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 														.addComponent(lblWidth)))
 										.addGroup(gl_contentPanel.createSequentialGroup().addGap(3)
-												.addComponent(btnSetOuterColor)
-												.addPreferredGap(ComponentPlacement.RELATED)
-												.addComponent(btnSetInnerColor)))
+												.addComponent(btnOuterColor).addPreferredGap(ComponentPlacement.RELATED)
+												.addComponent(btnInnerColor)))
 								.addContainerGap(30, Short.MAX_VALUE)));
 
 		contentPanel.setLayout(gl_contentPanel);
@@ -206,14 +210,16 @@ public class DialogRectangle extends JDialog {
 
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				okButton = new JButton("OK");
+				btnOk = new JButton("OK");
 
-				okButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						if ((width.getText().isBlank() || height.getText().isBlank() || xCoord.getText().isBlank()
-								|| yCoord.getText().isBlank()))
-							JOptionPane.showMessageDialog(new JFrame(), "Niste popunili sva polja, pokušajte ponovo!",
-									"Greška!", JOptionPane.ERROR_MESSAGE);
+				btnOk.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent event) {
+						if ((width.getText().isBlank() || height.getText().isBlank()
+								|| xCoordinateOfUpperLeftPoint.getText().isBlank()
+								|| yCoordinateOfUpperLeftPoint.getText().isBlank()))
+							JOptionPane.showMessageDialog(new JFrame(),
+									"You have not filled in all the fields, try again!", "Error!",
+									JOptionPane.ERROR_MESSAGE);
 						else {
 							accepted = true;
 							setVisible(false);
@@ -221,31 +227,31 @@ public class DialogRectangle extends JDialog {
 					}
 				});
 
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
+				btnOk.setActionCommand("OK");
+				buttonPane.add(btnOk);
+				getRootPane().setDefaultButton(btnOk);
 			}
 			{
-				cancelButton = new JButton("Cancel");
+				btnCancel = new JButton("Cancel");
 
-				cancelButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
+				btnCancel.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent event) {
 						dispose();
 					}
 				});
 
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
+				btnCancel.setActionCommand("Cancel");
+				buttonPane.add(btnCancel);
 			}
 		}
 	}
 
-	public JTextField getXcoordinate() {
-		return xCoord;
+	public JTextField getXcoordinateOfUpperLeftPoint() {
+		return xCoordinateOfUpperLeftPoint;
 	}
 
-	public JTextField getYcoordinate() {
-		return yCoord;
+	public JTextField getYcoordinateOfUpperLeftPoint() {
+		return yCoordinateOfUpperLeftPoint;
 	}
 
 	public JTextField getheight() {
@@ -264,36 +270,36 @@ public class DialogRectangle extends JDialog {
 		this.width = width;
 	}
 
-	public JButton getBtnSetBorderColor() {
-		return btnSetOuterColor;
+	public JButton getBtnOuterColor() {
+		return btnOuterColor;
 	}
 
-	public void setBtnSetBorderColor(JButton btnSetBorderColor) {
-		this.btnSetOuterColor = btnSetBorderColor;
+	public void setBtnOuterColor(JButton btnOuterColor) {
+		this.btnOuterColor = btnOuterColor;
 	}
 
-	public JButton getBtnSetFillColor() {
-		return btnSetInnerColor;
+	public JButton getBtnInnerColor() {
+		return btnInnerColor;
 	}
 
-	public void setBtnSetFillColor(JButton btnSetFillColor) {
-		this.btnSetInnerColor = btnSetFillColor;
+	public void setBtnInnerColor(JButton btnInnerColor) {
+		this.btnInnerColor = btnInnerColor;
 	}
 
-	public JButton getCancelButton() {
-		return cancelButton;
+	public JButton getBtnCancel() {
+		return btnCancel;
 	}
 
-	public void setCancelButton(JButton cancelButton) {
-		this.cancelButton = cancelButton;
+	public void setBtnCancel(JButton btnCancel) {
+		this.btnCancel = btnCancel;
 	}
 
-	public JButton getOkButton() {
-		return okButton;
+	public JButton getBtnOk() {
+		return btnOk;
 	}
 
-	public void setOkButton(JButton okButton) {
-		this.okButton = okButton;
+	public void setOkButton(JButton btnOk) {
+		this.btnOk = btnOk;
 	}
 
 	public Color getOuterColor() {

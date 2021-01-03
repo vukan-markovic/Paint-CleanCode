@@ -3,7 +3,6 @@ package dialogs;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -27,15 +26,15 @@ import javax.swing.border.EmptyBorder;
 public class DialogDonut extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel;
-	private JTextField xCoord;
-	private JTextField yCoord;
-	private JTextField radius;
-	private JTextField smallRadius;
+	private JTextField xCoordinate;
+	private JTextField yCoordinate;
+	private JTextField outerRadius;
+	private JTextField innerRadius;
 	private boolean accepted = false;
-	private JButton btnSetOuterColor;
-	private JButton btnSetInnerColor;
-	private JButton cancelButton;
-	private JButton okButton;
+	private JButton btnOuterColor;
+	private JButton btnInnerColor;
+	private JButton btnCancel;
+	private JButton btnOk;
 	private Color outerColor;
 	private Color innerColor;
 
@@ -45,127 +44,136 @@ public class DialogDonut extends JDialog {
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		outerColor = Color.BLACK;
-		innerColor = new Color(0, 0, 0, 0);
+		innerColor = Color.WHITE;
 		contentPanel = new JPanel();
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		getContentPane().add(contentPanel, BorderLayout.WEST);
 		{
-			xCoord = new JTextField();
-			xCoord.setColumns(10);
+			xCoordinate = new JTextField();
+			xCoordinate.setColumns(10);
 		}
 
-		yCoord = new JTextField();
-		yCoord.setColumns(10);
-		radius = new JTextField();
+		yCoordinate = new JTextField();
+		yCoordinate.setColumns(10);
+		outerRadius = new JTextField();
 
-		xCoord.addKeyListener(new KeyAdapter() {
+		xCoordinate.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				char c = e.getKeyChar();
+			public void keyTyped(KeyEvent event) {
+				char xCoordinateInputChar = event.getKeyChar();
 
-				if (!((c >= '0') && (c <= '9') || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE))) {
+				if (!((xCoordinateInputChar >= '0') && (xCoordinateInputChar <= '9')
+						|| (xCoordinateInputChar == KeyEvent.VK_BACK_SPACE)
+						|| (xCoordinateInputChar == KeyEvent.VK_DELETE))) {
 					getToolkit().beep();
-					e.consume();
+					event.consume();
 				}
 			}
 		});
 
-		yCoord.addKeyListener(new KeyAdapter() {
+		yCoordinate.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				char c = e.getKeyChar();
+			public void keyTyped(KeyEvent event) {
+				char yCoordinateInputChar = event.getKeyChar();
 
-				if (!((c >= '0') && (c <= '9') || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE))) {
+				if (!((yCoordinateInputChar >= '0') && (yCoordinateInputChar <= '9')
+						|| (yCoordinateInputChar == KeyEvent.VK_BACK_SPACE)
+						|| (yCoordinateInputChar == KeyEvent.VK_DELETE))) {
 					getToolkit().beep();
-					e.consume();
+					event.consume();
 				}
 			}
 		});
 
-		radius.addKeyListener(new KeyAdapter() {
+		outerRadius.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				char c = e.getKeyChar();
+			public void keyTyped(KeyEvent event) {
+				char outerRadiusInputChar = event.getKeyChar();
 
-				if (!((c >= '0') && (c <= '9') || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE))) {
+				if (!((outerRadiusInputChar >= '0') && (outerRadiusInputChar <= '9')
+						|| (outerRadiusInputChar == KeyEvent.VK_BACK_SPACE)
+						|| (outerRadiusInputChar == KeyEvent.VK_DELETE))) {
 					getToolkit().beep();
-					e.consume();
+					event.consume();
 				}
 			}
 		});
 
-		radius.setColumns(10);
-		smallRadius = new JTextField();
+		outerRadius.setColumns(10);
+		innerRadius = new JTextField();
 
-		smallRadius.addKeyListener(new KeyAdapter() {
+		innerRadius.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				char c = e.getKeyChar();
+			public void keyTyped(KeyEvent event) {
+				char innerRadiusInputChar = event.getKeyChar();
 
-				if (!((c >= '0') && (c <= '9') || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE))) {
+				if (!((innerRadiusInputChar >= '0') && (innerRadiusInputChar <= '9')
+						|| (innerRadiusInputChar == KeyEvent.VK_BACK_SPACE)
+						|| (innerRadiusInputChar == KeyEvent.VK_DELETE))) {
 					getToolkit().beep();
-					e.consume();
+					event.consume();
 				}
 			}
 		});
 
-		smallRadius.setColumns(10);
-		JLabel lblX = new JLabel("X:");
-		JLabel lblY = new JLabel("Y:");
-		JLabel lblR = new JLabel("r1:");
-		JLabel lblR_1 = new JLabel("r2:");
-		btnSetOuterColor = new JButton("Outer color");
+		innerRadius.setColumns(10);
+		JLabel lblXcoordinate = new JLabel("X coordinate:");
+		JLabel lblYcoordinate = new JLabel("Y coordinate:");
+		JLabel lblOuterRadius = new JLabel("Outer radius:");
+		JLabel lblInnerRadius = new JLabel("Inner radius:");
+		btnOuterColor = new JButton("Outer color");
 
-		btnSetOuterColor.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				outerColor = JColorChooser.showDialog(getContentPane(), "Choose Border Color", outerColor);
-				btnSetOuterColor.setBackground(outerColor);
+		btnOuterColor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				outerColor = JColorChooser.showDialog(getContentPane(), "Choose outer color", outerColor);
+				btnOuterColor.setBackground(outerColor);
 			}
 		});
 
-		btnSetInnerColor = new JButton("Inner color");
+		btnInnerColor = new JButton("Inner color");
 
-		btnSetInnerColor.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				innerColor = JColorChooser.showDialog(getContentPane(), "Choose Fill Color", innerColor);
-				btnSetInnerColor.setBackground(innerColor);
+		btnInnerColor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				innerColor = JColorChooser.showDialog(getContentPane(), "Choose inner color", innerColor);
+				btnInnerColor.setBackground(innerColor);
 			}
 		});
 
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setVerticalAlignment(SwingConstants.BOTTOM);
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		Image img = new ImageIcon(this.getClass().getResource("/donut.png")).getImage();
-		lblNewLabel.setIcon(new ImageIcon(img));
+		JLabel lblIcon = new JLabel("");
+		lblIcon.setVerticalAlignment(SwingConstants.BOTTOM);
+		lblIcon.setHorizontalAlignment(SwingConstants.CENTER);
+		lblIcon.setIcon(new ImageIcon(new ImageIcon(this.getClass().getResource("/donut.png")).getImage()));
 		GroupLayout gl_contentPanel = new GroupLayout(contentPanel);
 
 		gl_contentPanel.setHorizontalGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPanel.createSequentialGroup().addContainerGap()
 						.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING)
-								.addGroup(gl_contentPanel.createSequentialGroup().addComponent(lblX).addGap(18)
-										.addComponent(xCoord, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_contentPanel.createSequentialGroup().addComponent(lblXcoordinate)
+										.addGap(18).addComponent(xCoordinate, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 								.addGroup(gl_contentPanel.createSequentialGroup().addGap(48)
 										.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING)
 												.addGroup(gl_contentPanel.createSequentialGroup()
-														.addComponent(lblR, GroupLayout.DEFAULT_SIZE,
+														.addComponent(lblOuterRadius, GroupLayout.DEFAULT_SIZE,
 																GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-														.addGap(18).addComponent(radius, GroupLayout.PREFERRED_SIZE,
+														.addGap(18)
+														.addComponent(outerRadius, GroupLayout.PREFERRED_SIZE,
 																GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 												.addGroup(gl_contentPanel.createSequentialGroup()
 														.addPreferredGap(ComponentPlacement.RELATED, 4, Short.MAX_VALUE)
-														.addComponent(lblY).addGap(18).addComponent(
-																yCoord, GroupLayout.PREFERRED_SIZE,
+														.addComponent(lblYcoordinate).addGap(18).addComponent(
+																yCoordinate, GroupLayout.PREFERRED_SIZE,
 																GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-												.addGroup(gl_contentPanel.createSequentialGroup().addComponent(lblR_1)
-														.addGap(18).addComponent(smallRadius,
-																GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+												.addGroup(gl_contentPanel.createSequentialGroup()
+														.addComponent(lblInnerRadius).addGap(18)
+														.addComponent(innerRadius, GroupLayout.PREFERRED_SIZE,
+																GroupLayout.DEFAULT_SIZE,
 																GroupLayout.PREFERRED_SIZE)))))
 						.addGap(78)
-						.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING).addComponent(btnSetOuterColor)
-								.addComponent(btnSetInnerColor)
-								.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING).addComponent(btnOuterColor)
+								.addComponent(btnInnerColor)
+								.addComponent(lblIcon, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE))
 						.addGap(102)));
 
 		gl_contentPanel.setVerticalGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPanel
@@ -173,32 +181,32 @@ public class DialogDonut extends JDialog {
 				.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_contentPanel.createSequentialGroup()
 								.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
-										.addComponent(xCoord, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										.addComponent(xCoordinate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 												GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblX))
+										.addComponent(lblXcoordinate))
 								.addGap(18)
 								.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
-										.addComponent(yCoord, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										.addComponent(yCoordinate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 												GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblY))
+										.addComponent(lblYcoordinate))
 								.addGap(14)
 								.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
-										.addComponent(radius, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										.addComponent(outerRadius, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 												GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblR)))
+										.addComponent(lblOuterRadius)))
 						.addGroup(
 								gl_contentPanel.createSequentialGroup()
-										.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 81,
+										.addComponent(lblIcon, GroupLayout.PREFERRED_SIZE, 81,
 												GroupLayout.PREFERRED_SIZE)
 										.addGap(18)))
 				.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPanel.createSequentialGroup().addGap(18)
 								.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
-										.addComponent(smallRadius, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										.addComponent(innerRadius, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 												GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblR_1)))
+										.addComponent(lblInnerRadius)))
 						.addGroup(gl_contentPanel.createSequentialGroup().addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(btnSetOuterColor).addGap(9).addComponent(btnSetInnerColor)))
+								.addComponent(btnOuterColor).addGap(9).addComponent(btnInnerColor)))
 				.addGap(33)));
 
 		contentPanel.setLayout(gl_contentPanel);
@@ -208,66 +216,67 @@ public class DialogDonut extends JDialog {
 
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				okButton = new JButton("OK");
+				btnOk = new JButton("OK");
 
-				okButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						if (smallRadius.getText().isBlank() || radius.getText().isBlank() || xCoord.getText().isBlank()
-								|| yCoord.getText().isBlank()) {
-							JOptionPane.showMessageDialog(new JFrame(), "Niste popunili sva polja, pokušajte ponovo!",
-									"Greška!", JOptionPane.ERROR_MESSAGE);
-						} else if (Integer.parseInt(smallRadius.getText()) >= Integer.parseInt(radius.getText())) {
+				btnOk.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent event) {
+						if (innerRadius.getText().isBlank() || outerRadius.getText().isBlank()
+								|| xCoordinate.getText().isBlank() || yCoordinate.getText().isBlank())
 							JOptionPane.showMessageDialog(new JFrame(),
-									"Unutrašnji radius mora biti veæi od spoljašnjeg!", "Greška!",
+									"You have not filled in all the fields, try again!", "Error!",
 									JOptionPane.ERROR_MESSAGE);
-						} else {
+						else if (Integer.parseInt(innerRadius.getText()) >= Integer.parseInt(outerRadius.getText()))
+							JOptionPane.showMessageDialog(new JFrame(),
+									"The inner radius must be larger than the outer one!", "Error!",
+									JOptionPane.ERROR_MESSAGE);
+						else {
 							accepted = true;
 							setVisible(false);
 						}
 					}
 				});
 
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
+				btnOk.setActionCommand("OK");
+				buttonPane.add(btnOk);
+				getRootPane().setDefaultButton(btnOk);
 			}
 			{
-				cancelButton = new JButton("Cancel");
+				btnCancel = new JButton("Cancel");
 
-				cancelButton.addActionListener(new ActionListener() {
+				btnCancel.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						dispose();
 					}
 				});
 
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
+				btnCancel.setActionCommand("Cancel");
+				buttonPane.add(btnCancel);
 			}
 		}
 	}
 
 	public JTextField getXcoordinate() {
-		return xCoord;
+		return xCoordinate;
 	}
 
 	public JTextField getYcoordinate() {
-		return yCoord;
+		return yCoordinate;
 	}
 
-	public JTextField getRadius() {
-		return radius;
+	public JTextField getOuterRadius() {
+		return outerRadius;
 	}
 
-	public void setRadius(JTextField radius) {
-		this.radius = radius;
+	public void setOuterRadius(JTextField outerRadius) {
+		this.outerRadius = outerRadius;
 	}
 
-	public JTextField getSmallRadius() {
-		return smallRadius;
+	public JTextField getInnerRadius() {
+		return innerRadius;
 	}
 
-	public void setSmallRadius(JTextField smallRadius) {
-		this.smallRadius = smallRadius;
+	public void setInnerRadius(JTextField innerRadius) {
+		this.innerRadius = innerRadius;
 	}
 
 	public boolean isAccepted() {
@@ -278,36 +287,36 @@ public class DialogDonut extends JDialog {
 		this.accepted = accepted;
 	}
 
-	public JButton getBtnSetOuterColor() {
-		return btnSetOuterColor;
+	public JButton getBtnOuterColor() {
+		return btnOuterColor;
 	}
 
-	public void setBtnSetOuterColor(JButton btnSetOuterColor) {
-		this.btnSetOuterColor = btnSetOuterColor;
+	public void setBtnOuterColor(JButton btnOuterColor) {
+		this.btnOuterColor = btnOuterColor;
 	}
 
-	public JButton getBtnSetInnerColor() {
-		return btnSetInnerColor;
+	public JButton getBtnInnerColor() {
+		return btnInnerColor;
 	}
 
-	public void setBtnSetInnerColor(JButton btnSetInnerColor) {
-		this.btnSetInnerColor = btnSetInnerColor;
+	public void setBtnInnerColor(JButton btnInnerColor) {
+		this.btnInnerColor = btnInnerColor;
 	}
 
-	public JButton getCancelButton() {
-		return cancelButton;
+	public JButton getBtnCancel() {
+		return btnCancel;
 	}
 
-	public void setCancelButton(JButton cancelButton) {
-		this.cancelButton = cancelButton;
+	public void setBtnCancel(JButton btnCancel) {
+		this.btnCancel = btnCancel;
 	}
 
-	public JButton getOkButton() {
-		return okButton;
+	public JButton getBtnOk() {
+		return btnOk;
 	}
 
-	public void setOkButton(JButton okButton) {
-		this.okButton = okButton;
+	public void setBtnOk(JButton btnOk) {
+		this.btnOk = btnOk;
 	}
 
 	public Color getOuterColor() {

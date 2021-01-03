@@ -8,7 +8,6 @@ import java.io.FileReader;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 import java.util.Stack;
 
@@ -17,61 +16,66 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import command.CmdAdd;
-import command.CmdBringToFront;
-import command.CmdDeselect;
-import command.CmdModifyCircle;
-import command.CmdModifyDonut;
-import command.CmdModifyHexagon;
-import command.CmdModifyLine;
-import command.CmdModifyPoint;
-import command.CmdModifyRectangle;
-import command.CmdRemove;
-import command.CmdSelect;
-import command.CmdSendToBack;
-import command.CmdToBack;
-import command.CmdToFront;
-import command.Command;
+import commands.CmdAdd;
+import commands.CmdBringToFront;
+import commands.CmdDeselect;
+import commands.CmdModifyCircle;
+import commands.CmdModifyDonut;
+import commands.CmdModifyHexagon;
+import commands.CmdModifyLine;
+import commands.CmdModifyPoint;
+import commands.CmdModifyRectangle;
+import commands.CmdRemove;
+import commands.CmdSelect;
+import commands.CmdSendToBack;
+import commands.CmdToBack;
+import commands.CmdToFront;
+import commands.Command;
 import dialogs.DialogCircle;
 import dialogs.DialogDonut;
 import dialogs.DialogHexagon;
 import dialogs.DialogLine;
 import dialogs.DialogPoint;
 import dialogs.DialogRectangle;
-import geometry.Circle;
-import geometry.Donut;
-import geometry.HexagonAdapter;
-import geometry.Line;
-import geometry.Point;
-import geometry.Rectangle;
-import geometry.Shape;
 import hexagon.Hexagon;
-import observer.Observer;
+import observer.DrawingObserver;
 import observer.PropertyManager;
+import shapes.Circle;
+import shapes.Donut;
+import shapes.HexagonAdapter;
+import shapes.Line;
+import shapes.Point;
+import shapes.Rectangle;
+import shapes.Shape;
 import strategy.SaveLog;
 import strategy.SavePainting;
 import strategy.StrategyManager;
 
 public class DrawingController {
 	private DrawingModel model;
-	private DrawingFrame mainFrame;
-	private Color colInner;
-	private Color colOuter;
-	private Point startPoint;
-	private Stack<Command> commandsNormal;
-	private Stack<Command> commandsReverse;
-	private Observer observer;
+	private DrawingFrame frame;
+	private DrawingObserver observer;
 	private PropertyManager manager;
-	private Queue<String> logCommands;
-	private CmdAdd cmdAdd;
-	private CmdRemove cmdRemove;
+	private Queue<String> commandsLog;
+	private Stack<Command> executedCommands;
+	private Stack<Command> unexecutedCommands;
+	private StrategyManager strategy;
+	private SaveLog saveLog;
+	private SavePainting savePainting;
+	private JFileChooser fileChooser;
+	private String log;
+	private Color innerColor;
+	private Color outerColor;
+	private Point startPoint;
+	private Point point;
 	private DialogRectangle dialogRectangle;
 	private DialogCircle dialogCircle;
 	private DialogDonut dialogDonut;
 	private DialogHexagon dialogHexagon;
 	private DialogPoint dialogPoint;
 	private DialogLine dialogLine;
-	private Point point;
+	private CmdAdd cmdAdd;
+	private CmdRemove cmdRemove;
 	private CmdModifyCircle cmdModifyCircle;
 	private CmdModifyDonut cmdModifyDonut;
 	private CmdModifyLine cmdModifyLine;
@@ -84,53 +88,50 @@ public class DrawingController {
 	private CmdSendToBack cmdSendToBack;
 	private CmdSelect cmdSelect;
 	private CmdDeselect cmdDeselect;
-	private StrategyManager strategy;
-	private SaveLog saveLog;
-	private SavePainting painting;
-	private JFileChooser fileChooser;
-	private String log;
 
 	public DrawingController() {
 	}
 
-	public void setController(DrawingModel model, DrawingFrame mainFrame) {
+	public void setController(DrawingModel model, DrawingFrame frame) {
 		this.model = model;
-		this.mainFrame = mainFrame;
-		colInner = new Color(255, 235, 205);
-		colOuter = new Color(250, 128, 114);
-		observer = new Observer();
-		logCommands = new LinkedList<String>();
-		manager = new PropertyManager(mainFrame);
+		this.frame = frame;
+		innerColor = Color.WHITE;
+		outerColor = Color.BLACK;
+		executedCommands = new Stack<Command>();
+		unexecutedCommands = new Stack<Command>();
+		observer = new DrawingObserver();
+		commandsLog = new LinkedList<String>();
+		manager = new PropertyManager(frame);
 		observer.addPropertyChangeListener(manager);
-		commandsNormal = new Stack<Command>();
-		commandsReverse = new Stack<Command>();
 	}
 
 	public void executeCommand(Command command) {
 		command.execute();
-		commandsNormal.push(command);
+		executedCommands.push(command);
 	}
 
 	public void logCommand(String command) {
-		mainFrame.getlModel().addElement(command);
+		frame.getCommandsListModel().addElement(command);
 	}
 
 	public void btnSelectClicked(MouseEvent click) {
 		if (model.getShapes().size() != 0) {
-			for (int i = model.getShapes().size() - 1; i >= 0; i--) {
-				Shape s = model.get(i);
+			for (int indexOfShape = model.getShapes().size() - 1; indexOfShape >= 0; indexOfShape--) {
+				Shape shape = model.getShapeByIndex(indexOfShape);
 
-				if (s.contains(click.getX(), click.getY()) && s.isSelected()) {
-					executeCommand(new CmdDeselect(model.get(i), model));
-					logCommand("Deselect - " + model.get(i).getClass().getSimpleName() + " " + model.get(i).toString());
+				if (shape.contains(click.getX(), click.getY()) && shape.isSelected()) {
+					executeCommand(new CmdDeselect(model.getShapeByIndex(indexOfShape), model));
+					logCommand("Deselect - " + model.getShapeByIndex(indexOfShape).getClass().getSimpleName() + " "
+							+ model.getShapeByIndex(indexOfShape).toString());
 					fireEvents();
 					break;
-				} else if (s.contains(click.getX(), click.getY()) && !s.isSelected()) {
-					executeCommand(new CmdSelect(model.get(i), model));
-					logCommand("Select - " + model.get(i).getClass().getSimpleName() + " " + model.get(i).toString());
+				} else if (shape.contains(click.getX(), click.getY()) && !shape.isSelected()) {
+					executeCommand(new CmdSelect(model.getShapeByIndex(indexOfShape), model));
+					logCommand("Select - " + model.getShapeByIndex(indexOfShape).getClass().getSimpleName() + " "
+							+ model.getShapeByIndex(indexOfShape).toString());
 					fireEvents();
 					break;
-				} else if (i == 0) {
+				} else if (indexOfShape == 0) {
 					for (int j = 0; model.getSelectedShapes().size() > 0;) {
 						Shape deselected = model.getSelectedShapes().get(j);
 						executeCommand(new CmdDeselect(deselected, model));
@@ -144,23 +145,23 @@ public class DrawingController {
 
 	public void btnPointClicked(MouseEvent click) {
 		addPoint(click);
-		clearStack();
+		clearUnexecutedCommands();
 	}
 
 	public void addPoint(MouseEvent click) {
-		Point point = new Point(click.getX(), click.getY(), false, colOuter);
+		Point point = new Point(click.getX(), click.getY(), false, outerColor);
 		cmdAdd = new CmdAdd(model, point);
 		executeCommand(cmdAdd);
 		logCommand("Add - " + point.getClass().getSimpleName() + " " + point);
 	}
 
-	public void clearStack() {
-		commandsReverse.clear();
+	public void clearUnexecutedCommands() {
+		unexecutedCommands.clear();
 	}
 
 	public void addLine(MouseEvent click) {
-		Point endPoint = new Point(click.getX(), click.getY(), false, colOuter);
-		Line line = new Line(startPoint, endPoint, false, colOuter);
+		Point endPoint = new Point(click.getX(), click.getY(), false, outerColor);
+		Line line = new Line(startPoint, endPoint, false, outerColor);
 		cmdAdd = new CmdAdd(model, line);
 		executeCommand(cmdAdd);
 		logCommand("Add - " + line.getClass().getSimpleName() + " " + line);
@@ -168,35 +169,35 @@ public class DrawingController {
 
 	public void btnLineClicked(MouseEvent click) {
 		if (startPoint == null)
-			startPoint = new Point(click.getX(), click.getY(), false, colOuter);
+			startPoint = new Point(click.getX(), click.getY(), false, outerColor);
 		else {
 			addLine(click);
-			clearStack();
+			clearUnexecutedCommands();
 			startPoint = null;
 		}
 	}
 
 	public void addRectangle(DialogRectangle dialogRectangle, Point point) {
 		Rectangle rectangle = new Rectangle(point, Integer.parseInt(dialogRectangle.getheight().getText()),
-				Integer.parseInt(dialogRectangle.getwidth().getText()), false, colOuter, colInner);
+				Integer.parseInt(dialogRectangle.getwidth().getText()), false, outerColor, innerColor);
 		cmdAdd = new CmdAdd(model, rectangle);
 		executeCommand(cmdAdd);
-		clearStack();
+		clearUnexecutedCommands();
 		logCommand("Add - " + rectangle.getClass().getSimpleName() + " " + rectangle);
 	}
 
 	public void createRectangleDialog(Point point) {
-		dialogRectangle.getBtnSetBorderColor().setVisible(false);
-		dialogRectangle.getBtnSetFillColor().setVisible(false);
-		dialogRectangle.getXcoordinate().setText(String.valueOf(point.getX()));
-		dialogRectangle.getYcoordinate().setText(String.valueOf(point.getY()));
-		dialogRectangle.getXcoordinate().setEditable(false);
-		dialogRectangle.getYcoordinate().setEditable(false);
+		dialogRectangle.getBtnOuterColor().setVisible(false);
+		dialogRectangle.getBtnInnerColor().setVisible(false);
+		dialogRectangle.getXcoordinateOfUpperLeftPoint().setText(String.valueOf(point.getXcoordinate()));
+		dialogRectangle.getYcoordinateOfUpperLeftPoint().setText(String.valueOf(point.getYcoordinate()));
+		dialogRectangle.getXcoordinateOfUpperLeftPoint().setEditable(false);
+		dialogRectangle.getYcoordinateOfUpperLeftPoint().setEditable(false);
 		dialogRectangle.setVisible(true);
 	}
 
 	public void btnRectangleClicked(MouseEvent click) {
-		point = new Point(click.getX(), click.getY(), false, colOuter);
+		point = new Point(click.getX(), click.getY(), false, outerColor);
 		dialogRectangle = new DialogRectangle();
 		createRectangleDialog(point);
 
@@ -205,26 +206,26 @@ public class DrawingController {
 	}
 
 	public void createCircleDialog(Point center) {
-		dialogCircle.getBtnSetOuterColor().setVisible(false);
-		dialogCircle.getBtnSetInnerColor().setVisible(false);
-		dialogCircle.getXcoordinate().setText(String.valueOf(center.getX()));
-		dialogCircle.getYcoordinate().setText(String.valueOf(center.getY()));
+		dialogCircle.getBtnOuterColor().setVisible(false);
+		dialogCircle.getBtnInnerColor().setVisible(false);
+		dialogCircle.getXcoordinate().setText(String.valueOf(center.getXcoordinate()));
+		dialogCircle.getYcoordinate().setText(String.valueOf(center.getYcoordinate()));
 		dialogCircle.getXcoordinate().setEditable(false);
 		dialogCircle.getYcoordinate().setEditable(false);
 		dialogCircle.setVisible(true);
 	}
 
 	public void addCircle(DialogCircle dialogCircle, Point center) {
-		Circle circle = new Circle(center, Integer.parseInt(dialogCircle.getRadius().getText()), false, colOuter,
-				colInner);
+		Circle circle = new Circle(center, Integer.parseInt(dialogCircle.getRadius().getText()), false, outerColor,
+				innerColor);
 		cmdAdd = new CmdAdd(model, circle);
 		executeCommand(cmdAdd);
-		clearStack();
+		clearUnexecutedCommands();
 		logCommand("Add - " + circle.getClass().getSimpleName() + " " + circle);
 	}
 
 	public void btnCircleClicked(MouseEvent click) {
-		point = new Point(click.getX(), click.getY(), false, colOuter);
+		point = new Point(click.getX(), click.getY(), false, outerColor);
 		dialogCircle = new DialogCircle();
 		createCircleDialog(point);
 
@@ -233,27 +234,27 @@ public class DrawingController {
 	}
 
 	public void createDonutDialog(Point center) {
-		dialogDonut.getBtnSetOuterColor().setVisible(false);
-		dialogDonut.getBtnSetInnerColor().setVisible(false);
-		dialogDonut.getXcoordinate().setText(String.valueOf(center.getX()));
-		dialogDonut.getYcoordinate().setText(String.valueOf(center.getY()));
+		dialogDonut.getBtnOuterColor().setVisible(false);
+		dialogDonut.getBtnInnerColor().setVisible(false);
+		dialogDonut.getXcoordinate().setText(String.valueOf(center.getXcoordinate()));
+		dialogDonut.getYcoordinate().setText(String.valueOf(center.getYcoordinate()));
 		dialogDonut.getXcoordinate().setEditable(false);
 		dialogDonut.getYcoordinate().setEditable(false);
 		dialogDonut.setVisible(true);
 	}
 
 	public void addDonut(DialogDonut dialogDonut, Point center) {
-		Donut donut = new Donut(center, Integer.parseInt(dialogDonut.getRadius().getText()),
-				Integer.parseInt(dialogDonut.getSmallRadius().getText()), false, colOuter, colInner);
+		Donut donut = new Donut(center, Integer.parseInt(dialogDonut.getOuterRadius().getText()),
+				Integer.parseInt(dialogDonut.getInnerRadius().getText()), false, outerColor, innerColor);
 
 		cmdAdd = new CmdAdd(model, donut);
 		executeCommand(cmdAdd);
-		clearStack();
+		clearUnexecutedCommands();
 		logCommand("Add - " + donut.getClass().getSimpleName() + " " + donut);
 	}
 
 	public void btnDonutClicked(MouseEvent click) {
-		point = new Point(click.getX(), click.getY(), false, colOuter);
+		point = new Point(click.getX(), click.getY(), false, outerColor);
 		dialogDonut = new DialogDonut();
 		createDonutDialog(point);
 
@@ -262,27 +263,27 @@ public class DrawingController {
 	}
 
 	public void createHexagonDialog(Point center) {
-		dialogHexagon.getBtnSetOuterColor().setVisible(false);
-		dialogHexagon.getBtnSetInnerColor().setVisible(false);
-		dialogHexagon.getXcoordinate().setText(String.valueOf(center.getX()));
-		dialogHexagon.getYcoordinate().setText(String.valueOf(center.getY()));
+		dialogHexagon.getBtnOuterColor().setVisible(false);
+		dialogHexagon.getBtnInnerColor().setVisible(false);
+		dialogHexagon.getXcoordinate().setText(String.valueOf(center.getXcoordinate()));
+		dialogHexagon.getYcoordinate().setText(String.valueOf(center.getYcoordinate()));
 		dialogHexagon.getXcoordinate().setEditable(false);
 		dialogHexagon.getYcoordinate().setEditable(false);
 		dialogHexagon.setVisible(true);
 	}
 
 	public void addHexagon(DialogHexagon dialogHexagon, Point center) {
-		HexagonAdapter hexagon = new HexagonAdapter(
-				new Hexagon(center.getX(), center.getY(), Integer.parseInt(dialogHexagon.getRadius().getText())),
-				colOuter, colInner);
+		HexagonAdapter hexagon = new HexagonAdapter(new Hexagon(center.getXcoordinate(), center.getYcoordinate(),
+				Integer.parseInt(dialogHexagon.getRadius().getText())), outerColor, innerColor);
+
 		cmdAdd = new CmdAdd(model, hexagon);
 		executeCommand(cmdAdd);
-		clearStack();
+		clearUnexecutedCommands();
 		logCommand("Add - " + hexagon.getClass().getSimpleName() + " " + hexagon);
 	}
 
 	public void btnHexagonClicked(MouseEvent click) {
-		point = new Point(click.getX(), click.getY(), false, colOuter);
+		point = new Point(click.getX(), click.getY(), false, outerColor);
 		dialogHexagon = new DialogHexagon();
 		createHexagonDialog(point);
 
@@ -291,10 +292,10 @@ public class DrawingController {
 	}
 
 	public void createPointDialog(Shape selectedShape) {
-		dialogPoint.getXcoordinate().setText(String.valueOf(((Point) selectedShape).getX()));
-		dialogPoint.getYcoordinate().setText(String.valueOf(((Point) selectedShape).getY()));
-		dialogPoint.setOuterColor(((Point) selectedShape).getBorderColor());
-		dialogPoint.getBtnSetOuterColor().setBackground(dialogPoint.getOuterColor());
+		dialogPoint.getXcoordinate().setText(String.valueOf(((Point) selectedShape).getXcoordinate()));
+		dialogPoint.getYcoordinate().setText(String.valueOf(((Point) selectedShape).getYcoordinate()));
+		dialogPoint.setOuterColor(((Point) selectedShape).getOuterColor());
+		dialogPoint.getBtnOuterColor().setBackground(dialogPoint.getOuterColor());
 		dialogPoint.setVisible(true);
 	}
 
@@ -308,16 +309,20 @@ public class DrawingController {
 		logCommand("Modify - " + newState.getClass().getSimpleName() + " from " + oldState + " to " + " " + newState);
 		cmdModifyPoint = new CmdModifyPoint(oldState, (Point) newState);
 		executeCommand(cmdModifyPoint);
-		clearStack();
+		clearUnexecutedCommands();
 	}
 
 	public void createLineDialog(Shape selectedShape) {
-		dialogLine.getX1coordinate().setText(String.valueOf(((Line) selectedShape).getStartPoint().getX()));
-		dialogLine.getY1coordinate().setText(String.valueOf(((Line) selectedShape).getStartPoint().getY()));
-		dialogLine.getX2coordinate().setText(String.valueOf(((Line) selectedShape).getEndPoint().getX()));
-		dialogLine.getY2coordinate().setText(String.valueOf(((Line) selectedShape).getEndPoint().getY()));
-		dialogLine.setOuterColor(((Line) selectedShape).getBorderColor());
-		dialogLine.getBtnSetOuterColor().setBackground(dialogLine.getOuterColor());
+		dialogLine.getXCoordinateOfStartPoint()
+				.setText(String.valueOf(((Line) selectedShape).getStartPoint().getXcoordinate()));
+		dialogLine.getYCoordinateOfStartPoint()
+				.setText(String.valueOf(((Line) selectedShape).getStartPoint().getYcoordinate()));
+		dialogLine.getXCoordinateOfEndPoint()
+				.setText(String.valueOf(((Line) selectedShape).getEndPoint().getXcoordinate()));
+		dialogLine.getYCoordinateOfEndPoint()
+				.setText(String.valueOf(((Line) selectedShape).getEndPoint().getYcoordinate()));
+		dialogLine.setOuterColor(((Line) selectedShape).getOuterColor());
+		dialogLine.getBtnOuterColor().setBackground(dialogLine.getOuterColor());
 		dialogLine.setVisible(true);
 	}
 
@@ -325,31 +330,33 @@ public class DrawingController {
 		Line oldState = (Line) selectedShape;
 
 		Line newState = new Line(
-				new Point(Integer.parseInt(dialogLine.getX1coordinate().getText()),
-						Integer.parseInt(dialogLine.getY1coordinate().getText()), oldState.isSelected(),
+				new Point(Integer.parseInt(dialogLine.getXCoordinateOfStartPoint().getText()),
+						Integer.parseInt(dialogLine.getYCoordinateOfStartPoint().getText()), oldState.isSelected(),
 						dialogLine.getOuterColor()),
-				new Point(Integer.parseInt(dialogLine.getX2coordinate().getText()),
-						Integer.parseInt(dialogLine.getY2coordinate().getText()), oldState.isSelected(),
+				new Point(Integer.parseInt(dialogLine.getXCoordinateOfEndPoint().getText()),
+						Integer.parseInt(dialogLine.getYCoordinateOfEndPoint().getText()), oldState.isSelected(),
 						dialogLine.getOuterColor()),
 				oldState.isSelected(), dialogLine.getOuterColor());
 
 		logCommand("Modify - " + newState.getClass().getSimpleName() + " from " + oldState + " to " + " " + newState);
 		cmdModifyLine = new CmdModifyLine(oldState, (Line) newState);
 		executeCommand(cmdModifyLine);
-		clearStack();
+		clearUnexecutedCommands();
 	}
 
 	public void createRectangleModifyDialog(Shape selectedShape) {
-		dialogRectangle.getXcoordinate()
-				.setText(String.valueOf(((Rectangle) selectedShape).getUpperLeftPoint().getX()));
-		dialogRectangle.getYcoordinate()
-				.setText(String.valueOf(((Rectangle) selectedShape).getUpperLeftPoint().getY()));
+		dialogRectangle.getXcoordinateOfUpperLeftPoint()
+				.setText(String.valueOf(((Rectangle) selectedShape).getUpperLeftPoint().getXcoordinate()));
+
+		dialogRectangle.getYcoordinateOfUpperLeftPoint()
+				.setText(String.valueOf(((Rectangle) selectedShape).getUpperLeftPoint().getYcoordinate()));
+
 		dialogRectangle.getheight().setText(String.valueOf(((Rectangle) selectedShape).getHeight()));
 		dialogRectangle.getwidth().setText(String.valueOf(((Rectangle) selectedShape).getWidth()));
-		dialogRectangle.setOuterColor(((Rectangle) selectedShape).getBorderColor());
-		dialogRectangle.setInnerColor(((Rectangle) selectedShape).getFillColor());
-		dialogRectangle.getBtnSetBorderColor().setBackground(dialogRectangle.getOuterColor());
-		dialogRectangle.getBtnSetFillColor().setBackground(dialogRectangle.getInnerColor());
+		dialogRectangle.setOuterColor(((Rectangle) selectedShape).getInnerColor());
+		dialogRectangle.setInnerColor(((Rectangle) selectedShape).getInnerColor());
+		dialogRectangle.getBtnOuterColor().setBackground(dialogRectangle.getOuterColor());
+		dialogRectangle.getBtnInnerColor().setBackground(dialogRectangle.getInnerColor());
 		dialogRectangle.setVisible(true);
 	}
 
@@ -357,9 +364,9 @@ public class DrawingController {
 		Rectangle oldState = (Rectangle) selectedShape;
 
 		Rectangle newState = new Rectangle(
-				new Point(Integer.parseInt(dialogRectangle.getXcoordinate().getText()),
-						Integer.parseInt(dialogRectangle.getYcoordinate().getText()), oldState.isSelected(),
-						dialogRectangle.getOuterColor()),
+				new Point(Integer.parseInt(dialogRectangle.getXcoordinateOfUpperLeftPoint().getText()),
+						Integer.parseInt(dialogRectangle.getYcoordinateOfUpperLeftPoint().getText()),
+						oldState.isSelected(), dialogRectangle.getOuterColor()),
 				Integer.parseInt(dialogRectangle.getheight().getText()),
 				Integer.parseInt(dialogRectangle.getwidth().getText()), oldState.isSelected(),
 				dialogRectangle.getOuterColor(), dialogRectangle.getInnerColor());
@@ -367,18 +374,18 @@ public class DrawingController {
 		logCommand("Modify - " + newState.getClass().getSimpleName() + " from " + oldState + " to " + " " + newState);
 		cmdModifyRectangle = new CmdModifyRectangle(oldState, (Rectangle) newState);
 		executeCommand(cmdModifyRectangle);
-		clearStack();
+		clearUnexecutedCommands();
 	}
 
 	public void createDonutModifyDialog(Shape selectedShape) {
-		dialogDonut.getXcoordinate().setText(String.valueOf(((Donut) selectedShape).getCenter().getX()));
-		dialogDonut.getYcoordinate().setText(String.valueOf(((Donut) selectedShape).getCenter().getY()));
-		dialogDonut.getRadius().setText(String.valueOf(((Donut) selectedShape).getRadius()));
-		dialogDonut.getSmallRadius().setText(String.valueOf(((Donut) selectedShape).getInnerRadius()));
-		dialogDonut.setOuterColor(((Donut) selectedShape).getBorderColor());
-		dialogDonut.setInnerColor(((Donut) selectedShape).getFillColor());
-		dialogDonut.getBtnSetOuterColor().setBackground(dialogDonut.getOuterColor());
-		dialogDonut.getBtnSetInnerColor().setBackground(dialogDonut.getInnerColor());
+		dialogDonut.getXcoordinate().setText(String.valueOf(((Donut) selectedShape).getCenter().getXcoordinate()));
+		dialogDonut.getYcoordinate().setText(String.valueOf(((Donut) selectedShape).getCenter().getYcoordinate()));
+		dialogDonut.getOuterRadius().setText(String.valueOf(((Donut) selectedShape).getRadius()));
+		dialogDonut.getInnerRadius().setText(String.valueOf(((Donut) selectedShape).getInnerRadius()));
+		dialogDonut.setOuterColor(((Donut) selectedShape).getInnerColor());
+		dialogDonut.setInnerColor(((Donut) selectedShape).getInnerColor());
+		dialogDonut.getBtnOuterColor().setBackground(dialogDonut.getOuterColor());
+		dialogDonut.getBtnInnerColor().setBackground(dialogDonut.getInnerColor());
 		dialogDonut.setVisible(true);
 	}
 
@@ -389,24 +396,24 @@ public class DrawingController {
 				new Point(Integer.parseInt(dialogDonut.getXcoordinate().getText()),
 						Integer.parseInt(dialogDonut.getYcoordinate().getText()), oldState.isSelected(),
 						dialogDonut.getOuterColor()),
-				Integer.parseInt(dialogDonut.getRadius().getText()),
-				Integer.parseInt(dialogDonut.getSmallRadius().getText()), oldState.isSelected(),
+				Integer.parseInt(dialogDonut.getOuterRadius().getText()),
+				Integer.parseInt(dialogDonut.getInnerRadius().getText()), oldState.isSelected(),
 				dialogDonut.getOuterColor(), dialogDonut.getInnerColor());
 
 		logCommand("Modify - " + newState.getClass().getSimpleName() + " from " + oldState + " to " + " " + newState);
 		cmdModifyDonut = new CmdModifyDonut(oldState, (Donut) newState);
 		executeCommand(cmdModifyDonut);
-		clearStack();
+		clearUnexecutedCommands();
 	}
 
 	public void createCircleModifyDialog(Shape selectedShape) {
-		dialogCircle.getXcoordinate().setText(String.valueOf(((Circle) selectedShape).getCenter().getX()));
-		dialogCircle.getYcoordinate().setText(String.valueOf(((Circle) selectedShape).getCenter().getY()));
+		dialogCircle.getXcoordinate().setText(String.valueOf(((Circle) selectedShape).getCenter().getXcoordinate()));
+		dialogCircle.getYcoordinate().setText(String.valueOf(((Circle) selectedShape).getCenter().getYcoordinate()));
 		dialogCircle.getRadius().setText(String.valueOf(((Circle) selectedShape).getRadius()));
-		dialogCircle.setOuterColor(((Circle) selectedShape).getBorderColor());
-		dialogCircle.setInnerColor(((Circle) selectedShape).getFillColor());
-		dialogCircle.getBtnSetOuterColor().setBackground(dialogCircle.getOuterColor());
-		dialogCircle.getBtnSetInnerColor().setBackground(dialogCircle.getInnerColor());
+		dialogCircle.setOuterColor(((Circle) selectedShape).getInnerColor());
+		dialogCircle.setInnerColor(((Circle) selectedShape).getInnerColor());
+		dialogCircle.getBtnOuterColor().setBackground(dialogCircle.getOuterColor());
+		dialogCircle.getBtnInnerColor().setBackground(dialogCircle.getInnerColor());
 		dialogCircle.setVisible(true);
 	}
 
@@ -423,17 +430,17 @@ public class DrawingController {
 		logCommand("Modify - " + newState.getClass().getSimpleName() + " from " + oldState + " to " + " " + newState);
 		cmdModifyCircle = new CmdModifyCircle(oldState, (Circle) newState);
 		executeCommand(cmdModifyCircle);
-		clearStack();
+		clearUnexecutedCommands();
 	}
 
 	public void createHexagonModifyDialog(Shape selectedShape) {
-		dialogHexagon.getXcoordinate().setText(String.valueOf(((HexagonAdapter) selectedShape).getX()));
-		dialogHexagon.getYcoordinate().setText(String.valueOf(((HexagonAdapter) selectedShape).getY()));
-		dialogHexagon.getRadius().setText(String.valueOf(((HexagonAdapter) selectedShape).getR()));
-		dialogHexagon.setOuterColor(((HexagonAdapter) selectedShape).getBorderColor());
-		dialogHexagon.setInnerColor(((HexagonAdapter) selectedShape).getFillColor());
-		dialogHexagon.getBtnSetOuterColor().setBackground(dialogHexagon.getOuterColor());
-		dialogHexagon.getBtnSetInnerColor().setBackground(dialogHexagon.getInnerColor());
+		dialogHexagon.getXcoordinate().setText(String.valueOf(((HexagonAdapter) selectedShape).getXcoordinate()));
+		dialogHexagon.getYcoordinate().setText(String.valueOf(((HexagonAdapter) selectedShape).getYcoordinate()));
+		dialogHexagon.getRadius().setText(String.valueOf(((HexagonAdapter) selectedShape).getRadius()));
+		dialogHexagon.setOuterColor(((HexagonAdapter) selectedShape).getInnerColor());
+		dialogHexagon.setInnerColor(((HexagonAdapter) selectedShape).getInnerColor());
+		dialogHexagon.getBtnOuterColor().setBackground(dialogHexagon.getOuterColor());
+		dialogHexagon.getBtnInnerColor().setBackground(dialogHexagon.getInnerColor());
 		dialogHexagon.setVisible(true);
 	}
 
@@ -448,11 +455,11 @@ public class DrawingController {
 		logCommand("Modify - " + newState.getClass().getSimpleName() + " from " + oldState + " to " + " " + newState);
 		cmdModifyHexagon = new CmdModifyHexagon(oldState, (HexagonAdapter) newState);
 		executeCommand(cmdModifyHexagon);
-		clearStack();
+		clearUnexecutedCommands();
 	}
 
-	public void modify() {
-		Shape selectedShape = model.getOneSelectedShape();
+	public void btnModifyClicked() {
+		Shape selectedShape = model.getFirstSelectedShape();
 
 		if (model.getSelectedShapes().size() != 1)
 			return;
@@ -489,159 +496,154 @@ public class DrawingController {
 				modifyHexagon(selectedShape, dialogHexagon);
 		}
 
-		mainFrame.getView().repaint();
-		fireUndoRedo();
+		frame.getView().repaint();
+		fireEventsForUndoAndRedoButtons();
 	}
 
-	public void delete() {
+	public void btnRemoveClicked() {
 		if (model.getSelectedShapes().size() == 0)
 			return;
 
 		if (JOptionPane.showConfirmDialog(new JFrame(), "Are you sure you want to delete selected shape/shapes?",
 				"Delete it?", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-			deleteForLogs();
+			removeShapes();
 			logCommand("Deleted");
-			mainFrame.getView().repaint();
+			frame.getView().repaint();
 			fireEvents();
 		}
 	}
 
-	public void deleteForLogs() {
-		for (int i = 0; i < model.getSelectedShapes().size(); i++) {
-			cmdRemove = new CmdRemove(model, model.getSelectedShapes().get(i));
+	public void removeShapes() {
+		for (int indexOfShape = 0; indexOfShape < model.getSelectedShapes().size(); indexOfShape++) {
+			cmdRemove = new CmdRemove(model, model.getSelectedShapes().get(indexOfShape));
 			executeCommand(cmdRemove);
-			clearStack();
-			// main_frame.getlModel().addElement("Deleted - " +
-			// model.getSelectedShapes().get(i).getClass().getSimpleName()
-			// + " " + model.getSelectedShapes().get(i).toString());
+			clearUnexecutedCommands();
 		}
 
 		model.setSelectedShapes(new ArrayList<Shape>());
 	}
 
-	public void undo() {
-		if (commandsNormal.isEmpty())
+	public void btnUndoClicked() {
+		if (executedCommands.isEmpty())
 			return;
 
-		undoForLog();
+		undoCommand();
 		logCommand("Undo");
-		mainFrame.getView().repaint();
-		fireUndoRedo();
+		frame.getView().repaint();
+		fireEventsForUndoAndRedoButtons();
 		fireEvents();
 	}
 
-	public void undoForLog() {
-		commandsNormal.peek().unexecute();
-		commandsReverse.push(commandsNormal.peek());
-		commandsNormal.pop();
+	public void undoCommand() {
+		executedCommands.peek().unexecute();
+		unexecutedCommands.push(executedCommands.peek());
+		executedCommands.pop();
 	}
 
-	public void redo() {
-		if (commandsReverse.isEmpty())
+	public void btnRedoClicked() {
+		if (unexecutedCommands.isEmpty())
 			return;
 
-		redoForLog();
+		redoCommand();
 		logCommand("Redo");
-		mainFrame.getView().repaint();
-		fireUndoRedo();
+		frame.getView().repaint();
+		fireEventsForUndoAndRedoButtons();
 		fireEvents();
 	}
 
-	public void redoForLog() {
-		commandsReverse.peek().execute();
-		commandsNormal.push(commandsReverse.peek());
-		commandsReverse.pop();
+	public void redoCommand() {
+		unexecutedCommands.peek().execute();
+		executedCommands.push(unexecutedCommands.peek());
+		unexecutedCommands.pop();
 	}
 
-	public void outerColor() {
-		colOuter = JColorChooser.showDialog(null, "Choose a color!", colOuter);
+	public void chooseOuterColor() {
+		outerColor = JColorChooser.showDialog(null, "Choose a color!", outerColor);
 
-		if (colOuter != null)
-			mainFrame.getBtnOuterCol().setBackground(colOuter);
+		if (outerColor != null)
+			frame.getBtnOuterColor().setBackground(outerColor);
 	}
 
-	public void innerColor() {
-		colInner = JColorChooser.showDialog(null, "Choose a color!", colInner);
+	public void chooseInnerColor() {
+		innerColor = JColorChooser.showDialog(null, "Choose a color!", innerColor);
 
-		if (colInner != null)
-			mainFrame.getBtnInnerCol().setBackground(colInner);
+		if (innerColor != null)
+			frame.getBtnInnerColor().setBackground(innerColor);
 	}
 
-	public void toBack() {
+	public void btnToBackClicked() {
 		if (model.getSelectedShapes().size() == 1) {
-			Shape shape = model.getOneSelectedShape();
+			Shape shape = model.getFirstSelectedShape();
 			cmdToBack = new CmdToBack(model, shape);
 			executeCommand(cmdToBack);
-			clearStack();
+			clearUnexecutedCommands();
 			logCommand("ToBack - " + shape.getClass().getSimpleName() + " " + shape.toString());
-			mainFrame.getView().repaint();
+			frame.getView().repaint();
 		}
 	}
 
-	public void toFront() {
+	public void btnToFrontClicked() {
 		if (model.getSelectedShapes().size() == 1) {
-			Shape shape = model.getOneSelectedShape();
+			Shape shape = model.getFirstSelectedShape();
 			cmdToFront = new CmdToFront(model, shape);
 			executeCommand(cmdToFront);
-			clearStack();
+			clearUnexecutedCommands();
 			logCommand("ToFront - " + shape.getClass().getSimpleName() + " " + shape.toString());
-			mainFrame.getView().repaint();
+			frame.getView().repaint();
 		}
 	}
 
-	public void sendToBack() {
+	public void btnSendToBackClicked() {
 		if (model.getSelectedShapes().size() == 1) {
-			Shape shape = model.getOneSelectedShape();
+			Shape shape = model.getFirstSelectedShape();
 			cmdSendToBack = new CmdSendToBack(model, shape);
 			executeCommand(cmdSendToBack);
-			clearStack();
+			clearUnexecutedCommands();
 			logCommand("SendToBack - " + shape.getClass().getSimpleName() + " " + shape.toString());
-			mainFrame.getView().repaint();
+			frame.getView().repaint();
 		}
 	}
 
-	public void bringToFront() {
+	public void btnBringToFrontClicked() {
 		if (model.getSelectedShapes().size() == 1) {
-			Shape shape = model.getOneSelectedShape();
+			Shape shape = model.getFirstSelectedShape();
 			cmdBringToFront = new CmdBringToFront(model, shape);
 			executeCommand(cmdBringToFront);
-			clearStack();
+			clearUnexecutedCommands();
 			logCommand("BringToFront - " + shape.getClass().getSimpleName() + " " + shape.toString());
-			mainFrame.getView().repaint();
+			frame.getView().repaint();
 		}
 	}
 
 	public void fireEvents() {
-		observer.setBtnDeleteEnable(model.getSelectedShapes().size() > 0);
-		observer.setBtnModifyEnable(model.getSelectedShapes().size() == 1);
-		observer.setBtnToBackEnable(model.getSelectedShapes().size() == 1);
-		observer.setBtnToFrontEnable(model.getSelectedShapes().size() == 1);
-		observer.setBtnSendToBackEnable(model.getSelectedShapes().size() == 1);
-		observer.setBtnBringToFrontEnable(model.getSelectedShapes().size() == 1);
+		observer.setBtnDeleteEnabled(model.getSelectedShapes().size() > 0);
+		observer.setBtnModifyEnabled(model.getSelectedShapes().size() == 1);
+		observer.setBtnToBackEnabled(model.getSelectedShapes().size() == 1);
+		observer.setBtnToFrontEnabled(model.getSelectedShapes().size() == 1);
+		observer.setBtnSendToBackEnabled(model.getSelectedShapes().size() == 1);
+		observer.setBtnBringToFrontEnabled(model.getSelectedShapes().size() == 1);
 	}
 
-	public void fireUndoRedo() {
-		observer.setBtnUndoEnable(commandsNormal.size() > 0);
-		observer.setBtnRedoEnable(commandsReverse.size() > 0);
+	public void fireEventsForUndoAndRedoButtons() {
+		observer.setBtnUndoEnabled(executedCommands.size() > 0);
+		observer.setBtnRedoEnabled(unexecutedCommands.size() > 0);
 	}
 
 	public void saveDrawing() {
-		painting.setShapes(model.getShapes());
-		strategy.setStrategy(painting);
-		strategy.save(
-				fileChooser.getSelectedFile().getAbsolutePath() + "\\" + mainFrame.getFileName().getText() + ".bin");
+		savePainting.setShapes(model.getShapes());
+		strategy.setStrategy(savePainting);
+		strategy.save(fileChooser.getSelectedFile().getAbsolutePath() + "\\" + frame.getFileName().getText() + ".bin");
 	}
 
 	public void saveLog() {
 		log = "";
 
-		for (int i = 0; i < mainFrame.getlModel().getSize(); i++)
-			log = log + mainFrame.getlModel().get(i) + "\n";
+		for (int i = 0; i < frame.getCommandsListModel().getSize(); i++)
+			log = log + frame.getCommandsListModel().get(i) + "\n";
 
-		saveLog.setLog(log);
+		saveLog.setCommandsLog(log);
 		strategy.setStrategy(saveLog);
-		strategy.save(
-				fileChooser.getSelectedFile().getAbsolutePath() + "\\" + mainFrame.getFileName().getText() + ".txt");
+		strategy.save(fileChooser.getSelectedFile().getAbsolutePath() + "\\" + frame.getFileName().getText() + ".txt");
 	}
 
 	public String getLog() {
@@ -651,7 +653,7 @@ public class DrawingController {
 	public int showFileChooser(String title, int mode) {
 		fileChooser.setDialogTitle(title);
 		fileChooser.setFileSelectionMode(mode);
-		return fileChooser.showSaveDialog(mainFrame);
+		return fileChooser.showSaveDialog(frame);
 	}
 
 	public void save() {
@@ -670,15 +672,15 @@ public class DrawingController {
 			strategy = new StrategyManager();
 			saveLog();
 
-			painting = new SavePainting();
+			savePainting = new SavePainting();
 			strategy = new StrategyManager();
 			saveDrawing();
 		}
 	}
 
 	public void loadLog() {
-		mainFrame.getBtnNext().setEnabled(true);
-		setLogCommands(new LinkedList<String>());
+		frame.getBtnNext().setEnabled(true);
+		commandsLog.clear();
 		fileChooser = new JFileChooser();
 
 		if (showFileChooser("Specify the log you want to open", JFileChooser.FILES_ONLY) == JFileChooser.APPROVE_OPTION)
@@ -687,33 +689,33 @@ public class DrawingController {
 
 	public void addLog() {
 		try {
-			BufferedReader buffer = new BufferedReader(new FileReader(fileChooser.getSelectedFile().getAbsolutePath()));
-			String text = "";
+			BufferedReader reader = new BufferedReader(new FileReader(fileChooser.getSelectedFile().getAbsolutePath()));
+			String line = "";
 
-			while ((text = buffer.readLine()) != null)
-				logCommands.add(text);
-		} catch (Exception exception) {
-			System.out.println(exception.getMessage());
-		}
-	}
-
-	public void addPainting() {
-		try {
-			FileInputStream fis = new FileInputStream(fileChooser.getSelectedFile().getAbsoluteFile());
-			ObjectInputStream ois = new ObjectInputStream(fis);
-			model.setShapes((List<Shape>) ois.readObject());
-			mainFrame.getView().repaint();
+			while ((line = reader.readLine()) != null)
+				commandsLog.add(line);
 		} catch (Exception exception) {
 			System.out.println(exception.getMessage());
 		}
 	}
 
 	@SuppressWarnings("unchecked")
+	public void addPainting() {
+		try {
+			ObjectInputStream inputStream = new ObjectInputStream(
+					new FileInputStream(fileChooser.getSelectedFile().getAbsoluteFile()));
+			model.setShapes((ArrayList<Shape>) inputStream.readObject());
+			frame.getView().repaint();
+		} catch (Exception exception) {
+			System.out.println(exception.getMessage());
+		}
+	}
+
 	public void loadPainting() {
 		fileChooser = new JFileChooser();
 		showFileChooser("Specify the painting you want to open", JFileChooser.FILES_ONLY);
 
-		if (fileChooser.showOpenDialog(mainFrame) == JFileChooser.APPROVE_OPTION)
+		if (fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION)
 			addPainting();
 	}
 
@@ -725,205 +727,240 @@ public class DrawingController {
 		executeCommand(cmdAdd);
 	}
 
-	public void addLineFromLog(String[] line) {
-		Point startPoint = new Point(Integer.parseInt(line[6]), Integer.parseInt(line[9]), false,
-				(Integer.parseInt(line[13]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[13]))));
+	public void addLineFromLog(String[] logLine) {
+		Point startPoint = new Point(Integer.parseInt(logLine[6]), Integer.parseInt(logLine[9]), false,
+				(Integer.parseInt(logLine[13]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[13]))));
 
-		Point endPoint = new Point(Integer.parseInt(line[18]), Integer.parseInt(line[21]), false,
-				(Integer.parseInt(line[25]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[25]))));
+		Point endPoint = new Point(Integer.parseInt(logLine[18]), Integer.parseInt(logLine[21]), false,
+				(Integer.parseInt(logLine[25]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[25]))));
 
 		Line lineShape = new Line(startPoint, endPoint, false,
-				(Integer.parseInt(line[29]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[29]))));
+				(Integer.parseInt(logLine[29]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[29]))));
 
 		cmdAdd = new CmdAdd(model, lineShape);
 		executeCommand(cmdAdd);
 	}
 
-	public void addRectangleFromLog(String[] line) {
-		Point point = new Point(Integer.parseInt(line[7]), Integer.parseInt(line[10]), false,
-				(Integer.parseInt(line[14]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[14]))));
+	public void addRectangleFromLog(String[] logLine) {
+		Point point = new Point(Integer.parseInt(logLine[7]), Integer.parseInt(logLine[10]), false,
+				(Integer.parseInt(logLine[14]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[14]))));
 
-		Rectangle rectangle = new Rectangle(point, Integer.parseInt(line[17]), Integer.parseInt(line[20]), false,
-				(Integer.parseInt(line[24]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[24]))),
-				(Integer.parseInt(line[28]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[28]))));
+		Rectangle rectangle = new Rectangle(point, Integer.parseInt(logLine[17]), Integer.parseInt(logLine[20]), false,
+				(Integer.parseInt(logLine[24]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[24]))),
+				(Integer.parseInt(logLine[28]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[28]))));
 
 		cmdAdd = new CmdAdd(model, rectangle);
 		executeCommand(cmdAdd);
 	}
 
-	public void addCircleFromLog(String[] line) {
-		Point point = new Point(Integer.parseInt(line[5]), Integer.parseInt(line[8]), false,
-				(Integer.parseInt(line[12]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[12]))));
+	public void addCircleFromLog(String[] logLine) {
+		Point point = new Point(Integer.parseInt(logLine[5]), Integer.parseInt(logLine[8]), false,
+				(Integer.parseInt(logLine[12]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[12]))));
 
-		Circle circle = new Circle(point, Integer.parseInt(line[15]), false,
-				(Integer.parseInt(line[19]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[19]))),
-				(Integer.parseInt(line[23]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[23]))));
+		Circle circle = new Circle(point, Integer.parseInt(logLine[15]), false,
+				(Integer.parseInt(logLine[19]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[19]))),
+				(Integer.parseInt(logLine[23]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[23]))));
 
 		cmdAdd = new CmdAdd(model, circle);
 		executeCommand(cmdAdd);
 	}
 
-	public void addDonutFromLog(String[] line) {
-		Point point = new Point(Integer.parseInt(line[5]), Integer.parseInt(line[8]), false,
-				(Integer.parseInt(line[12]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[12]))));
+	public void addDonutFromLog(String[] logLine) {
+		Point point = new Point(Integer.parseInt(logLine[5]), Integer.parseInt(logLine[8]), false,
+				(Integer.parseInt(logLine[12]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[12]))));
 
-		Donut donut = new Donut(point, Integer.parseInt(line[15]), Integer.parseInt(line[27]), false,
-				(Integer.parseInt(line[31]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[31]))),
-				(Integer.parseInt(line[35]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[35]))));
+		Donut donut = new Donut(point, Integer.parseInt(logLine[15]), Integer.parseInt(logLine[27]), false,
+				(Integer.parseInt(logLine[31]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[31]))),
+				(Integer.parseInt(logLine[35]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[35]))));
 
 		cmdAdd = new CmdAdd(model, donut);
 		executeCommand(cmdAdd);
 	}
 
-	public void addHexagonFromLog(String[] line) {
-		Point point = new Point(Integer.parseInt(line[5]), Integer.parseInt(line[8]), false,
-				(Integer.parseInt(line[12]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[12]))));
+	public void addHexagonFromLog(String[] logLine) {
+		Point point = new Point(Integer.parseInt(logLine[5]), Integer.parseInt(logLine[8]), false,
+				(Integer.parseInt(logLine[12]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[12]))));
 
-		HexagonAdapter hexagon = new HexagonAdapter(point.getX(), point.getY(), Integer.parseInt(line[15]),
-				(Integer.parseInt(line[19]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[19]))),
-				(Integer.parseInt(line[23]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[23]))),
+		HexagonAdapter hexagon = new HexagonAdapter(point.getXcoordinate(), point.getYcoordinate(),
+				Integer.parseInt(logLine[15]),
+				(Integer.parseInt(logLine[19]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[19]))),
+				(Integer.parseInt(logLine[23]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[23]))),
 				false);
 
 		cmdAdd = new CmdAdd(model, hexagon);
 		executeCommand(cmdAdd);
 	}
 
-	public void selectPoint(String[] line) {
-		Point point = new Point(Integer.parseInt(line[4]), Integer.parseInt(line[7]), false,
-				(Integer.parseInt(line[11]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[11]))));
+	public void selectPointFromLog(String[] logLine) {
+		Point point = new Point(Integer.parseInt(logLine[4]), Integer.parseInt(logLine[7]), false,
+				(Integer.parseInt(logLine[11]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[11]))));
 
 		cmdSelect = new CmdSelect(point, model);
 		executeCommand(cmdSelect);
 	}
 
-	public void selectLine(String[] line) {
-		Point startPoint = new Point(Integer.parseInt(line[6]), Integer.parseInt(line[9]), false,
-				(Integer.parseInt(line[13]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[13]))));
+	public void selectLineFromLog(String[] logLine) {
+		Point startPoint = new Point(Integer.parseInt(logLine[6]), Integer.parseInt(logLine[9]), false,
+				(Integer.parseInt(logLine[13]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[13]))));
 
-		Point endPoint = new Point(Integer.parseInt(line[18]), Integer.parseInt(line[21]), false,
-				(Integer.parseInt(line[25]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[25]))));
+		Point endPoint = new Point(Integer.parseInt(logLine[18]), Integer.parseInt(logLine[21]), false,
+				(Integer.parseInt(logLine[25]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[25]))));
 
 		Line lineShape = new Line(startPoint, endPoint, true,
-				(Integer.parseInt(line[29]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[29]))));
+				(Integer.parseInt(logLine[29]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[29]))));
 
 		cmdSelect = new CmdSelect(lineShape, model);
 		executeCommand(cmdSelect);
 	}
 
-	public void selectRectangle(String[] line) {
-		Point point = new Point(Integer.parseInt(line[7]), Integer.parseInt(line[10]), false,
-				(Integer.parseInt(line[14]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[14]))));
+	public void selectRectangleFromLog(String[] logLine) {
+		Point point = new Point(Integer.parseInt(logLine[7]), Integer.parseInt(logLine[10]), false,
+				(Integer.parseInt(logLine[14]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[14]))));
 
-		Rectangle rectangle = new Rectangle(point, Integer.parseInt(line[17]), Integer.parseInt(line[20]), true,
-				(Integer.parseInt(line[24]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[24]))),
-				(Integer.parseInt(line[28]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[28]))));
+		Rectangle rectangle = new Rectangle(point, Integer.parseInt(logLine[17]), Integer.parseInt(logLine[20]), true,
+				(Integer.parseInt(logLine[24]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[24]))),
+				(Integer.parseInt(logLine[28]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[28]))));
 
 		cmdSelect = new CmdSelect(rectangle, model);
 		executeCommand(cmdSelect);
 	}
 
-	public void selectCircle(String[] line) {
-		Point point = new Point(Integer.parseInt(line[5]), Integer.parseInt(line[8]), false,
-				(Integer.parseInt(line[12]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[12]))));
+	public void selectCircleFromLog(String[] logLine) {
+		Point point = new Point(Integer.parseInt(logLine[5]), Integer.parseInt(logLine[8]), false,
+				(Integer.parseInt(logLine[12]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[12]))));
 
-		Circle circle = new Circle(point, Integer.parseInt(line[15]), true,
-				(Integer.parseInt(line[19]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[19]))),
-				(Integer.parseInt(line[23]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[23]))));
+		Circle circle = new Circle(point, Integer.parseInt(logLine[15]), true,
+				(Integer.parseInt(logLine[19]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[19]))),
+				(Integer.parseInt(logLine[23]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[23]))));
 
 		cmdSelect = new CmdSelect(circle, model);
 		executeCommand(cmdSelect);
 	}
 
-	public void selectDonut(String[] line) {
-		Point point = new Point(Integer.parseInt(line[5]), Integer.parseInt(line[8]), false,
-				(Integer.parseInt(line[12]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[12]))));
+	public void selectDonutFromLog(String[] logLine) {
+		Point point = new Point(Integer.parseInt(logLine[5]), Integer.parseInt(logLine[8]), false,
+				(Integer.parseInt(logLine[12]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[12]))));
 
-		Donut donut = new Donut(point, Integer.parseInt(line[15]), Integer.parseInt(line[27]), true,
-				(Integer.parseInt(line[31]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[31]))),
-				(Integer.parseInt(line[35]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[35]))));
+		Donut donut = new Donut(point, Integer.parseInt(logLine[15]), Integer.parseInt(logLine[27]), true,
+				(Integer.parseInt(logLine[31]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[31]))),
+				(Integer.parseInt(logLine[35]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[35]))));
 
 		cmdSelect = new CmdSelect(donut, model);
 		executeCommand(cmdSelect);
 	}
 
-	public void selectHexagon(String[] line) {
-		Point point = new Point(Integer.parseInt(line[5]), Integer.parseInt(line[8]), false,
-				(Integer.parseInt(line[12]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[12]))));
+	public void selectHexagonFromLog(String[] logLine) {
+		Point point = new Point(Integer.parseInt(logLine[5]), Integer.parseInt(logLine[8]), false,
+				(Integer.parseInt(logLine[12]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[12]))));
 
-		HexagonAdapter hexagon = new HexagonAdapter(point.getX(), point.getY(), Integer.parseInt(line[15]),
-				(Integer.parseInt(line[19]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[19]))),
-				(Integer.parseInt(line[23]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[23]))),
+		HexagonAdapter hexagon = new HexagonAdapter(point.getXcoordinate(), point.getYcoordinate(),
+				Integer.parseInt(logLine[15]),
+				(Integer.parseInt(logLine[19]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[19]))),
+				(Integer.parseInt(logLine[23]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[23]))),
 				false);
 
 		cmdSelect = new CmdSelect(hexagon, model);
 		executeCommand(cmdSelect);
 	}
 
-	public void deselectPoint(String[] line) {
-		Point point = new Point(Integer.parseInt(line[4]), Integer.parseInt(line[7]), true,
-				(Integer.parseInt(line[11]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[11]))));
+	public void deselectPointFromLog(String[] logLine) {
+		Point point = new Point(Integer.parseInt(logLine[4]), Integer.parseInt(logLine[7]), true,
+				(Integer.parseInt(logLine[11]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[11]))));
 
 		cmdDeselect = new CmdDeselect(point, model);
 		executeCommand(cmdDeselect);
 	}
 
-	public void deselectLine(String[] line) {
-		Point startPoint = new Point(Integer.parseInt(line[6]), Integer.parseInt(line[9]), false,
-				(Integer.parseInt(line[13]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[13]))));
+	public void deselectLineFromLog(String[] logLine) {
+		Point startPoint = new Point(Integer.parseInt(logLine[6]), Integer.parseInt(logLine[9]), false,
+				(Integer.parseInt(logLine[13]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[13]))));
 
-		Point endPoint = new Point(Integer.parseInt(line[18]), Integer.parseInt(line[21]), false,
-				(Integer.parseInt(line[25]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[25]))));
+		Point endPoint = new Point(Integer.parseInt(logLine[18]), Integer.parseInt(logLine[21]), false,
+				(Integer.parseInt(logLine[25]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[25]))));
 
 		Line lineShape = new Line(startPoint, endPoint, true,
-				(Integer.parseInt(line[29]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[29]))));
+				(Integer.parseInt(logLine[29]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[29]))));
 
 		cmdDeselect = new CmdDeselect(lineShape, model);
 		executeCommand(cmdDeselect);
 	}
 
-	public void deselectRectangle(String[] line) {
-		Point point = new Point(Integer.parseInt(line[7]), Integer.parseInt(line[10]), false,
-				(Integer.parseInt(line[14]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[14]))));
+	public void deselectRectangleFromLog(String[] logLine) {
+		Point point = new Point(Integer.parseInt(logLine[7]), Integer.parseInt(logLine[10]), false,
+				(Integer.parseInt(logLine[14]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[14]))));
 
-		Rectangle rectangle = new Rectangle(point, Integer.parseInt(line[17]), Integer.parseInt(line[20]), true,
-				(Integer.parseInt(line[24]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[24]))),
-				(Integer.parseInt(line[28]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[28]))));
+		Rectangle rectangle = new Rectangle(point, Integer.parseInt(logLine[17]), Integer.parseInt(logLine[20]), true,
+				(Integer.parseInt(logLine[24]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[24]))),
+				(Integer.parseInt(logLine[28]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[28]))));
 
 		cmdDeselect = new CmdDeselect(rectangle, model);
 		executeCommand(cmdDeselect);
 	}
 
-	public void deselectCircle(String[] line) {
-		Point point = new Point(Integer.parseInt(line[5]), Integer.parseInt(line[8]), false,
-				(Integer.parseInt(line[12]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[12]))));
+	public void deselectCircleFromLog(String[] logLine) {
+		Point point = new Point(Integer.parseInt(logLine[5]), Integer.parseInt(logLine[8]), false,
+				(Integer.parseInt(logLine[12]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[12]))));
 
-		Circle circle = new Circle(point, Integer.parseInt(line[15]), true,
-				(Integer.parseInt(line[19]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[19]))),
-				(Integer.parseInt(line[23]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[23]))));
+		Circle circle = new Circle(point, Integer.parseInt(logLine[15]), true,
+				(Integer.parseInt(logLine[19]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[19]))),
+				(Integer.parseInt(logLine[23]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[23]))));
 
 		cmdDeselect = new CmdDeselect(circle, model);
 		executeCommand(cmdDeselect);
 	}
 
-	public void deselectDonut(String[] line) {
-		Point point = new Point(Integer.parseInt(line[5]), Integer.parseInt(line[8]), false,
-				(Integer.parseInt(line[12]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[12]))));
+	public void deselectDonutFromLog(String[] logLine) {
+		Point point = new Point(Integer.parseInt(logLine[5]), Integer.parseInt(logLine[8]), false,
+				(Integer.parseInt(logLine[12]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[12]))));
 
-		Donut donut = new Donut(point, Integer.parseInt(line[15]), Integer.parseInt(line[27]), true,
-				(Integer.parseInt(line[31]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[31]))),
-				(Integer.parseInt(line[35]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[35]))));
+		Donut donut = new Donut(point, Integer.parseInt(logLine[15]), Integer.parseInt(logLine[27]), true,
+				(Integer.parseInt(logLine[31]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[31]))),
+				(Integer.parseInt(logLine[35]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[35]))));
 
 		cmdDeselect = new CmdDeselect(donut, model);
 		executeCommand(cmdDeselect);
 	}
 
-	public void deselectHexagon(String[] line) {
-		Point point = new Point(Integer.parseInt(line[5]), Integer.parseInt(line[8]), false,
-				(Integer.parseInt(line[12]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[12]))));
+	public void deselectHexagonFromLog(String[] logLine) {
+		Point point = new Point(Integer.parseInt(logLine[5]), Integer.parseInt(logLine[8]), false,
+				(Integer.parseInt(logLine[12]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[12]))));
 
-		HexagonAdapter hexagon = new HexagonAdapter(point.getX(), point.getY(), Integer.parseInt(line[15]),
-				(Integer.parseInt(line[19]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[19]))),
-				(Integer.parseInt(line[23]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[23]))),
+		HexagonAdapter hexagon = new HexagonAdapter(point.getXcoordinate(), point.getYcoordinate(),
+				Integer.parseInt(logLine[15]),
+				(Integer.parseInt(logLine[19]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[19]))),
+				(Integer.parseInt(logLine[23]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[23]))),
 				true);
 
 		cmdDeselect = new CmdDeselect(hexagon, model);
@@ -979,15 +1016,17 @@ public class DrawingController {
 		executeCommand(cmdModifyRectangle);
 	}
 
-	public void modifyCircleFromLog(String[] line, Shape selectedShape) {
+	public void modifyCircleFromLog(String[] logLine, Shape selectedShape) {
 		Circle oldState = (Circle) selectedShape;
 
-		Point point = new Point(Integer.parseInt(line[29]), Integer.parseInt(line[32]), false,
-				(Integer.parseInt(line[36]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[36]))));
+		Point point = new Point(Integer.parseInt(logLine[29]), Integer.parseInt(logLine[32]), false,
+				(Integer.parseInt(logLine[36]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[36]))));
 
-		Circle newState = new Circle(point, Integer.parseInt(line[39]), true,
-				(Integer.parseInt(line[43]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[43]))),
-				(Integer.parseInt(line[47]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[47]))));
+		Circle newState = new Circle(point, Integer.parseInt(logLine[39]), true,
+				(Integer.parseInt(logLine[43]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[43]))),
+				(Integer.parseInt(logLine[47]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[47]))));
 
 		model.getSelectedShapes().remove(oldState);
 		model.getSelectedShapes().add(newState);
@@ -996,15 +1035,17 @@ public class DrawingController {
 		executeCommand(cmdModifyCircle);
 	}
 
-	public void modifyDonutFromLog(String[] line, Shape selectedShape) {
+	public void modifyDonutFromLog(String[] logLine, Shape selectedShape) {
 		Donut oldState = (Donut) selectedShape;
 
-		Point point = new Point(Integer.parseInt(line[41]), Integer.parseInt(line[44]), false,
-				(Integer.parseInt(line[48]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[48]))));
+		Point point = new Point(Integer.parseInt(logLine[41]), Integer.parseInt(logLine[44]), false,
+				(Integer.parseInt(logLine[48]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[48]))));
 
-		Donut newState = new Donut(point, Integer.parseInt(line[51]), Integer.parseInt(line[63]), true,
-				(Integer.parseInt(line[67]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[67]))),
-				(Integer.parseInt(line[71]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[71]))));
+		Donut newState = new Donut(point, Integer.parseInt(logLine[51]), Integer.parseInt(logLine[63]), true,
+				(Integer.parseInt(logLine[67]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[67]))),
+				(Integer.parseInt(logLine[71]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[71]))));
 
 		model.getSelectedShapes().remove(oldState);
 		model.getSelectedShapes().add(newState);
@@ -1013,15 +1054,17 @@ public class DrawingController {
 		executeCommand(cmdModifyDonut);
 	}
 
-	public void modifyHexagonFromLog(String[] line, Shape selectedShape) {
+	public void modifyHexagonFromLog(String[] logLine, Shape selectedShape) {
 		HexagonAdapter oldState = (HexagonAdapter) selectedShape;
 
-		Point point = new Point(Integer.parseInt(line[29]), Integer.parseInt(line[32]), false,
-				(Integer.parseInt(line[36]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[36]))));
+		Point point = new Point(Integer.parseInt(logLine[29]), Integer.parseInt(logLine[32]), false,
+				(Integer.parseInt(logLine[36]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[36]))));
 
-		HexagonAdapter newState = new HexagonAdapter(point.getX(), point.getY(), Integer.parseInt(line[39]),
-				(Integer.parseInt(line[43]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[43]))),
-				(Integer.parseInt(line[47]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[47]))),
+		HexagonAdapter newState = new HexagonAdapter(point.getXcoordinate(), point.getYcoordinate(),
+				Integer.parseInt(logLine[39]),
+				(Integer.parseInt(logLine[43]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[43]))),
+				(Integer.parseInt(logLine[47]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[47]))),
 				true);
 
 		model.getSelectedShapes().remove(oldState);
@@ -1031,109 +1074,109 @@ public class DrawingController {
 		executeCommand(cmdModifyHexagon);
 	}
 
-	public void nextCommand() {
-		String[] line = logCommands.peek().split(" ");
+	public void executeCommandFromLog() {
+		String[] logLine = commandsLog.peek().split(" ");
 
-		if (line[0].equals("Add")) {
-			if (line[2].equals("Point"))
-				addPointFromLog(line);
-			else if (line[2].equals("Line"))
-				addLineFromLog(line);
-			else if (line[2].equals("Rectangle"))
-				addRectangleFromLog(line);
-			else if (line[2].equals("Circle"))
-				addCircleFromLog(line);
-			else if (line[2].equals("Donut"))
-				addDonutFromLog(line);
-			else if (line[2].equals("HexagonAdapter"))
-				addHexagonFromLog(line);
-		} else if (line[0].equals("Select")) {
-			if (line[2].equals("Point"))
-				selectPoint(line);
-			else if (line[2].equals("Line"))
-				selectLine(line);
-			else if (line[2].equals("Rectangle"))
-				selectRectangle(line);
-			else if (line[2].equals("Circle"))
-				selectCircle(line);
-			else if (line[2].equals("Donut"))
-				selectDonut(line);
-			else if (line[2].equals("HexagonAdapter"))
-				selectHexagon(line);
-		} else if (line[0].equals("Deselect")) {
-			if (line[2].equals("Point"))
-				deselectPoint(line);
-			else if (line[2].equals("Line"))
-				deselectLine(line);
-			else if (line[2].equals("Rectangle"))
-				deselectRectangle(line);
-			else if (line[2].equals("Circle"))
-				deselectCircle(line);
-			else if (line[2].equals("Donut"))
-				deselectDonut(line);
-			else if (line[2].equals("HexagonAdapter"))
-				deselectHexagon(line);
-		} else if (line[0].equals("Modify")) {
-			Shape selectedShape = model.getOneSelectedShape();
+		if (logLine[0].equals("Add")) {
+			if (logLine[2].equals("Point"))
+				addPointFromLog(logLine);
+			else if (logLine[2].equals("Line"))
+				addLineFromLog(logLine);
+			else if (logLine[2].equals("Rectangle"))
+				addRectangleFromLog(logLine);
+			else if (logLine[2].equals("Circle"))
+				addCircleFromLog(logLine);
+			else if (logLine[2].equals("Donut"))
+				addDonutFromLog(logLine);
+			else if (logLine[2].equals("HexagonAdapter"))
+				addHexagonFromLog(logLine);
+		} else if (logLine[0].equals("Select")) {
+			if (logLine[2].equals("Point"))
+				selectPointFromLog(logLine);
+			else if (logLine[2].equals("Line"))
+				selectLineFromLog(logLine);
+			else if (logLine[2].equals("Rectangle"))
+				selectRectangleFromLog(logLine);
+			else if (logLine[2].equals("Circle"))
+				selectCircleFromLog(logLine);
+			else if (logLine[2].equals("Donut"))
+				selectDonutFromLog(logLine);
+			else if (logLine[2].equals("HexagonAdapter"))
+				selectHexagonFromLog(logLine);
+		} else if (logLine[0].equals("Deselect")) {
+			if (logLine[2].equals("Point"))
+				deselectPointFromLog(logLine);
+			else if (logLine[2].equals("Line"))
+				deselectLineFromLog(logLine);
+			else if (logLine[2].equals("Rectangle"))
+				deselectRectangleFromLog(logLine);
+			else if (logLine[2].equals("Circle"))
+				deselectCircleFromLog(logLine);
+			else if (logLine[2].equals("Donut"))
+				deselectDonutFromLog(logLine);
+			else if (logLine[2].equals("HexagonAdapter"))
+				deselectHexagonFromLog(logLine);
+		} else if (logLine[0].equals("Modify")) {
+			Shape selectedShape = model.getFirstSelectedShape();
 
-			if (line[2].equals("Point"))
-				modifyPointFromLog(line, selectedShape);
-			else if (line[2].equals("Line"))
-				modifyLineFromLog(line, selectedShape);
-			else if (line[2].equals("Rectangle"))
-				modifyRectangleFromLog(line, selectedShape);
-			else if (line[2].equals("Circle"))
-				modifyCircleFromLog(line, selectedShape);
-			else if (line[2].equals("Donut"))
-				modifyDonutFromLog(line, selectedShape);
-			else if (line[2].equals("HexagonAdapter"))
-				modifyHexagonFromLog(line, selectedShape);
-		} else if (line[0].equals("Deleted"))
-			deleteForLogs();
-		else if (line[0].equals("Undo"))
-			undoForLog();
-		else if (line[0].equals("Redo"))
-			redoForLog();
-		else if (line[0].equals("ToBack"))
-			toBack();
-		else if (line[0].equals("ToFront"))
-			toFront();
-		else if (line[0].equals("BringToFront"))
-			bringToFront();
-		else if (line[0].equals("SendToBack"))
-			sendToBack();
+			if (logLine[2].equals("Point"))
+				modifyPointFromLog(logLine, selectedShape);
+			else if (logLine[2].equals("Line"))
+				modifyLineFromLog(logLine, selectedShape);
+			else if (logLine[2].equals("Rectangle"))
+				modifyRectangleFromLog(logLine, selectedShape);
+			else if (logLine[2].equals("Circle"))
+				modifyCircleFromLog(logLine, selectedShape);
+			else if (logLine[2].equals("Donut"))
+				modifyDonutFromLog(logLine, selectedShape);
+			else if (logLine[2].equals("HexagonAdapter"))
+				modifyHexagonFromLog(logLine, selectedShape);
+		} else if (logLine[0].equals("Deleted"))
+			removeShapes();
+		else if (logLine[0].equals("Undo"))
+			undoCommand();
+		else if (logLine[0].equals("Redo"))
+			redoCommand();
+		else if (logLine[0].equals("ToBack"))
+			btnToBackClicked();
+		else if (logLine[0].equals("ToFront"))
+			btnToFrontClicked();
+		else if (logLine[0].equals("BringToFront"))
+			btnBringToFrontClicked();
+		else if (logLine[0].equals("SendToBack"))
+			btnSendToBackClicked();
 
-		if (getLogCommands().size() == 1)
-			mainFrame.getBtnNext().setEnabled(false);
+		if (getCommandsLog().size() == 1)
+			frame.getBtnNext().setEnabled(false);
 
 		fireEvents();
-		fireUndoRedo();
-		mainFrame.getView().repaint();
-		mainFrame.getlModel().addElement(getLogCommands().poll());
+		fireEventsForUndoAndRedoButtons();
+		frame.getView().repaint();
+		frame.getCommandsListModel().addElement(getCommandsLog().poll());
 	}
 
-	public Queue<String> getLogCommands() {
-		return logCommands;
+	public Queue<String> getCommandsLog() {
+		return commandsLog;
 	}
 
-	public void setLogCommands(Queue<String> loggComm) {
-		this.logCommands = loggComm;
+	public void setCommandsLog(Queue<String> commandsLog) {
+		this.commandsLog = commandsLog;
 	}
 
-	public Stack<Command> getCommandsNormal() {
-		return commandsNormal;
+	public Stack<Command> getExecutedCommands() {
+		return executedCommands;
 	}
 
-	public void setCommandsNormal(Stack<Command> commandsNormal) {
-		this.commandsNormal = commandsNormal;
+	public void setExecutedCommands(Stack<Command> executedCommands) {
+		this.executedCommands = executedCommands;
 	}
 
-	public Stack<Command> getCommandsReverse() {
-		return commandsReverse;
+	public Stack<Command> getUnexecutedCommands() {
+		return unexecutedCommands;
 	}
 
-	public void setCommandsReverse(Stack<Command> commandsReverse) {
-		this.commandsReverse = commandsReverse;
+	public void setUnexecutedCommands(Stack<Command> unexecutedCommands) {
+		this.unexecutedCommands = unexecutedCommands;
 	}
 
 	public Point getStartPoint() {
@@ -1253,19 +1296,19 @@ public class DrawingController {
 	}
 
 	public Color getInnerColor() {
-		return colInner;
+		return innerColor;
 	}
 
 	public Color getOuterColor() {
-		return colOuter;
-	}
-
-	public void setDialogRectangle(DialogRectangle dialogRectangle) {
-		this.dialogRectangle = dialogRectangle;
+		return outerColor;
 	}
 
 	public DialogRectangle getDialogRectangle() {
 		return dialogRectangle;
+	}
+
+	public void setDialogRectangle(DialogRectangle dialogRectangle) {
+		this.dialogRectangle = dialogRectangle;
 	}
 
 	public DialogCircle getDialogCircle() {
@@ -1308,12 +1351,12 @@ public class DrawingController {
 		this.dialogLine = dialogLine;
 	}
 
-	public void setPoint(Point point) {
-		this.point = point;
-	}
-
 	public Point getPoint() {
 		return point;
+	}
+
+	public void setPoint(Point point) {
+		this.point = point;
 	}
 
 	public StrategyManager getStrategy() {
@@ -1332,12 +1375,12 @@ public class DrawingController {
 		this.saveLog = saveLog;
 	}
 
-	public SavePainting getPainting() {
-		return painting;
+	public SavePainting getSavePainting() {
+		return savePainting;
 	}
 
-	public void setPainting(SavePainting painting) {
-		this.painting = painting;
+	public void setSavePainting(SavePainting savePainting) {
+		this.savePainting = savePainting;
 	}
 
 	public JFileChooser getFileChooser() {

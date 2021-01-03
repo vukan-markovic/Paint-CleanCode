@@ -3,7 +3,6 @@ package dialogs;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -27,14 +26,14 @@ import javax.swing.border.EmptyBorder;
 public class DialogLine extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel;
-	private final JTextField x1Coord;
-	private final JTextField y1Coord;
-	private final JTextField x2Coord;
-	private final JTextField y2Coord;
+	private final JTextField xCoordinateOfStartPoint;
+	private final JTextField yCoordinateOfStartPoint;
+	private final JTextField xCoordinateOfEndPoint;
+	private final JTextField yCoordinateOfEndPoint;
 	private boolean accepted = false;
-	private JButton btnSetOuterColor;
-	private JButton cancelButton;
-	private JButton okButton;
+	private JButton btnOuterColor;
+	private JButton btnCancel;
+	private JButton btnOk;
 	private Color outerColor;
 
 	public DialogLine() {
@@ -42,130 +41,142 @@ public class DialogLine extends JDialog {
 		setModal(true);
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
-		outerColor = new Color(250, 128, 114);
+		outerColor = Color.BLACK;
 		contentPanel = new JPanel();
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		x1Coord = new JTextField();
-		x1Coord.setColumns(10);
-		y1Coord = new JTextField();
-		y1Coord.setColumns(10);
-		x2Coord = new JTextField();
-		x2Coord.setColumns(10);
-		y2Coord = new JTextField();
-		y2Coord.setColumns(10);
-		JLabel lblX = new JLabel("X1:");
-		JLabel lblY = new JLabel("Y1:");
-		JLabel lblX_1 = new JLabel("X2");
-		JLabel lblY_1 = new JLabel("Y2");
-		btnSetOuterColor = new JButton("Outer color");
+		xCoordinateOfStartPoint = new JTextField();
+		xCoordinateOfStartPoint.setColumns(10);
+		yCoordinateOfStartPoint = new JTextField();
+		yCoordinateOfStartPoint.setColumns(10);
+		xCoordinateOfEndPoint = new JTextField();
+		xCoordinateOfEndPoint.setColumns(10);
+		yCoordinateOfEndPoint = new JTextField();
+		yCoordinateOfEndPoint.setColumns(10);
 
-		x1Coord.addKeyListener(new KeyAdapter() {
+		JLabel lblXCoordinateOfStartPoint = new JLabel("X coordinate of start point:");
+		JLabel lblYCoordinateOfStartPoint = new JLabel("Y coordinate of start point::");
+		JLabel lblXCoordinateOfEndPoint = new JLabel("X coordinate of end point:");
+		JLabel lblYCoordinateOfEndPoint = new JLabel("Y coordinate of end point:");
+		btnOuterColor = new JButton("Outer color");
+
+		xCoordinateOfStartPoint.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				char c = e.getKeyChar();
+			public void keyTyped(KeyEvent event) {
+				char xCoordinateOfStartPointInputChar = event.getKeyChar();
 
-				if (!((c >= '0') && (c <= '9') || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE))) {
+				if (!((xCoordinateOfStartPointInputChar >= '0') && (xCoordinateOfStartPointInputChar <= '9')
+						|| (xCoordinateOfStartPointInputChar == KeyEvent.VK_BACK_SPACE)
+						|| (xCoordinateOfStartPointInputChar == KeyEvent.VK_DELETE))) {
 					getToolkit().beep();
-					e.consume();
+					event.consume();
 				}
 			}
 		});
 
-		y1Coord.addKeyListener(new KeyAdapter() {
+		yCoordinateOfStartPoint.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				char c = e.getKeyChar();
+			public void keyTyped(KeyEvent event) {
+				char yCoordinateOfStartPointInputChar = event.getKeyChar();
 
-				if (!((c >= '0') && (c <= '9') || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE))) {
+				if (!((yCoordinateOfStartPointInputChar >= '0') && (yCoordinateOfStartPointInputChar <= '9')
+						|| (yCoordinateOfStartPointInputChar == KeyEvent.VK_BACK_SPACE)
+						|| (yCoordinateOfStartPointInputChar == KeyEvent.VK_DELETE))) {
 					getToolkit().beep();
-					e.consume();
+					event.consume();
 				}
 			}
 		});
 
-		x2Coord.addKeyListener(new KeyAdapter() {
+		xCoordinateOfEndPoint.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				char c = e.getKeyChar();
+			public void keyTyped(KeyEvent event) {
+				char xCoordinateOfEndPointInputChar = event.getKeyChar();
 
-				if (!((c >= '0') && (c <= '9') || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE))) {
+				if (!((xCoordinateOfEndPointInputChar >= '0') && (xCoordinateOfEndPointInputChar <= '9')
+						|| (xCoordinateOfEndPointInputChar == KeyEvent.VK_BACK_SPACE)
+						|| (xCoordinateOfEndPointInputChar == KeyEvent.VK_DELETE))) {
 					getToolkit().beep();
-					e.consume();
+					event.consume();
 				}
 			}
 		});
 
-		y2Coord.addKeyListener(new KeyAdapter() {
+		yCoordinateOfEndPoint.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				char c = e.getKeyChar();
+			public void keyTyped(KeyEvent event) {
+				char yCoordinateOfEndPointInputChar = event.getKeyChar();
 
-				if (!((c >= '0') && (c <= '9') || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE))) {
+				if (!((yCoordinateOfEndPointInputChar >= '0') && (yCoordinateOfEndPointInputChar <= '9')
+						|| (yCoordinateOfEndPointInputChar == KeyEvent.VK_BACK_SPACE)
+						|| (yCoordinateOfEndPointInputChar == KeyEvent.VK_DELETE))) {
 					getToolkit().beep();
-					e.consume();
+					event.consume();
 				}
 			}
 		});
 
-		btnSetOuterColor.addActionListener(new ActionListener() {
+		btnOuterColor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				outerColor = JColorChooser.showDialog(getContentPane(), "Choose Border Color", outerColor);
-				btnSetOuterColor.setBackground(outerColor);
+				outerColor = JColorChooser.showDialog(getContentPane(), "Choose outer color", outerColor);
+				btnOuterColor.setBackground(outerColor);
 			}
 		});
 
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		Image img = new ImageIcon(this.getClass().getResource("/line.png")).getImage();
-		lblNewLabel.setIcon(new ImageIcon(img));
+		JLabel lblIcon = new JLabel("");
+		lblIcon.setHorizontalAlignment(SwingConstants.CENTER);
+		lblIcon.setIcon(new ImageIcon(new ImageIcon(this.getClass().getResource("/line.png")).getImage()));
 		GroupLayout gl_contentPanel = new GroupLayout(contentPanel);
 
 		gl_contentPanel.setHorizontalGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPanel.createSequentialGroup().addGap(41)
-						.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING).addComponent(lblX_1)
-								.addComponent(lblY_1).addComponent(lblY).addComponent(lblX))
+						.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING)
+								.addComponent(lblXCoordinateOfEndPoint).addComponent(lblYCoordinateOfEndPoint)
+								.addComponent(lblYCoordinateOfStartPoint).addComponent(lblXCoordinateOfStartPoint))
 						.addGap(26)
 						.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-								.addComponent(y2Coord, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(y1Coord, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(x1Coord, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(x2Coord, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE))
+								.addComponent(yCoordinateOfEndPoint, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(yCoordinateOfStartPoint, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(xCoordinateOfStartPoint, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(xCoordinateOfEndPoint, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addPreferredGap(ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
 						.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
 								.addGroup(Alignment.TRAILING,
 										gl_contentPanel.createSequentialGroup()
-												.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 140,
+												.addComponent(lblIcon, GroupLayout.PREFERRED_SIZE, 140,
 														GroupLayout.PREFERRED_SIZE)
 												.addGap(49))
 								.addGroup(Alignment.TRAILING, gl_contentPanel.createSequentialGroup()
-										.addComponent(btnSetOuterColor).addGap(77)))));
+										.addComponent(btnOuterColor).addGap(77)))));
 
 		gl_contentPanel.setVerticalGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPanel.createSequentialGroup().addGap(36)
 						.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING)
 								.addGroup(gl_contentPanel.createSequentialGroup()
 										.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
-												.addComponent(lblX).addComponent(x1Coord, GroupLayout.PREFERRED_SIZE,
+												.addComponent(lblXCoordinateOfStartPoint)
+												.addComponent(xCoordinateOfStartPoint, GroupLayout.PREFERRED_SIZE,
 														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 										.addGap(18)
 										.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
-												.addComponent(lblY).addComponent(y1Coord, GroupLayout.PREFERRED_SIZE,
+												.addComponent(lblYCoordinateOfStartPoint)
+												.addComponent(yCoordinateOfStartPoint, GroupLayout.PREFERRED_SIZE,
 														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 										.addGap(18)
 										.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
-												.addComponent(lblX_1).addComponent(x2Coord, GroupLayout.PREFERRED_SIZE,
+												.addComponent(lblXCoordinateOfEndPoint)
+												.addComponent(xCoordinateOfEndPoint, GroupLayout.PREFERRED_SIZE,
 														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-								.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE))
+								.addComponent(lblIcon, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE))
 						.addGap(18)
 						.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(y2Coord, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblY_1).addComponent(btnSetOuterColor))
+								.addComponent(yCoordinateOfEndPoint, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblYCoordinateOfEndPoint).addComponent(btnOuterColor))
 						.addContainerGap(43, Short.MAX_VALUE)));
 
 		contentPanel.setLayout(gl_contentPanel);
@@ -175,14 +186,16 @@ public class DialogLine extends JDialog {
 
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				okButton = new JButton("OK");
+				btnOk = new JButton("OK");
 
-				okButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						if (x1Coord.getText().isBlank() || y1Coord.getText().isBlank() || x2Coord.getText().isBlank()
-								|| y2Coord.getText().isBlank())
-							JOptionPane.showMessageDialog(new JFrame(), "Niste popunili sva polja, pokušajte ponovo!",
-									"Greška!", JOptionPane.ERROR_MESSAGE);
+				btnOk.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent event) {
+						if (xCoordinateOfStartPoint.getText().isBlank() || yCoordinateOfStartPoint.getText().isBlank()
+								|| xCoordinateOfEndPoint.getText().isBlank()
+								|| yCoordinateOfEndPoint.getText().isBlank())
+							JOptionPane.showMessageDialog(new JFrame(),
+									"You have not filled in all the fields, try again!", "Error!",
+									JOptionPane.ERROR_MESSAGE);
 						else {
 							accepted = true;
 							setVisible(false);
@@ -191,21 +204,21 @@ public class DialogLine extends JDialog {
 					}
 				});
 
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
+				btnOk.setActionCommand("OK");
+				buttonPane.add(btnOk);
+				getRootPane().setDefaultButton(btnOk);
 			}
 			{
-				cancelButton = new JButton("Cancel");
+				btnCancel = new JButton("Cancel");
 
-				cancelButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
+				btnCancel.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent event) {
 						dispose();
 					}
 				});
 
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
+				btnCancel.setActionCommand("Cancel");
+				buttonPane.add(btnCancel);
 			}
 		}
 	}
@@ -218,28 +231,28 @@ public class DialogLine extends JDialog {
 		this.accepted = accepted;
 	}
 
-	public JButton getBtnSetOuterColor() {
-		return btnSetOuterColor;
+	public JButton getBtnOuterColor() {
+		return btnOuterColor;
 	}
 
-	public void setBtnSetOuterColor(JButton btnSetOuterColor) {
-		this.btnSetOuterColor = btnSetOuterColor;
+	public void setBtnOuterColor(JButton btnOuterColor) {
+		this.btnOuterColor = btnOuterColor;
 	}
 
-	public JButton getCancelButton() {
-		return cancelButton;
+	public JButton getBtnCancel() {
+		return btnCancel;
 	}
 
-	public void setCancelButton(JButton cancelButton) {
-		this.cancelButton = cancelButton;
+	public void setBtnCancel(JButton btnCancel) {
+		this.btnCancel = btnCancel;
 	}
 
-	public JButton getOkButton() {
-		return okButton;
+	public JButton getBtnOk() {
+		return btnOk;
 	}
 
-	public void setOkButton(JButton okButton) {
-		this.okButton = okButton;
+	public void setBtnOk(JButton btnOk) {
+		this.btnOk = btnOk;
 	}
 
 	public Color getOuterColor() {
@@ -250,19 +263,19 @@ public class DialogLine extends JDialog {
 		this.outerColor = outerColor;
 	}
 
-	public JTextField getX1coordinate() {
-		return x1Coord;
+	public JTextField getXCoordinateOfStartPoint() {
+		return xCoordinateOfStartPoint;
 	}
 
-	public JTextField getY1coordinate() {
-		return y1Coord;
+	public JTextField getYCoordinateOfStartPoint() {
+		return yCoordinateOfStartPoint;
 	}
 
-	public JTextField getX2coordinate() {
-		return x2Coord;
+	public JTextField getXCoordinateOfEndPoint() {
+		return xCoordinateOfEndPoint;
 	}
 
-	public JTextField getY2coordinate() {
-		return y2Coord;
+	public JTextField getYCoordinateOfEndPoint() {
+		return yCoordinateOfEndPoint;
 	}
 }

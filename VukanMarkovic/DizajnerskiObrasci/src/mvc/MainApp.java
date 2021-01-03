@@ -12,10 +12,10 @@ public class MainApp {
 	}
 
 	public static void main(String[] args) {
-		DrawingModel drawingModel = new DrawingModel();
-		DrawingFrame drawingFrame = new DrawingFrame();
-		DrawingController drawingController = new DrawingController();
-		drawingController.setController(drawingModel, drawingFrame);
-		createAndShowGUI(drawingModel, drawingFrame, drawingController);
+		DrawingModel model = new DrawingModel();
+		DrawingFrame frame = new DrawingFrame();
+		DrawingController controller = new DrawingController();
+		controller.setController(model, frame);
+		createAndShowGUI(model, frame, controller);
 	}
 }

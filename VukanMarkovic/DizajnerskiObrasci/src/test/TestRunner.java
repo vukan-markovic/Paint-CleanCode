@@ -6,11 +6,11 @@ import org.junit.runner.notification.Failure;
 
 public class TestRunner {
 	public static void main(String[] args) {
-		Result result = JUnitCore.runClasses(TestSuite.class);
+		Result testsResult = JUnitCore.runClasses(TestSuite.class);
 
-		for (Failure failure : result.getFailures())
-			System.out.println(failure.toString());
+		for (Failure testFailure : testsResult.getFailures())
+			System.out.println(testFailure.toString());
 
-		System.out.println(result.wasSuccessful());
+		System.out.println(testsResult.wasSuccessful());
 	}
 }

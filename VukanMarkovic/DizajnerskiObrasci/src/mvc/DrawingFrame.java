@@ -27,17 +27,17 @@ public class DrawingFrame extends JFrame {
 	private JPanel contentPane;
 	private DrawingView view;
 	private DrawingController controller;
-	private final JToggleButton tglbtnPoint;
-	private final JToggleButton tglbtnLine;
-	private final JToggleButton tglbtnRectangle;
-	private final JToggleButton tglbtnCircle;
-	private final JToggleButton tglbtnDonut;
-	private final JToggleButton tglbtnHexagon;
-	private final JToggleButton tglbtnSelect;
+	private final JToggleButton btnPoint;
+	private final JToggleButton btnLine;
+	private final JToggleButton btnRectangle;
+	private final JToggleButton btnCircle;
+	private final JToggleButton btnDonut;
+	private final JToggleButton btnHexagon;
+	private final JToggleButton btnSelect;
 	private final JButton btnModify;
 	private final JButton btnDelete;
-	private final JButton btnOuterCol;
-	private final JButton btnInnerCol;
+	private final JButton btnOuterColor;
+	private final JButton btnInnerColor;
 	private final JButton btnUndo;
 	private final JButton btnRedo;
 	private final JButton btnSendToBack;
@@ -46,7 +46,7 @@ public class DrawingFrame extends JFrame {
 	private final JButton btnToFront;
 	private final JButton btnSave;
 	private final JButton btnLoadPainting;
-	private DefaultListModel<String> lModel;
+	private DefaultListModel<String> commandsListModel;
 	private JButton btnLoadLog;
 	private JButton btnNext;
 	private JTextField fileName;
@@ -55,7 +55,7 @@ public class DrawingFrame extends JFrame {
 		setTitle("Vukan Markoviæ I7 18/2020");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 580, 600);
-		lModel = new DefaultListModel<>();
+		commandsListModel = new DefaultListModel<>();
 		view = new DrawingView();
 		contentPane = new JPanel();
 		contentPane.setBackground(SystemColor.menu);
@@ -69,215 +69,226 @@ public class DrawingFrame extends JFrame {
 		view.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent click) {
-				if (tglbtnSelect.isSelected())
+				if (btnSelect.isSelected())
 					controller.btnSelectClicked(click);
-				else if (tglbtnPoint.isSelected())
+				else if (btnPoint.isSelected())
 					controller.btnPointClicked(click);
-				else if (tglbtnLine.isSelected())
+				else if (btnLine.isSelected())
 					controller.btnLineClicked(click);
-				else if (tglbtnRectangle.isSelected())
+				else if (btnRectangle.isSelected())
 					controller.btnRectangleClicked(click);
-				else if (tglbtnCircle.isSelected())
+				else if (btnCircle.isSelected())
 					controller.btnCircleClicked(click);
-				else if (tglbtnDonut.isSelected())
+				else if (btnDonut.isSelected())
 					controller.btnDonutClicked(click);
-				else if (tglbtnHexagon.isSelected())
+				else if (btnHexagon.isSelected())
 					controller.btnHexagonClicked(click);
 
 				view.repaint();
-				controller.fireUndoRedo();
+				controller.fireEventsForUndoAndRedoButtons();
 			}
 		});
 
-		JToolBar toolBar = new JToolBar();
-		toolBar.setBounds(3, 5, 429, 24);
-		contentPane.add(toolBar, BorderLayout.NORTH);
+		JToolBar topToolBar = new JToolBar();
+		topToolBar.setBounds(3, 5, 429, 24);
+		contentPane.add(topToolBar, BorderLayout.NORTH);
 		ButtonGroup buttonGroup = new ButtonGroup();
 
-		tglbtnPoint = new JToggleButton("Point");
-		toolBar.add(tglbtnPoint);
-		buttonGroup.add(tglbtnPoint);
-		tglbtnPoint.setToolTipText("Point");
+		btnPoint = new JToggleButton("Point");
+		topToolBar.add(btnPoint);
+		buttonGroup.add(btnPoint);
+		btnPoint.setToolTipText("Draw point");
 
-		tglbtnLine = new JToggleButton("Line");
-		toolBar.add(tglbtnLine);
-		buttonGroup.add(tglbtnLine);
-		tglbtnLine.setToolTipText("Line");
+		btnLine = new JToggleButton("Line");
+		topToolBar.add(btnLine);
+		buttonGroup.add(btnLine);
+		btnLine.setToolTipText("Draw line");
 
-		tglbtnRectangle = new JToggleButton("Rectangle");
-		toolBar.add(tglbtnRectangle);
-		buttonGroup.add(tglbtnRectangle);
-		tglbtnRectangle.setToolTipText("Rectangle");
+		btnRectangle = new JToggleButton("Rectangle");
+		topToolBar.add(btnRectangle);
+		buttonGroup.add(btnRectangle);
+		btnRectangle.setToolTipText("Draw rectangle");
 
-		tglbtnCircle = new JToggleButton("Circle");
-		toolBar.add(tglbtnCircle);
-		buttonGroup.add(tglbtnCircle);
-		tglbtnCircle.setToolTipText("Circle");
+		btnCircle = new JToggleButton("Circle");
+		topToolBar.add(btnCircle);
+		buttonGroup.add(btnCircle);
+		btnCircle.setToolTipText("Draw circle");
 
-		tglbtnDonut = new JToggleButton("Donut");
-		toolBar.add(tglbtnDonut);
-		buttonGroup.add(tglbtnDonut);
-		tglbtnDonut.setToolTipText("Donut");
+		btnDonut = new JToggleButton("Donut");
+		topToolBar.add(btnDonut);
+		buttonGroup.add(btnDonut);
+		btnDonut.setToolTipText("Draw donut");
 
-		tglbtnHexagon = new JToggleButton("Hexagon");
-		toolBar.add(tglbtnHexagon);
-		buttonGroup.add(tglbtnHexagon);
-		tglbtnHexagon.setToolTipText("Hexagon");
+		btnHexagon = new JToggleButton("Hexagon");
+		topToolBar.add(btnHexagon);
+		buttonGroup.add(btnHexagon);
+		btnHexagon.setToolTipText("Draw hexagon");
 
-		tglbtnSelect = new JToggleButton("Select");
-		toolBar.add(tglbtnSelect);
-		buttonGroup.add(tglbtnSelect);
-		tglbtnSelect.setToolTipText("Select");
+		btnSelect = new JToggleButton("Select");
+		topToolBar.add(btnSelect);
+		buttonGroup.add(btnSelect);
+		btnSelect.setToolTipText("Select shape");
 
 		btnModify = new JButton("Modify");
 		btnModify.setEnabled(false);
-
-		toolBar.add(btnModify);
+		topToolBar.add(btnModify);
 		buttonGroup.add(btnModify);
-		btnModify.setToolTipText("Modify");
+		btnModify.setToolTipText("Modify shape");
 
 		btnModify.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				controller.modify();
+			public void actionPerformed(ActionEvent event) {
+				controller.btnModifyClicked();
 			}
 		});
 
 		btnDelete = new JButton("Delete");
 		btnDelete.setEnabled(false);
-		btnDelete.setToolTipText("Delete");
+		btnDelete.setToolTipText("Delete shape");
+		topToolBar.add(btnDelete);
+		buttonGroup.add(btnDelete);
 
 		btnDelete.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				controller.delete();
+			public void actionPerformed(ActionEvent event) {
+				controller.btnRemoveClicked();
+			}
+		});
+		
+		JToolBar rightToolBar = new JToolBar();
+		rightToolBar.setOrientation(SwingConstants.VERTICAL);
+		rightToolBar.setBounds(345, 21, 87, 288);
+		contentPane.add(rightToolBar, BorderLayout.EAST);
+		
+		btnOuterColor = new JButton("Set outer color");
+		btnOuterColor.setBackground(Color.BLACK);
+		btnOuterColor.setToolTipText("Set outer draw color");
+		rightToolBar.add(btnOuterColor);
+		
+		btnOuterColor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				controller.chooseOuterColor();
 			}
 		});
 
-		toolBar.add(btnDelete);
-		buttonGroup.add(btnDelete);
-		JToolBar toolBar_1 = new JToolBar();
-		toolBar_1.setOrientation(SwingConstants.VERTICAL);
-		toolBar_1.setBounds(345, 21, 87, 288);
-		contentPane.add(toolBar_1, BorderLayout.EAST);
-		btnOuterCol = new JButton("Set outer color");
-
-		btnOuterCol.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				controller.outerColor();
+		btnInnerColor = new JButton("Set inner color");
+		btnInnerColor.setBackground(Color.WHITE);
+		btnInnerColor.setToolTipText("Set inner draw color");
+		rightToolBar.add(btnInnerColor);
+		
+		btnInnerColor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				controller.chooseInnerColor();
 			}
 		});
 
-		btnOuterCol.setBackground(new Color(250, 128, 114));
-		toolBar_1.add(btnOuterCol);
-		btnInnerCol = new JButton("Set inner color");
-
-		btnInnerCol.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				controller.innerColor();
-			}
-		});
-
-		btnInnerCol.setBackground(new Color(255, 235, 205));
-		toolBar_1.add(btnInnerCol);
 		btnUndo = new JButton("Undo");
 		btnUndo.setEnabled(false);
-
+		btnUndo.setToolTipText("Undo command");
+		rightToolBar.add(btnUndo);
+		
 		btnUndo.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				controller.undo();
+			public void actionPerformed(ActionEvent event) {
+				controller.btnUndoClicked();
 			}
 		});
 
-		toolBar_1.add(btnUndo);
 		btnRedo = new JButton("Redo");
 		btnRedo.setEnabled(false);
-
+		btnRedo.setToolTipText("Redo command");
+		rightToolBar.add(btnRedo);
+		
 		btnRedo.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				controller.redo();
+			public void actionPerformed(ActionEvent event) {
+				controller.btnRedoClicked();
 			}
 		});
 
-		toolBar_1.add(btnRedo);
 		btnSendToBack = new JButton("Send to back");
 		btnSendToBack.setEnabled(false);
-
+		btnSendToBack.setToolTipText("Send shape to back");
+		rightToolBar.add(btnSendToBack);
+				
 		btnSendToBack.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				controller.sendToBack();
+			public void actionPerformed(ActionEvent event) {
+				controller.btnSendToBackClicked();
 			}
 		});
 
-		toolBar_1.add(btnSendToBack);
 		btnBringToFront = new JButton("Bring to front");
 		btnBringToFront.setEnabled(false);
-
+		btnBringToFront.setToolTipText("Bring shape to front");
+		rightToolBar.add(btnBringToFront);
+		
 		btnBringToFront.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				controller.bringToFront();
+			public void actionPerformed(ActionEvent event) {
+				controller.btnBringToFrontClicked();
 			}
 		});
-
-		toolBar_1.add(btnBringToFront);
+	
 		btnToBack = new JButton("To back");
 		btnToBack.setEnabled(false);
-
+		btnToBack.setToolTipText("Move shape to back");
+		rightToolBar.add(btnToBack);
+		
 		btnToBack.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				controller.toBack();
+			public void actionPerformed(ActionEvent event) {
+				controller.btnToBackClicked();
 			}
 		});
 
-		toolBar_1.add(btnToBack);
 		btnToFront = new JButton("To front");
 		btnToFront.setEnabled(false);
-
+		btnToFront.setToolTipText("Move shape to front");
+		rightToolBar.add(btnToFront);
+		
 		btnToFront.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				controller.toFront();
+			public void actionPerformed(ActionEvent event) {
+				controller.btnToFrontClicked();
 			}
 		});
 
-		toolBar_1.add(btnToFront);
 		btnSave = new JButton("Save");
-
+		btnSave.setToolTipText("Save painting and log");
+		rightToolBar.add(btnSave);
+		
 		btnSave.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent event) {
 				controller.save();
 			}
 		});
-
-		toolBar_1.add(btnSave);
+	
 		btnLoadLog = new JButton("Load log");
-
+		btnLoadLog.setToolTipText("Load log file");
+		rightToolBar.add(btnLoadLog);
+		
 		btnLoadLog.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent event) {
 				controller.loadLog();
 			}
 		});
 
-		toolBar_1.add(btnLoadLog);
 		btnLoadPainting = new JButton("Load painting");
-
+		btnLoadPainting.setToolTipText("Load painting file");
+		rightToolBar.add(btnLoadPainting);
+		
 		btnLoadPainting.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent event) {
 				controller.loadPainting();
 			}
 		});
 
-		toolBar_1.add(btnLoadPainting);
 		btnNext = new JButton("Next");
 		btnNext.setEnabled(false);
-
+		rightToolBar.add(btnNext);
+		
 		btnNext.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				controller.nextCommand();
+			public void actionPerformed(ActionEvent event) {
+				controller.executeCommandFromLog();
 			}
 		});
-
-		toolBar_1.add(btnNext);
+	
 		fileName = new JTextField();
-		toolBar_1.add(fileName);
-		fileName.setText("Saving");
+		rightToolBar.add(fileName);
+		fileName.setText("Painting");
 		fileName.setColumns(10);
 
 		JScrollPane scrollPane = new JScrollPane();
@@ -285,9 +296,9 @@ public class DrawingFrame extends JFrame {
 		contentPane.add(scrollPane, BorderLayout.PAGE_END);
 		scrollPane.setPreferredSize(new Dimension(0, 140));
 
-		JList<String> list = new JList<String>();
-		scrollPane.setViewportView(list);
-		list.setModel(lModel);
+		JList<String> commandsList = new JList<String>();
+		scrollPane.setViewportView(commandsList);
+		commandsList.setModel(commandsListModel);
 		setContentPane(contentPane);
 	}
 
@@ -295,8 +306,8 @@ public class DrawingFrame extends JFrame {
 		return fileName;
 	}
 
-	public DefaultListModel<String> getlModel() {
-		return lModel;
+	public DefaultListModel<String> getCommandsListModel() {
+		return commandsListModel;
 	}
 
 	public DrawingController getController() {
@@ -315,32 +326,32 @@ public class DrawingFrame extends JFrame {
 		return btnNext;
 	}
 
-	public JToggleButton getTglbtnPoint() {
-		return tglbtnPoint;
+	public JToggleButton getBtnPoint() {
+		return btnPoint;
 	}
 
-	public JToggleButton getTglbtnLine() {
-		return tglbtnLine;
+	public JToggleButton getBtnLine() {
+		return btnLine;
 	}
 
-	public JToggleButton getTglbtnRectangle() {
-		return tglbtnRectangle;
+	public JToggleButton getBtnRectangle() {
+		return btnRectangle;
 	}
 
-	public JToggleButton getTglbtnCircle() {
-		return tglbtnCircle;
+	public JToggleButton getBtnCircle() {
+		return btnCircle;
 	}
 
-	public JToggleButton getTglbtnDonut() {
-		return tglbtnDonut;
+	public JToggleButton getBtnDonut() {
+		return btnDonut;
 	}
 
-	public JToggleButton getTglbtnHexagon() {
-		return tglbtnHexagon;
+	public JToggleButton getBtnHexagon() {
+		return btnHexagon;
 	}
 
-	public JToggleButton getTglbtnSelect() {
-		return tglbtnSelect;
+	public JToggleButton getBtnSelect() {
+		return btnSelect;
 	}
 
 	public JButton getBtnModify() {
@@ -351,12 +362,12 @@ public class DrawingFrame extends JFrame {
 		return btnDelete;
 	}
 
-	public JButton getBtnOuterCol() {
-		return btnOuterCol;
+	public JButton getBtnOuterColor() {
+		return btnOuterColor;
 	}
 
-	public JButton getBtnInnerCol() {
-		return btnInnerCol;
+	public JButton getBtnInnerColor() {
+		return btnInnerColor;
 	}
 
 	public JButton getBtnUndo() {

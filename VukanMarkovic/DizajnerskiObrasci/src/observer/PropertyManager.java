@@ -6,43 +6,43 @@ import java.beans.PropertyChangeListener;
 import mvc.DrawingFrame;
 
 public class PropertyManager implements PropertyChangeListener {
-	private DrawingFrame mainFrame;
+	private DrawingFrame frame;
 
-	public PropertyManager(DrawingFrame mainFrame) {
-		this.mainFrame = mainFrame;
-	}
-
-	public DrawingFrame getMainFrame() {
-		return mainFrame;
+	public PropertyManager(DrawingFrame frame) {
+		this.frame = frame;
 	}
 
 	@Override
-	public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
-		switch (propertyChangeEvent.getPropertyName()) {
+	public void propertyChange(PropertyChangeEvent changeEvent) {
+		switch (changeEvent.getPropertyName()) {
 		case "btnDelete":
-			mainFrame.getBtnDelete().setEnabled((boolean) propertyChangeEvent.getNewValue());
+			frame.getBtnDelete().setEnabled((boolean) changeEvent.getNewValue());
 			break;
 		case "btnModify":
-			mainFrame.getBtnModify().setEnabled((boolean) propertyChangeEvent.getNewValue());
+			frame.getBtnModify().setEnabled((boolean) changeEvent.getNewValue());
 			break;
 		case "btnUndo":
-			mainFrame.getBtnUndo().setEnabled((boolean) propertyChangeEvent.getNewValue());
+			frame.getBtnUndo().setEnabled((boolean) changeEvent.getNewValue());
 			break;
 		case "btnRedo":
-			mainFrame.getBtnRedo().setEnabled((boolean) propertyChangeEvent.getNewValue());
+			frame.getBtnRedo().setEnabled((boolean) changeEvent.getNewValue());
 			break;
 		case "btnToBack":
-			mainFrame.getBtnToBack().setEnabled((boolean) propertyChangeEvent.getNewValue());
+			frame.getBtnToBack().setEnabled((boolean) changeEvent.getNewValue());
 			break;
 		case "btnToFront":
-			mainFrame.getBtnToFront().setEnabled((boolean) propertyChangeEvent.getNewValue());
+			frame.getBtnToFront().setEnabled((boolean) changeEvent.getNewValue());
 			break;
 		case "btnSendToBack":
-			mainFrame.getBtnSendToBack().setEnabled((boolean) propertyChangeEvent.getNewValue());
+			frame.getBtnSendToBack().setEnabled((boolean) changeEvent.getNewValue());
 			break;
 		case "btnBringToFront":
-			mainFrame.getBtnBringToFront().setEnabled((boolean) propertyChangeEvent.getNewValue());
+			frame.getBtnBringToFront().setEnabled((boolean) changeEvent.getNewValue());
 			break;
 		}
+	}
+
+	public DrawingFrame getFrame() {
+		return frame;
 	}
 }
