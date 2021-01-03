@@ -42,13 +42,10 @@ import test.testStrategy.TestSavePainting;
 @Suite.SuiteClasses({ TestCmdAdd.class, TestCmdBringToFront.class, TestCmdDeselect.class, TestCmdModifyCircle.class,
 		TestCmdModifyDonut.class, TestCmdModifyHexagon.class, TestCmdModifyLine.class, TestCmdModifyPoint.class,
 		TestCmdModifyRectangle.class, TestCmdRemove.class, TestCmdSelect.class, TestCmdSendToBack.class,
-		TestCmdToBack.class, TestCmdToFront.class, 
-//		TestDialogCircle.class, TestDialogDonut.class,
-//		TestDialogHexagon.class, TestDialogLine.class, TestDialogPoint.class, TestDialogRectangle.class,
+		TestCmdToBack.class, TestCmdToFront.class, TestDialogCircle.class, TestDialogDonut.class,
+		TestDialogHexagon.class, TestDialogLine.class, TestDialogPoint.class, TestDialogRectangle.class,
 		TestCircle.class, TestDonut.class, TestHexagonAdapter.class, TestLine.class, TestPoint.class,
-		TestRectangle.class, TestDrawingController.class, 
-		TestDrawingFrame.class, 
-		TestDrawingModel.class,
+		TestRectangle.class, TestDrawingController.class, TestDrawingFrame.class, TestDrawingModel.class,
 		TestDrawingView.class, TestMainApp.class, TestObserver.class, TestSaveLog.class, TestSavePainting.class })
 public class TestSuite {
 }

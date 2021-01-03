@@ -4,8 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Image;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -31,6 +33,8 @@ public class DialogLine extends JDialog {
 	private final JTextField y2Coord;
 	private boolean accepted = false;
 	private JButton btnSetOuterColor;
+	private JButton cancelButton;
+	private JButton okButton;
 	private Color outerColor;
 
 	public DialogLine() {
@@ -56,9 +60,56 @@ public class DialogLine extends JDialog {
 		JLabel lblY_1 = new JLabel("Y2");
 		btnSetOuterColor = new JButton("Outer color");
 
-		btnSetOuterColor.addMouseListener(new MouseAdapter() {
+		x1Coord.addKeyListener(new KeyAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void keyTyped(KeyEvent e) {
+				char c = e.getKeyChar();
+
+				if (!((c >= '0') && (c <= '9') || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE))) {
+					getToolkit().beep();
+					e.consume();
+				}
+			}
+		});
+
+		y1Coord.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				char c = e.getKeyChar();
+
+				if (!((c >= '0') && (c <= '9') || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE))) {
+					getToolkit().beep();
+					e.consume();
+				}
+			}
+		});
+
+		x2Coord.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				char c = e.getKeyChar();
+
+				if (!((c >= '0') && (c <= '9') || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE))) {
+					getToolkit().beep();
+					e.consume();
+				}
+			}
+		});
+
+		y2Coord.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				char c = e.getKeyChar();
+
+				if (!((c >= '0') && (c <= '9') || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE))) {
+					getToolkit().beep();
+					e.consume();
+				}
+			}
+		});
+
+		btnSetOuterColor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				outerColor = JColorChooser.showDialog(getContentPane(), "Choose Border Color", outerColor);
 				btnSetOuterColor.setBackground(outerColor);
 			}
@@ -124,17 +175,18 @@ public class DialogLine extends JDialog {
 
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton okButton = new JButton("OK");
+				okButton = new JButton("OK");
 
-				okButton.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mouseClicked(MouseEvent e) {
-						try {
+				okButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						if (x1Coord.getText().isBlank() || y1Coord.getText().isBlank() || x2Coord.getText().isBlank()
+								|| y2Coord.getText().isBlank())
+							JOptionPane.showMessageDialog(new JFrame(), "Niste popunili sva polja, pokušajte ponovo!",
+									"Greška!", JOptionPane.ERROR_MESSAGE);
+						else {
 							accepted = true;
 							setVisible(false);
-						} catch (NumberFormatException a) {
-							JOptionPane.showMessageDialog(new JFrame(), "Niste popunili sva polja, pokusajte ponovo!",
-									"Oops, greska!", JOptionPane.ERROR_MESSAGE);
+
 						}
 					}
 				});
@@ -144,11 +196,10 @@ public class DialogLine extends JDialog {
 				getRootPane().setDefaultButton(okButton);
 			}
 			{
-				JButton cancelButton = new JButton("Cancel");
+				cancelButton = new JButton("Cancel");
 
-				cancelButton.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mouseClicked(MouseEvent e) {
+				cancelButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
 						dispose();
 					}
 				});
@@ -173,6 +224,22 @@ public class DialogLine extends JDialog {
 
 	public void setBtnSetOuterColor(JButton btnSetOuterColor) {
 		this.btnSetOuterColor = btnSetOuterColor;
+	}
+
+	public JButton getCancelButton() {
+		return cancelButton;
+	}
+
+	public void setCancelButton(JButton cancelButton) {
+		this.cancelButton = cancelButton;
+	}
+
+	public JButton getOkButton() {
+		return okButton;
+	}
+
+	public void setOkButton(JButton okButton) {
+		this.okButton = okButton;
 	}
 
 	public Color getOuterColor() {

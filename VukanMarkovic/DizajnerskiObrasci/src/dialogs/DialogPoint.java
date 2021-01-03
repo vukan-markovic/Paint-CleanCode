@@ -6,8 +6,8 @@ import java.awt.FlowLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -31,6 +31,8 @@ public class DialogPoint extends JDialog {
 	private final JTextField yCoordinate;
 	private boolean accepted;
 	private final JButton btnSetOuterColor;
+	private JButton cancelButton;
+	private JButton okButton;
 	private Color outerColor;
 
 	public DialogPoint() {
@@ -52,6 +54,30 @@ public class DialogPoint extends JDialog {
 			yCoordinate.setColumns(10);
 		}
 
+		xCoordinate.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				char c = e.getKeyChar();
+
+				if (!((c >= '0') && (c <= '9') || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE))) {
+					getToolkit().beep();
+					e.consume();
+				}
+			}
+		});
+
+		yCoordinate.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				char c = e.getKeyChar();
+
+				if (!((c >= '0') && (c <= '9') || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE))) {
+					getToolkit().beep();
+					e.consume();
+				}
+			}
+		});
+
 		JLabel lblX = new JLabel("X:");
 		JLabel lblY = new JLabel("Y:");
 		btnSetOuterColor = new JButton("Outer color");
@@ -64,13 +90,7 @@ public class DialogPoint extends JDialog {
 				btnSetOuterColor.setBackground(outerColor);
 			}
 		});
-		/*
-		 * btnSetOuterColor.addMouseListener(new MouseAdapter() {
-		 * 
-		 * @Override public void mouseClicked(MouseEvent e) {
-		 * outerColor=JColorChooser.showDialog(getContentPane(), "Choose Border Color",
-		 * new Color(250, 128, 114)); btnSetOuterColor.setBackground(outerColor); } });
-		 */
+
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		Image img = new ImageIcon(this.getClass().getResource("/point3.png")).getImage();
@@ -121,17 +141,16 @@ public class DialogPoint extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 
 			{
-				JButton okButton = new JButton("OK");
+				okButton = new JButton("OK");
 
-				okButton.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mouseClicked(MouseEvent e) {
-						try {
+				okButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent event) {
+						if (xCoordinate.getText().isBlank() || yCoordinate.getText().isBlank())
+							JOptionPane.showMessageDialog(new JFrame(), "Niste popunili sva polja, pokušajte ponovo!",
+									"Greška!", JOptionPane.ERROR_MESSAGE);
+						else {
 							accepted = true;
 							setVisible(false);
-						} catch (NumberFormatException a) {
-							JOptionPane.showMessageDialog(new JFrame(), "Niste popunili sva polja, pokusajte ponovo!",
-									"Oops, greska!", JOptionPane.ERROR_MESSAGE);
 						}
 					}
 				});
@@ -141,11 +160,10 @@ public class DialogPoint extends JDialog {
 				getRootPane().setDefaultButton(okButton);
 			}
 			{
-				JButton cancelButton = new JButton("Cancel");
+				cancelButton = new JButton("Cancel");
 
-				cancelButton.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mouseClicked(MouseEvent e) {
+				cancelButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
 						dispose();
 					}
 				});
@@ -174,6 +192,22 @@ public class DialogPoint extends JDialog {
 
 	public JButton getBtnSetOuterColor() {
 		return btnSetOuterColor;
+	}
+
+	public JButton getCancelButton() {
+		return cancelButton;
+	}
+
+	public void setCancelButton(JButton cancelButton) {
+		this.cancelButton = cancelButton;
+	}
+
+	public JButton getOkButton() {
+		return okButton;
+	}
+
+	public void setOkButton(JButton okButton) {
+		this.okButton = okButton;
 	}
 
 	public Color getOuterColor() {

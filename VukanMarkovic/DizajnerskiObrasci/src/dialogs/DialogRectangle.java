@@ -8,8 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -17,7 +15,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -34,6 +34,8 @@ public class DialogRectangle extends JDialog {
 	private boolean accepted = false;
 	private JButton btnSetOuterColor;
 	private JButton btnSetInnerColor;
+	private JButton cancelButton;
+	private JButton okButton;
 	private Color outerColor;
 	private Color innerColor;
 
@@ -91,9 +93,32 @@ public class DialogRectangle extends JDialog {
 		JLabel lblY = new JLabel("Y:");
 		btnSetOuterColor = new JButton("Outer color");
 
-		btnSetOuterColor.addMouseListener(new MouseAdapter() {
+		xCoord.addKeyListener(new KeyAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void keyTyped(KeyEvent e) {
+				char c = e.getKeyChar();
+
+				if (!((c >= '0') && (c <= '9') || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE))) {
+					getToolkit().beep();
+					e.consume();
+				}
+			}
+		});
+
+		yCoord.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				char c = e.getKeyChar();
+
+				if (!((c >= '0') && (c <= '9') || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE))) {
+					getToolkit().beep();
+					e.consume();
+				}
+			}
+		});
+
+		btnSetOuterColor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				outerColor = JColorChooser.showDialog(getContentPane(), "Choose Border Color", outerColor);
 				btnSetOuterColor.setBackground(outerColor);
 			}
@@ -101,9 +126,8 @@ public class DialogRectangle extends JDialog {
 
 		btnSetInnerColor = new JButton("Inner color");
 
-		btnSetInnerColor.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
+		btnSetInnerColor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				innerColor = JColorChooser.showDialog(getContentPane(), "Choose Fill Color", innerColor);
 				btnSetInnerColor.setBackground(innerColor);
 			}
@@ -182,37 +206,36 @@ public class DialogRectangle extends JDialog {
 
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton okBtn = new JButton("OK");
+				okButton = new JButton("OK");
 
-				okBtn.addActionListener(new ActionListener() {
+				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+						if ((width.getText().isBlank() || height.getText().isBlank() || xCoord.getText().isBlank()
+								|| yCoord.getText().isBlank()))
+							JOptionPane.showMessageDialog(new JFrame(), "Niste popunili sva polja, pokušajte ponovo!",
+									"Greška!", JOptionPane.ERROR_MESSAGE);
+						else {
+							accepted = true;
+							setVisible(false);
+						}
 					}
 				});
 
-				okBtn.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mouseClicked(MouseEvent arg0) {
-						accepted = true;
-						setVisible(false);
-					}
-				});
-
-				okBtn.setActionCommand("OK");
-				buttonPane.add(okBtn);
-				getRootPane().setDefaultButton(okBtn);
+				okButton.setActionCommand("OK");
+				buttonPane.add(okButton);
+				getRootPane().setDefaultButton(okButton);
 			}
 			{
-				JButton cancelBtn = new JButton("Cancel");
+				cancelButton = new JButton("Cancel");
 
-				cancelBtn.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mouseClicked(MouseEvent e) {
+				cancelButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
 						dispose();
 					}
 				});
 
-				cancelBtn.setActionCommand("Cancel");
-				buttonPane.add(cancelBtn);
+				cancelButton.setActionCommand("Cancel");
+				buttonPane.add(cancelButton);
 			}
 		}
 	}
@@ -255,6 +278,22 @@ public class DialogRectangle extends JDialog {
 
 	public void setBtnSetFillColor(JButton btnSetFillColor) {
 		this.btnSetInnerColor = btnSetFillColor;
+	}
+
+	public JButton getCancelButton() {
+		return cancelButton;
+	}
+
+	public void setCancelButton(JButton cancelButton) {
+		this.cancelButton = cancelButton;
+	}
+
+	public JButton getOkButton() {
+		return okButton;
+	}
+
+	public void setOkButton(JButton okButton) {
+		this.okButton = okButton;
 	}
 
 	public Color getOuterColor() {

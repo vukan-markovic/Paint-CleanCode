@@ -4,10 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -34,6 +34,8 @@ public class DialogDonut extends JDialog {
 	private boolean accepted = false;
 	private JButton btnSetOuterColor;
 	private JButton btnSetInnerColor;
+	private JButton cancelButton;
+	private JButton okButton;
 	private Color outerColor;
 	private Color innerColor;
 
@@ -56,6 +58,30 @@ public class DialogDonut extends JDialog {
 		yCoord = new JTextField();
 		yCoord.setColumns(10);
 		radius = new JTextField();
+
+		xCoord.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				char c = e.getKeyChar();
+
+				if (!((c >= '0') && (c <= '9') || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE))) {
+					getToolkit().beep();
+					e.consume();
+				}
+			}
+		});
+
+		yCoord.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				char c = e.getKeyChar();
+
+				if (!((c >= '0') && (c <= '9') || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE))) {
+					getToolkit().beep();
+					e.consume();
+				}
+			}
+		});
 
 		radius.addKeyListener(new KeyAdapter() {
 			@Override
@@ -91,9 +117,8 @@ public class DialogDonut extends JDialog {
 		JLabel lblR_1 = new JLabel("r2:");
 		btnSetOuterColor = new JButton("Outer color");
 
-		btnSetOuterColor.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
+		btnSetOuterColor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				outerColor = JColorChooser.showDialog(getContentPane(), "Choose Border Color", outerColor);
 				btnSetOuterColor.setBackground(outerColor);
 			}
@@ -101,9 +126,8 @@ public class DialogDonut extends JDialog {
 
 		btnSetInnerColor = new JButton("Inner color");
 
-		btnSetInnerColor.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
+		btnSetInnerColor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				innerColor = JColorChooser.showDialog(getContentPane(), "Choose Fill Color", innerColor);
 				btnSetInnerColor.setBackground(innerColor);
 			}
@@ -184,27 +208,21 @@ public class DialogDonut extends JDialog {
 
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton okButton = new JButton("OK");
+				okButton = new JButton("OK");
 
-				okButton.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mouseClicked(MouseEvent e) {
-						try {
-							if (Integer.parseInt(getSmallRadius().getText()) <= 0) {
-								JOptionPane.showMessageDialog(new JFrame(), "Unutrašnji radius mora biti veæi od 0!",
-										"Oops, greska!", JOptionPane.ERROR_MESSAGE);
-							} else if (Integer.parseInt(getSmallRadius().getText()) >= Integer
-									.parseInt(getRadius().getText())) {
-								JOptionPane.showMessageDialog(new JFrame(),
-										"Unutrašnji radius mora biti veæi od spoljašnjeg!", "Oops, greska!",
-										JOptionPane.ERROR_MESSAGE);
-							} else {
-								accepted = true;
-								setVisible(false);
-							}
-						} catch (NumberFormatException a) {
-							JOptionPane.showMessageDialog(new JFrame(), "Niste popunili sva polja, pokusajte ponovo!",
-									"Oops, greska!", JOptionPane.ERROR_MESSAGE);
+				okButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						if (smallRadius.getText().isBlank() || radius.getText().isBlank() || xCoord.getText().isBlank()
+								|| yCoord.getText().isBlank()) {
+							JOptionPane.showMessageDialog(new JFrame(), "Niste popunili sva polja, pokušajte ponovo!",
+									"Greška!", JOptionPane.ERROR_MESSAGE);
+						} else if (Integer.parseInt(smallRadius.getText()) >= Integer.parseInt(radius.getText())) {
+							JOptionPane.showMessageDialog(new JFrame(),
+									"Unutrašnji radius mora biti veæi od spoljašnjeg!", "Greška!",
+									JOptionPane.ERROR_MESSAGE);
+						} else {
+							accepted = true;
+							setVisible(false);
 						}
 					}
 				});
@@ -214,11 +232,10 @@ public class DialogDonut extends JDialog {
 				getRootPane().setDefaultButton(okButton);
 			}
 			{
-				JButton cancelButton = new JButton("Cancel");
+				cancelButton = new JButton("Cancel");
 
-				cancelButton.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mouseClicked(MouseEvent e) {
+				cancelButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
 						dispose();
 					}
 				});
@@ -275,6 +292,22 @@ public class DialogDonut extends JDialog {
 
 	public void setBtnSetInnerColor(JButton btnSetInnerColor) {
 		this.btnSetInnerColor = btnSetInnerColor;
+	}
+
+	public JButton getCancelButton() {
+		return cancelButton;
+	}
+
+	public void setCancelButton(JButton cancelButton) {
+		this.cancelButton = cancelButton;
+	}
+
+	public JButton getOkButton() {
+		return okButton;
+	}
+
+	public void setOkButton(JButton okButton) {
+		this.okButton = okButton;
 	}
 
 	public Color getOuterColor() {
