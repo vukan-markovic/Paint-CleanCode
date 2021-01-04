@@ -42,11 +42,16 @@ public class Circle extends SurfaceShape {
 	@Override
 	public void drawSelection(Graphics graphics) {
 		graphics.setColor(Color.BLUE);
-		graphics.drawRect(center.getXcoordinate() - 3, center.getYcoordinate() - 3, 6, 6);
-		graphics.drawRect(center.getXcoordinate() + getRadius() - 3, center.getYcoordinate() - 3, 6, 6);
-		graphics.drawRect(center.getXcoordinate() - getRadius() - 3, center.getYcoordinate() - 3, 6, 6);
-		graphics.drawRect(center.getXcoordinate() - 3, center.getYcoordinate() + radius - 3, 6, 6);
-		graphics.drawRect(center.getXcoordinate() - 3, center.getYcoordinate() - radius - 3, 6, 6);
+		graphics.drawRect(center.getXcoordinate() - SELECT_RECTANGLE_GAP,
+				center.getYcoordinate() - SELECT_RECTANGLE_GAP, 6, 6);
+		graphics.drawRect(center.getXcoordinate() + getRadius() - SELECT_RECTANGLE_GAP,
+				center.getYcoordinate() - SELECT_RECTANGLE_GAP, 6, 6);
+		graphics.drawRect(center.getXcoordinate() - getRadius() - SELECT_RECTANGLE_GAP,
+				center.getYcoordinate() - SELECT_RECTANGLE_GAP, 6, 6);
+		graphics.drawRect(center.getXcoordinate() - SELECT_RECTANGLE_GAP,
+				center.getYcoordinate() + radius - SELECT_RECTANGLE_GAP, 6, 6);
+		graphics.drawRect(center.getXcoordinate() - SELECT_RECTANGLE_GAP,
+				center.getYcoordinate() - radius - SELECT_RECTANGLE_GAP, 6, 6);
 	}
 
 	public boolean contains(int xCoordinate, int yCoordinate) {

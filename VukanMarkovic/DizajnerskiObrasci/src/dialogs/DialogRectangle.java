@@ -89,13 +89,7 @@ public class DialogRectangle extends JDialog {
 		height.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent event) {
-				char heightInputChar = event.getKeyChar();
-
-				if (!((heightInputChar >= '0') && (heightInputChar <= '9')
-						|| (heightInputChar == KeyEvent.VK_BACK_SPACE) || (heightInputChar == KeyEvent.VK_DELETE))) {
-					getToolkit().beep();
-					event.consume();
-				}
+				preventInvalidChar(event);
 			}
 		});
 
@@ -105,13 +99,7 @@ public class DialogRectangle extends JDialog {
 		width.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent event) {
-				char widthInputChar = event.getKeyChar();
-
-				if (!((widthInputChar >= '0') && (widthInputChar <= '9') || (widthInputChar == KeyEvent.VK_BACK_SPACE)
-						|| (widthInputChar == KeyEvent.VK_DELETE))) {
-					getToolkit().beep();
-					event.consume();
-				}
+				preventInvalidChar(event);
 			}
 		});
 
@@ -217,15 +205,12 @@ public class DialogRectangle extends JDialog {
 
 		btnOk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				if ((width.getText().isBlank() || height.getText().isBlank()
-						|| xCoordinateOfUpperLeftPoint.getText().isBlank()
-						|| yCoordinateOfUpperLeftPoint.getText().isBlank()))
-					JOptionPane.showMessageDialog(new JFrame(), "You have not filled in all the fields, try again!",
-							"Error!", JOptionPane.ERROR_MESSAGE);
-				else {
+				if (isInputValid()) {
 					accepted = true;
 					setVisible(false);
-				}
+				} else
+					JOptionPane.showMessageDialog(new JFrame(), "You have not filled in all the fields, try again!",
+							"Error!", JOptionPane.ERROR_MESSAGE);
 			}
 		});
 
@@ -238,6 +223,23 @@ public class DialogRectangle extends JDialog {
 				dispose();
 			}
 		});
+	}
+
+	private void preventInvalidChar(KeyEvent event) {
+		char charInput = event.getKeyChar();
+
+		if (charInput <= '0' || charInput >= '9' || charInput == KeyEvent.VK_BACK_SPACE
+				|| charInput == KeyEvent.VK_DELETE) {
+			getToolkit().beep();
+			event.consume();
+		}
+	}
+
+	private boolean isInputValid() {
+		if ((width.getText().isBlank() || height.getText().isBlank() || xCoordinateOfUpperLeftPoint.getText().isBlank()
+				|| yCoordinateOfUpperLeftPoint.getText().isBlank()))
+			return false;
+		return true;
 	}
 
 	public JTextField getXcoordinateOfUpperLeftPoint() {

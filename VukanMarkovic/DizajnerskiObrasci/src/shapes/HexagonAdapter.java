@@ -42,10 +42,10 @@ public class HexagonAdapter extends Shape {
 
 	public boolean equals(Object object) {
 		if (object instanceof HexagonAdapter) {
-			HexagonAdapter c = (HexagonAdapter) object;
+			HexagonAdapter hexagonAdapter = (HexagonAdapter) object;
 
-			if (getRadius() == (c.getRadius()) && getXcoordinate() == c.getXcoordinate()
-					&& getYcoordinate() == c.getYcoordinate())
+			if (getRadius() == (hexagonAdapter.getRadius()) && getXcoordinate() == hexagonAdapter.getXcoordinate()
+					&& getYcoordinate() == hexagonAdapter.getYcoordinate())
 				return true;
 		}
 

@@ -39,11 +39,16 @@ public class Donut extends Circle {
 
 	public void drawSelection(Graphics graphics) {
 		graphics.setColor(Color.BLUE);
-		graphics.drawRect(getCenter().getXcoordinate() - 3, getCenter().getYcoordinate() - 3, 6, 6);
-		graphics.drawRect(getCenter().getXcoordinate() + getRadius() - 3, getCenter().getYcoordinate() - 3, 6, 6);
-		graphics.drawRect(getCenter().getXcoordinate() - getRadius() - 3, getCenter().getYcoordinate() - 3, 6, 6);
-		graphics.drawRect(getCenter().getXcoordinate() - 3, getCenter().getYcoordinate() + getRadius() - 3, 6, 6);
-		graphics.drawRect(getCenter().getXcoordinate() - 3, getCenter().getYcoordinate() - getRadius() - 3, 6, 6);
+		graphics.drawRect(getCenter().getXcoordinate() - SELECT_RECTANGLE_GAP,
+				getCenter().getYcoordinate() - SELECT_RECTANGLE_GAP, 6, 6);
+		graphics.drawRect(getCenter().getXcoordinate() + getRadius() - SELECT_RECTANGLE_GAP,
+				getCenter().getYcoordinate() - SELECT_RECTANGLE_GAP, 6, 6);
+		graphics.drawRect(getCenter().getXcoordinate() - getRadius() - SELECT_RECTANGLE_GAP,
+				getCenter().getYcoordinate() - SELECT_RECTANGLE_GAP, 6, 6);
+		graphics.drawRect(getCenter().getXcoordinate() - SELECT_RECTANGLE_GAP,
+				getCenter().getYcoordinate() + getRadius() - SELECT_RECTANGLE_GAP, 6, 6);
+		graphics.drawRect(getCenter().getXcoordinate() - SELECT_RECTANGLE_GAP,
+				getCenter().getYcoordinate() - getRadius() - SELECT_RECTANGLE_GAP, 6, 6);
 	}
 
 	public void calculateArea() {

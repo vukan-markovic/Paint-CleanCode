@@ -54,14 +54,7 @@ public class DialogCircle extends JDialog {
 		xCoordinate.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent event) {
-				char xCoordinateInputChar = event.getKeyChar();
-
-				if (!((xCoordinateInputChar >= '0') && (xCoordinateInputChar <= '9')
-						|| (xCoordinateInputChar == KeyEvent.VK_BACK_SPACE)
-						|| (xCoordinateInputChar == KeyEvent.VK_DELETE))) {
-					getToolkit().beep();
-					event.consume();
-				}
+				preventInvalidChar(event);
 			}
 		});
 
@@ -71,14 +64,7 @@ public class DialogCircle extends JDialog {
 		yCoordinate.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent event) {
-				char yCoordinateInputChar = event.getKeyChar();
-
-				if (!((yCoordinateInputChar >= '0') && (yCoordinateInputChar <= '9')
-						|| (yCoordinateInputChar == KeyEvent.VK_BACK_SPACE)
-						|| (yCoordinateInputChar == KeyEvent.VK_DELETE))) {
-					getToolkit().beep();
-					event.consume();
-				}
+				preventInvalidChar(event);
 			}
 		});
 
@@ -88,13 +74,7 @@ public class DialogCircle extends JDialog {
 		radius.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent event) {
-				char radiusInput = event.getKeyChar();
-
-				if (!((radiusInput >= '0') && (radiusInput <= '9') || (radiusInput == KeyEvent.VK_BACK_SPACE)
-						|| (radiusInput == KeyEvent.VK_DELETE))) {
-					getToolkit().beep();
-					event.consume();
-				}
+				preventInvalidChar(event);
 			}
 		});
 
@@ -191,13 +171,12 @@ public class DialogCircle extends JDialog {
 
 		btnOk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				if ((radius.getText().isBlank() || xCoordinate.getText().isBlank() || yCoordinate.getText().isBlank()))
-					JOptionPane.showMessageDialog(new JFrame(), "You have not filled in all the fields, try again!",
-							"Error!", JOptionPane.ERROR_MESSAGE);
-				else {
+				if (isInputValid()) {
 					accepted = true;
 					setVisible(false);
-				}
+				} else
+					JOptionPane.showMessageDialog(new JFrame(), "You have not filled in all the fields, try again!",
+							"Error!", JOptionPane.ERROR_MESSAGE);
 			}
 		});
 
@@ -210,6 +189,22 @@ public class DialogCircle extends JDialog {
 				dispose();
 			}
 		});
+	}
+
+	private void preventInvalidChar(KeyEvent event) {
+		char charInput = event.getKeyChar();
+
+		if (charInput <= '0' || charInput >= '9' || charInput == KeyEvent.VK_BACK_SPACE
+				|| charInput == KeyEvent.VK_DELETE) {
+			getToolkit().beep();
+			event.consume();
+		}
+	}
+
+	private boolean isInputValid() {
+		if ((radius.getText().isBlank() || xCoordinate.getText().isBlank() || yCoordinate.getText().isBlank()))
+			return false;
+		return true;
 	}
 
 	public JTextField getXcoordinate() {

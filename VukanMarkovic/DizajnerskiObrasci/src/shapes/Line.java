@@ -7,6 +7,7 @@ public class Line extends Shape {
 	private static final long serialVersionUID = 1L;
 	private Point startPoint;
 	private Point endPoint;
+	private static final double LINE_CLICK_TRESHOLD = 0.05;
 
 	public Line() {
 	}
@@ -36,9 +37,12 @@ public class Line extends Shape {
 	@Override
 	public void drawSelection(Graphics graphics) {
 		graphics.setColor(Color.BLUE);
-		graphics.drawRect(startPoint.getXcoordinate() - 3, startPoint.getYcoordinate() - 3, 6, 6);
-		graphics.drawRect(endPoint.getXcoordinate() - 3, endPoint.getYcoordinate() - 3, 6, 6);
-		graphics.drawRect(getMiddleOfLine().getXcoordinate() - 3, getMiddleOfLine().getYcoordinate() - 3, 6, 6);
+		graphics.drawRect(startPoint.getXcoordinate() - SELECT_RECTANGLE_GAP,
+				startPoint.getYcoordinate() - SELECT_RECTANGLE_GAP, 6, 6);
+		graphics.drawRect(endPoint.getXcoordinate() - SELECT_RECTANGLE_GAP,
+				endPoint.getYcoordinate() - SELECT_RECTANGLE_GAP, 6, 6);
+		graphics.drawRect(getMiddleOfLine().getXcoordinate() - SELECT_RECTANGLE_GAP,
+				getMiddleOfLine().getYcoordinate() - SELECT_RECTANGLE_GAP, 6, 6);
 	}
 
 	public Point getMiddleOfLine() {
@@ -48,7 +52,7 @@ public class Line extends Shape {
 
 	public boolean contains(int xCoordinate, int yCoordinate) {
 		if ((startPoint.calculateDistance(xCoordinate, yCoordinate)
-				+ endPoint.calculateDistance(xCoordinate, yCoordinate)) - calculateLength() <= 0.05)
+				+ endPoint.calculateDistance(xCoordinate, yCoordinate)) - calculateLength() <= LINE_CLICK_TRESHOLD)
 			return true;
 		return false;
 	}

@@ -7,6 +7,8 @@ public class Point extends Shape {
 	private static final long serialVersionUID = 1L;
 	private int xCoordinate;
 	private int yCoordinate;
+	private static final int POINT_CLICK_TRESHOLD = 3;
+	private static final int POINT_LINE_GAP = 2;
 
 	public Point() {
 	}
@@ -21,12 +23,12 @@ public class Point extends Shape {
 		this.xCoordinate = xCoordinate;
 		this.yCoordinate = yCoordinate;
 	}
-	
+
 	@Override
 	public void draw(Graphics graphics) {
 		graphics.setColor(getOuterColor());
-		graphics.drawLine(xCoordinate - 2, yCoordinate, xCoordinate + 2, yCoordinate);
-		graphics.drawLine(xCoordinate, yCoordinate - 2, xCoordinate, yCoordinate + 2);
+		graphics.drawLine(xCoordinate - POINT_LINE_GAP, yCoordinate, xCoordinate + POINT_LINE_GAP, yCoordinate);
+		graphics.drawLine(xCoordinate, yCoordinate - POINT_LINE_GAP, xCoordinate, yCoordinate + POINT_LINE_GAP);
 
 		if (isSelected())
 			drawSelection(graphics);
@@ -35,11 +37,11 @@ public class Point extends Shape {
 	@Override
 	public void drawSelection(Graphics graphics) {
 		graphics.setColor(Color.BLUE);
-		graphics.drawRect(xCoordinate - 3, yCoordinate - 3, 6, 6);
+		graphics.drawRect(xCoordinate - SELECT_RECTANGLE_GAP, yCoordinate - SELECT_RECTANGLE_GAP, 6, 6);
 	}
 
 	public boolean contains(int xCoordinate, int yCoordinate) {
-		if (calculateDistance(xCoordinate, yCoordinate) <= 3)
+		if (calculateDistance(xCoordinate, yCoordinate) <= POINT_CLICK_TRESHOLD)
 			return true;
 		return false;
 	}
@@ -64,7 +66,7 @@ public class Point extends Shape {
 	public Point clone() {
 		return new Point(xCoordinate, yCoordinate, isSelected(), getOuterColor());
 	}
-	
+
 	public String toString() {
 		return "(xCoordinate: " + xCoordinate + " , yCoordinate: " + yCoordinate + " , Outer color: "
 				+ getOuterColor().getRGB() + " )";

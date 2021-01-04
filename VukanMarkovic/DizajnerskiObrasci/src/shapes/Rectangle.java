@@ -45,11 +45,14 @@ public class Rectangle extends SurfaceShape {
 	@Override
 	public void drawSelection(Graphics graphics) {
 		graphics.setColor(Color.BLUE);
-		graphics.drawRect(upperLeftPoint.getXcoordinate() - 3, upperLeftPoint.getYcoordinate() - 3, 6, 6);
-		graphics.drawRect(upperLeftPoint.getXcoordinate() - 3 + width, upperLeftPoint.getYcoordinate() - 3, 6, 6);
-		graphics.drawRect(upperLeftPoint.getXcoordinate() - 3, upperLeftPoint.getYcoordinate() - 3 + height, 6, 6);
-		graphics.drawRect(upperLeftPoint.getXcoordinate() + width - 3, upperLeftPoint.getYcoordinate() + height - 3, 6,
-				6);
+		graphics.drawRect(upperLeftPoint.getXcoordinate() - SELECT_RECTANGLE_GAP,
+				upperLeftPoint.getYcoordinate() - SELECT_RECTANGLE_GAP, 6, 6);
+		graphics.drawRect(upperLeftPoint.getXcoordinate() - SELECT_RECTANGLE_GAP + width,
+				upperLeftPoint.getYcoordinate() - SELECT_RECTANGLE_GAP, 6, 6);
+		graphics.drawRect(upperLeftPoint.getXcoordinate() - SELECT_RECTANGLE_GAP,
+				upperLeftPoint.getYcoordinate() - SELECT_RECTANGLE_GAP + height, 6, 6);
+		graphics.drawRect(upperLeftPoint.getXcoordinate() + width - SELECT_RECTANGLE_GAP,
+				upperLeftPoint.getYcoordinate() + height - SELECT_RECTANGLE_GAP, 6, 6);
 	}
 
 	public boolean contains(int xCoordinate, int yCoordinate) {
@@ -75,7 +78,7 @@ public class Rectangle extends SurfaceShape {
 	public Rectangle clone() {
 		return new Rectangle(upperLeftPoint.clone(), height, width, isSelected(), getOuterColor(), getInnerColor());
 	}
-	
+
 	public String toString() {
 		return "Upper left point: " + upperLeftPoint + ", height: " + height + " , width: " + width + " , Inner color: "
 				+ getInnerColor().getRGB() + " , Outer color: " + getOuterColor().getRGB();

@@ -52,14 +52,7 @@ public class DialogLine extends JDialog {
 		xCoordinateOfStartPoint.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent event) {
-				char xCoordinateOfStartPointInputChar = event.getKeyChar();
-
-				if (!((xCoordinateOfStartPointInputChar >= '0') && (xCoordinateOfStartPointInputChar <= '9')
-						|| (xCoordinateOfStartPointInputChar == KeyEvent.VK_BACK_SPACE)
-						|| (xCoordinateOfStartPointInputChar == KeyEvent.VK_DELETE))) {
-					getToolkit().beep();
-					event.consume();
-				}
+				preventInvalidChar(event);
 			}
 		});
 
@@ -69,14 +62,7 @@ public class DialogLine extends JDialog {
 		yCoordinateOfStartPoint.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent event) {
-				char yCoordinateOfStartPointInputChar = event.getKeyChar();
-
-				if (!((yCoordinateOfStartPointInputChar >= '0') && (yCoordinateOfStartPointInputChar <= '9')
-						|| (yCoordinateOfStartPointInputChar == KeyEvent.VK_BACK_SPACE)
-						|| (yCoordinateOfStartPointInputChar == KeyEvent.VK_DELETE))) {
-					getToolkit().beep();
-					event.consume();
-				}
+				preventInvalidChar(event);
 			}
 		});
 
@@ -86,14 +72,7 @@ public class DialogLine extends JDialog {
 		xCoordinateOfEndPoint.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent event) {
-				char xCoordinateOfEndPointInputChar = event.getKeyChar();
-
-				if (!((xCoordinateOfEndPointInputChar >= '0') && (xCoordinateOfEndPointInputChar <= '9')
-						|| (xCoordinateOfEndPointInputChar == KeyEvent.VK_BACK_SPACE)
-						|| (xCoordinateOfEndPointInputChar == KeyEvent.VK_DELETE))) {
-					getToolkit().beep();
-					event.consume();
-				}
+				preventInvalidChar(event);
 			}
 		});
 
@@ -103,14 +82,7 @@ public class DialogLine extends JDialog {
 		yCoordinateOfEndPoint.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent event) {
-				char yCoordinateOfEndPointInputChar = event.getKeyChar();
-
-				if (!((yCoordinateOfEndPointInputChar >= '0') && (yCoordinateOfEndPointInputChar <= '9')
-						|| (yCoordinateOfEndPointInputChar == KeyEvent.VK_BACK_SPACE)
-						|| (yCoordinateOfEndPointInputChar == KeyEvent.VK_DELETE))) {
-					getToolkit().beep();
-					event.consume();
-				}
+				preventInvalidChar(event);
 			}
 		});
 
@@ -197,15 +169,13 @@ public class DialogLine extends JDialog {
 
 		btnOk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				if (xCoordinateOfStartPoint.getText().isBlank() || yCoordinateOfStartPoint.getText().isBlank()
-						|| xCoordinateOfEndPoint.getText().isBlank() || yCoordinateOfEndPoint.getText().isBlank())
-					JOptionPane.showMessageDialog(new JFrame(), "You have not filled in all the fields, try again!",
-							"Error!", JOptionPane.ERROR_MESSAGE);
-				else {
+				if (isInputValid()) {
 					accepted = true;
 					setVisible(false);
 
-				}
+				} else
+					JOptionPane.showMessageDialog(new JFrame(), "You have not filled in all the fields, try again!",
+							"Error!", JOptionPane.ERROR_MESSAGE);
 			}
 		});
 
@@ -218,6 +188,23 @@ public class DialogLine extends JDialog {
 				dispose();
 			}
 		});
+	}
+
+	private void preventInvalidChar(KeyEvent event) {
+		char charInput = event.getKeyChar();
+
+		if (charInput <= '0' || charInput >= '9' || charInput == KeyEvent.VK_BACK_SPACE
+				|| charInput == KeyEvent.VK_DELETE) {
+			getToolkit().beep();
+			event.consume();
+		}
+	}
+
+	private boolean isInputValid() {
+		if (xCoordinateOfStartPoint.getText().isBlank() || yCoordinateOfStartPoint.getText().isBlank()
+				|| xCoordinateOfEndPoint.getText().isBlank() || yCoordinateOfEndPoint.getText().isBlank())
+			return false;
+		return true;
 	}
 
 	public JTextField getXCoordinateOfStartPoint() {

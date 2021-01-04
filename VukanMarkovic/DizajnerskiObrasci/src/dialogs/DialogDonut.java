@@ -55,14 +55,7 @@ public class DialogDonut extends JDialog {
 		xCoordinate.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent event) {
-				char xCoordinateInputChar = event.getKeyChar();
-
-				if (!((xCoordinateInputChar >= '0') && (xCoordinateInputChar <= '9')
-						|| (xCoordinateInputChar == KeyEvent.VK_BACK_SPACE)
-						|| (xCoordinateInputChar == KeyEvent.VK_DELETE))) {
-					getToolkit().beep();
-					event.consume();
-				}
+				preventInvalidChar(event);
 			}
 		});
 
@@ -72,14 +65,7 @@ public class DialogDonut extends JDialog {
 		yCoordinate.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent event) {
-				char yCoordinateInputChar = event.getKeyChar();
-
-				if (!((yCoordinateInputChar >= '0') && (yCoordinateInputChar <= '9')
-						|| (yCoordinateInputChar == KeyEvent.VK_BACK_SPACE)
-						|| (yCoordinateInputChar == KeyEvent.VK_DELETE))) {
-					getToolkit().beep();
-					event.consume();
-				}
+				preventInvalidChar(event);
 			}
 		});
 
@@ -89,14 +75,7 @@ public class DialogDonut extends JDialog {
 		outerRadius.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent event) {
-				char outerRadiusInputChar = event.getKeyChar();
-
-				if (!((outerRadiusInputChar >= '0') && (outerRadiusInputChar <= '9')
-						|| (outerRadiusInputChar == KeyEvent.VK_BACK_SPACE)
-						|| (outerRadiusInputChar == KeyEvent.VK_DELETE))) {
-					getToolkit().beep();
-					event.consume();
-				}
+				preventInvalidChar(event);
 			}
 		});
 
@@ -106,14 +85,7 @@ public class DialogDonut extends JDialog {
 		innerRadius.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent event) {
-				char innerRadiusInputChar = event.getKeyChar();
-
-				if (!((innerRadiusInputChar >= '0') && (innerRadiusInputChar <= '9')
-						|| (innerRadiusInputChar == KeyEvent.VK_BACK_SPACE)
-						|| (innerRadiusInputChar == KeyEvent.VK_DELETE))) {
-					getToolkit().beep();
-					event.consume();
-				}
+				preventInvalidChar(event);
 			}
 		});
 
@@ -225,11 +197,10 @@ public class DialogDonut extends JDialog {
 
 		btnOk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				if (innerRadius.getText().isBlank() || outerRadius.getText().isBlank()
-						|| xCoordinate.getText().isBlank() || yCoordinate.getText().isBlank())
+				if (isInputInvalidEmptyFields())
 					JOptionPane.showMessageDialog(new JFrame(), "You have not filled in all the fields, try again!",
 							"Error!", JOptionPane.ERROR_MESSAGE);
-				else if (Integer.parseInt(innerRadius.getText()) >= Integer.parseInt(outerRadius.getText()))
+				else if (isInputInvalidRadius())
 					JOptionPane.showMessageDialog(new JFrame(), "The inner radius must be larger than the outer one!",
 							"Error!", JOptionPane.ERROR_MESSAGE);
 				else {
@@ -248,6 +219,29 @@ public class DialogDonut extends JDialog {
 				dispose();
 			}
 		});
+	}
+
+	private void preventInvalidChar(KeyEvent event) {
+		char charInput = event.getKeyChar();
+
+		if (charInput <= '0' || charInput >= '9' || charInput == KeyEvent.VK_BACK_SPACE
+				|| charInput == KeyEvent.VK_DELETE) {
+			getToolkit().beep();
+			event.consume();
+		}
+	}
+
+	private boolean isInputInvalidEmptyFields() {
+		if (innerRadius.getText().isBlank() || outerRadius.getText().isBlank() || xCoordinate.getText().isBlank()
+				|| yCoordinate.getText().isBlank())
+			return true;
+		return false;
+	}
+
+	private boolean isInputInvalidRadius() {
+		if (Integer.parseInt(innerRadius.getText()) >= Integer.parseInt(outerRadius.getText()))
+			return true;
+		return false;
 	}
 
 	public JTextField getXcoordinate() {
