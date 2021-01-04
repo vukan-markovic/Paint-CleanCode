@@ -13,11 +13,11 @@ import shapes.Point;
 import shapes.Shape;
 
 public class CmdSendToBackTests {
-	private CmdSendToBack cmdSendToBack;
 	private DrawingModel model;
 	private Shape shape;
 	private int indexOfShape;
-
+	private CmdSendToBack cmdSendToBack;
+	
 	@Before
 	public void setUp() {
 		model = new DrawingModel();

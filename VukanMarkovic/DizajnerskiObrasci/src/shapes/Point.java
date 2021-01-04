@@ -21,27 +21,33 @@ public class Point extends Shape {
 		this.xCoordinate = xCoordinate;
 		this.yCoordinate = yCoordinate;
 	}
-
-	public Point clone() {
-		return new Point(xCoordinate, yCoordinate, isSelected(), getOuterColor());
-	}
-
+	
 	@Override
 	public void draw(Graphics graphics) {
 		graphics.setColor(getOuterColor());
 		graphics.drawLine(xCoordinate - 2, yCoordinate, xCoordinate + 2, yCoordinate);
 		graphics.drawLine(xCoordinate, yCoordinate - 2, xCoordinate, yCoordinate + 2);
 
-		if (isSelected()) {
-			graphics.setColor(Color.BLUE);
-			graphics.drawRect(xCoordinate - 3, yCoordinate - 3, 6, 6);
-		}
+		if (isSelected())
+			drawSelection(graphics);
+	}
+
+	@Override
+	public void drawSelection(Graphics graphics) {
+		graphics.setColor(Color.BLUE);
+		graphics.drawRect(xCoordinate - 3, yCoordinate - 3, 6, 6);
 	}
 
 	public boolean contains(int xCoordinate, int yCoordinate) {
-		if (distance(xCoordinate, yCoordinate) <= 3)
+		if (calculateDistance(xCoordinate, yCoordinate) <= 3)
 			return true;
 		return false;
+	}
+
+	public double calculateDistance(int xCoodinate, int yCoodinate) {
+		double xCoodinatesDifference = xCoordinate - xCoodinate;
+		double yCoodinatesDifference = yCoordinate - yCoodinate;
+		return Math.sqrt(xCoodinatesDifference * xCoodinatesDifference + yCoodinatesDifference * yCoodinatesDifference);
 	}
 
 	public boolean equals(Object object) {
@@ -55,30 +61,28 @@ public class Point extends Shape {
 		return false;
 	}
 
-	public double distance(int xCoodinate, int yCoodinate) {
-		double xCoodinatesDifference = xCoordinate - xCoodinate;
-		double yCoodinatesDifference = yCoordinate - yCoodinate;
-		return Math.sqrt(xCoodinatesDifference * xCoodinatesDifference + yCoodinatesDifference * yCoodinatesDifference);
+	public Point clone() {
+		return new Point(xCoordinate, yCoordinate, isSelected(), getOuterColor());
+	}
+	
+	public String toString() {
+		return "(xCoordinate: " + xCoordinate + " , yCoordinate: " + yCoordinate + " , Outer color: "
+				+ getOuterColor().getRGB() + " )";
 	}
 
 	public int getXcoordinate() {
 		return xCoordinate;
 	}
 
-	public void setXcoordinate(int xCoordinate) {
-		this.xCoordinate = xCoordinate;
-	}
-
 	public int getYcoordinate() {
 		return yCoordinate;
 	}
 
-	public void setYcoordinate(int yCoordinate) {
-		this.yCoordinate = yCoordinate;
+	public void setXcoordinate(int xCoordinate) {
+		this.xCoordinate = xCoordinate;
 	}
 
-	public String toString() {
-		return "(xCoordinate: " + xCoordinate + " , yCoordinate: " + yCoordinate + " , Outer color: "
-				+ getOuterColor().getRGB() + " )";
+	public void setYcoordinate(int yCoordinate) {
+		this.yCoordinate = yCoordinate;
 	}
 }

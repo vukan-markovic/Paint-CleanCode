@@ -23,6 +23,7 @@ public class DrawingView extends JPanel {
 	@Override
 	public void paint(Graphics graphics) {
 		super.paintComponent(graphics);
+
 		Iterator<Shape> shapesIterator = model.getShapes().iterator();
 
 		while (shapesIterator.hasNext()) {
@@ -35,11 +36,11 @@ public class DrawingView extends JPanel {
 		}
 	}
 
-	public void setModel(DrawingModel model) {
-		this.model = model;
-	}
-
 	public DrawingModel getModel() {
 		return model;
+	}
+
+	public void setModel(DrawingModel model) {
+		this.model = model;
 	}
 }

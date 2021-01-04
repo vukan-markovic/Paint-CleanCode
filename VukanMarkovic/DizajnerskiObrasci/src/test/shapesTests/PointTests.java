@@ -3,6 +3,7 @@ package test.shapesTests;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
 import java.awt.Color;
@@ -16,11 +17,15 @@ import shapes.Point;
 
 public class PointTests {
 	private Point point;
+	private Point pointMock;
 	private Graphics graphics;
 
 	@Before
 	public void setUp() {
 		point = new Point(1, 2);
+		pointMock = spy(Point.class);
+		pointMock.setXcoordinate(1);
+		pointMock.setYcoordinate(2);
 		graphics = mock(Graphics.class);
 	}
 
@@ -38,16 +43,22 @@ public class PointTests {
 
 	@Test
 	public void testDrawShapeSelected() {
-		point.setSelected(true);
-		point.draw(graphics);
-		verify(graphics).setColor(point.getOuterColor());
+		pointMock.setSelected(true);
+		pointMock.draw(graphics);
+		verify(graphics).setColor(pointMock.getOuterColor());
 
-		verify(graphics).drawLine(point.getXcoordinate() - 2, point.getYcoordinate(), point.getXcoordinate() + 2,
-				point.getYcoordinate());
+		verify(graphics).drawLine(pointMock.getXcoordinate() - 2, pointMock.getYcoordinate(),
+				pointMock.getXcoordinate() + 2, pointMock.getYcoordinate());
 
-		verify(graphics).drawLine(point.getXcoordinate(), point.getYcoordinate() - 2, point.getXcoordinate(),
-				point.getYcoordinate() + 2);
+		verify(graphics).drawLine(pointMock.getXcoordinate(), pointMock.getYcoordinate() - 2,
+				pointMock.getXcoordinate(), pointMock.getYcoordinate() + 2);
 
+		verify(pointMock).drawSelection(graphics);
+	}
+
+	@Test
+	public void testDrawSelection() {
+		point.drawSelection(graphics);
 		verify(graphics).setColor(Color.BLUE);
 		verify(graphics).drawRect(point.getXcoordinate() - 3, point.getYcoordinate() - 3, 6, 6);
 	}

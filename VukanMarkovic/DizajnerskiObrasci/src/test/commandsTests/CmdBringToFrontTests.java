@@ -12,10 +12,10 @@ import shapes.Point;
 import shapes.Shape;
 
 public class CmdBringToFrontTests {
-	private CmdBringToFront cmdBringToFront;
 	private DrawingModel model;
 	private Shape shape;
 	private int indexOfShape;
+	private CmdBringToFront cmdBringToFront;
 
 	@Before
 	public void setUp() {

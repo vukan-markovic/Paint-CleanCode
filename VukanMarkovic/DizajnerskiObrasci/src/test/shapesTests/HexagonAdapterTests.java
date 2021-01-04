@@ -24,8 +24,8 @@ public class HexagonAdapterTests {
 	@Before
 	public void setUp() {
 		hexagonAdapter = new HexagonAdapter(new Hexagon(1, 2, 3), Color.WHITE, Color.BLACK);
-		graphics = mock(Graphics.class);
 		hexagon = mock(Hexagon.class);
+		graphics = mock(Graphics.class);
 	}
 
 	@Test
@@ -33,6 +33,11 @@ public class HexagonAdapterTests {
 		hexagonAdapter = new HexagonAdapter(hexagon, Color.WHITE, Color.BLACK);
 		hexagonAdapter.draw(graphics);
 		verify(hexagon).paint(graphics);
+	}
+
+	@Test(expected = UnsupportedOperationException.class)
+	public void testDrawSelection() {
+		hexagonAdapter.drawSelection(graphics);
 	}
 
 	@Test

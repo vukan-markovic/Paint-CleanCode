@@ -55,19 +55,26 @@ public class RectangleTests {
 				rectangleMock.getHeight());
 
 		verify(rectangleMock).fillShape(graphics);
+		verify(rectangleMock).drawSelection(graphics);
+	}
+
+	@Test
+	public void testDrawSelection() {
+		rectangle.drawSelection(graphics);
+
 		verify(graphics).setColor(Color.BLUE);
 
-		verify(graphics).drawRect(rectangleMock.getUpperLeftPoint().getXcoordinate() - 3,
-				rectangleMock.getUpperLeftPoint().getYcoordinate() - 3, 6, 6);
+		verify(graphics).drawRect(rectangle.getUpperLeftPoint().getXcoordinate() - 3,
+				rectangle.getUpperLeftPoint().getYcoordinate() - 3, 6, 6);
 
-		verify(graphics).drawRect(rectangleMock.getUpperLeftPoint().getXcoordinate() - 3 + rectangleMock.getWidth(),
-				rectangleMock.getUpperLeftPoint().getYcoordinate() - 3, 6, 6);
+		verify(graphics).drawRect(rectangle.getUpperLeftPoint().getXcoordinate() - 3 + rectangle.getWidth(),
+				rectangle.getUpperLeftPoint().getYcoordinate() - 3, 6, 6);
 
-		verify(graphics).drawRect(rectangleMock.getUpperLeftPoint().getXcoordinate() - 3,
-				rectangleMock.getUpperLeftPoint().getYcoordinate() - 3 + rectangleMock.getHeight(), 6, 6);
+		verify(graphics).drawRect(rectangle.getUpperLeftPoint().getXcoordinate() - 3,
+				rectangle.getUpperLeftPoint().getYcoordinate() - 3 + rectangle.getHeight(), 6, 6);
 
-		verify(graphics).drawRect(rectangleMock.getUpperLeftPoint().getXcoordinate() + rectangleMock.getWidth() - 3,
-				rectangleMock.getUpperLeftPoint().getYcoordinate() + rectangleMock.getHeight() - 3, 6, 6);
+		verify(graphics).drawRect(rectangle.getUpperLeftPoint().getXcoordinate() + rectangle.getWidth() - 3,
+				rectangle.getUpperLeftPoint().getYcoordinate() + rectangle.getHeight() - 3, 6, 6);
 	}
 
 	@Test

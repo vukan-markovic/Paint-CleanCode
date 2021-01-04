@@ -26,23 +26,14 @@ public class Rectangle extends SurfaceShape {
 		setInnerColor(innerColor);
 	}
 
-	public Rectangle clone() {
-		return new Rectangle(upperLeftPoint.clone(), height, width, isSelected(), getOuterColor(), getInnerColor());
-	}
-
 	@Override
 	public void draw(Graphics graphics) {
 		graphics.setColor(getOuterColor());
 		graphics.drawRect(upperLeftPoint.getXcoordinate(), upperLeftPoint.getYcoordinate(), width, height);
 		fillShape(graphics);
 
-		if (isSelected()) {
-			graphics.setColor(Color.BLUE);
-			graphics.drawRect(upperLeftPoint.getXcoordinate() - 3, upperLeftPoint.getYcoordinate() - 3, 6, 6);
-			graphics.drawRect(upperLeftPoint.getXcoordinate() - 3 + width, upperLeftPoint.getYcoordinate() - 3, 6, 6);
-			graphics.drawRect(upperLeftPoint.getXcoordinate() - 3, upperLeftPoint.getYcoordinate() - 3 + height, 6, 6);
-			graphics.drawRect(upperLeftPoint.getXcoordinate() + width - 3, upperLeftPoint.getYcoordinate() + height - 3, 6, 6);
-		}
+		if (isSelected())
+			drawSelection(graphics);
 	}
 
 	@Override
@@ -51,9 +42,20 @@ public class Rectangle extends SurfaceShape {
 		graphics.fillRect(upperLeftPoint.getXcoordinate(), upperLeftPoint.getYcoordinate(), width, height);
 	}
 
+	@Override
+	public void drawSelection(Graphics graphics) {
+		graphics.setColor(Color.BLUE);
+		graphics.drawRect(upperLeftPoint.getXcoordinate() - 3, upperLeftPoint.getYcoordinate() - 3, 6, 6);
+		graphics.drawRect(upperLeftPoint.getXcoordinate() - 3 + width, upperLeftPoint.getYcoordinate() - 3, 6, 6);
+		graphics.drawRect(upperLeftPoint.getXcoordinate() - 3, upperLeftPoint.getYcoordinate() - 3 + height, 6, 6);
+		graphics.drawRect(upperLeftPoint.getXcoordinate() + width - 3, upperLeftPoint.getYcoordinate() + height - 3, 6,
+				6);
+	}
+
 	public boolean contains(int xCoordinate, int yCoordinate) {
 		if (upperLeftPoint.getXcoordinate() <= xCoordinate && xCoordinate <= upperLeftPoint.getXcoordinate() + width
-				&& upperLeftPoint.getYcoordinate() <= yCoordinate && yCoordinate <= upperLeftPoint.getYcoordinate() + height)
+				&& upperLeftPoint.getYcoordinate() <= yCoordinate
+				&& yCoordinate <= upperLeftPoint.getYcoordinate() + height)
 			return true;
 		return false;
 	}
@@ -70,32 +72,36 @@ public class Rectangle extends SurfaceShape {
 		return false;
 	}
 
+	public Rectangle clone() {
+		return new Rectangle(upperLeftPoint.clone(), height, width, isSelected(), getOuterColor(), getInnerColor());
+	}
+	
+	public String toString() {
+		return "Upper left point: " + upperLeftPoint + ", height: " + height + " , width: " + width + " , Inner color: "
+				+ getInnerColor().getRGB() + " , Outer color: " + getOuterColor().getRGB();
+	}
+
 	public Point getUpperLeftPoint() {
 		return upperLeftPoint;
-	}
-
-	public void setUpperLeftPoint(Point upperLeftPoint) {
-		this.upperLeftPoint = upperLeftPoint;
-	}
-
-	public int getWidth() {
-		return width;
-	}
-
-	public void setWidth(int width) {
-		this.width = width;
 	}
 
 	public int getHeight() {
 		return height;
 	}
 
+	public int getWidth() {
+		return width;
+	}
+
+	public void setUpperLeftPoint(Point upperLeftPoint) {
+		this.upperLeftPoint = upperLeftPoint;
+	}
+
 	public void setHeight(int height) {
 		this.height = height;
 	}
 
-	public String toString() {
-		return "Upper left point: " + upperLeftPoint + ", height: " + height + " , width: " + width + " , Inner color: "
-				+ getInnerColor().getRGB() + " , Outer color: " + getOuterColor().getRGB();
+	public void setWidth(int width) {
+		this.width = width;
 	}
 }

@@ -29,13 +29,13 @@ public class DialogHexagon extends JDialog {
 	private JTextField xCoordinate;
 	private JTextField yCoordinate;
 	private JTextField radius;
-	private boolean accepted = false;
 	private JButton btnOuterColor;
 	private JButton btnInnerColor;
-	private JButton btnCancel;
 	private JButton btnOk;
+	private JButton btnCancel;
 	private Color outerColor;
 	private Color innerColor;
+	private boolean accepted;
 
 	public DialogHexagon() {
 		setTitle("Hexagon dialog");
@@ -46,16 +46,10 @@ public class DialogHexagon extends JDialog {
 		outerColor = Color.BLACK;
 		contentPanel = new JPanel();
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-
 		getContentPane().add(contentPanel, BorderLayout.WEST);
-		{
-			xCoordinate = new JTextField();
-			xCoordinate.setColumns(10);
-		}
 
-		yCoordinate = new JTextField();
-		yCoordinate.setColumns(10);
-		radius = new JTextField();
+		xCoordinate = new JTextField();
+		xCoordinate.setColumns(10);
 
 		xCoordinate.addKeyListener(new KeyAdapter() {
 			@Override
@@ -71,6 +65,9 @@ public class DialogHexagon extends JDialog {
 			}
 		});
 
+		yCoordinate = new JTextField();
+		yCoordinate.setColumns(10);
+
 		yCoordinate.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent event) {
@@ -85,6 +82,9 @@ public class DialogHexagon extends JDialog {
 			}
 		});
 
+		radius = new JTextField();
+		radius.setColumns(10);
+
 		radius.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent event) {
@@ -98,10 +98,6 @@ public class DialogHexagon extends JDialog {
 			}
 		});
 
-		radius.setColumns(10);
-		JLabel lblXcoordinate = new JLabel("X coordinate:");
-		JLabel lblYcoordinate = new JLabel("Y coordinate:");
-		JLabel lblRadius = new JLabel("Radius:");
 		btnOuterColor = new JButton("Outer color");
 
 		btnOuterColor.addActionListener(new ActionListener() {
@@ -120,103 +116,100 @@ public class DialogHexagon extends JDialog {
 			}
 		});
 
+		JLabel lblXcoordinate = new JLabel("X coordinate:");
+		JLabel lblYcoordinate = new JLabel("Y coordinate:");
+		JLabel lblRadius = new JLabel("Radius:");
+
 		JLabel lblIcon = new JLabel("");
 		lblIcon.setHorizontalAlignment(SwingConstants.CENTER);
 		lblIcon.setIcon(new ImageIcon(new ImageIcon(this.getClass().getResource("/hexagon.png")).getImage()));
-		GroupLayout gl_contentPanel = new GroupLayout(contentPanel);
 
-		gl_contentPanel.setHorizontalGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_contentPanel.createSequentialGroup().addContainerGap()
-						.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING)
-								.addGroup(gl_contentPanel.createSequentialGroup().addComponent(lblXcoordinate)
-										.addGap(18).addComponent(xCoordinate, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_contentPanel.createSequentialGroup().addGap(48)
-										.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING)
-												.addGroup(gl_contentPanel.createSequentialGroup()
+		GroupLayout glContentPanel = new GroupLayout(contentPanel);
+
+		glContentPanel.setHorizontalGroup(glContentPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(glContentPanel.createSequentialGroup().addContainerGap()
+						.addGroup(glContentPanel.createParallelGroup(Alignment.TRAILING)
+								.addGroup(glContentPanel.createSequentialGroup().addComponent(lblXcoordinate).addGap(18)
+										.addComponent(xCoordinate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+												GroupLayout.PREFERRED_SIZE))
+								.addGroup(glContentPanel.createSequentialGroup().addGap(48)
+										.addGroup(glContentPanel.createParallelGroup(Alignment.TRAILING)
+												.addGroup(glContentPanel.createSequentialGroup()
 														.addComponent(lblRadius, GroupLayout.DEFAULT_SIZE,
 																GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 														.addGap(18).addComponent(radius, GroupLayout.PREFERRED_SIZE,
 																GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-												.addGroup(gl_contentPanel.createSequentialGroup()
+												.addGroup(glContentPanel.createSequentialGroup()
 														.addPreferredGap(ComponentPlacement.RELATED, 4, Short.MAX_VALUE)
 														.addComponent(lblYcoordinate).addGap(18)
 														.addComponent(yCoordinate, GroupLayout.PREFERRED_SIZE,
 																GroupLayout.DEFAULT_SIZE,
 																GroupLayout.PREFERRED_SIZE)))))
 						.addGap(72)
-						.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING)
+						.addGroup(glContentPanel.createParallelGroup(Alignment.TRAILING)
 								.addComponent(lblIcon, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
-								.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
+								.addGroup(glContentPanel.createParallelGroup(Alignment.LEADING)
 										.addComponent(btnInnerColor).addComponent(btnOuterColor)))
 						.addGap(86)));
 
-		gl_contentPanel.setVerticalGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPanel
+		glContentPanel.setVerticalGroup(glContentPanel.createParallelGroup(Alignment.LEADING).addGroup(glContentPanel
 				.createSequentialGroup().addContainerGap(35, Short.MAX_VALUE)
-				.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING, false)
-						.addGroup(gl_contentPanel.createSequentialGroup()
-								.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
+				.addGroup(glContentPanel.createParallelGroup(Alignment.TRAILING, false)
+						.addGroup(glContentPanel.createSequentialGroup()
+								.addGroup(glContentPanel.createParallelGroup(Alignment.BASELINE)
 										.addComponent(xCoordinate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 												GroupLayout.PREFERRED_SIZE)
 										.addComponent(lblXcoordinate))
 								.addGap(18)
-								.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
+								.addGroup(glContentPanel.createParallelGroup(Alignment.BASELINE)
 										.addComponent(yCoordinate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 												GroupLayout.PREFERRED_SIZE)
 										.addComponent(lblYcoordinate))
 								.addGap(14)
-								.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
+								.addGroup(glContentPanel.createParallelGroup(Alignment.BASELINE)
 										.addComponent(radius, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 												GroupLayout.PREFERRED_SIZE)
 										.addComponent(lblRadius)))
 						.addGroup(
-								gl_contentPanel.createSequentialGroup()
+								glContentPanel.createSequentialGroup()
 										.addComponent(lblIcon, GroupLayout.PREFERRED_SIZE, 81,
 												GroupLayout.PREFERRED_SIZE)
 										.addGap(19)))
 				.addGap(10).addComponent(btnOuterColor).addPreferredGap(ComponentPlacement.RELATED)
 				.addComponent(btnInnerColor).addGap(21)));
 
-		contentPanel.setLayout(gl_contentPanel);
-		{
-			JPanel buttonPane = new JPanel();
-			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		contentPanel.setLayout(glContentPanel);
 
-			getContentPane().add(buttonPane, BorderLayout.SOUTH);
-			{
-				btnOk = new JButton("OK");
+		JPanel btnPanel = new JPanel();
+		btnPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		getContentPane().add(btnPanel, BorderLayout.SOUTH);
 
-				btnOk.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent event) {
-						if (radius.getText().isBlank() || xCoordinate.getText().isBlank()
-								|| yCoordinate.getText().isBlank())
-							JOptionPane.showMessageDialog(new JFrame(),
-									"You have not filled in all the fields, try again!", "Error!",
-									JOptionPane.ERROR_MESSAGE);
-						else {
-							accepted = true;
-							setVisible(false);
-						}
-					}
-				});
+		btnOk = new JButton("OK");
+		btnOk.setActionCommand("OK");
+		btnPanel.add(btnOk);
+		getRootPane().setDefaultButton(btnOk);
 
-				btnOk.setActionCommand("OK");
-				buttonPane.add(btnOk);
-				getRootPane().setDefaultButton(btnOk);
+		btnOk.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				if (radius.getText().isBlank() || xCoordinate.getText().isBlank() || yCoordinate.getText().isBlank())
+					JOptionPane.showMessageDialog(new JFrame(), "You have not filled in all the fields, try again!",
+							"Error!", JOptionPane.ERROR_MESSAGE);
+				else {
+					accepted = true;
+					setVisible(false);
+				}
 			}
-			{
-				btnCancel = new JButton("Cancel");
+		});
 
-				btnCancel.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent event) {
-						dispose();
-					}
-				});
+		btnCancel = new JButton("Cancel");
+		btnCancel.setActionCommand("Cancel");
+		btnPanel.add(btnCancel);
 
-				btnCancel.setActionCommand("Cancel");
-				buttonPane.add(btnCancel);
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				dispose();
 			}
-		}
+		});
 	}
 
 	public JTextField getXcoordinate() {
@@ -231,63 +224,63 @@ public class DialogHexagon extends JDialog {
 		return radius;
 	}
 
-	public void setRadius(JTextField radius) {
-		this.radius = radius;
-	}
-
-	public boolean isAccepted() {
-		return accepted;
-	}
-
-	public void setAccepted(boolean accepted) {
-		this.accepted = accepted;
-	}
-
 	public JButton getBtnOuterColor() {
 		return btnOuterColor;
-	}
-
-	public void setBtnOuterColor(JButton btnOuterColor) {
-		this.btnOuterColor = btnOuterColor;
 	}
 
 	public JButton getBtnInnerColor() {
 		return btnInnerColor;
 	}
 
-	public void setBtnInnerColor(JButton btnInnerColor) {
-		this.btnInnerColor = btnInnerColor;
+	public JButton getBtnOk() {
+		return btnOk;
 	}
 
 	public JButton getBtnCancel() {
 		return btnCancel;
 	}
 
-	public void setBtnCancel(JButton btnCancel) {
-		this.btnCancel = btnCancel;
-	}
-
-	public JButton getBtnOk() {
-		return btnOk;
-	}
-
-	public void setBtnOk(JButton btnOk) {
-		this.btnOk = btnOk;
-	}
-
 	public Color getOuterColor() {
 		return outerColor;
-	}
-
-	public void setOuterColor(Color outerColor) {
-		this.outerColor = outerColor;
 	}
 
 	public Color getInnerColor() {
 		return innerColor;
 	}
 
+	public boolean isAccepted() {
+		return accepted;
+	}
+
+	public void setRadius(JTextField radius) {
+		this.radius = radius;
+	}
+
+	public void setBtnOuterColor(JButton btnOuterColor) {
+		this.btnOuterColor = btnOuterColor;
+	}
+
+	public void setBtnInnerColor(JButton btnInnerColor) {
+		this.btnInnerColor = btnInnerColor;
+	}
+
+	public void setBtnOk(JButton btnOk) {
+		this.btnOk = btnOk;
+	}
+
+	public void setBtnCancel(JButton btnCancel) {
+		this.btnCancel = btnCancel;
+	}
+
+	public void setOuterColor(Color outerColor) {
+		this.outerColor = outerColor;
+	}
+
 	public void setInnerColor(Color innerColor) {
 		this.innerColor = innerColor;
+	}
+
+	public void setAccepted(boolean accepted) {
+		this.accepted = accepted;
 	}
 }

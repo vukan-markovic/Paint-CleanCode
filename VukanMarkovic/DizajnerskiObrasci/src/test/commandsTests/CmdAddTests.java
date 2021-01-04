@@ -12,9 +12,9 @@ import shapes.Point;
 import shapes.Shape;
 
 public class CmdAddTests {
-	private CmdAdd cmdAdd;
 	private DrawingModel model;
 	private Shape shape;
+	private CmdAdd cmdAdd;
 
 	@Before
 	public void setUp() {

@@ -23,11 +23,11 @@ public class DrawingModelTests {
 	public void setUp() {
 		model = new DrawingModel();
 		firstPoint = new Point(1, 2);
+		secondPoint = new Point(1, 2, true, Color.WHITE);
 	}
 
 	@Test
 	public void testGetOneSelectedShape() {
-		secondPoint = new Point(1, 2, true, Color.WHITE);
 		model.setShapes(new ArrayList<Shape>(Arrays.asList(firstPoint, secondPoint)));
 		assertEquals(secondPoint, model.getFirstSelectedShape());
 	}

@@ -28,11 +28,11 @@ public class DialogPoint extends JDialog {
 	private final JPanel contentPanel;
 	private final JTextField xCoordinate;
 	private final JTextField yCoordinate;
-	private boolean accepted;
 	private final JButton btnOuterColor;
-	private JButton btnCancel;
 	private JButton btnOk;
+	private JButton btnCancel;
 	private Color outerColor;
+	private boolean accepted;
 
 	public DialogPoint() {
 		setTitle("Point dialog");
@@ -42,16 +42,10 @@ public class DialogPoint extends JDialog {
 		outerColor = Color.BLACK;
 		contentPanel = new JPanel();
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		{
-			xCoordinate = new JTextField();
-			xCoordinate.setColumns(10);
-		}
-		{
-			yCoordinate = new JTextField();
-			yCoordinate.setColumns(10);
-		}
+
+		xCoordinate = new JTextField();
+		xCoordinate.setColumns(10);
 
 		xCoordinate.addKeyListener(new KeyAdapter() {
 			@Override
@@ -67,6 +61,9 @@ public class DialogPoint extends JDialog {
 			}
 		});
 
+		yCoordinate = new JTextField();
+		yCoordinate.setColumns(10);
+
 		yCoordinate.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent event) {
@@ -81,8 +78,6 @@ public class DialogPoint extends JDialog {
 			}
 		});
 
-		JLabel lblXcoordinate = new JLabel("X coordinate:");
-		JLabel lblYcoordinate = new JLabel("Y coordinate:");
 		btnOuterColor = new JButton("Outer color");
 		btnOuterColor.setHorizontalAlignment(SwingConstants.RIGHT);
 
@@ -93,87 +88,85 @@ public class DialogPoint extends JDialog {
 			}
 		});
 
+		JLabel lblXcoordinate = new JLabel("X coordinate:");
+		JLabel lblYcoordinate = new JLabel("Y coordinate:");
+
 		JLabel lblIcon = new JLabel("");
 		lblIcon.setHorizontalAlignment(SwingConstants.CENTER);
 		lblIcon.setIcon(new ImageIcon(new ImageIcon(this.getClass().getResource("/point3.png")).getImage()));
-		GroupLayout gl_contentPanel = new GroupLayout(contentPanel);
 
-		gl_contentPanel.setHorizontalGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING).addGroup(
-				gl_contentPanel.createSequentialGroup().addContainerGap(46, Short.MAX_VALUE).addGroup(gl_contentPanel
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPanel.createSequentialGroup()
-								.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING)
+		GroupLayout glContentPanel = new GroupLayout(contentPanel);
+
+		glContentPanel.setHorizontalGroup(glContentPanel.createParallelGroup(Alignment.TRAILING).addGroup(glContentPanel
+				.createSequentialGroup().addContainerGap(46, Short.MAX_VALUE)
+				.addGroup(glContentPanel.createParallelGroup(Alignment.LEADING)
+						.addGroup(glContentPanel.createSequentialGroup()
+								.addGroup(glContentPanel.createParallelGroup(Alignment.TRAILING)
 										.addComponent(lblXcoordinate).addComponent(lblYcoordinate))
 								.addGap(30)
-								.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
+								.addGroup(glContentPanel.createParallelGroup(Alignment.LEADING)
 										.addComponent(xCoordinate, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(yCoordinate, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 								.addPreferredGap(ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
 								.addComponent(lblIcon, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE))
-						.addComponent(btnOuterColor, Alignment.TRAILING)).addGap(58)));
+						.addComponent(btnOuterColor, Alignment.TRAILING))
+				.addGap(58)));
 
-		gl_contentPanel.setVerticalGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING).addGroup(
-				gl_contentPanel.createSequentialGroup().addContainerGap(24, Short.MAX_VALUE).addGroup(gl_contentPanel
-						.createParallelGroup(Alignment.TRAILING)
-						.addGroup(gl_contentPanel.createSequentialGroup()
-								.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
+		glContentPanel.setVerticalGroup(glContentPanel.createParallelGroup(Alignment.TRAILING).addGroup(glContentPanel
+				.createSequentialGroup().addContainerGap(24, Short.MAX_VALUE)
+				.addGroup(glContentPanel.createParallelGroup(Alignment.TRAILING)
+						.addGroup(glContentPanel.createSequentialGroup()
+								.addGroup(glContentPanel.createParallelGroup(Alignment.BASELINE)
 										.addComponent(xCoordinate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 												GroupLayout.PREFERRED_SIZE)
 										.addComponent(lblXcoordinate))
 								.addGap(45)
-								.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
+								.addGroup(glContentPanel.createParallelGroup(Alignment.BASELINE)
 										.addComponent(yCoordinate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 												GroupLayout.PREFERRED_SIZE)
 										.addComponent(lblYcoordinate))
 								.addGap(18))
 						.addGroup(
-								gl_contentPanel.createSequentialGroup()
+								glContentPanel.createSequentialGroup()
 										.addComponent(lblIcon, GroupLayout.PREFERRED_SIZE, 88,
 												GroupLayout.PREFERRED_SIZE)
 										.addGap(42)))
-						.addComponent(btnOuterColor).addGap(44)));
+				.addComponent(btnOuterColor).addGap(44)));
 
-		contentPanel.setLayout(gl_contentPanel);
-		{
-			JPanel buttonPane = new JPanel();
-			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			getContentPane().add(buttonPane, BorderLayout.SOUTH);
+		contentPanel.setLayout(glContentPanel);
 
-			{
-				btnOk = new JButton("OK");
+		JPanel btnPanel = new JPanel();
+		btnPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		getContentPane().add(btnPanel, BorderLayout.SOUTH);
 
-				btnOk.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent event) {
-						if (xCoordinate.getText().isBlank() || yCoordinate.getText().isBlank())
-							JOptionPane.showMessageDialog(new JFrame(),
-									"You have not filled in all the fields, try again!", "Error!",
-									JOptionPane.ERROR_MESSAGE);
-						else {
-							accepted = true;
-							setVisible(false);
-						}
-					}
-				});
+		btnOk = new JButton("OK");
+		btnOk.setActionCommand("OK");
+		btnPanel.add(btnOk);
+		getRootPane().setDefaultButton(btnOk);
 
-				btnOk.setActionCommand("OK");
-				buttonPane.add(btnOk);
-				getRootPane().setDefaultButton(btnOk);
+		btnOk.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				if (xCoordinate.getText().isBlank() || yCoordinate.getText().isBlank())
+					JOptionPane.showMessageDialog(new JFrame(), "You have not filled in all the fields, try again!",
+							"Error!", JOptionPane.ERROR_MESSAGE);
+				else {
+					accepted = true;
+					setVisible(false);
+				}
 			}
-			{
-				btnCancel = new JButton("Cancel");
+		});
 
-				btnCancel.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent event) {
-						dispose();
-					}
-				});
+		btnCancel = new JButton("Cancel");
+		btnCancel.setActionCommand("Cancel");
+		btnPanel.add(btnCancel);
 
-				btnCancel.setActionCommand("Cancel");
-				buttonPane.add(btnCancel);
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				dispose();
 			}
-		}
+		});
 	}
 
 	public JTextField getXcoordinate() {
@@ -184,39 +177,39 @@ public class DialogPoint extends JDialog {
 		return yCoordinate;
 	}
 
-	public boolean isAccepted() {
-		return accepted;
-	}
-
-	public void setAccepted(boolean accepted) {
-		this.accepted = accepted;
-	}
-
 	public JButton getBtnOuterColor() {
 		return btnOuterColor;
-	}
-
-	public JButton getBtnCancel() {
-		return btnCancel;
-	}
-
-	public void setBtnCancel(JButton btnCancel) {
-		this.btnCancel = btnCancel;
 	}
 
 	public JButton getBtnOk() {
 		return btnOk;
 	}
 
-	public void setBtnOk(JButton btnOk) {
-		this.btnOk = btnOk;
+	public JButton getBtnCancel() {
+		return btnCancel;
 	}
 
 	public Color getOuterColor() {
 		return outerColor;
 	}
 
+	public boolean isAccepted() {
+		return accepted;
+	}
+
+	public void setBtnOk(JButton btnOk) {
+		this.btnOk = btnOk;
+	}
+
+	public void setBtnCancel(JButton btnCancel) {
+		this.btnCancel = btnCancel;
+	}
+
 	public void setOuterColor(Color outerColor) {
 		this.outerColor = outerColor;
+	}
+
+	public void setAccepted(boolean accepted) {
+		this.accepted = accepted;
 	}
 }

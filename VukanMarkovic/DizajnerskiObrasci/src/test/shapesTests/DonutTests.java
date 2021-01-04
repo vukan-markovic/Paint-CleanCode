@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
 import java.awt.Color;
@@ -20,6 +21,7 @@ import shapes.Point;
 
 public class DonutTests {
 	private Donut donut;
+	private Donut donutMock;
 	private Graphics graphics;
 	private Graphics2D graphics2d;
 	private Area area;
@@ -27,6 +29,11 @@ public class DonutTests {
 	@Before
 	public void setUp() {
 		donut = new Donut(new Point(1, 2), 3, 2, false, Color.WHITE, Color.BLACK);
+		donutMock = spy(Donut.class);
+		donutMock.setCenter(new Point(1, 2));
+		donutMock.setRadius(3);
+		donutMock.setInnerRadius(2);
+
 		graphics = mock(Graphics.class);
 		graphics2d = mock(Graphics2D.class);
 
@@ -40,21 +47,34 @@ public class DonutTests {
 
 	@Test
 	public void testDrawShapeNotSelected() {
-		donut.draw(graphics, graphics2d);
-		verify(graphics).setColor(donut.getOuterColor());
-		verify(graphics2d).draw(donut.getDonutArea());
-		verify(graphics).setColor(donut.getInnerColor());
-		verify(graphics2d).fill(donut.getDonutArea());
+		donutMock.draw(graphics, graphics2d);
+		verify(graphics).setColor(donutMock.getOuterColor());
+		verify(graphics2d).draw(donutMock.getArea());
+		verify(donutMock).fillShape(graphics, graphics2d);
 	}
 
 	@Test
 	public void testDrawShapeSelected() {
-		donut.setSelected(true);
-		donut.draw(graphics, graphics2d);
-		verify(graphics).setColor(donut.getOuterColor());
-		verify(graphics2d).draw(donut.getDonutArea());
+		donutMock.setSelected(true);
+		donutMock.draw(graphics, graphics2d);
+		verify(graphics).setColor(donutMock.getOuterColor());
+		verify(graphics2d).draw(donutMock.getArea());
+		verify(graphics).setColor(donutMock.getInnerColor());
+		verify(graphics2d).fill(donutMock.getArea());
+		verify(donutMock).fillShape(graphics, graphics2d);
+		verify(donutMock).drawSelection(graphics);
+	}
+
+	@Test
+	public void testFillShape() {
+		donut.fillShape(graphics, graphics2d);
 		verify(graphics).setColor(donut.getInnerColor());
-		verify(graphics2d).fill(donut.getDonutArea());
+		verify(graphics2d).fill(donut.getArea());
+	}
+
+	@Test
+	public void testDrawSelection() {
+		donut.drawSelection(graphics);
 		verify(graphics).setColor(Color.BLUE);
 		verify(graphics).drawRect(donut.getCenter().getXcoordinate() - 3, donut.getCenter().getYcoordinate() - 3, 6, 6);
 
@@ -69,6 +89,12 @@ public class DonutTests {
 
 		verify(graphics).drawRect(donut.getCenter().getXcoordinate() - 3,
 				donut.getCenter().getYcoordinate() - donut.getRadius() - 3, 6, 6);
+	}
+
+	@Test
+	public void testCalculateArea() {
+		donut.calculateArea();
+		assertTrue(area.equals(donut.getArea()));
 	}
 
 	@Test

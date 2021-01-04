@@ -91,7 +91,7 @@ public class DrawingController {
 
 	public DrawingController() {
 	}
-
+	
 	public void setController(DrawingModel model, DrawingFrame frame) {
 		this.model = model;
 		this.frame = frame;
@@ -120,7 +120,7 @@ public class DrawingController {
 				Shape shape = model.getShapeByIndex(indexOfShape);
 
 				if (shape.contains(click.getX(), click.getY()) && shape.isSelected()) {
-					executeCommand(new CmdDeselect(model.getShapeByIndex(indexOfShape), model));
+					executeCommand(new CmdDeselect(model, model.getShapeByIndex(indexOfShape)));
 					logCommand("Deselect - " + model.getShapeByIndex(indexOfShape).getClass().getSimpleName() + " "
 							+ model.getShapeByIndex(indexOfShape).toString());
 					fireEvents();
@@ -134,7 +134,7 @@ public class DrawingController {
 				} else if (indexOfShape == 0) {
 					for (int j = 0; model.getSelectedShapes().size() > 0;) {
 						Shape deselected = model.getSelectedShapes().get(j);
-						executeCommand(new CmdDeselect(deselected, model));
+						executeCommand(new CmdDeselect(model, deselected));
 						logCommand("Deselect - " + deselected.getClass().getSimpleName() + " " + deselected.toString());
 						fireEvents();
 					}
@@ -889,7 +889,7 @@ public class DrawingController {
 				(Integer.parseInt(logLine[11]) == 0 ? new Color(0, 0, 0, 0)
 						: new Color(Integer.parseInt(logLine[11]))));
 
-		cmdDeselect = new CmdDeselect(point, model);
+		cmdDeselect = new CmdDeselect(model, point);
 		executeCommand(cmdDeselect);
 	}
 
@@ -906,7 +906,7 @@ public class DrawingController {
 				(Integer.parseInt(logLine[29]) == 0 ? new Color(0, 0, 0, 0)
 						: new Color(Integer.parseInt(logLine[29]))));
 
-		cmdDeselect = new CmdDeselect(lineShape, model);
+		cmdDeselect = new CmdDeselect(model, lineShape);
 		executeCommand(cmdDeselect);
 	}
 
@@ -920,7 +920,7 @@ public class DrawingController {
 				(Integer.parseInt(logLine[28]) == 0 ? new Color(0, 0, 0, 0)
 						: new Color(Integer.parseInt(logLine[28]))));
 
-		cmdDeselect = new CmdDeselect(rectangle, model);
+		cmdDeselect = new CmdDeselect(model, rectangle);
 		executeCommand(cmdDeselect);
 	}
 
@@ -933,8 +933,8 @@ public class DrawingController {
 				(Integer.parseInt(logLine[19]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[19]))),
 				(Integer.parseInt(logLine[23]) == 0 ? new Color(0, 0, 0, 0)
 						: new Color(Integer.parseInt(logLine[23]))));
-
-		cmdDeselect = new CmdDeselect(circle, model);
+ 
+		cmdDeselect = new CmdDeselect(model, circle);
 		executeCommand(cmdDeselect);
 	}
 
@@ -948,7 +948,7 @@ public class DrawingController {
 				(Integer.parseInt(logLine[35]) == 0 ? new Color(0, 0, 0, 0)
 						: new Color(Integer.parseInt(logLine[35]))));
 
-		cmdDeselect = new CmdDeselect(donut, model);
+		cmdDeselect = new CmdDeselect(model, donut);
 		executeCommand(cmdDeselect);
 	}
 
@@ -963,7 +963,7 @@ public class DrawingController {
 				(Integer.parseInt(logLine[23]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[23]))),
 				true);
 
-		cmdDeselect = new CmdDeselect(hexagon, model);
+		cmdDeselect = new CmdDeselect(model, hexagon);
 		executeCommand(cmdDeselect);
 	}
 

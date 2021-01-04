@@ -11,8 +11,8 @@ import mvc.DrawingFrame;
 import mvc.DrawingModel;
 
 public class DrawingFrameTests {
-	private DrawingFrame frame;
 	private DrawingController controller;
+	private DrawingFrame frame;
 	private DrawingModel model;
 
 	@Before

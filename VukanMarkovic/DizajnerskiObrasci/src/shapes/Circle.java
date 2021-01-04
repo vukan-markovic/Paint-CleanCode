@@ -23,24 +23,14 @@ public class Circle extends SurfaceShape {
 		setInnerColor(innerColor);
 	}
 
-	public Circle clone() {
-		return new Circle(center.clone(), radius, isSelected(), getInnerColor(), getOuterColor());
-	}
-
 	@Override
 	public void draw(Graphics graphics) {
 		graphics.setColor(getOuterColor());
 		graphics.drawOval(center.getXcoordinate() - radius, center.getYcoordinate() - radius, radius * 2, radius * 2);
 		fillShape(graphics);
 
-		if (isSelected()) {
-			graphics.setColor(Color.BLUE);
-			graphics.drawRect(center.getXcoordinate() - 3, center.getYcoordinate() - 3, 6, 6);
-			graphics.drawRect(center.getXcoordinate() + getRadius() - 3, center.getYcoordinate() - 3, 6, 6);
-			graphics.drawRect(center.getXcoordinate() - getRadius() - 3, center.getYcoordinate() - 3, 6, 6);
-			graphics.drawRect(center.getXcoordinate() - 3, center.getYcoordinate() + radius - 3, 6, 6);
-			graphics.drawRect(center.getXcoordinate() - 3, center.getYcoordinate() - radius - 3, 6, 6);
-		}
+		if (isSelected())
+			drawSelection(graphics);
 	}
 
 	@Override
@@ -49,8 +39,18 @@ public class Circle extends SurfaceShape {
 		graphics.fillOval(center.getXcoordinate() - radius, center.getYcoordinate() - radius, radius * 2, radius * 2);
 	}
 
+	@Override
+	public void drawSelection(Graphics graphics) {
+		graphics.setColor(Color.BLUE);
+		graphics.drawRect(center.getXcoordinate() - 3, center.getYcoordinate() - 3, 6, 6);
+		graphics.drawRect(center.getXcoordinate() + getRadius() - 3, center.getYcoordinate() - 3, 6, 6);
+		graphics.drawRect(center.getXcoordinate() - getRadius() - 3, center.getYcoordinate() - 3, 6, 6);
+		graphics.drawRect(center.getXcoordinate() - 3, center.getYcoordinate() + radius - 3, 6, 6);
+		graphics.drawRect(center.getXcoordinate() - 3, center.getYcoordinate() - radius - 3, 6, 6);
+	}
+
 	public boolean contains(int xCoordinate, int yCoordinate) {
-		return center.distance(xCoordinate, yCoordinate) <= radius;
+		return center.calculateDistance(xCoordinate, yCoordinate) <= radius;
 	}
 
 	public boolean equals(Object object) {
@@ -62,24 +62,28 @@ public class Circle extends SurfaceShape {
 		return false;
 	}
 
-	public Point getCenter() {
-		return center;
+	public Circle clone() {
+		return new Circle(center.clone(), radius, isSelected(), getInnerColor(), getOuterColor());
 	}
 
-	public void setCenter(Point center) {
-		this.center = center;
+	public String toString() {
+		return "Center: " + center + ", radius: " + radius + " , Inner color: " + getInnerColor().getRGB()
+				+ " , Outer color: " + getOuterColor().getRGB();
+	}
+
+	public Point getCenter() {
+		return center;
 	}
 
 	public int getRadius() {
 		return radius;
 	}
 
-	public void setRadius(int radius) {
-		this.radius = radius;
+	public void setCenter(Point center) {
+		this.center = center;
 	}
 
-	public String toString() {
-		return "Center: " + center + ", radius: " + radius + " , Inner color: " + getInnerColor().getRGB()
-				+ " , Outer color: " + getOuterColor().getRGB();
+	public void setRadius(int radius) {
+		this.radius = radius;
 	}
 }

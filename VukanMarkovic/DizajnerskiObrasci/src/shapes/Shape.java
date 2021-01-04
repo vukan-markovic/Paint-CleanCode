@@ -20,17 +20,19 @@ public abstract class Shape implements Cloneable, Serializable {
 	public abstract boolean contains(int xCoordinate, int yCoordinate);
 
 	public abstract void draw(Graphics graphics);
+	
+	public abstract void drawSelection(Graphics graphics);
 
 	public boolean isSelected() {
 		return selected;
 	}
 
-	public void setSelected(boolean selected) {
-		this.selected = selected;
-	}
-
 	public Color getOuterColor() {
 		return outerColor;
+	}
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
 	}
 
 	public void setOuterColor(Color outerColor) {

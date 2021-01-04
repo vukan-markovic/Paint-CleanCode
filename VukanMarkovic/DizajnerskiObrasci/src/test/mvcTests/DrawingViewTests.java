@@ -15,8 +15,8 @@ import shapes.Donut;
 import shapes.Point;
 
 public class DrawingViewTests {
-	private DrawingView view;
 	private DrawingModel model;
+	private DrawingView view;
 	private Point point;
 	private Donut donut;
 	private Graphics2D graphics;

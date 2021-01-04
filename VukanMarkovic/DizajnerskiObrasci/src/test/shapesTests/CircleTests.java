@@ -17,8 +17,8 @@ import shapes.Circle;
 import shapes.Point;
 
 public class CircleTests {
-	private Point center;
 	private int radius;
+	private Point center;
 	private Circle circle;
 	private Circle circleMock;
 	private Graphics graphics;
@@ -55,6 +55,12 @@ public class CircleTests {
 				radius * 2);
 
 		verify(circleMock).fillShape(graphics);
+		verify(circleMock).drawSelection(graphics);
+	}
+
+	@Test
+	public void testDrawSelection() {
+		circle.drawSelection(graphics);
 		verify(graphics).setColor(Color.BLUE);
 		verify(graphics).drawRect(center.getXcoordinate() - 3, center.getYcoordinate() - 3, 6, 6);
 		verify(graphics).drawRect(center.getXcoordinate() + circle.getRadius() - 3, center.getYcoordinate() - 3, 6, 6);

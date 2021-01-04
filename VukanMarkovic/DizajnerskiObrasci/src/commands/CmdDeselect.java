@@ -4,12 +4,12 @@ import mvc.DrawingModel;
 import shapes.Shape;
 
 public class CmdDeselect implements Command {
-	private Shape shape;
 	private DrawingModel model;
-
-	public CmdDeselect(Shape shape, DrawingModel model) {
-		this.shape = shape;
+	private Shape shape;
+	
+	public CmdDeselect(DrawingModel model, Shape shape) {
 		this.model = model;
+		this.shape = shape;
 	}
 
 	@Override

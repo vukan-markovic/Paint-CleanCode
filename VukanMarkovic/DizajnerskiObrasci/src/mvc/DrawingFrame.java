@@ -24,9 +24,10 @@ import javax.swing.border.EmptyBorder;
 
 public class DrawingFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
 	private DrawingView view;
 	private DrawingController controller;
+	private DefaultListModel<String> commandsListModel;
+	private JPanel contentPanel;
 	private final JToggleButton btnPoint;
 	private final JToggleButton btnLine;
 	private final JToggleButton btnRectangle;
@@ -46,7 +47,6 @@ public class DrawingFrame extends JFrame {
 	private final JButton btnToFront;
 	private final JButton btnSave;
 	private final JButton btnLoadPainting;
-	private DefaultListModel<String> commandsListModel;
 	private JButton btnLoadLog;
 	private JButton btnNext;
 	private JTextField fileName;
@@ -55,14 +55,9 @@ public class DrawingFrame extends JFrame {
 		setTitle("Vukan Markoviæ I7 18/2020");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 580, 600);
-		commandsListModel = new DefaultListModel<>();
+
 		view = new DrawingView();
-		contentPane = new JPanel();
-		contentPane.setBackground(SystemColor.menu);
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout());
 		view.setPreferredSize(new Dimension(600, 400));
-		contentPane.add(view, BorderLayout.CENTER);
 		view.setBackground(SystemColor.controlLtHighlight);
 		view.setBounds(10, 256, 325, -227);
 
@@ -89,50 +84,57 @@ public class DrawingFrame extends JFrame {
 			}
 		});
 
+		contentPanel = new JPanel();
+		contentPanel.setBackground(SystemColor.menu);
+		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPanel.setLayout(new BorderLayout());
+		contentPanel.add(view, BorderLayout.CENTER);
+
 		JToolBar topToolBar = new JToolBar();
 		topToolBar.setBounds(3, 5, 429, 24);
-		contentPane.add(topToolBar, BorderLayout.NORTH);
-		ButtonGroup buttonGroup = new ButtonGroup();
+		contentPanel.add(topToolBar, BorderLayout.NORTH);
+
+		ButtonGroup btnGroup = new ButtonGroup();
 
 		btnPoint = new JToggleButton("Point");
 		topToolBar.add(btnPoint);
-		buttonGroup.add(btnPoint);
+		btnGroup.add(btnPoint);
 		btnPoint.setToolTipText("Draw point");
 
 		btnLine = new JToggleButton("Line");
 		topToolBar.add(btnLine);
-		buttonGroup.add(btnLine);
+		btnGroup.add(btnLine);
 		btnLine.setToolTipText("Draw line");
 
 		btnRectangle = new JToggleButton("Rectangle");
 		topToolBar.add(btnRectangle);
-		buttonGroup.add(btnRectangle);
+		btnGroup.add(btnRectangle);
 		btnRectangle.setToolTipText("Draw rectangle");
 
 		btnCircle = new JToggleButton("Circle");
 		topToolBar.add(btnCircle);
-		buttonGroup.add(btnCircle);
+		btnGroup.add(btnCircle);
 		btnCircle.setToolTipText("Draw circle");
 
 		btnDonut = new JToggleButton("Donut");
 		topToolBar.add(btnDonut);
-		buttonGroup.add(btnDonut);
+		btnGroup.add(btnDonut);
 		btnDonut.setToolTipText("Draw donut");
 
 		btnHexagon = new JToggleButton("Hexagon");
 		topToolBar.add(btnHexagon);
-		buttonGroup.add(btnHexagon);
+		btnGroup.add(btnHexagon);
 		btnHexagon.setToolTipText("Draw hexagon");
 
 		btnSelect = new JToggleButton("Select");
 		topToolBar.add(btnSelect);
-		buttonGroup.add(btnSelect);
+		btnGroup.add(btnSelect);
 		btnSelect.setToolTipText("Select shape");
 
 		btnModify = new JButton("Modify");
 		btnModify.setEnabled(false);
 		topToolBar.add(btnModify);
-		buttonGroup.add(btnModify);
+		btnGroup.add(btnModify);
 		btnModify.setToolTipText("Modify shape");
 
 		btnModify.addActionListener(new ActionListener() {
@@ -145,24 +147,24 @@ public class DrawingFrame extends JFrame {
 		btnDelete.setEnabled(false);
 		btnDelete.setToolTipText("Delete shape");
 		topToolBar.add(btnDelete);
-		buttonGroup.add(btnDelete);
+		btnGroup.add(btnDelete);
 
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				controller.btnRemoveClicked();
 			}
 		});
-		
+
 		JToolBar rightToolBar = new JToolBar();
 		rightToolBar.setOrientation(SwingConstants.VERTICAL);
 		rightToolBar.setBounds(345, 21, 87, 288);
-		contentPane.add(rightToolBar, BorderLayout.EAST);
-		
+		contentPanel.add(rightToolBar, BorderLayout.EAST);
+
 		btnOuterColor = new JButton("Set outer color");
 		btnOuterColor.setBackground(Color.BLACK);
 		btnOuterColor.setToolTipText("Set outer draw color");
 		rightToolBar.add(btnOuterColor);
-		
+
 		btnOuterColor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				controller.chooseOuterColor();
@@ -173,7 +175,7 @@ public class DrawingFrame extends JFrame {
 		btnInnerColor.setBackground(Color.WHITE);
 		btnInnerColor.setToolTipText("Set inner draw color");
 		rightToolBar.add(btnInnerColor);
-		
+
 		btnInnerColor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				controller.chooseInnerColor();
@@ -184,7 +186,7 @@ public class DrawingFrame extends JFrame {
 		btnUndo.setEnabled(false);
 		btnUndo.setToolTipText("Undo command");
 		rightToolBar.add(btnUndo);
-		
+
 		btnUndo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				controller.btnUndoClicked();
@@ -195,7 +197,7 @@ public class DrawingFrame extends JFrame {
 		btnRedo.setEnabled(false);
 		btnRedo.setToolTipText("Redo command");
 		rightToolBar.add(btnRedo);
-		
+
 		btnRedo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				controller.btnRedoClicked();
@@ -206,7 +208,7 @@ public class DrawingFrame extends JFrame {
 		btnSendToBack.setEnabled(false);
 		btnSendToBack.setToolTipText("Send shape to back");
 		rightToolBar.add(btnSendToBack);
-				
+
 		btnSendToBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				controller.btnSendToBackClicked();
@@ -217,18 +219,18 @@ public class DrawingFrame extends JFrame {
 		btnBringToFront.setEnabled(false);
 		btnBringToFront.setToolTipText("Bring shape to front");
 		rightToolBar.add(btnBringToFront);
-		
+
 		btnBringToFront.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				controller.btnBringToFrontClicked();
 			}
 		});
-	
+
 		btnToBack = new JButton("To back");
 		btnToBack.setEnabled(false);
 		btnToBack.setToolTipText("Move shape to back");
 		rightToolBar.add(btnToBack);
-		
+
 		btnToBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				controller.btnToBackClicked();
@@ -239,7 +241,7 @@ public class DrawingFrame extends JFrame {
 		btnToFront.setEnabled(false);
 		btnToFront.setToolTipText("Move shape to front");
 		rightToolBar.add(btnToFront);
-		
+
 		btnToFront.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				controller.btnToFrontClicked();
@@ -249,17 +251,17 @@ public class DrawingFrame extends JFrame {
 		btnSave = new JButton("Save");
 		btnSave.setToolTipText("Save painting and log");
 		rightToolBar.add(btnSave);
-		
+
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				controller.save();
 			}
 		});
-	
+
 		btnLoadLog = new JButton("Load log");
 		btnLoadLog.setToolTipText("Load log file");
 		rightToolBar.add(btnLoadLog);
-		
+
 		btnLoadLog.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				controller.loadLog();
@@ -269,7 +271,7 @@ public class DrawingFrame extends JFrame {
 		btnLoadPainting = new JButton("Load painting");
 		btnLoadPainting.setToolTipText("Load painting file");
 		rightToolBar.add(btnLoadPainting);
-		
+
 		btnLoadPainting.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				controller.loadPainting();
@@ -279,13 +281,13 @@ public class DrawingFrame extends JFrame {
 		btnNext = new JButton("Next");
 		btnNext.setEnabled(false);
 		rightToolBar.add(btnNext);
-		
+
 		btnNext.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				controller.executeCommandFromLog();
 			}
 		});
-	
+
 		fileName = new JTextField();
 		rightToolBar.add(fileName);
 		fileName.setText("Painting");
@@ -293,37 +295,27 @@ public class DrawingFrame extends JFrame {
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(3, 256, 342, 53);
-		contentPane.add(scrollPane, BorderLayout.PAGE_END);
+		contentPanel.add(scrollPane, BorderLayout.PAGE_END);
 		scrollPane.setPreferredSize(new Dimension(0, 140));
 
+		commandsListModel = new DefaultListModel<>();
 		JList<String> commandsList = new JList<String>();
 		scrollPane.setViewportView(commandsList);
 		commandsList.setModel(commandsListModel);
-		setContentPane(contentPane);
-	}
 
-	public JTextField getFileName() {
-		return fileName;
-	}
-
-	public DefaultListModel<String> getCommandsListModel() {
-		return commandsListModel;
-	}
-
-	public DrawingController getController() {
-		return controller;
-	}
-
-	public void setController(DrawingController controller) {
-		this.controller = controller;
+		setContentPane(contentPanel);
 	}
 
 	public DrawingView getView() {
 		return view;
 	}
 
-	public JButton getBtnNext() {
-		return btnNext;
+	public DrawingController getController() {
+		return controller;
+	}
+
+	public DefaultListModel<String> getCommandsListModel() {
+		return commandsListModel;
 	}
 
 	public JToggleButton getBtnPoint() {
@@ -398,11 +390,23 @@ public class DrawingFrame extends JFrame {
 		return btnSave;
 	}
 
+	public JButton getBtnLoadPainting() {
+		return btnLoadPainting;
+	}
+
 	public JButton getBtnLoadLog() {
 		return btnLoadLog;
 	}
 
-	public JButton getBtnLoadPainting() {
-		return btnLoadPainting;
+	public JButton getBtnNext() {
+		return btnNext;
+	}
+
+	public JTextField getFileName() {
+		return fileName;
+	}
+
+	public void setController(DrawingController controller) {
+		this.controller = controller;
 	}
 }

@@ -82,32 +82,6 @@ public class DialogRectangleTests {
 	}
 
 	@Test
-	public void testWidthInvalidInput() {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				dialogRectangle.setVisible(true);
-				dialogRectangle.getwidth().requestFocusInWindow();
-				robot.keyPress(KeyEvent.VK_W);
-				assertFalse(dialogRectangle.getwidth().getText().contains("W"));
-			}
-		});
-	}
-
-	@Test
-	public void testWidth() {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				dialogRectangle.setVisible(true);
-				dialogRectangle.getwidth().requestFocusInWindow();
-				robot.keyPress(KeyEvent.VK_3);
-				assertFalse(dialogRectangle.getwidth().getText().contains("3"));
-			}
-		});
-	}
-
-	@Test
 	public void testHeightInvalidInput() {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
@@ -129,6 +103,32 @@ public class DialogRectangleTests {
 				dialogRectangle.getheight().requestFocusInWindow();
 				robot.keyPress(KeyEvent.VK_3);
 				assertFalse(dialogRectangle.getheight().getText().contains("3"));
+			}
+		});
+	}
+	
+	@Test
+	public void testWidthInvalidInput() {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				dialogRectangle.setVisible(true);
+				dialogRectangle.getwidth().requestFocusInWindow();
+				robot.keyPress(KeyEvent.VK_W);
+				assertFalse(dialogRectangle.getwidth().getText().contains("W"));
+			}
+		});
+	}
+
+	@Test
+	public void testWidth() {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				dialogRectangle.setVisible(true);
+				dialogRectangle.getwidth().requestFocusInWindow();
+				robot.keyPress(KeyEvent.VK_3);
+				assertFalse(dialogRectangle.getwidth().getText().contains("3"));
 			}
 		});
 	}

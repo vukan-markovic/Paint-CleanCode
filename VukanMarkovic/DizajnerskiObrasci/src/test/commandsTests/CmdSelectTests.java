@@ -13,8 +13,8 @@ import shapes.Point;
 import shapes.Shape;
 
 public class CmdSelectTests {
-	private Shape shape;
 	private DrawingModel model;
+	private Shape shape;
 	private CmdSelect cmdSelect;
 
 	@Before

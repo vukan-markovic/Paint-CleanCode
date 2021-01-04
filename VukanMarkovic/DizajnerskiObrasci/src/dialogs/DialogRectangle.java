@@ -30,70 +30,27 @@ public class DialogRectangle extends JDialog {
 	private JTextField yCoordinateOfUpperLeftPoint;
 	private JTextField height;
 	private JTextField width;
-	private boolean accepted = false;
 	private JButton btnOuterColor;
 	private JButton btnInnerColor;
-	private JButton btnCancel;
 	private JButton btnOk;
+	private JButton btnCancel;
 	private Color outerColor;
 	private Color innerColor;
+	private boolean accepted;
 
 	public DialogRectangle() {
+		outerColor = Color.BLACK;
+		innerColor = Color.WHITE;
 		setTitle("Rectangle dialog");
 		setModal(true);
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
-		outerColor = Color.BLACK;
-		innerColor = Color.WHITE;
 		contentPanel = new JPanel();
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		{
-			height = new JTextField();
 
-			height.addKeyListener(new KeyAdapter() {
-				@Override
-				public void keyTyped(KeyEvent event) {
-					char heightInputChar = event.getKeyChar();
-
-					if (!((heightInputChar >= '0') && (heightInputChar <= '9')
-							|| (heightInputChar == KeyEvent.VK_BACK_SPACE)
-							|| (heightInputChar == KeyEvent.VK_DELETE))) {
-						getToolkit().beep();
-						event.consume();
-					}
-				}
-			});
-
-			height.setColumns(10);
-		}
-
-		width = new JTextField();
-
-		width.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent event) {
-				char widthInputChar = event.getKeyChar();
-
-				if (!((widthInputChar >= '0') && (widthInputChar <= '9') || (widthInputChar == KeyEvent.VK_BACK_SPACE)
-						|| (widthInputChar == KeyEvent.VK_DELETE))) {
-					getToolkit().beep();
-					event.consume();
-				}
-			}
-		});
-
-		width.setColumns(10);
 		xCoordinateOfUpperLeftPoint = new JTextField();
 		xCoordinateOfUpperLeftPoint.setColumns(10);
-		yCoordinateOfUpperLeftPoint = new JTextField();
-		yCoordinateOfUpperLeftPoint.setColumns(10);
-		JLabel lblHeight = new JLabel("Height:");
-		JLabel lblWidth = new JLabel("Width:");
-		JLabel lblX = new JLabel("X:");
-		JLabel lblY = new JLabel("Y:");
-		btnOuterColor = new JButton("Outer color");
 
 		xCoordinateOfUpperLeftPoint.addKeyListener(new KeyAdapter() {
 			@Override
@@ -109,6 +66,9 @@ public class DialogRectangle extends JDialog {
 			}
 		});
 
+		yCoordinateOfUpperLeftPoint = new JTextField();
+		yCoordinateOfUpperLeftPoint.setColumns(10);
+
 		yCoordinateOfUpperLeftPoint.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent event) {
@@ -122,6 +82,40 @@ public class DialogRectangle extends JDialog {
 				}
 			}
 		});
+
+		height = new JTextField();
+		height.setColumns(10);
+
+		height.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent event) {
+				char heightInputChar = event.getKeyChar();
+
+				if (!((heightInputChar >= '0') && (heightInputChar <= '9')
+						|| (heightInputChar == KeyEvent.VK_BACK_SPACE) || (heightInputChar == KeyEvent.VK_DELETE))) {
+					getToolkit().beep();
+					event.consume();
+				}
+			}
+		});
+
+		width = new JTextField();
+		width.setColumns(10);
+
+		width.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent event) {
+				char widthInputChar = event.getKeyChar();
+
+				if (!((widthInputChar >= '0') && (widthInputChar <= '9') || (widthInputChar == KeyEvent.VK_BACK_SPACE)
+						|| (widthInputChar == KeyEvent.VK_DELETE))) {
+					getToolkit().beep();
+					event.consume();
+				}
+			}
+		});
+
+		btnOuterColor = new JButton("Outer color");
 
 		btnOuterColor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
@@ -139,20 +133,26 @@ public class DialogRectangle extends JDialog {
 			}
 		});
 
+		JLabel lblHeight = new JLabel("Height:");
+		JLabel lblWidth = new JLabel("Width:");
+		JLabel lblX = new JLabel("X:");
+		JLabel lblY = new JLabel("Y:");
+
 		JLabel lblIcon = new JLabel("");
 		lblIcon.setHorizontalAlignment(SwingConstants.CENTER);
 		lblIcon.setIcon(new ImageIcon(new ImageIcon(this.getClass().getResource("/rect.png")).getImage()));
-		GroupLayout gl_contentPanel = new GroupLayout(contentPanel);
 
-		gl_contentPanel.setHorizontalGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPanel.createSequentialGroup().addGap(25)
-						.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING).addComponent(lblX)
+		GroupLayout glContentPanel = new GroupLayout(contentPanel);
+
+		glContentPanel.setHorizontalGroup(glContentPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(glContentPanel.createSequentialGroup().addGap(25)
+						.addGroup(glContentPanel.createParallelGroup(Alignment.TRAILING).addComponent(lblX)
 								.addComponent(lblY).addComponent(lblHeight).addComponent(lblWidth))
 						.addGap(18)
-						.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING)
+						.addGroup(glContentPanel.createParallelGroup(Alignment.TRAILING)
 								.addComponent(yCoordinateOfUpperLeftPoint, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
+								.addGroup(glContentPanel.createParallelGroup(Alignment.LEADING)
 										.addComponent(width, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 												GroupLayout.PREFERRED_SIZE)
 										.addComponent(xCoordinateOfUpperLeftPoint, GroupLayout.PREFERRED_SIZE,
@@ -160,12 +160,14 @@ public class DialogRectangle extends JDialog {
 										.addComponent(height, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 												GroupLayout.PREFERRED_SIZE)))
 						.addPreferredGap(ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
-						.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING)
-								.addGroup(gl_contentPanel.createSequentialGroup()
-										.addComponent(lblIcon, GroupLayout.PREFERRED_SIZE, 145,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(39))
-								.addGroup(gl_contentPanel.createSequentialGroup().addGroup(gl_contentPanel
+						.addGroup(glContentPanel.createParallelGroup(Alignment.TRAILING)
+								.addGroup(
+										glContentPanel
+												.createSequentialGroup()
+												.addComponent(lblIcon, GroupLayout.PREFERRED_SIZE, 145,
+														GroupLayout.PREFERRED_SIZE)
+												.addGap(39))
+								.addGroup(glContentPanel.createSequentialGroup().addGroup(glContentPanel
 										.createParallelGroup(Alignment.TRAILING, false)
 										.addComponent(btnInnerColor, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
 												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -173,77 +175,69 @@ public class DialogRectangle extends JDialog {
 												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 										.addGap(63)))));
 
-		gl_contentPanel
-				.setVerticalGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING)
-						.addGroup(gl_contentPanel.createSequentialGroup().addGap(37).addGroup(gl_contentPanel
-								.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPanel.createSequentialGroup()
-										.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
-												.addComponent(xCoordinateOfUpperLeftPoint, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addComponent(lblX))
-										.addGap(18)
-										.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
-												.addComponent(yCoordinateOfUpperLeftPoint, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addComponent(lblY))
-										.addGap(18)
-										.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
-												.addComponent(height, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addComponent(lblHeight)))
-								.addComponent(lblIcon, GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-										.addGroup(gl_contentPanel.createSequentialGroup().addGap(18)
-												.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
-														.addComponent(width, GroupLayout.PREFERRED_SIZE,
-																GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-														.addComponent(lblWidth)))
-										.addGroup(gl_contentPanel.createSequentialGroup().addGap(3)
-												.addComponent(btnOuterColor).addPreferredGap(ComponentPlacement.RELATED)
-												.addComponent(btnInnerColor)))
-								.addContainerGap(30, Short.MAX_VALUE)));
+		glContentPanel.setVerticalGroup(glContentPanel.createParallelGroup(Alignment.TRAILING).addGroup(glContentPanel
+				.createSequentialGroup().addGap(37)
+				.addGroup(glContentPanel.createParallelGroup(Alignment.LEADING).addGroup(glContentPanel
+						.createSequentialGroup()
+						.addGroup(glContentPanel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(xCoordinateOfUpperLeftPoint, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblX))
+						.addGap(18)
+						.addGroup(glContentPanel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(yCoordinateOfUpperLeftPoint, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblY))
+						.addGap(18)
+						.addGroup(glContentPanel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(height, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblHeight)))
+						.addComponent(lblIcon, GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE))
+				.addGroup(glContentPanel.createParallelGroup(Alignment.LEADING)
+						.addGroup(glContentPanel.createSequentialGroup().addGap(18)
+								.addGroup(glContentPanel.createParallelGroup(Alignment.BASELINE)
+										.addComponent(width, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(lblWidth)))
+						.addGroup(glContentPanel.createSequentialGroup().addGap(3).addComponent(btnOuterColor)
+								.addPreferredGap(ComponentPlacement.RELATED).addComponent(btnInnerColor)))
+				.addContainerGap(30, Short.MAX_VALUE)));
 
-		contentPanel.setLayout(gl_contentPanel);
-		{
-			JPanel buttonPane = new JPanel();
-			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		contentPanel.setLayout(glContentPanel);
 
-			getContentPane().add(buttonPane, BorderLayout.SOUTH);
-			{
-				btnOk = new JButton("OK");
+		JPanel btnPanel = new JPanel();
+		btnPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		getContentPane().add(btnPanel, BorderLayout.SOUTH);
 
-				btnOk.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent event) {
-						if ((width.getText().isBlank() || height.getText().isBlank()
-								|| xCoordinateOfUpperLeftPoint.getText().isBlank()
-								|| yCoordinateOfUpperLeftPoint.getText().isBlank()))
-							JOptionPane.showMessageDialog(new JFrame(),
-									"You have not filled in all the fields, try again!", "Error!",
-									JOptionPane.ERROR_MESSAGE);
-						else {
-							accepted = true;
-							setVisible(false);
-						}
-					}
-				});
+		btnOk = new JButton("OK");
+		btnOk.setActionCommand("OK");
+		btnPanel.add(btnOk);
+		getRootPane().setDefaultButton(btnOk);
 
-				btnOk.setActionCommand("OK");
-				buttonPane.add(btnOk);
-				getRootPane().setDefaultButton(btnOk);
+		btnOk.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				if ((width.getText().isBlank() || height.getText().isBlank()
+						|| xCoordinateOfUpperLeftPoint.getText().isBlank()
+						|| yCoordinateOfUpperLeftPoint.getText().isBlank()))
+					JOptionPane.showMessageDialog(new JFrame(), "You have not filled in all the fields, try again!",
+							"Error!", JOptionPane.ERROR_MESSAGE);
+				else {
+					accepted = true;
+					setVisible(false);
+				}
 			}
-			{
-				btnCancel = new JButton("Cancel");
+		});
 
-				btnCancel.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent event) {
-						dispose();
-					}
-				});
+		btnCancel = new JButton("Cancel");
+		btnCancel.setActionCommand("Cancel");
+		btnPanel.add(btnCancel);
 
-				btnCancel.setActionCommand("Cancel");
-				buttonPane.add(btnCancel);
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				dispose();
 			}
-		}
+		});
 	}
 
 	public JTextField getXcoordinateOfUpperLeftPoint() {
@@ -258,68 +252,68 @@ public class DialogRectangle extends JDialog {
 		return height;
 	}
 
-	public void setHeight(JTextField height) {
-		this.height = height;
-	}
-
 	public JTextField getwidth() {
 		return width;
-	}
-
-	public void setWidth(JTextField width) {
-		this.width = width;
 	}
 
 	public JButton getBtnOuterColor() {
 		return btnOuterColor;
 	}
 
-	public void setBtnOuterColor(JButton btnOuterColor) {
-		this.btnOuterColor = btnOuterColor;
-	}
-
 	public JButton getBtnInnerColor() {
 		return btnInnerColor;
-	}
-
-	public void setBtnInnerColor(JButton btnInnerColor) {
-		this.btnInnerColor = btnInnerColor;
-	}
-
-	public JButton getBtnCancel() {
-		return btnCancel;
-	}
-
-	public void setBtnCancel(JButton btnCancel) {
-		this.btnCancel = btnCancel;
 	}
 
 	public JButton getBtnOk() {
 		return btnOk;
 	}
 
-	public void setOkButton(JButton btnOk) {
-		this.btnOk = btnOk;
+	public JButton getBtnCancel() {
+		return btnCancel;
 	}
 
 	public Color getOuterColor() {
 		return outerColor;
 	}
 
-	public void setOuterColor(Color outerColor) {
-		this.outerColor = outerColor;
-	}
-
 	public Color getInnerColor() {
 		return innerColor;
 	}
 
-	public void setInnerColor(Color innerColor) {
-		this.innerColor = innerColor;
-	}
-
 	public boolean isAccepted() {
 		return accepted;
+	}
+
+	public void setHeight(JTextField height) {
+		this.height = height;
+	}
+
+	public void setWidth(JTextField width) {
+		this.width = width;
+	}
+
+	public void setBtnOuterColor(JButton btnOuterColor) {
+		this.btnOuterColor = btnOuterColor;
+	}
+
+	public void setBtnInnerColor(JButton btnInnerColor) {
+		this.btnInnerColor = btnInnerColor;
+	}
+
+	public void setBtnCancel(JButton btnCancel) {
+		this.btnCancel = btnCancel;
+	}
+
+	public void setOkButton(JButton btnOk) {
+		this.btnOk = btnOk;
+	}
+
+	public void setOuterColor(Color outerColor) {
+		this.outerColor = outerColor;
+	}
+
+	public void setInnerColor(Color innerColor) {
+		this.innerColor = innerColor;
 	}
 
 	public void setAccepted(boolean accepted) {

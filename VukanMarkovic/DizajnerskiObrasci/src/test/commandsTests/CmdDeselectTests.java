@@ -13,8 +13,8 @@ import shapes.Point;
 import shapes.Shape;
 
 public class CmdDeselectTests {
-	private Shape shape;
 	private DrawingModel model;
+	private Shape shape;
 	private CmdDeselect cmdDeselect;
 
 	@Before
@@ -23,7 +23,7 @@ public class CmdDeselectTests {
 		shape = new Point();
 		model.addShape(shape);
 		model.selectShape(shape);
-		cmdDeselect = new CmdDeselect(shape, model);
+		cmdDeselect = new CmdDeselect(model, shape);
 	}
 
 	@Test
@@ -31,7 +31,7 @@ public class CmdDeselectTests {
 		Line line = new Line(new Point(1, 1), new Point(2, 2));
 		model.addShape(line);
 		model.selectShape(line);
-		cmdDeselect = new CmdDeselect(shape, model);
+		cmdDeselect = new CmdDeselect(model, shape);
 		cmdDeselect.execute();
 		assertTrue(model.getShapeByIndex(model.getIndexOfShape(line)).isSelected());
 		assertTrue(model.getSelectedShapes().contains(line));
@@ -53,7 +53,7 @@ public class CmdDeselectTests {
 	public void testUnexecuteShapeIsNotEqual() {
 		Line line = new Line(new Point(1, 1), new Point(2, 2));
 		model.addShape(line);
-		cmdDeselect = new CmdDeselect(shape, model);
+		cmdDeselect = new CmdDeselect(model, shape);
 		cmdDeselect.unexecute();
 		assertFalse(model.getShapeByIndex(model.getIndexOfShape(line)).isSelected());
 		assertFalse(model.getSelectedShapes().contains(line));

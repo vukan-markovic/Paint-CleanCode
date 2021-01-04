@@ -32,26 +32,6 @@ public class DrawingModel {
 		return null;
 	}
 
-	public int getIndexOfShape(Shape shape) {
-		return shapes.indexOf(shape);
-	}
-
-	public List<Shape> getSelectedShapes() {
-		return selectedShapes;
-	}
-
-	public void setSelectedShapes(List<Shape> selectedShapes) {
-		this.selectedShapes = selectedShapes;
-	}
-
-	public void setShapes(List<Shape> shapes) {
-		this.shapes = shapes;
-	}
-
-	public List<Shape> getShapes() {
-		return shapes;
-	}
-
 	public void addShape(Shape shape) {
 		shapes.add(shape);
 	}
@@ -60,7 +40,27 @@ public class DrawingModel {
 		shapes.remove(shape);
 	}
 
+	public int getIndexOfShape(Shape shape) {
+		return shapes.indexOf(shape);
+	}
+
 	public Shape getShapeByIndex(int indexOfShape) {
 		return shapes.get(indexOfShape);
+	}
+
+	public List<Shape> getShapes() {
+		return shapes;
+	}
+
+	public List<Shape> getSelectedShapes() {
+		return selectedShapes;
+	}
+
+	public void setShapes(List<Shape> shapes) {
+		this.shapes = shapes;
+	}
+
+	public void setSelectedShapes(List<Shape> selectedShapes) {
+		this.selectedShapes = selectedShapes;
 	}
 }

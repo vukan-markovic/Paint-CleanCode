@@ -20,34 +20,43 @@ public class Donut extends Circle {
 		setSelected(selected);
 	}
 
-	public Donut clone() {
-		return new Donut(getCenter().clone(), getRadius(), innerRadius, isSelected(), getInnerColor(), getOuterColor());
-	}
-
 	public void draw(Graphics graphics, Graphics2D graphics2d) {
-		area = new Area(new Ellipse2D.Double(getCenter().getXcoordinate() - getRadius(), getCenter().getYcoordinate() - getRadius(),
-				getRadius() * 2, getRadius() * 2));
-
-		area.subtract(new Area(new Ellipse2D.Double((getCenter().getXcoordinate() - innerRadius),
-				(getCenter().getYcoordinate() - innerRadius), innerRadius * 2, innerRadius * 2)));
+		calculateArea();
 
 		graphics.setColor(getOuterColor());
 		graphics2d.draw(area);
+
+		fillShape(graphics, graphics2d);
+
+		if (isSelected())
+			drawSelection(graphics);
+	}
+
+	public void fillShape(Graphics graphics, Graphics2D graphics2d) {
 		graphics.setColor(getInnerColor());
 		graphics2d.fill(area);
+	}
 
-		if (isSelected()) {
-			graphics.setColor(Color.BLUE);
-			graphics.drawRect(getCenter().getXcoordinate() - 3, getCenter().getYcoordinate() - 3, 6, 6);
-			graphics.drawRect(getCenter().getXcoordinate() + getRadius() - 3, getCenter().getYcoordinate() - 3, 6, 6);
-			graphics.drawRect(getCenter().getXcoordinate() - getRadius() - 3, getCenter().getYcoordinate() - 3, 6, 6);
-			graphics.drawRect(getCenter().getXcoordinate() - 3, getCenter().getYcoordinate() + getRadius() - 3, 6, 6);
-			graphics.drawRect(getCenter().getXcoordinate() - 3, getCenter().getYcoordinate() - getRadius() - 3, 6, 6);
-		}
+	public void drawSelection(Graphics graphics) {
+		graphics.setColor(Color.BLUE);
+		graphics.drawRect(getCenter().getXcoordinate() - 3, getCenter().getYcoordinate() - 3, 6, 6);
+		graphics.drawRect(getCenter().getXcoordinate() + getRadius() - 3, getCenter().getYcoordinate() - 3, 6, 6);
+		graphics.drawRect(getCenter().getXcoordinate() - getRadius() - 3, getCenter().getYcoordinate() - 3, 6, 6);
+		graphics.drawRect(getCenter().getXcoordinate() - 3, getCenter().getYcoordinate() + getRadius() - 3, 6, 6);
+		graphics.drawRect(getCenter().getXcoordinate() - 3, getCenter().getYcoordinate() - getRadius() - 3, 6, 6);
+	}
+
+	public void calculateArea() {
+		area = new Area(new Ellipse2D.Double(getCenter().getXcoordinate() - getRadius(),
+				getCenter().getYcoordinate() - getRadius(), getRadius() * 2, getRadius() * 2));
+
+		area.subtract(new Area(new Ellipse2D.Double((getCenter().getXcoordinate() - innerRadius),
+				(getCenter().getYcoordinate() - innerRadius), innerRadius * 2, innerRadius * 2)));
 	}
 
 	public boolean contains(int xCoordinate, int yCoordinate) {
-		return super.contains(xCoordinate, yCoordinate) && getCenter().distance(xCoordinate, yCoordinate) > innerRadius;
+		return super.contains(xCoordinate, yCoordinate)
+				&& getCenter().calculateDistance(xCoordinate, yCoordinate) > innerRadius;
 	}
 
 	public boolean equals(Object object) {
@@ -62,20 +71,24 @@ public class Donut extends Circle {
 		return false;
 	}
 
-	public int getInnerRadius() {
-		return innerRadius;
-	}
-
-	public void setInnerRadius(int innerRadius) {
-		this.innerRadius = innerRadius;
-	}
-
-	public Area getDonutArea() {
-		return area;
+	public Donut clone() {
+		return new Donut(getCenter().clone(), getRadius(), innerRadius, isSelected(), getInnerColor(), getOuterColor());
 	}
 
 	public String toString() {
 		return super.toString() + " , inner radius: " + innerRadius + " , Inner color: " + getInnerColor().getRGB()
 				+ " , Outer color: " + getOuterColor().getRGB();
+	}
+
+	public int getInnerRadius() {
+		return innerRadius;
+	}
+
+	public Area getArea() {
+		return area;
+	}
+
+	public void setInnerRadius(int innerRadius) {
+		this.innerRadius = innerRadius;
 	}
 }
