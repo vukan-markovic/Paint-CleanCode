@@ -5,6 +5,7 @@ import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -91,7 +92,7 @@ public class DrawingController {
 
 	public DrawingController() {
 	}
-	
+
 	public void setController(DrawingModel model, DrawingFrame frame) {
 		this.model = model;
 		this.frame = frame;
@@ -558,14 +559,14 @@ public class DrawingController {
 	}
 
 	public void chooseOuterColor() {
-		outerColor = JColorChooser.showDialog(null, "Choose a color!", outerColor);
+		outerColor = JColorChooser.showDialog(frame, "Choose a color!", outerColor);
 
 		if (outerColor != null)
 			frame.getBtnOuterColor().setBackground(outerColor);
 	}
 
 	public void chooseInnerColor() {
-		innerColor = JColorChooser.showDialog(null, "Choose a color!", innerColor);
+		innerColor = JColorChooser.showDialog(frame, "Choose a color!", innerColor);
 
 		if (innerColor != null)
 			frame.getBtnInnerColor().setBackground(innerColor);
@@ -658,7 +659,7 @@ public class DrawingController {
 
 	public void save() {
 		if (model.getShapes().size() == 0) {
-			JOptionPane.showMessageDialog(null, "You can't save because you haven't draw anythig yet!", "Error",
+			JOptionPane.showMessageDialog(frame, "You can't save because you haven't draw anythig yet!", "Error",
 					JOptionPane.ERROR_MESSAGE);
 			return;
 		}
@@ -688,25 +689,28 @@ public class DrawingController {
 	}
 
 	public void addLog() {
-		try {
-			BufferedReader reader = new BufferedReader(new FileReader(fileChooser.getSelectedFile().getAbsolutePath()));
-			String line = "";
+		try (BufferedReader reader = new BufferedReader(
+				new FileReader(fileChooser.getSelectedFile().getAbsolutePath()))) {
+			String logLine = "";
 
-			while ((line = reader.readLine()) != null)
-				commandsLog.add(line);
-		} catch (Exception exception) {
+			while ((logLine = reader.readLine()) != null)
+				commandsLog.add(logLine);
+		} catch (IOException exception) {
+			commandsLog.clear();
 			System.out.println(exception.getMessage());
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	public void addPainting() {
-		try {
-			ObjectInputStream inputStream = new ObjectInputStream(
-					new FileInputStream(fileChooser.getSelectedFile().getAbsoluteFile()));
+		try (ObjectInputStream inputStream = new ObjectInputStream(
+				new FileInputStream(fileChooser.getSelectedFile().getAbsoluteFile()))) {
 			model.setShapes((ArrayList<Shape>) inputStream.readObject());
 			frame.getView().repaint();
-		} catch (Exception exception) {
+		} catch (IOException exception) {
+			System.out.println(exception.getMessage());
+		} catch (ClassNotFoundException exception) {
+			model.getShapes().clear();
 			System.out.println(exception.getMessage());
 		}
 	}
@@ -933,7 +937,7 @@ public class DrawingController {
 				(Integer.parseInt(logLine[19]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[19]))),
 				(Integer.parseInt(logLine[23]) == 0 ? new Color(0, 0, 0, 0)
 						: new Color(Integer.parseInt(logLine[23]))));
- 
+
 		cmdDeselect = new CmdDeselect(model, circle);
 		executeCommand(cmdDeselect);
 	}

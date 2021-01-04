@@ -9,10 +9,8 @@ public class SaveLog implements Save {
 
 	@Override
 	public void saveFile(String filePath) {
-		try {
-			BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
 			writer.write(commandsLog);
-			writer.close();
 		} catch (IOException exception) {
 			System.out.println(exception.getMessage());
 		}

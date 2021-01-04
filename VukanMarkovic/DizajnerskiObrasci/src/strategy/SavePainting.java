@@ -12,10 +12,8 @@ public class SavePainting implements Save {
 
 	@Override
 	public void saveFile(String filePath) {
-		try {
-			ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(filePath));
+		try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(filePath))) {
 			outputStream.writeObject(shapes);
-			outputStream.close();
 		} catch (IOException exception) {
 			System.out.println(exception.getMessage());
 		}

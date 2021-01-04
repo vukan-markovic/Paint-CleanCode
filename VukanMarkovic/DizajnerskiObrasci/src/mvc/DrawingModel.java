@@ -24,12 +24,7 @@ public class DrawingModel {
 	}
 
 	public Shape getFirstSelectedShape() {
-		for (Shape shape : shapes) {
-			if (shape != null && shape.isSelected())
-				return shape;
-		}
-
-		return null;
+		return shapes.stream().filter(shape -> shape.isSelected()).findFirst().get();
 	}
 
 	public void addShape(Shape shape) {
