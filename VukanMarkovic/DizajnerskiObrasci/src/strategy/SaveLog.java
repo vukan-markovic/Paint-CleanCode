@@ -1,8 +1,6 @@
 package strategy;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 public class SaveLog implements Save {
 	private String commandsLog;

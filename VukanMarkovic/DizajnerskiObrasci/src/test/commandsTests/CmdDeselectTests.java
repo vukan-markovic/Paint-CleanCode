@@ -1,16 +1,10 @@
 package test.commandsTests;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Before;
-import org.junit.Test;
-
+import static org.junit.Assert.*;
+import org.junit.*;
+import shapes.*;
 import commands.CmdDeselect;
 import mvc.DrawingModel;
-import shapes.Line;
-import shapes.Point;
-import shapes.Shape;
 
 public class CmdDeselectTests {
 	private DrawingModel model;
@@ -20,7 +14,7 @@ public class CmdDeselectTests {
 	@Before
 	public void setUp() {
 		model = new DrawingModel();
-		shape = new Point();
+		shape = new Point(1, 2);
 		model.addShape(shape);
 		model.selectShape(shape);
 		cmdDeselect = new CmdDeselect(model, shape);

@@ -16,13 +16,13 @@ public class CmdSendToBack implements Command {
 	@Override
 	public void execute() {
 		indexOfShape = model.getIndexOfShape(shape);
-		model.getShapes().remove(shape);
-		model.getShapes().add(0, shape);
+		model.removeShape(shape);
+		model.addShapeToIndex(0, shape);
 	}
 
 	@Override
 	public void unexecute() {
-		model.getShapes().remove(0);
-		model.getShapes().add(indexOfShape, shape);
+		model.removeShapeAtIndex(0);
+		model.addShapeToIndex(indexOfShape, shape);
 	}
 }

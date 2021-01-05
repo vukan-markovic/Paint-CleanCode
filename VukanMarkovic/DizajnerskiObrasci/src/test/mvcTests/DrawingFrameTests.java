@@ -1,14 +1,8 @@
 package test.mvcTests;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import mvc.DrawingController;
-import mvc.DrawingFrame;
-import mvc.DrawingModel;
+import static org.mockito.Mockito.*;
+import org.junit.*;
+import mvc.*;
 
 public class DrawingFrameTests {
 	private DrawingController controller;

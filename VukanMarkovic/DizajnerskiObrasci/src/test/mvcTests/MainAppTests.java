@@ -1,17 +1,9 @@
 package test.mvcTests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
+import static org.junit.Assert.*;
+import org.junit.*;
+import mvc.*;
 import javax.swing.JFrame;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import mvc.DrawingController;
-import mvc.DrawingFrame;
-import mvc.DrawingModel;
-import mvc.MainApp;
 
 public class MainAppTests {
 	private DrawingModel model;
@@ -28,7 +20,7 @@ public class MainAppTests {
 
 	@Test
 	public void testMain() {
-		MainApp.main(null);
+		MainApp.main(new String[1]);
 	}
 
 	@Test

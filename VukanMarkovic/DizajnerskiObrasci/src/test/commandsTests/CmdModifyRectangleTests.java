@@ -1,16 +1,10 @@
 package test.commandsTests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-
+import shapes.*;
+import org.junit.*;
+import static org.junit.Assert.*;
 import java.awt.Color;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import commands.CmdModifyRectangle;
-import shapes.Point;
-import shapes.Rectangle;
 
 public class CmdModifyRectangleTests {
 	private Rectangle oldState;
@@ -23,13 +17,6 @@ public class CmdModifyRectangleTests {
 		oldState = new Rectangle(new Point(1, 3), 6, 7, false, Color.BLACK, Color.WHITE);
 		newState = new Rectangle(new Point(2, 4), 4, 9, true, Color.WHITE, Color.BLACK);
 		cmdModifyRectangle = new CmdModifyRectangle(oldState, newState);
-	}
-
-	@Test(expected = NullPointerException.class)
-	public void testExecuteExceptionExpected() {
-		cmdModifyRectangle = new CmdModifyRectangle(new Rectangle(), new Rectangle());
-		cmdModifyRectangle.execute();
-		assertNotEquals(newState, oldState);
 	}
 
 	@Test

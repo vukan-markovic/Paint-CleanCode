@@ -1,8 +1,6 @@
 package observer;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
+import java.beans.*;
 import mvc.DrawingFrame;
 
 public class PropertyManager implements PropertyChangeListener {

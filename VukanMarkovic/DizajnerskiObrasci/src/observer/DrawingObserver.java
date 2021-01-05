@@ -1,7 +1,6 @@
 package observer;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
+import java.beans.*;
 
 public class DrawingObserver {
 	private boolean btnDeleteEnabled;

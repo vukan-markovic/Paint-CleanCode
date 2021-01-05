@@ -1,56 +1,16 @@
 package mvc;
 
+import java.io.*;
+import java.util.*;
+import javax.swing.*;
+import commands.*;
+import dialogs.*;
+import observer.*;
+import shapes.*;
+import strategy.*;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Stack;
-
-import javax.swing.JColorChooser;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
-import commands.CmdAdd;
-import commands.CmdBringToFront;
-import commands.CmdDeselect;
-import commands.CmdModifyCircle;
-import commands.CmdModifyDonut;
-import commands.CmdModifyHexagon;
-import commands.CmdModifyLine;
-import commands.CmdModifyPoint;
-import commands.CmdModifyRectangle;
-import commands.CmdRemove;
-import commands.CmdSelect;
-import commands.CmdSendToBack;
-import commands.CmdToBack;
-import commands.CmdToFront;
-import commands.Command;
-import dialogs.DialogCircle;
-import dialogs.DialogDonut;
-import dialogs.DialogHexagon;
-import dialogs.DialogLine;
-import dialogs.DialogPoint;
-import dialogs.DialogRectangle;
 import hexagon.Hexagon;
-import observer.DrawingObserver;
-import observer.PropertyManager;
-import shapes.Circle;
-import shapes.Donut;
-import shapes.HexagonAdapter;
-import shapes.Line;
-import shapes.Point;
-import shapes.Rectangle;
-import shapes.Shape;
-import strategy.SaveLog;
-import strategy.SavePainting;
-import strategy.StrategyManager;
 
 public class DrawingController {
 	private DrawingModel model;
@@ -133,8 +93,8 @@ public class DrawingController {
 					fireEvents();
 					break;
 				} else if (indexOfShape == 0) {
-					for (int j = 0; model.getSelectedShapes().size() > 0;) {
-						Shape deselected = model.getSelectedShapes().get(j);
+					for (int shapeIndex = 0; model.getSelectedShapes().size() > 0;) {
+						Shape deselected = model.getSelectedShapes().get(shapeIndex);
 						executeCommand(new CmdDeselect(model, deselected));
 						logCommand("Deselect - " + deselected.getClass().getSimpleName() + " " + deselected.toString());
 						fireEvents();
@@ -190,10 +150,10 @@ public class DrawingController {
 	public void createRectangleDialog(Point point) {
 		dialogRectangle.getBtnOuterColor().setVisible(false);
 		dialogRectangle.getBtnInnerColor().setVisible(false);
-		dialogRectangle.getXcoordinateOfUpperLeftPoint().setText(String.valueOf(point.getXcoordinate()));
-		dialogRectangle.getYcoordinateOfUpperLeftPoint().setText(String.valueOf(point.getYcoordinate()));
-		dialogRectangle.getXcoordinateOfUpperLeftPoint().setEditable(false);
-		dialogRectangle.getYcoordinateOfUpperLeftPoint().setEditable(false);
+		dialogRectangle.getXcoordinate().setText(String.valueOf(point.getXcoordinate()));
+		dialogRectangle.getYcoordinate().setText(String.valueOf(point.getYcoordinate()));
+		dialogRectangle.getXcoordinate().setEditable(false);
+		dialogRectangle.getYcoordinate().setEditable(false);
 		dialogRectangle.setVisible(true);
 	}
 
@@ -346,10 +306,10 @@ public class DrawingController {
 	}
 
 	public void createRectangleModifyDialog(Shape selectedShape) {
-		dialogRectangle.getXcoordinateOfUpperLeftPoint()
+		dialogRectangle.getXcoordinate()
 				.setText(String.valueOf(((Rectangle) selectedShape).getUpperLeftPoint().getXcoordinate()));
 
-		dialogRectangle.getYcoordinateOfUpperLeftPoint()
+		dialogRectangle.getYcoordinate()
 				.setText(String.valueOf(((Rectangle) selectedShape).getUpperLeftPoint().getYcoordinate()));
 
 		dialogRectangle.getheight().setText(String.valueOf(((Rectangle) selectedShape).getHeight()));
@@ -365,8 +325,8 @@ public class DrawingController {
 		Rectangle oldState = (Rectangle) selectedShape;
 
 		Rectangle newState = new Rectangle(
-				new Point(Integer.parseInt(dialogRectangle.getXcoordinateOfUpperLeftPoint().getText()),
-						Integer.parseInt(dialogRectangle.getYcoordinateOfUpperLeftPoint().getText()),
+				new Point(Integer.parseInt(dialogRectangle.getXcoordinate().getText()),
+						Integer.parseInt(dialogRectangle.getYcoordinate().getText()),
 						oldState.isSelected(), dialogRectangle.getOuterColor()),
 				Integer.parseInt(dialogRectangle.getheight().getText()),
 				Integer.parseInt(dialogRectangle.getwidth().getText()), oldState.isSelected(),
@@ -521,7 +481,7 @@ public class DrawingController {
 			clearUnexecutedCommands();
 		}
 
-		model.setSelectedShapes(new ArrayList<Shape>());
+		model.getSelectedShapes().clear();;
 	}
 
 	public void btnUndoClicked() {

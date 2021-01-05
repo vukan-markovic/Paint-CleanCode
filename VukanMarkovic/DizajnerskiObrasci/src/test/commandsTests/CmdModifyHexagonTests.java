@@ -1,13 +1,8 @@
 package test.commandsTests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-
+import static org.junit.Assert.*;
+import org.junit.*;
 import java.awt.Color;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import commands.CmdModifyHexagon;
 import shapes.HexagonAdapter;
 
@@ -19,16 +14,9 @@ public class CmdModifyHexagonTests {
 
 	@Before
 	public void setUp() {
-		oldState = originalState = new HexagonAdapter(3, 2, 3, Color.BLACK, Color.WHITE, false);
+		oldState = new HexagonAdapter(3, 2, 3, Color.BLACK, Color.WHITE, false);
 		newState = new HexagonAdapter(4, 1, 5, Color.WHITE, Color.BLACK, true);
 		cmdModifyHexagon = new CmdModifyHexagon(oldState, newState);
-	}
-
-	@Test()
-	public void testExecuteOldStateNotEqualsNewState() {
-		cmdModifyHexagon = new CmdModifyHexagon(new HexagonAdapter(), new HexagonAdapter());
-		cmdModifyHexagon.execute();
-		assertNotEquals(newState, oldState);
 	}
 
 	@Test

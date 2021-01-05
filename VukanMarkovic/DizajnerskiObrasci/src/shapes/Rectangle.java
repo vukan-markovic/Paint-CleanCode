@@ -1,16 +1,12 @@
 package shapes;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.*;
 
 public class Rectangle extends SurfaceShape {
 	private static final long serialVersionUID = 1L;
 	private Point upperLeftPoint;
 	private int height;
 	private int width;
-
-	public Rectangle() {
-	}
 
 	public Rectangle(Point upperLeftPoint, int height, int width) {
 		this.upperLeftPoint = upperLeftPoint;

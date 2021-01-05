@@ -1,16 +1,12 @@
 package shapes;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.*;
 
 public class Line extends Shape {
 	private static final long serialVersionUID = 1L;
+	private final double LINE_CLICK_TRESHOLD = 0.05;
 	private Point startPoint;
 	private Point endPoint;
-	private static final double LINE_CLICK_TRESHOLD = 0.05;
-
-	public Line() {
-	}
 
 	public Line(Point startPoint, Point endPoint) {
 		this.startPoint = startPoint;

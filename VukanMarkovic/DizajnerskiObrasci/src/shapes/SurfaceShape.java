@@ -1,7 +1,6 @@
 package shapes;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.*;
 
 abstract class SurfaceShape extends Shape {
 	private static final long serialVersionUID = 1L;

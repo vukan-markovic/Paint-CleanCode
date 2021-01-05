@@ -1,15 +1,10 @@
 package test.commandsTests;
 
+import org.junit.*;
+import shapes.*;
 import static org.junit.Assert.assertEquals;
-
 import java.awt.Color;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import commands.CmdModifyDonut;
-import shapes.Donut;
-import shapes.Point;
 
 public class CmdModifyDonutTests {
 	private Donut oldState;
@@ -22,12 +17,6 @@ public class CmdModifyDonutTests {
 		oldState = new Donut(new Point(1, 1), 3, 2, false, Color.BLACK, Color.WHITE);
 		newState = new Donut(new Point(1, 2), 4, 1, true, Color.WHITE, Color.BLACK);
 		cmdModifyDonut = new CmdModifyDonut(oldState, newState);
-	}
-
-	@Test(expected = NullPointerException.class)
-	public void testExecuteExceptionExpected() {
-		cmdModifyDonut = new CmdModifyDonut(new Donut(), new Donut());
-		cmdModifyDonut.execute();
 	}
 
 	@Test

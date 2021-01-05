@@ -1,20 +1,12 @@
 package test.shapesTests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+import org.junit.*;
+import hexagon.Hexagon;
+import shapes.*;
 import java.awt.Color;
 import java.awt.Graphics;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import hexagon.Hexagon;
-import shapes.HexagonAdapter;
-import shapes.Point;
 
 public class HexagonAdapterTests {
 	private HexagonAdapter hexagonAdapter;

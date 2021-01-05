@@ -1,15 +1,11 @@
 package shapes;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.*;
 
 public class Circle extends SurfaceShape {
 	private static final long serialVersionUID = 1L;
 	private Point center;
 	private int radius;
-
-	public Circle() {
-	}
 
 	public Circle(Point center, int radius) {
 		this.center = center;

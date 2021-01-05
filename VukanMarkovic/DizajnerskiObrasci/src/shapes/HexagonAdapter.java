@@ -1,17 +1,11 @@
 package shapes;
 
-import java.awt.Color;
-import java.awt.Graphics;
-
+import java.awt.*;
 import hexagon.Hexagon;
 
 public class HexagonAdapter extends Shape {
 	private static final long serialVersionUID = 1L;
 	private Hexagon hexagon;
-
-	public HexagonAdapter() {
-		hexagon = new Hexagon(0, 0, 0);
-	}
 
 	public HexagonAdapter(Hexagon hexagon, Color outerColor, Color innerColor) {
 		this.hexagon = hexagon;

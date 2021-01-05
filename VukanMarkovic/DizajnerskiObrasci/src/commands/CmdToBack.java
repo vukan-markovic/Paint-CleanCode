@@ -1,7 +1,6 @@
 package commands;
 
 import java.util.Collections;
-
 import mvc.DrawingModel;
 import shapes.Shape;
 

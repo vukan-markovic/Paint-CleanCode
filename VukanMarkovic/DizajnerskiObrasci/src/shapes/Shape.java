@@ -1,14 +1,13 @@
 package shapes;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.*;
 import java.io.Serializable;
 
 public abstract class Shape implements Cloneable, Serializable {
 	private static final long serialVersionUID = 1L;
+	public final int SELECT_RECTANGLE_GAP = 3;
 	private boolean selected;
 	private Color outerColor = Color.BLACK;
-	public static final int SELECT_RECTANGLE_GAP = 3;
 
 	public Shape() {
 	}

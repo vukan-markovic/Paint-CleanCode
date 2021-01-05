@@ -1,18 +1,12 @@
 package shapes;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.geom.Area;
-import java.awt.geom.Ellipse2D;
+import java.awt.*;
+import java.awt.geom.*;
 
 public class Donut extends Circle {
 	private static final long serialVersionUID = 1L;
 	private int innerRadius;
 	private Area area;
-
-	public Donut() {
-	}
 
 	public Donut(Point center, int outerRadius, int innerRadius, boolean selected, Color innerColor, Color outerColor) {
 		super(center, outerRadius, false, innerColor, outerColor);

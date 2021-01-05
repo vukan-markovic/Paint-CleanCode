@@ -1,15 +1,10 @@
 package test.commandsTests;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Before;
-import org.junit.Test;
-
+import static org.junit.Assert.*;
+import org.junit.*;
+import shapes.*;
 import commands.CmdRemove;
 import mvc.DrawingModel;
-import shapes.Point;
-import shapes.Shape;
 
 public class CmdRemoveTests {
 	private DrawingModel model;
@@ -19,7 +14,7 @@ public class CmdRemoveTests {
 	@Before
 	public void setUp() {
 		model = new DrawingModel();
-		shape = new Point();
+		shape = new Point(1, 2);
 		cmdRemove = new CmdRemove(model, shape);
 	}
 

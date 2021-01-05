@@ -1,18 +1,11 @@
 package test.mvcTests;
 
-import static org.junit.Assert.assertNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import static org.junit.Assert.*;
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import org.junit.Before;
-import org.junit.Test;
-
+import java.util.*;
+import org.junit.*;
+import shapes.*;
 import mvc.DrawingModel;
-import shapes.Point;
-import shapes.Shape;
 
 public class DrawingModelTests {
 	private DrawingModel model;

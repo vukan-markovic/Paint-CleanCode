@@ -1,18 +1,11 @@
 package test.mvcTests;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-
+import static org.mockito.Mockito.*;
+import org.junit.*;
+import mvc.*;
+import shapes.*;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import mvc.DrawingModel;
-import mvc.DrawingView;
-import shapes.Donut;
-import shapes.Point;
 
 public class DrawingViewTests {
 	private DrawingModel model;

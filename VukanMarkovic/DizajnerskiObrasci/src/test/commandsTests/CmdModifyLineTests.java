@@ -1,15 +1,10 @@
 package test.commandsTests;
 
+import shapes.*;
+import org.junit.*;
 import static org.junit.Assert.assertEquals;
-
 import java.awt.Color;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import commands.CmdModifyLine;
-import shapes.Line;
-import shapes.Point;
 
 public class CmdModifyLineTests {
 	private Line oldState;
@@ -22,12 +17,6 @@ public class CmdModifyLineTests {
 		oldState = new Line(new Point(1, 1), new Point(3, 2), false, Color.BLACK);
 		newState = new Line(new Point(1, 2), new Point(4, 1), true, Color.WHITE);
 		cmdModifyLine = new CmdModifyLine(oldState, newState);
-	}
-
-	@Test(expected = NullPointerException.class)
-	public void testExecuteExceptionExpected() {
-		cmdModifyLine = new CmdModifyLine(new Line(), new Line());
-		cmdModifyLine.execute();
 	}
 
 	@Test

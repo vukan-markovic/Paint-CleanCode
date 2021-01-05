@@ -1,21 +1,10 @@
 package test.shapesTests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
-
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.geom.Area;
-import java.awt.geom.Ellipse2D;
-
-import org.junit.Before;
-import org.junit.Test;
-
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+import org.junit.*;
+import java.awt.*;
+import java.awt.geom.*;
 import shapes.Donut;
 import shapes.Point;
 

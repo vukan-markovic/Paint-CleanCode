@@ -1,16 +1,10 @@
 package test.commandsTests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-
-import org.junit.Before;
-import org.junit.Test;
-
+import shapes.*;
+import static org.junit.Assert.*;
+import org.junit.*;
 import commands.CmdSendToBack;
 import mvc.DrawingModel;
-import shapes.Line;
-import shapes.Point;
-import shapes.Shape;
 
 public class CmdSendToBackTests {
 	private DrawingModel model;
@@ -21,8 +15,8 @@ public class CmdSendToBackTests {
 	@Before
 	public void setUp() {
 		model = new DrawingModel();
-		shape = new Point();
-		model.addShape(new Line());
+		shape = new Point(1, 2);
+		model.addShape(new Line(new Point(1, 2), new Point(3, 4)));
 		model.addShape(shape);
 		indexOfShape = model.getIndexOfShape(shape);
 		cmdSendToBack = new CmdSendToBack(model, shape);

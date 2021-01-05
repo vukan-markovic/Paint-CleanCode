@@ -1,8 +1,6 @@
 package mvc;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import java.util.*;
 import shapes.Shape;
 
 public class DrawingModel {
@@ -23,18 +21,34 @@ public class DrawingModel {
 		}
 	}
 
-	public Shape getFirstSelectedShape() {
-		return shapes.stream().filter(shape -> shape.isSelected()).findFirst().get();
-	}
-
 	public void addShape(Shape shape) {
 		shapes.add(shape);
+	}
+	
+	public void addSelectedShape(Shape shape) {
+		selectedShapes.add(shape);
+	}
+	
+	public void removeSelectedShape(Shape shape) {
+		selectedShapes.remove(shape);
+	}
+	
+	public void addShapeToIndex(int index, Shape shape) {
+		shapes.add(index, shape);
+	}
+	
+	public void removeShapeAtIndex(int index) {
+		shapes.remove(index);
 	}
 
 	public void removeShape(Shape shape) {
 		shapes.remove(shape);
 	}
 
+	public int getNumberOfShapes() {
+		return shapes.size();
+	}
+	
 	public int getIndexOfShape(Shape shape) {
 		return shapes.indexOf(shape);
 	}
@@ -43,6 +57,10 @@ public class DrawingModel {
 		return shapes.get(indexOfShape);
 	}
 
+	public Shape getFirstSelectedShape() {
+		return shapes.stream().filter(shape -> shape.isSelected()).findFirst().get();
+	}
+	
 	public List<Shape> getShapes() {
 		return shapes;
 	}
@@ -53,9 +71,5 @@ public class DrawingModel {
 
 	public void setShapes(List<Shape> shapes) {
 		this.shapes = shapes;
-	}
-
-	public void setSelectedShapes(List<Shape> selectedShapes) {
-		this.selectedShapes = selectedShapes;
 	}
 }

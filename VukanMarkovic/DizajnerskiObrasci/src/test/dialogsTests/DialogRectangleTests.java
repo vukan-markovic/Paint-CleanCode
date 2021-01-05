@@ -1,20 +1,11 @@
 package test.dialogsTests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
-
-import java.awt.AWTException;
-import java.awt.Robot;
+import java.awt.*;
+import org.junit.*;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 import java.awt.event.KeyEvent;
-
 import javax.swing.SwingUtilities;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import dialogs.DialogRectangle;
 
 public class DialogRectangleTests {
@@ -35,9 +26,9 @@ public class DialogRectangleTests {
 			@Override
 			public void run() {
 				dialogRectangle.setVisible(true);
-				dialogRectangle.getXcoordinateOfUpperLeftPoint().requestFocusInWindow();
+				dialogRectangle.getXcoordinate().requestFocusInWindow();
 				robot.keyPress(KeyEvent.VK_W);
-				assertFalse(dialogRectangle.getXcoordinateOfUpperLeftPoint().getText().contains("W"));
+				assertFalse(dialogRectangle.getXcoordinate().getText().contains("W"));
 			}
 		});
 	}
@@ -48,9 +39,9 @@ public class DialogRectangleTests {
 			@Override
 			public void run() {
 				dialogRectangle.setVisible(true);
-				dialogRectangle.getXcoordinateOfUpperLeftPoint().requestFocusInWindow();
+				dialogRectangle.getXcoordinate().requestFocusInWindow();
 				robot.keyPress(KeyEvent.VK_3);
-				assertTrue(dialogRectangle.getXcoordinateOfUpperLeftPoint().getText().contains("3"));
+				assertTrue(dialogRectangle.getXcoordinate().getText().contains("3"));
 			}
 		});
 	}
@@ -61,9 +52,9 @@ public class DialogRectangleTests {
 			@Override
 			public void run() {
 				dialogRectangle.setVisible(true);
-				dialogRectangle.getYcoordinateOfUpperLeftPoint().requestFocusInWindow();
+				dialogRectangle.getYcoordinate().requestFocusInWindow();
 				robot.keyPress(KeyEvent.VK_W);
-				assertFalse(dialogRectangle.getYcoordinateOfUpperLeftPoint().getText().contains("W"));
+				assertFalse(dialogRectangle.getYcoordinate().getText().contains("W"));
 			}
 		});
 	}
@@ -74,9 +65,9 @@ public class DialogRectangleTests {
 			@Override
 			public void run() {
 				dialogRectangle.setVisible(true);
-				dialogRectangle.getYcoordinateOfUpperLeftPoint().requestFocusInWindow();
+				dialogRectangle.getYcoordinate().requestFocusInWindow();
 				robot.keyPress(KeyEvent.VK_3);
-				assertTrue(dialogRectangle.getYcoordinateOfUpperLeftPoint().getText().contains("3"));
+				assertTrue(dialogRectangle.getYcoordinate().getText().contains("3"));
 			}
 		});
 	}
@@ -162,8 +153,8 @@ public class DialogRectangleTests {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				dialogRectangle.getXcoordinateOfUpperLeftPoint().setText(String.valueOf(1));
-				dialogRectangle.getYcoordinateOfUpperLeftPoint().setText(String.valueOf(2));
+				dialogRectangle.getXcoordinate().setText(String.valueOf(1));
+				dialogRectangle.getYcoordinate().setText(String.valueOf(2));
 				dialogRectangle.getBtnOk().doClick();
 				robot.keyPress(KeyEvent.VK_ENTER);
 				assertFalse(dialogRectangle.isAccepted());
@@ -174,8 +165,8 @@ public class DialogRectangleTests {
 
 	@Test
 	public void testBtnOkClicked() {
-		dialogRectangle.getXcoordinateOfUpperLeftPoint().setText(String.valueOf(1));
-		dialogRectangle.getYcoordinateOfUpperLeftPoint().setText(String.valueOf(2));
+		dialogRectangle.getXcoordinate().setText(String.valueOf(1));
+		dialogRectangle.getYcoordinate().setText(String.valueOf(2));
 		dialogRectangle.getwidth().setText(String.valueOf(3));
 		dialogRectangle.getheight().setText(String.valueOf(4));
 		dialogRectangle.getBtnOk().doClick();

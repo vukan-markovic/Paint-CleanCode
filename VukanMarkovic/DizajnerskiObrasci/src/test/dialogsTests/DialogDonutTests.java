@@ -1,20 +1,11 @@
 package test.dialogsTests;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
-
-import java.awt.AWTException;
-import java.awt.Robot;
+import java.awt.*;
+import org.junit.*;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 import java.awt.event.KeyEvent;
-
 import javax.swing.SwingUtilities;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import dialogs.DialogDonut;
 
 public class DialogDonutTests {

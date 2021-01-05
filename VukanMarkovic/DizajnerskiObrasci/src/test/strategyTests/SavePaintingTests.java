@@ -1,24 +1,12 @@
 package test.strategyTests;
 
+import java.io.*;
+import java.util.*;
+import org.junit.*;
+import shapes.*;
+import strategy.*;
 import static org.junit.Assert.assertEquals;
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-
-import shapes.Line;
-import shapes.Point;
-import shapes.Shape;
-import strategy.SavePainting;
-import strategy.StrategyManager;
 
 public class SavePaintingTests {
 	private SavePainting savePainting;

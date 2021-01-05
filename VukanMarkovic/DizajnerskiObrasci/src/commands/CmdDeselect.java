@@ -6,7 +6,7 @@ import shapes.Shape;
 public class CmdDeselect implements Command {
 	private DrawingModel model;
 	private Shape shape;
-	
+
 	public CmdDeselect(DrawingModel model, Shape shape) {
 		this.model = model;
 		this.shape = shape;
@@ -14,21 +14,19 @@ public class CmdDeselect implements Command {
 
 	@Override
 	public void execute() {
-		for (int indexOfShape = 0; indexOfShape < model.getShapes().size(); indexOfShape++) {
-			if (model.getShapes().get(indexOfShape).equals(shape)) {
-				model.getShapes().get(indexOfShape).setSelected(false);
-				model.getSelectedShapes().remove(shape);
-			}
-		}
+		Shape shapeToSelect = model.getShapes().stream().filter(modelShape -> modelShape.equals(shape)).findFirst()
+				.get();
+
+		shapeToSelect.setSelected(false);
+		model.removeSelectedShape(shapeToSelect);
 	}
 
 	@Override
 	public void unexecute() {
-		for (int indexOfShape = 0; indexOfShape < model.getShapes().size(); indexOfShape++) {
-			if (model.getShapes().get(indexOfShape).equals(shape)) {
-				model.getShapes().get(indexOfShape).setSelected(true);
-				model.getSelectedShapes().add(shape);
-			}
-		}
+		Shape shapeToSelect = model.getShapes().stream().filter(modelShape -> modelShape.equals(shape)).findFirst()
+				.get();
+
+		shapeToSelect.setSelected(true);
+		model.addSelectedShape(shapeToSelect);
 	}
 }

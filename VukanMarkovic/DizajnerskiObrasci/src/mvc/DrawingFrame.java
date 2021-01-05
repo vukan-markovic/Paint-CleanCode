@@ -1,24 +1,8 @@
 package mvc;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.SystemColor;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
-import javax.swing.ButtonGroup;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.JToggleButton;
-import javax.swing.JToolBar;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
@@ -316,34 +300,6 @@ public class DrawingFrame extends JFrame {
 
 	public DefaultListModel<String> getCommandsListModel() {
 		return commandsListModel;
-	}
-
-	public JToggleButton getBtnPoint() {
-		return btnPoint;
-	}
-
-	public JToggleButton getBtnLine() {
-		return btnLine;
-	}
-
-	public JToggleButton getBtnRectangle() {
-		return btnRectangle;
-	}
-
-	public JToggleButton getBtnCircle() {
-		return btnCircle;
-	}
-
-	public JToggleButton getBtnDonut() {
-		return btnDonut;
-	}
-
-	public JToggleButton getBtnHexagon() {
-		return btnHexagon;
-	}
-
-	public JToggleButton getBtnSelect() {
-		return btnSelect;
 	}
 
 	public JButton getBtnModify() {

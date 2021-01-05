@@ -1,16 +1,10 @@
 package test.commandsTests;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Before;
-import org.junit.Test;
-
+import static org.junit.Assert.*;
+import org.junit.*;
+import shapes.*;
 import commands.CmdSelect;
 import mvc.DrawingModel;
-import shapes.Line;
-import shapes.Point;
-import shapes.Shape;
 
 public class CmdSelectTests {
 	private DrawingModel model;
@@ -20,7 +14,7 @@ public class CmdSelectTests {
 	@Before
 	public void setUp() {
 		model = new DrawingModel();
-		shape = new Point();
+		shape = new Point(1, 2);
 		model.addShape(shape);
 		cmdSelect = new CmdSelect(shape, model);
 	}
@@ -51,10 +45,9 @@ public class CmdSelectTests {
 	public void testUnexecuteShapeIsNotEqual() {
 		Line line = new Line(new Point(1, 1), new Point(2, 2));
 		model.addShape(line);
-		model.selectShape(line);
 		cmdSelect = new CmdSelect(shape, model);
 		cmdSelect.unexecute();
-		assertTrue(model.getShapeByIndex(model.getIndexOfShape(line)).isSelected());
+		assertFalse(model.getShapeByIndex(model.getIndexOfShape(line)).isSelected());
 		assertTrue(model.getSelectedShapes().contains(line));
 	}
 

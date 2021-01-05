@@ -1,15 +1,10 @@
 package test.commandsTests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Before;
-import org.junit.Test;
-
+import static org.junit.Assert.*;
+import org.junit.*;
+import shapes.*;
 import commands.CmdBringToFront;
 import mvc.DrawingModel;
-import shapes.Point;
-import shapes.Shape;
 
 public class CmdBringToFrontTests {
 	private DrawingModel model;
@@ -20,7 +15,7 @@ public class CmdBringToFrontTests {
 	@Before
 	public void setUp() {
 		model = new DrawingModel();
-		shape = new Point();
+		shape = new Point(1, 2);
 		model.addShape(shape);
 		indexOfShape = model.getIndexOfShape(shape);
 		cmdBringToFront = new CmdBringToFront(model, shape);

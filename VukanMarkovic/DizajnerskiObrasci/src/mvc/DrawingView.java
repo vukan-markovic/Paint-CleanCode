@@ -1,12 +1,8 @@
 package mvc;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.util.Iterator;
-
 import javax.swing.JPanel;
-
 import shapes.Donut;
 import shapes.Shape;
 

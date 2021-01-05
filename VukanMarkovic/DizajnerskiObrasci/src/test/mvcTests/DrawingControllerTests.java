@@ -1,73 +1,24 @@
 package test.mvcTests;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
-
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+import java.io.*;
+import java.util.*;
+import javax.swing.*;
+import org.junit.*;
+import commands.*;
+import dialogs.*;
+import mvc.*;
+import shapes.*;
+import strategy.*;
 import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Robot;
 import java.awt.event.MouseEvent;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.util.EmptyStackException;
-import java.util.Stack;
 import java.util.stream.Collectors;
-
-import javax.swing.JFileChooser;
-import javax.swing.JTextField;
-
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import hexagon.Hexagon;
 import org.junit.rules.TemporaryFolder;
 import org.mockito.Mockito;
-
-import commands.CmdAdd;
-import commands.CmdBringToFront;
-import commands.CmdDeselect;
-import commands.CmdModifyCircle;
-import commands.CmdModifyDonut;
-import commands.CmdModifyHexagon;
-import commands.CmdModifyLine;
-import commands.CmdModifyPoint;
-import commands.CmdModifyRectangle;
-import commands.CmdRemove;
-import commands.CmdSelect;
-import commands.CmdSendToBack;
-import commands.CmdToBack;
-import commands.CmdToFront;
-import commands.Command;
-import dialogs.DialogCircle;
-import dialogs.DialogDonut;
-import dialogs.DialogHexagon;
-import dialogs.DialogLine;
-import dialogs.DialogPoint;
-import dialogs.DialogRectangle;
-import hexagon.Hexagon;
-import mvc.DrawingController;
-import mvc.DrawingFrame;
-import mvc.DrawingModel;
-import shapes.Circle;
-import shapes.Donut;
-import shapes.HexagonAdapter;
-import shapes.Line;
-import shapes.Point;
-import shapes.Rectangle;
-import strategy.SaveLog;
-import strategy.SavePainting;
-import strategy.StrategyManager;
 
 public class DrawingControllerTests {
 	private DrawingController controller;
@@ -157,7 +108,7 @@ public class DrawingControllerTests {
 	@Test
 	public void testClearStack() {
 		Stack<Command> commands = new Stack<Command>();
-		commands.add(new CmdAdd(model, new Point()));
+		commands.add(new CmdAdd(model, new Point(1, 2)));
 		controller.setUnexecutedCommands(commands);
 		controller.clearUnexecutedCommands();
 		assertTrue(controller.getUnexecutedCommands().isEmpty());
@@ -183,7 +134,7 @@ public class DrawingControllerTests {
 
 	@Test
 	public void testBtnLineClickedStartPointNotNull() {
-		controllerMock.setStartPoint(new Point());
+		controllerMock.setStartPoint(new Point(1, 2));
 		controllerMock.btnLineClicked(click);
 		verify(controllerMock, Mockito.times(1)).addLine(click);
 		verify(controllerMock, Mockito.times(1)).clearUnexecutedCommands();
@@ -192,9 +143,9 @@ public class DrawingControllerTests {
 	@Test
 	public void testAddRectangle() {
 		DialogRectangle dialogRectangle = new DialogRectangle();
-		dialogRectangle.setWidth(new JTextField("1"));
-		dialogRectangle.setHeight(new JTextField("1"));
-		Point point = new Point();
+		dialogRectangle.getwidth().setText("1");
+		dialogRectangle.getheight().setText("1");
+		Point point = new Point(1, 2);
 
 		Rectangle rectangle = new Rectangle(point, Integer.parseInt(dialogRectangle.getheight().getText()),
 				Integer.parseInt(dialogRectangle.getwidth().getText()), false, controllerMock.getOuterColor(),
@@ -215,10 +166,10 @@ public class DrawingControllerTests {
 		controller.createRectangleDialog(point);
 		assertFalse(dialogRectangle.getBtnOuterColor().isVisible());
 		assertFalse(dialogRectangle.getBtnInnerColor().isVisible());
-		assertEquals("1", dialogRectangle.getXcoordinateOfUpperLeftPoint().getText());
-		assertEquals("2", dialogRectangle.getYcoordinateOfUpperLeftPoint().getText());
-		assertFalse(dialogRectangle.getXcoordinateOfUpperLeftPoint().isEditable());
-		assertFalse(dialogRectangle.getYcoordinateOfUpperLeftPoint().isEditable());
+		assertEquals("1", dialogRectangle.getXcoordinate().getText());
+		assertEquals("2", dialogRectangle.getYcoordinate().getText());
+		assertFalse(dialogRectangle.getXcoordinate().isEditable());
+		assertFalse(dialogRectangle.getYcoordinate().isEditable());
 		assertFalse(dialogRectangle.isVisible());
 	}
 
@@ -250,7 +201,7 @@ public class DrawingControllerTests {
 	public void testAddCircle() {
 		DialogCircle dialogCircle = new DialogCircle();
 		dialogCircle.getRadius().setText("1");
-		Point point = new Point();
+		Point point = new Point(1, 2);
 
 		Circle circle = new Circle(point, Integer.parseInt(dialogCircle.getRadius().getText()), false,
 				controllerMock.getOuterColor(), controllerMock.getInnerColor());
@@ -290,9 +241,9 @@ public class DrawingControllerTests {
 	@Test
 	public void testAddDonut() {
 		DialogDonut dialogDonut = new DialogDonut();
-		dialogDonut.setOuterRadius(new JTextField("1"));
-		dialogDonut.setInnerRadius(new JTextField("1"));
-		Point point = new Point();
+		dialogDonut.getOuterRadius().setText("1");
+		dialogDonut.getInnerRadius().setText("1");
+		Point point = new Point(1, 2);
 
 		Donut donut = new Donut(point, Integer.parseInt(dialogDonut.getOuterRadius().getText()),
 				Integer.parseInt(dialogDonut.getInnerRadius().getText()), false, controllerMock.getOuterColor(),
@@ -332,8 +283,8 @@ public class DrawingControllerTests {
 	@Test
 	public void testAddHexagon() {
 		DialogHexagon dialogHexagon = new DialogHexagon();
-		dialogHexagon.setRadius(new JTextField("1"));
-		Point point = new Point();
+		dialogHexagon.getRadius().setText("1");
+		Point point = new Point(1, 2);
 
 		HexagonAdapter hexagon = new HexagonAdapter(
 				new Hexagon(point.getXcoordinate(), point.getYcoordinate(),
@@ -439,8 +390,8 @@ public class DrawingControllerTests {
 		Rectangle rectangle = new Rectangle(new Point(1, 2), 3, 4);
 		controller.setDialogRectangle(dialogRectangle);
 		controller.createRectangleModifyDialog(rectangle);
-		assertEquals("1", dialogRectangle.getXcoordinateOfUpperLeftPoint().getText());
-		assertEquals("2", dialogRectangle.getYcoordinateOfUpperLeftPoint().getText());
+		assertEquals("1", dialogRectangle.getXcoordinate().getText());
+		assertEquals("2", dialogRectangle.getYcoordinate().getText());
 		assertEquals("3", dialogRectangle.getheight().getText());
 		assertEquals("4", dialogRectangle.getwidth().getText());
 		assertEquals(Color.BLACK, dialogRectangle.getOuterColor());
@@ -453,14 +404,14 @@ public class DrawingControllerTests {
 	@Test
 	public void testModifyRectangle() {
 		Rectangle oldState = new Rectangle(new Point(1, 2), 3, 4);
-		dialogRectangle.getXcoordinateOfUpperLeftPoint().setText("1");
-		dialogRectangle.getYcoordinateOfUpperLeftPoint().setText("2");
+		dialogRectangle.getXcoordinate().setText("1");
+		dialogRectangle.getYcoordinate().setText("2");
 		dialogRectangle.getheight().setText("3");
 		dialogRectangle.getwidth().setText("4");
 
 		Rectangle newState = new Rectangle(
-				new Point(Integer.parseInt(dialogRectangle.getXcoordinateOfUpperLeftPoint().getText()),
-						Integer.parseInt(dialogRectangle.getYcoordinateOfUpperLeftPoint().getText()),
+				new Point(Integer.parseInt(dialogRectangle.getXcoordinate().getText()),
+						Integer.parseInt(dialogRectangle.getYcoordinate().getText()),
 						oldState.isSelected(), dialogRectangle.getOuterColor()),
 				Integer.parseInt(dialogRectangle.getheight().getText()),
 				Integer.parseInt(dialogRectangle.getwidth().getText()), oldState.isSelected(),
@@ -497,8 +448,8 @@ public class DrawingControllerTests {
 		Donut oldState = new Donut(new Point(1, 2), 3, 4, true, Color.BLACK, Color.BLACK);
 		dialogDonut.getXcoordinate().setText("1");
 		dialogDonut.getYcoordinate().setText("2");
-		dialogDonut.setOuterRadius(new JTextField("4"));
-		dialogDonut.setInnerRadius(new JTextField("3"));
+		dialogDonut.getOuterRadius().setText("4");
+		dialogDonut.getInnerRadius().setText("3");
 
 		Donut newState = new Donut(
 				new Point(Integer.parseInt(dialogDonut.getXcoordinate().getText()),
@@ -578,7 +529,7 @@ public class DrawingControllerTests {
 		HexagonAdapter oldState = new HexagonAdapter(1, 2, 3, Color.BLACK, Color.BLACK, true);
 		dialogHexagon.getXcoordinate().setText("1");
 		dialogHexagon.getYcoordinate().setText("2");
-		dialogHexagon.setRadius(new JTextField("4"));
+		dialogHexagon.getRadius().setText("4");
 
 		HexagonAdapter newState = new HexagonAdapter(Integer.parseInt(dialogHexagon.getXcoordinate().getText()),
 				Integer.parseInt(dialogHexagon.getYcoordinate().getText()),

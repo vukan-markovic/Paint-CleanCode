@@ -1,17 +1,13 @@
 package shapes;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.*;
 
 public class Point extends Shape {
 	private static final long serialVersionUID = 1L;
+	private final int POINT_CLICK_TRESHOLD = 3;
+	private final int POINT_LINE_GAP = 2;
 	private int xCoordinate;
 	private int yCoordinate;
-	private static final int POINT_CLICK_TRESHOLD = 3;
-	private static final int POINT_LINE_GAP = 2;
-
-	public Point() {
-	}
 
 	public Point(int xCoordinate, int yCoordinate) {
 		this.xCoordinate = xCoordinate;

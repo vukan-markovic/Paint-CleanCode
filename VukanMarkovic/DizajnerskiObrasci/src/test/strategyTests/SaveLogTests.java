@@ -1,20 +1,11 @@
 package test.strategyTests;
 
+import java.io.*;
+import org.junit.*;
+import strategy.*;
 import static org.junit.Assert.assertEquals;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.stream.Collectors;
-
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-
-import strategy.SaveLog;
-import strategy.StrategyManager;
 
 public class SaveLogTests {
 	private SaveLog saveLog;

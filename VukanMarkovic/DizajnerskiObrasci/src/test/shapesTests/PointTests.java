@@ -1,19 +1,11 @@
 package test.shapesTests;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
-
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+import org.junit.*;
+import shapes.*;
 import java.awt.Color;
 import java.awt.Graphics;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import shapes.Line;
-import shapes.Point;
 
 public class PointTests {
 	private Point point;
@@ -75,7 +67,7 @@ public class PointTests {
 
 	@Test
 	public void testEqualsNotSameType() {
-		assertFalse(point.equals(new Line()));
+		assertFalse(point.equals(new Line(new Point(0, 2), new Point(1, 2))));
 	}
 
 	@Test

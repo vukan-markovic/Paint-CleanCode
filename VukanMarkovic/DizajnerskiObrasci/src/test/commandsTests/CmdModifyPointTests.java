@@ -1,13 +1,8 @@
 package test.commandsTests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-
+import static org.junit.Assert.*;
+import org.junit.*;
 import java.awt.Color;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import commands.CmdModifyPoint;
 import shapes.Point;
 
@@ -26,7 +21,7 @@ public class CmdModifyPointTests {
 
 	@Test()
 	public void testExecuteOldStateNotEqualsNewState() {
-		cmdModifyPoint = new CmdModifyPoint(new Point(), new Point());
+		cmdModifyPoint = new CmdModifyPoint(new Point(1, 2), new Point(3, 4));
 		cmdModifyPoint.execute();
 		assertNotEquals(newState, oldState);
 	}
@@ -37,10 +32,9 @@ public class CmdModifyPointTests {
 		assertEquals(newState, oldState);
 	}
 
-	@Test()
-	public void testUnexecuteExecuteNotCalledOldStateNotEqualsOriginalState() {
+	@Test(expected = NullPointerException.class)
+	public void testUnexecuteExecuteNotCalledExceptionExpected() {
 		cmdModifyPoint.unexecute();
-		assertNotEquals(originalState, oldState);
 	}
 
 	@Test
