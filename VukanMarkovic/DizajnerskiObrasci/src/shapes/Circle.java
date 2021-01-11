@@ -7,16 +7,10 @@ public class Circle extends SurfaceShape {
 	private Point center;
 	private int radius;
 
-	public Circle(Point center, int radius) {
+	public Circle(Point center, int radius, boolean selected, Color outerColor, Color innerColor) {
+		super(selected, outerColor, innerColor);
 		this.center = center;
 		this.radius = radius;
-	}
-
-	public Circle(Point center, int radius, boolean selected, Color outerColor, Color innerColor) {
-		this(center, radius);
-		setSelected(selected);
-		setOuterColor(outerColor);
-		setInnerColor(innerColor);
 	}
 
 	@Override
@@ -30,24 +24,34 @@ public class Circle extends SurfaceShape {
 	}
 
 	@Override
-	public void fillShape(Graphics graphics) {
+	protected void fillShape(Graphics graphics) {
 		graphics.setColor(getInnerColor());
 		graphics.fillOval(center.getXcoordinate() - radius, center.getYcoordinate() - radius, radius * 2, radius * 2);
 	}
 
 	@Override
-	public void drawSelection(Graphics graphics) {
-		graphics.setColor(Color.BLUE);
+	protected void drawSelection(Graphics graphics) {
+		graphics.setColor(getSelectionColor());
+
 		graphics.drawRect(center.getXcoordinate() - SELECT_RECTANGLE_GAP,
-				center.getYcoordinate() - SELECT_RECTANGLE_GAP, 6, 6);
+				center.getYcoordinate() - SELECT_RECTANGLE_GAP, SELECT_RECTANGLE_SIDE_LENGTH,
+				SELECT_RECTANGLE_SIDE_LENGTH);
+
 		graphics.drawRect(center.getXcoordinate() + getRadius() - SELECT_RECTANGLE_GAP,
-				center.getYcoordinate() - SELECT_RECTANGLE_GAP, 6, 6);
+				center.getYcoordinate() - SELECT_RECTANGLE_GAP, SELECT_RECTANGLE_SIDE_LENGTH,
+				SELECT_RECTANGLE_SIDE_LENGTH);
+
 		graphics.drawRect(center.getXcoordinate() - getRadius() - SELECT_RECTANGLE_GAP,
-				center.getYcoordinate() - SELECT_RECTANGLE_GAP, 6, 6);
+				center.getYcoordinate() - SELECT_RECTANGLE_GAP, SELECT_RECTANGLE_SIDE_LENGTH,
+				SELECT_RECTANGLE_SIDE_LENGTH);
+
 		graphics.drawRect(center.getXcoordinate() - SELECT_RECTANGLE_GAP,
-				center.getYcoordinate() + radius - SELECT_RECTANGLE_GAP, 6, 6);
+				center.getYcoordinate() + radius - SELECT_RECTANGLE_GAP, SELECT_RECTANGLE_SIDE_LENGTH,
+				SELECT_RECTANGLE_SIDE_LENGTH);
+
 		graphics.drawRect(center.getXcoordinate() - SELECT_RECTANGLE_GAP,
-				center.getYcoordinate() - radius - SELECT_RECTANGLE_GAP, 6, 6);
+				center.getYcoordinate() - radius - SELECT_RECTANGLE_GAP, SELECT_RECTANGLE_SIDE_LENGTH,
+				SELECT_RECTANGLE_SIDE_LENGTH);
 	}
 
 	public boolean contains(int xCoordinate, int yCoordinate) {
@@ -64,12 +68,12 @@ public class Circle extends SurfaceShape {
 	}
 
 	public Circle clone() {
-		return new Circle(center.clone(), radius, isSelected(), getInnerColor(), getOuterColor());
+		return new Circle(center.clone(), radius, isSelected(), getOuterColor(), getInnerColor());
 	}
 
 	public String toString() {
-		return "Center: " + center + ", radius: " + radius + " , Inner color: " + getInnerColor().getRGB()
-				+ " , Outer color: " + getOuterColor().getRGB();
+		return "Center: " + center + ", radius: " + radius + " , Outer color: " + getOuterColor().getRGB()
+				+ " , Inner color: " + getInnerColor().getRGB();
 	}
 
 	public Point getCenter() {

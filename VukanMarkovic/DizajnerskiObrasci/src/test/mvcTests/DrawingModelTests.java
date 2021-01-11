@@ -15,7 +15,7 @@ public class DrawingModelTests {
 	@Before
 	public void setUp() {
 		model = new DrawingModel();
-		firstPoint = new Point(1, 2);
+		firstPoint = new Point(1, 2, false, Color.BLACK);
 		secondPoint = new Point(1, 2, true, Color.WHITE);
 	}
 

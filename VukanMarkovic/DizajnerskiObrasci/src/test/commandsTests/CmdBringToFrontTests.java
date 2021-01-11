@@ -1,6 +1,9 @@
 package test.commandsTests;
 
 import static org.junit.Assert.*;
+
+import java.awt.Color;
+
 import org.junit.*;
 import shapes.*;
 import commands.CmdBringToFront;
@@ -15,7 +18,7 @@ public class CmdBringToFrontTests {
 	@Before
 	public void setUp() {
 		model = new DrawingModel();
-		shape = new Point(1, 2);
+		shape = new Point(1, 2, false, Color.BLACK);
 		model.addShape(shape);
 		indexOfShape = model.getIndexOfShape(shape);
 		cmdBringToFront = new CmdBringToFront(model, shape);

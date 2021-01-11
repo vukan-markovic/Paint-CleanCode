@@ -8,41 +8,24 @@ public class Donut extends Circle {
 	private int innerRadius;
 	private Area area;
 
-	public Donut(Point center, int outerRadius, int innerRadius, boolean selected, Color innerColor, Color outerColor) {
-		super(center, outerRadius, false, innerColor, outerColor);
+	public Donut(Point center, int outerRadius, int innerRadius, boolean selected, Color outerColor, Color innerColor) {
+		super(center, outerRadius, selected, outerColor, innerColor);
 		this.innerRadius = innerRadius;
-		setSelected(selected);
 	}
 
 	public void draw(Graphics graphics, Graphics2D graphics2d) {
 		calculateArea();
-
 		graphics.setColor(getOuterColor());
 		graphics2d.draw(area);
-
 		fillShape(graphics, graphics2d);
 
 		if (isSelected())
 			drawSelection(graphics);
 	}
 
-	public void fillShape(Graphics graphics, Graphics2D graphics2d) {
+	protected void fillShape(Graphics graphics, Graphics2D graphics2d) {
 		graphics.setColor(getInnerColor());
 		graphics2d.fill(area);
-	}
-
-	public void drawSelection(Graphics graphics) {
-		graphics.setColor(Color.BLUE);
-		graphics.drawRect(getCenter().getXcoordinate() - SELECT_RECTANGLE_GAP,
-				getCenter().getYcoordinate() - SELECT_RECTANGLE_GAP, 6, 6);
-		graphics.drawRect(getCenter().getXcoordinate() + getRadius() - SELECT_RECTANGLE_GAP,
-				getCenter().getYcoordinate() - SELECT_RECTANGLE_GAP, 6, 6);
-		graphics.drawRect(getCenter().getXcoordinate() - getRadius() - SELECT_RECTANGLE_GAP,
-				getCenter().getYcoordinate() - SELECT_RECTANGLE_GAP, 6, 6);
-		graphics.drawRect(getCenter().getXcoordinate() - SELECT_RECTANGLE_GAP,
-				getCenter().getYcoordinate() + getRadius() - SELECT_RECTANGLE_GAP, 6, 6);
-		graphics.drawRect(getCenter().getXcoordinate() - SELECT_RECTANGLE_GAP,
-				getCenter().getYcoordinate() - getRadius() - SELECT_RECTANGLE_GAP, 6, 6);
 	}
 
 	public void calculateArea() {
@@ -71,12 +54,12 @@ public class Donut extends Circle {
 	}
 
 	public Donut clone() {
-		return new Donut(getCenter().clone(), getRadius(), innerRadius, isSelected(), getInnerColor(), getOuterColor());
+		return new Donut(getCenter().clone(), getRadius(), innerRadius, isSelected(), getOuterColor(), getInnerColor());
 	}
 
 	public String toString() {
-		return super.toString() + " , inner radius: " + innerRadius + " , Inner color: " + getInnerColor().getRGB()
-				+ " , Outer color: " + getOuterColor().getRGB();
+		return super.toString() + " , inner radius: " + innerRadius + " , Outer color: " + getOuterColor().getRGB()
+				+ " , Inner color: " + getInnerColor().getRGB();
 	}
 
 	public int getInnerRadius() {

@@ -1,5 +1,6 @@
 package test.strategyTests;
 
+import java.awt.Color;
 import java.io.*;
 import java.util.*;
 import org.junit.*;
@@ -33,8 +34,8 @@ public class SavePaintingTests {
 
 	@Test
 	public void testSavePainting() throws IOException, ClassNotFoundException {
-		savePainting.setShapes(
-				new ArrayList<Shape>(Arrays.asList(new Point(1, 2), new Line(new Point(1, 2), new Point(3, 4)))));
+		savePainting.setShapes(new ArrayList<Shape>(Arrays.asList(new Point(1, 2, false, Color.BLACK), new Line(
+				new Point(1, 2, false, Color.BLACK), new Point(3, 4, false, Color.BLACK), false, Color.BLACK))));
 
 		strategy.setStrategy(savePainting);
 		String filePath = folder.newFile("myfile1.txt").getAbsolutePath();

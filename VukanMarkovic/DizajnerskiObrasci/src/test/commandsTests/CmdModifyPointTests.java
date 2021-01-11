@@ -22,7 +22,7 @@ public class CmdModifyPointTests {
 
 	@Test()
 	public void testExecuteOldStateNotEqualsNewState() {
-		cmdModifyPoint = new CmdModifyPoint(new Point(1, 2), new Point(3, 4));
+		cmdModifyPoint = new CmdModifyPoint(new Point(1, 2, false, Color.BLACK), new Point(3, 4, false, Color.BLACK));
 		cmdModifyPoint.execute();
 		assertNotEquals(newState, oldState);
 	}

@@ -5,12 +5,12 @@ import java.util.*;
 import javax.swing.*;
 import commands.*;
 import dialogs.*;
+import hexagon.Hexagon;
 import observer.*;
 import shapes.*;
 import strategy.*;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
-import hexagon.Hexagon;
 
 public class DrawingController {
 	private DrawingModel model;
@@ -235,7 +235,7 @@ public class DrawingController {
 
 	public void addHexagon(DialogHexagon dialogHexagon, Point center) {
 		HexagonAdapter hexagon = new HexagonAdapter(new Hexagon(center.getXcoordinate(), center.getYcoordinate(),
-				Integer.parseInt(dialogHexagon.getRadius().getText())), outerColor, innerColor);
+				Integer.parseInt(dialogHexagon.getRadius().getText())), false, innerColor, outerColor);
 
 		cmdAdd = new CmdAdd(model, hexagon);
 		executeCommand(cmdAdd);
@@ -274,10 +274,8 @@ public class DrawingController {
 	}
 
 	public void createLineDialog(Shape selectedShape) {
-		dialogLine.getXcoordinate()
-				.setText(String.valueOf(((Line) selectedShape).getStartPoint().getXcoordinate()));
-		dialogLine.getYcoordinate()
-				.setText(String.valueOf(((Line) selectedShape).getStartPoint().getYcoordinate()));
+		dialogLine.getXcoordinate().setText(String.valueOf(((Line) selectedShape).getStartPoint().getXcoordinate()));
+		dialogLine.getYcoordinate().setText(String.valueOf(((Line) selectedShape).getStartPoint().getYcoordinate()));
 		dialogLine.getXCoordinateOfEndPoint()
 				.setText(String.valueOf(((Line) selectedShape).getEndPoint().getXcoordinate()));
 		dialogLine.getYCoordinateOfEndPoint()
@@ -326,8 +324,8 @@ public class DrawingController {
 
 		Rectangle newState = new Rectangle(
 				new Point(Integer.parseInt(dialogRectangle.getXcoordinate().getText()),
-						Integer.parseInt(dialogRectangle.getYcoordinate().getText()),
-						oldState.isSelected(), dialogRectangle.getOuterColor()),
+						Integer.parseInt(dialogRectangle.getYcoordinate().getText()), oldState.isSelected(),
+						dialogRectangle.getOuterColor()),
 				Integer.parseInt(dialogRectangle.getheight().getText()),
 				Integer.parseInt(dialogRectangle.getwidth().getText()), oldState.isSelected(),
 				dialogRectangle.getOuterColor(), dialogRectangle.getInnerColor());
@@ -408,10 +406,11 @@ public class DrawingController {
 	public void modifyHexagon(Shape selectedShape, DialogHexagon dialogHexagon) {
 		HexagonAdapter oldState = (HexagonAdapter) selectedShape;
 
-		HexagonAdapter newState = new HexagonAdapter(Integer.parseInt(dialogHexagon.getXcoordinate().getText()),
-				Integer.parseInt(dialogHexagon.getYcoordinate().getText()),
-				Integer.parseInt(dialogHexagon.getRadius().getText()), dialogHexagon.getOuterColor(),
-				dialogHexagon.getInnerColor(), oldState.isSelected());
+		HexagonAdapter newState = new HexagonAdapter(
+				new Hexagon(Integer.parseInt(dialogHexagon.getXcoordinate().getText()),
+						Integer.parseInt(dialogHexagon.getYcoordinate().getText()),
+						Integer.parseInt(dialogHexagon.getRadius().getText())),
+				oldState.isSelected(), dialogHexagon.getInnerColor(), dialogHexagon.getOuterColor());
 
 		logCommand("Modify - " + newState.getClass().getSimpleName() + " from " + oldState + " to " + " " + newState);
 		cmdModifyHexagon = new CmdModifyHexagon(oldState, (HexagonAdapter) newState);
@@ -481,7 +480,8 @@ public class DrawingController {
 			clearUnexecutedCommands();
 		}
 
-		model.getSelectedShapes().clear();;
+		model.getSelectedShapes().clear();
+		;
 	}
 
 	public void btnUndoClicked() {
@@ -755,11 +755,11 @@ public class DrawingController {
 				(Integer.parseInt(logLine[12]) == 0 ? new Color(0, 0, 0, 0)
 						: new Color(Integer.parseInt(logLine[12]))));
 
-		HexagonAdapter hexagon = new HexagonAdapter(point.getXcoordinate(), point.getYcoordinate(),
-				Integer.parseInt(logLine[15]),
+		HexagonAdapter hexagon = new HexagonAdapter(
+				new Hexagon(point.getXcoordinate(), point.getYcoordinate(), Integer.parseInt(logLine[15])), false,
 				(Integer.parseInt(logLine[19]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[19]))),
-				(Integer.parseInt(logLine[23]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[23]))),
-				false);
+				(Integer.parseInt(logLine[23]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[23]))));
 
 		cmdAdd = new CmdAdd(model, hexagon);
 		executeCommand(cmdAdd);
@@ -838,11 +838,11 @@ public class DrawingController {
 				(Integer.parseInt(logLine[12]) == 0 ? new Color(0, 0, 0, 0)
 						: new Color(Integer.parseInt(logLine[12]))));
 
-		HexagonAdapter hexagon = new HexagonAdapter(point.getXcoordinate(), point.getYcoordinate(),
-				Integer.parseInt(logLine[15]),
+		HexagonAdapter hexagon = new HexagonAdapter(
+				new Hexagon(point.getXcoordinate(), point.getYcoordinate(), Integer.parseInt(logLine[15])), false,
 				(Integer.parseInt(logLine[19]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[19]))),
-				(Integer.parseInt(logLine[23]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[23]))),
-				false);
+				(Integer.parseInt(logLine[23]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[23]))));
 
 		cmdSelect = new CmdSelect(model, hexagon);
 		executeCommand(cmdSelect);
@@ -921,11 +921,11 @@ public class DrawingController {
 				(Integer.parseInt(logLine[12]) == 0 ? new Color(0, 0, 0, 0)
 						: new Color(Integer.parseInt(logLine[12]))));
 
-		HexagonAdapter hexagon = new HexagonAdapter(point.getXcoordinate(), point.getYcoordinate(),
-				Integer.parseInt(logLine[15]),
+		HexagonAdapter hexagon = new HexagonAdapter(
+				new Hexagon(point.getXcoordinate(), point.getYcoordinate(), Integer.parseInt(logLine[15])), true,
 				(Integer.parseInt(logLine[19]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[19]))),
-				(Integer.parseInt(logLine[23]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[23]))),
-				true);
+				(Integer.parseInt(logLine[23]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[23]))));
 
 		cmdDeselect = new CmdDeselect(model, hexagon);
 		executeCommand(cmdDeselect);
@@ -1025,11 +1025,11 @@ public class DrawingController {
 				(Integer.parseInt(logLine[36]) == 0 ? new Color(0, 0, 0, 0)
 						: new Color(Integer.parseInt(logLine[36]))));
 
-		HexagonAdapter newState = new HexagonAdapter(point.getXcoordinate(), point.getYcoordinate(),
-				Integer.parseInt(logLine[39]),
+		HexagonAdapter newState = new HexagonAdapter(
+				new Hexagon(point.getXcoordinate(), point.getYcoordinate(), Integer.parseInt(logLine[39])), true,
 				(Integer.parseInt(logLine[43]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[43]))),
-				(Integer.parseInt(logLine[47]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[47]))),
-				true);
+				(Integer.parseInt(logLine[47]) == 0 ? new Color(0, 0, 0, 0)
+						: new Color(Integer.parseInt(logLine[47]))));
 
 		model.getSelectedShapes().remove(oldState);
 		model.getSelectedShapes().add(newState);

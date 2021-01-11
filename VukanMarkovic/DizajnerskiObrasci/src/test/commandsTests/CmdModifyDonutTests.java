@@ -14,9 +14,9 @@ public class CmdModifyDonutTests {
 
 	@Before
 	public void setUp() {
-		oldState = new Donut(new Point(1, 1), 3, 2, false, Color.BLACK, Color.WHITE);
-		newState = new Donut(new Point(1, 2), 4, 1, true, Color.WHITE, Color.BLACK);
-		originalState = new Donut(new Point(1, 1), 3, 2, false, Color.BLACK, Color.WHITE);
+		oldState = new Donut(new Point(1, 1, false, Color.BLACK), 3, 2, false, Color.BLACK, Color.WHITE);
+		newState = new Donut(new Point(1, 2, false, Color.BLACK), 4, 1, true, Color.WHITE, Color.BLACK);
+		originalState = new Donut(new Point(1, 1, false, Color.BLACK), 3, 2, false, Color.BLACK, Color.WHITE);
 		cmdModifyDonut = new CmdModifyDonut(oldState, newState);
 	}
 

@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import org.junit.*;
 import java.awt.Color;
 import commands.CmdModifyHexagon;
+import hexagon.Hexagon;
 import shapes.HexagonAdapter;
 
 public class CmdModifyHexagonTests {
@@ -14,9 +15,9 @@ public class CmdModifyHexagonTests {
 
 	@Before
 	public void setUp() {
-		oldState = new HexagonAdapter(3, 2, 3, Color.BLACK, Color.WHITE, false);
-		newState = new HexagonAdapter(4, 1, 5, Color.WHITE, Color.BLACK, true);
-		originalState = new HexagonAdapter(3, 2, 3, Color.BLACK, Color.WHITE, false);
+		oldState = new HexagonAdapter(new Hexagon(3, 2, 3), false, Color.WHITE, Color.BLACK);
+		newState = new HexagonAdapter(new Hexagon(4, 1, 5), true, Color.BLACK, Color.WHITE);
+		originalState = new HexagonAdapter(new Hexagon(3, 2, 3), false, Color.WHITE, Color.BLACK);
 		cmdModifyHexagon = new CmdModifyHexagon(oldState, newState);
 	}
 

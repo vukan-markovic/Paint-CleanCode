@@ -1,6 +1,9 @@
 package test.commandsTests;
 
 import static org.junit.Assert.*;
+
+import java.awt.Color;
+
 import org.junit.*;
 import shapes.*;
 import commands.CmdAdd;
@@ -14,7 +17,7 @@ public class CmdAddTests {
 	@Before
 	public void setUp() {
 		model = new DrawingModel();
-		shape = new Point(1, 2);
+		shape = new Point(1, 2, false, Color.BLACK);
 		cmdAdd = new CmdAdd(model, shape);
 	}
 

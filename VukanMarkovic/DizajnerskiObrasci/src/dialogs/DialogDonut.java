@@ -5,12 +5,19 @@ import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
-public class DialogDonut extends DialogCircle {
+public class DialogDonut extends DialogSurfaceShape {
 	private static final long serialVersionUID = 1L;
+	private JTextField radius;
 	private JTextField innerRadius;
 	private JLabel lblInnerRadius;
+	private JLabel lblRadius;
 
 	public DialogDonut() {
+		radius = new JTextField();
+		lblRadius = new JLabel("Radius:");
+		innerRadius = new JTextField();
+		lblInnerRadius = new JLabel("Inner radius:");
+
 		setTitle("Donut dialog");
 		setIcon();
 		buildLayout();
@@ -25,8 +32,9 @@ public class DialogDonut extends DialogCircle {
 
 	@Override
 	public void buildLayout() {
-		innerRadius = new JTextField();
-		lblInnerRadius = new JLabel("Inner radius:");
+		radius.setColumns(10);
+		radius.addKeyListener(getListener());
+
 		innerRadius.setColumns(10);
 		innerRadius.addKeyListener(getListener());
 
@@ -39,10 +47,9 @@ public class DialogDonut extends DialogCircle {
 								.addGroup(getGlContentPanel().createSequentialGroup().addGap(48)
 										.addGroup(getGlContentPanel().createParallelGroup(Alignment.TRAILING)
 												.addGroup(getGlContentPanel().createSequentialGroup()
-														.addComponent(getLblRadius(), GroupLayout.DEFAULT_SIZE,
+														.addComponent(lblRadius, GroupLayout.DEFAULT_SIZE,
 																GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-														.addGap(18)
-														.addComponent(getRadius(), GroupLayout.PREFERRED_SIZE,
+														.addGap(18).addComponent(radius, GroupLayout.PREFERRED_SIZE,
 																GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 												.addGroup(getGlContentPanel().createSequentialGroup()
 														.addPreferredGap(ComponentPlacement.RELATED, 4, Short.MAX_VALUE)
@@ -75,9 +82,9 @@ public class DialogDonut extends DialogCircle {
 										.addComponent(getLblYcoordinate()))
 								.addGap(14)
 								.addGroup(getGlContentPanel().createParallelGroup(Alignment.BASELINE)
-										.addComponent(getRadius(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										.addComponent(radius, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 												GroupLayout.PREFERRED_SIZE)
-										.addComponent(getLblRadius())))
+										.addComponent(lblRadius)))
 								.addGroup(getGlContentPanel().createSequentialGroup()
 										.addComponent(getLblIcon(), GroupLayout.PREFERRED_SIZE, 81,
 												GroupLayout.PREFERRED_SIZE)
@@ -98,14 +105,14 @@ public class DialogDonut extends DialogCircle {
 
 	@Override
 	public boolean isInputValid() {
-		if (innerRadius.getText().isBlank() || getRadius().getText().isBlank() || getXcoordinate().getText().isBlank()
+		if (innerRadius.getText().isBlank() || radius.getText().isBlank() || getXcoordinate().getText().isBlank()
 				|| getYcoordinate().getText().isBlank())
 			return false;
 		return true;
 	}
 
 	private boolean isInputInvalidRadius() {
-		if (Integer.parseInt(innerRadius.getText()) >= Integer.parseInt(getRadius().getText()))
+		if (Integer.parseInt(innerRadius.getText()) >= Integer.parseInt(radius.getText()))
 			return true;
 		return false;
 	}
@@ -127,6 +134,10 @@ public class DialogDonut extends DialogCircle {
 		});
 	}
 
+	public JTextField getRadius() {
+		return radius;
+	}
+	
 	public JTextField getInnerRadius() {
 		return innerRadius;
 	}

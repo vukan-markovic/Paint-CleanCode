@@ -7,16 +7,11 @@ public class HexagonAdapter extends Shape {
 	private static final long serialVersionUID = 1L;
 	private Hexagon hexagon;
 
-	public HexagonAdapter(Hexagon hexagon, Color outerColor, Color innerColor) {
+	public HexagonAdapter(Hexagon hexagon, boolean selected, Color outerColor, Color innerColor) {
 		this.hexagon = hexagon;
-		hexagon.setBorderColor(outerColor);
-		hexagon.setAreaColor(innerColor);
-	}
-
-	public HexagonAdapter(int xCoordinate, int yCoordinate, int radius, Color outerColor, Color innerColor,
-			boolean selected) {
-		this(new Hexagon(xCoordinate, yCoordinate, radius), outerColor, innerColor);
 		setSelected(selected);
+		setOuterColor(outerColor);
+		setInnerColor(innerColor);
 	}
 
 	@Override
@@ -25,7 +20,7 @@ public class HexagonAdapter extends Shape {
 	}
 
 	@Override
-	public void drawSelection(Graphics graphics) {
+	protected void drawSelection(Graphics graphics) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -38,7 +33,7 @@ public class HexagonAdapter extends Shape {
 		if (object instanceof HexagonAdapter) {
 			HexagonAdapter hexagonAdapter = (HexagonAdapter) object;
 
-			if (getRadius() == (hexagonAdapter.getRadius()) && getXcoordinate() == hexagonAdapter.getXcoordinate()
+			if (getRadius() == hexagonAdapter.getRadius() && getXcoordinate() == hexagonAdapter.getXcoordinate()
 					&& getYcoordinate() == hexagonAdapter.getYcoordinate())
 				return true;
 		}
@@ -47,13 +42,14 @@ public class HexagonAdapter extends Shape {
 	}
 
 	public HexagonAdapter clone() {
-		return new HexagonAdapter(getXcoordinate(), getYcoordinate(), getRadius(), getOuterColor(), getInnerColor(),
-				isSelected());
+		return new HexagonAdapter(new Hexagon(getXcoordinate(), getYcoordinate(), getRadius()), isSelected(), getOuterColor(),
+				getInnerColor());
 	}
 
 	public String toString() {
-		return "Center: " + new Point(hexagon.getX(), hexagon.getY()) + ", radius: " + hexagon.getR()
-				+ " , Inner color: " + getInnerColor().getRGB() + " , Outer color: " + getOuterColor().getRGB();
+		return "Center: " + new Point(hexagon.getX(), hexagon.getY(), false, Color.BLACK) + ", radius: "
+				+ hexagon.getR() + " , Outer color: " + getOuterColor().getRGB() + " , Inner color: "
+				+ getInnerColor().getRGB();
 	}
 
 	public int getXcoordinate() {

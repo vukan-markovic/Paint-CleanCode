@@ -10,19 +10,13 @@ import shapes.Point;
 
 public class DonutTests {
 	private Donut donut;
-	private Donut donutMock;
 	private Graphics graphics;
 	private Graphics2D graphics2d;
 	private Area area;
 
 	@Before
 	public void setUp() {
-		donut = new Donut(new Point(1, 2), 3, 2, false, Color.WHITE, Color.BLACK);
-		donutMock = spy(Donut.class);
-		donutMock.setCenter(new Point(1, 2));
-		donutMock.setRadius(3);
-		donutMock.setInnerRadius(2);
-
+		donut = new Donut(new Point(1, 2, false, Color.BLACK), 3, 2, false, Color.WHITE, Color.BLACK);
 		graphics = mock(Graphics.class);
 		graphics2d = mock(Graphics2D.class);
 
@@ -36,34 +30,23 @@ public class DonutTests {
 
 	@Test
 	public void testDrawShapeNotSelected() {
-		donutMock.draw(graphics, graphics2d);
-		verify(graphics).setColor(donutMock.getOuterColor());
-		verify(graphics2d).draw(donutMock.getArea());
-		verify(donutMock).fillShape(graphics, graphics2d);
-	}
-
-	@Test
-	public void testDrawShapeSelected() {
-		donutMock.setSelected(true);
-		donutMock.draw(graphics, graphics2d);
-		verify(graphics).setColor(donutMock.getOuterColor());
-		verify(graphics2d).draw(donutMock.getArea());
-		verify(graphics).setColor(donutMock.getInnerColor());
-		verify(graphics2d).fill(donutMock.getArea());
-		verify(donutMock).fillShape(graphics, graphics2d);
-		verify(donutMock).drawSelection(graphics);
-	}
-
-	@Test
-	public void testFillShape() {
-		donut.fillShape(graphics, graphics2d);
+		donut.draw(graphics, graphics2d);
+		verify(graphics).setColor(donut.getOuterColor());
+		verify(graphics2d).draw(donut.getArea());
 		verify(graphics).setColor(donut.getInnerColor());
 		verify(graphics2d).fill(donut.getArea());
 	}
 
 	@Test
-	public void testDrawSelection() {
-		donut.drawSelection(graphics);
+	public void testDrawShapeSelected() {
+		donut.setSelected(true);
+		donut.draw(graphics, graphics2d);
+		verify(graphics).setColor(donut.getOuterColor());
+		verify(graphics2d).draw(donut.getArea());
+		verify(graphics).setColor(donut.getInnerColor());
+		verify(graphics2d).fill(donut.getArea());
+		verify(graphics).setColor(donut.getInnerColor());
+		verify(graphics2d).fill(donut.getArea());
 		verify(graphics).setColor(Color.BLUE);
 		verify(graphics).drawRect(donut.getCenter().getXcoordinate() - 3, donut.getCenter().getYcoordinate() - 3, 6, 6);
 
@@ -103,36 +86,36 @@ public class DonutTests {
 
 	@Test
 	public void testEqualsNotSameType() {
-		assertFalse(donut.equals(new Point(1, 2)));
+		assertFalse(donut.equals(new Point(1, 2, false, Color.BLACK)));
 	}
 
 	@Test
 	public void testEqualsFalseExpectedRadius() {
-		assertFalse(donut.equals(new Donut(new Point(1, 2), 1, 2, false, Color.WHITE, Color.BLACK)));
+		assertFalse(donut.equals(new Donut(new Point(1, 2, false, Color.BLACK), 1, 2, false, Color.WHITE, Color.BLACK)));
 	}
 
 	@Test
 	public void testEqualsFalseExpectedInnerRadius() {
-		assertFalse(donut.equals(new Donut(new Point(1, 2), 3, 1, false, Color.WHITE, Color.BLACK)));
+		assertFalse(donut.equals(new Donut(new Point(1, 2, false, Color.BLACK), 3, 1, false, Color.WHITE, Color.BLACK)));
 	}
 
 	@Test
 	public void testEqualsTrueExpected() {
-		assertTrue(donut.equals(new Donut(new Point(1, 2), 3, 2, false, Color.WHITE, Color.BLACK)));
+		assertTrue(donut.equals(new Donut(new Point(1, 2, false, Color.BLACK), 3, 2, false, Color.WHITE, Color.BLACK)));
 	}
 
 	@Test
 	public void testEqualsFalseExpected() {
-		assertFalse(donut.equals(new Donut(new Point(1, 2), 8, 5, false, Color.WHITE, Color.BLACK)));
+		assertFalse(donut.equals(new Donut(new Point(1, 2, false, Color.BLACK), 8, 5, false, Color.WHITE, Color.BLACK)));
 	}
 
 	@Test
 	public void testToString() {
 		assertEquals(
-				"Center: " + donut.getCenter() + ", radius: " + donut.getRadius() + " , Inner color: "
-						+ donut.getInnerColor().getRGB() + " , Outer color: " + donut.getOuterColor().getRGB()
-						+ " , inner radius: " + donut.getInnerRadius() + " , Inner color: "
-						+ donut.getInnerColor().getRGB() + " , Outer color: " + donut.getOuterColor().getRGB(),
+				"Center: " + donut.getCenter() + ", radius: " + donut.getRadius() + " , Outer color: "
+						+ donut.getOuterColor().getRGB() + " , Inner color: " + donut.getInnerColor().getRGB()
+						+ " , inner radius: " + donut.getInnerRadius() + " , Outer color: "
+						+ donut.getOuterColor().getRGB() + " , Inner color: " + donut.getInnerColor().getRGB(),
 				donut.toString());
 	}
 }

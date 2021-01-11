@@ -8,15 +8,10 @@ public class Line extends Shape {
 	private Point startPoint;
 	private Point endPoint;
 
-	public Line(Point startPoint, Point endPoint) {
+	public Line(Point startPoint, Point endPoint, boolean selected, Color outerColor) {
+		super(selected, outerColor);
 		this.startPoint = startPoint;
 		this.endPoint = endPoint;
-	}
-
-	public Line(Point startPoint, Point endPoint, boolean selected, Color outerColor) {
-		this(startPoint, endPoint);
-		setSelected(selected);
-		setOuterColor(outerColor);
 	}
 
 	@Override
@@ -31,14 +26,20 @@ public class Line extends Shape {
 	}
 
 	@Override
-	public void drawSelection(Graphics graphics) {
-		graphics.setColor(Color.BLUE);
+	protected void drawSelection(Graphics graphics) {
+		graphics.setColor(getSelectionColor());
+
 		graphics.drawRect(startPoint.getXcoordinate() - SELECT_RECTANGLE_GAP,
-				startPoint.getYcoordinate() - SELECT_RECTANGLE_GAP, 6, 6);
+				startPoint.getYcoordinate() - SELECT_RECTANGLE_GAP, SELECT_RECTANGLE_SIDE_LENGTH,
+				SELECT_RECTANGLE_SIDE_LENGTH);
+
 		graphics.drawRect(endPoint.getXcoordinate() - SELECT_RECTANGLE_GAP,
-				endPoint.getYcoordinate() - SELECT_RECTANGLE_GAP, 6, 6);
+				endPoint.getYcoordinate() - SELECT_RECTANGLE_GAP, SELECT_RECTANGLE_SIDE_LENGTH,
+				SELECT_RECTANGLE_SIDE_LENGTH);
+
 		graphics.drawRect(getMiddleOfLine().getXcoordinate() - SELECT_RECTANGLE_GAP,
-				getMiddleOfLine().getYcoordinate() - SELECT_RECTANGLE_GAP, 6, 6);
+				getMiddleOfLine().getYcoordinate() - SELECT_RECTANGLE_GAP, SELECT_RECTANGLE_SIDE_LENGTH,
+				SELECT_RECTANGLE_SIDE_LENGTH);
 	}
 
 	public Point getMiddleOfLine() {

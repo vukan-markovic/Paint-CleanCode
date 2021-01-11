@@ -8,18 +8,12 @@ public class Rectangle extends SurfaceShape {
 	private int height;
 	private int width;
 
-	public Rectangle(Point upperLeftPoint, int height, int width) {
+	public Rectangle(Point upperLeftPoint, int height, int width, boolean selected, Color outerColor,
+			Color innerColor) {
+		super(selected, outerColor, innerColor);
 		this.upperLeftPoint = upperLeftPoint;
 		this.height = height;
 		this.width = width;
-	}
-
-	public Rectangle(Point upperLeftPoint, int height, int width, boolean selected, Color outerColor,
-			Color innerColor) {
-		this(upperLeftPoint, height, width);
-		setSelected(selected);
-		setOuterColor(outerColor);
-		setInnerColor(innerColor);
 	}
 
 	@Override
@@ -33,22 +27,30 @@ public class Rectangle extends SurfaceShape {
 	}
 
 	@Override
-	public void fillShape(Graphics graphics) {
+	protected void fillShape(Graphics graphics) {
 		graphics.setColor(getInnerColor());
 		graphics.fillRect(upperLeftPoint.getXcoordinate(), upperLeftPoint.getYcoordinate(), width, height);
 	}
 
 	@Override
-	public void drawSelection(Graphics graphics) {
-		graphics.setColor(Color.BLUE);
+	protected void drawSelection(Graphics graphics) {
+		graphics.setColor(getSelectionColor());
+
 		graphics.drawRect(upperLeftPoint.getXcoordinate() - SELECT_RECTANGLE_GAP,
-				upperLeftPoint.getYcoordinate() - SELECT_RECTANGLE_GAP, 6, 6);
+				upperLeftPoint.getYcoordinate() - SELECT_RECTANGLE_GAP, SELECT_RECTANGLE_SIDE_LENGTH,
+				SELECT_RECTANGLE_SIDE_LENGTH);
+
 		graphics.drawRect(upperLeftPoint.getXcoordinate() - SELECT_RECTANGLE_GAP + width,
-				upperLeftPoint.getYcoordinate() - SELECT_RECTANGLE_GAP, 6, 6);
+				upperLeftPoint.getYcoordinate() - SELECT_RECTANGLE_GAP, SELECT_RECTANGLE_SIDE_LENGTH,
+				SELECT_RECTANGLE_SIDE_LENGTH);
+
 		graphics.drawRect(upperLeftPoint.getXcoordinate() - SELECT_RECTANGLE_GAP,
-				upperLeftPoint.getYcoordinate() - SELECT_RECTANGLE_GAP + height, 6, 6);
+				upperLeftPoint.getYcoordinate() - SELECT_RECTANGLE_GAP + height, SELECT_RECTANGLE_SIDE_LENGTH,
+				SELECT_RECTANGLE_SIDE_LENGTH);
+
 		graphics.drawRect(upperLeftPoint.getXcoordinate() + width - SELECT_RECTANGLE_GAP,
-				upperLeftPoint.getYcoordinate() + height - SELECT_RECTANGLE_GAP, 6, 6);
+				upperLeftPoint.getYcoordinate() + height - SELECT_RECTANGLE_GAP, SELECT_RECTANGLE_SIDE_LENGTH,
+				SELECT_RECTANGLE_SIDE_LENGTH);
 	}
 
 	public boolean contains(int xCoordinate, int yCoordinate) {
@@ -76,8 +78,8 @@ public class Rectangle extends SurfaceShape {
 	}
 
 	public String toString() {
-		return "Upper left point: " + upperLeftPoint + ", height: " + height + " , width: " + width + " , Inner color: "
-				+ getInnerColor().getRGB() + " , Outer color: " + getOuterColor().getRGB();
+		return "Upper left point: " + upperLeftPoint + ", height: " + height + " , width: " + width + " , Outer color: "
+				+ getOuterColor().getRGB() + " , Inner color: " + getInnerColor().getRGB();
 	}
 
 	public Point getUpperLeftPoint() {

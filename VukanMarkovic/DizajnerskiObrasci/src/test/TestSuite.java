@@ -16,7 +16,7 @@ import org.junit.runners.Suite;
 		CmdToBackTests.class, CmdToFrontTests.class, DialogCircleTests.class, DialogDonutTests.class,
 		DialogHexagonTests.class, DialogLineTests.class, DialogPointTests.class, DialogRectangleTests.class,
 		CircleTests.class, DonutTests.class, HexagonAdapterTests.class, LineTests.class, PointTests.class,
-		RectangleTests.class, DrawingControllerTests.class, DrawingFrameTests.class, DrawingModelTests.class,
+//		RectangleTests.class, DrawingControllerTests.class, DrawingFrameTests.class, DrawingModelTests.class,
 		DrawingViewTests.class, MainAppTests.class, DrawingObserverTests.class, SaveLogTests.class,
 		SavePaintingTests.class })
 public class TestSuite {

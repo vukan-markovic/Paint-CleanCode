@@ -6,6 +6,8 @@ import commands.CmdToFront;
 import mvc.DrawingModel;
 import static org.junit.Assert.assertEquals;
 
+import java.awt.Color;
+
 public class CmdToFrontTests {
 	private DrawingModel model;
 	private Shape point;
@@ -16,8 +18,8 @@ public class CmdToFrontTests {
 	@Before
 	public void setUp() {
 		model = new DrawingModel();
-		point = new Point(1, 2);
-		line = new Line(new Point(1, 2), new Point(3, 4));
+		point = new Point(1, 2, false, Color.BLACK);
+		line = new Line(new Point(1, 2, false, Color.BLACK), new Point(3, 4, false, Color.BLACK), false, Color.BLACK);
 		model.addShape(point);
 	}
 

@@ -1,6 +1,9 @@
 package test.commandsTests;
 
 import static org.junit.Assert.*;
+
+import java.awt.Color;
+
 import org.junit.*;
 import shapes.*;
 import commands.CmdSelect;
@@ -14,14 +17,14 @@ public class CmdSelectTests {
 	@Before
 	public void setUp() {
 		model = new DrawingModel();
-		shape = new Point(1, 2);
+		shape = new Point(1, 2, false, Color.BLACK);
 		model.addShape(shape);
 		cmdSelect = new CmdSelect(model, shape);
 	}
 
 	@Test
 	public void testExecuteShapeIsNotEqual() {
-		Line line = new Line(new Point(1, 1), new Point(2, 2));
+		Line line = new Line(new Point(1, 1, false, Color.BLACK), new Point(2, 2, false, Color.BLACK), false, Color.BLACK);
 		model.addShape(line);
 		cmdSelect = new CmdSelect(model, shape);
 		cmdSelect.execute();

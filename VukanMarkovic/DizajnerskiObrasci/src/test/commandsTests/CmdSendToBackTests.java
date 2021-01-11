@@ -2,6 +2,9 @@ package test.commandsTests;
 
 import shapes.*;
 import static org.junit.Assert.*;
+
+import java.awt.Color;
+
 import org.junit.*;
 import commands.CmdSendToBack;
 import mvc.DrawingModel;
@@ -15,8 +18,8 @@ public class CmdSendToBackTests {
 	@Before
 	public void setUp() {
 		model = new DrawingModel();
-		shape = new Point(1, 2);
-		model.addShape(new Line(new Point(1, 2), new Point(3, 4)));
+		shape = new Point(1, 2, false, Color.BLACK);
+		model.addShape(new Line(new Point(1, 2, false, Color.BLACK), new Point(3, 4, false, Color.BLACK), false, Color.BLACK));
 		model.addShape(shape);
 		indexOfShape = model.getIndexOfShape(shape);
 		cmdSendToBack = new CmdSendToBack(model, shape);

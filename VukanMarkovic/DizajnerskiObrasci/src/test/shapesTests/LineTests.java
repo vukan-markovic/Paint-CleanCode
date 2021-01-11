@@ -9,15 +9,11 @@ import java.awt.Graphics;
 
 public class LineTests {
 	private Line line;
-	private Line lineMock;
 	private Graphics graphics;
 
 	@Before
 	public void setUp() {
-		line = new Line(new Point(1, 2), new Point(3, 4));
-		lineMock = spy(Line.class);
-		lineMock.setStartPoint(new Point(1, 2));
-		lineMock.setEndPoint(new Point(3, 4));
+		line = new Line(new Point(1, 2, false, Color.BLACK), new Point(3, 4, false, Color.BLACK), false, Color.BLACK);
 		graphics = mock(Graphics.class);
 	}
 
@@ -32,26 +28,20 @@ public class LineTests {
 
 	@Test
 	public void testDrawShapeSelected() {
-		lineMock.setSelected(true);
-		lineMock.draw(graphics);
-		verify(graphics).setColor(lineMock.getOuterColor());
+		line.setSelected(true);
+		line.draw(graphics);
+		verify(graphics).setColor(line.getOuterColor());
 
-		verify(graphics).drawLine(lineMock.getStartPoint().getXcoordinate(), lineMock.getStartPoint().getYcoordinate(),
-				lineMock.getEndPoint().getXcoordinate(), lineMock.getEndPoint().getYcoordinate());
+		verify(graphics).drawLine(line.getStartPoint().getXcoordinate(), line.getStartPoint().getYcoordinate(),
+				line.getEndPoint().getXcoordinate(), line.getEndPoint().getYcoordinate());
 
-		verify(lineMock).drawSelection(graphics);
-	}
-	
-	@Test 
-	public void testDrawSelection() {
-		line.drawSelection(graphics);
 		verify(graphics).setColor(Color.BLUE);
 		verify(graphics).drawRect(line.getStartPoint().getXcoordinate() - 3, line.getStartPoint().getYcoordinate() - 3,
 				6, 6);
 		verify(graphics).drawRect(line.getEndPoint().getXcoordinate() - 3, line.getEndPoint().getYcoordinate() - 3, 6,
 				6);
-		verify(graphics).drawRect(line.getMiddleOfLine().getXcoordinate() - 3, line.getMiddleOfLine().getYcoordinate() - 3, 6,
-				6);
+		verify(graphics).drawRect(line.getMiddleOfLine().getXcoordinate() - 3,
+				line.getMiddleOfLine().getYcoordinate() - 3, 6, 6);
 	}
 
 	@Test
@@ -60,7 +50,7 @@ public class LineTests {
 				(line.getStartPoint().getYcoordinate() + line.getEndPoint().getYcoordinate()) / 2, false,
 				line.getOuterColor()), line.getMiddleOfLine());
 	}
-	
+
 	@Test
 	public void testContainsTrueExcepted() {
 		assertTrue(line.contains(1, 2));
@@ -73,29 +63,28 @@ public class LineTests {
 
 	@Test
 	public void testLength() {
-		assertEquals(
-				line.getStartPoint().calculateDistance(line.getEndPoint().getXcoordinate(), line.getEndPoint().getYcoordinate()),
-				line.calculateLength(), 0);
+		assertEquals(line.getStartPoint().calculateDistance(line.getEndPoint().getXcoordinate(),
+				line.getEndPoint().getYcoordinate()), line.calculateLength(), 0);
 	}
-	
+
 	@Test
 	public void testEqualsNotSameType() {
-		assertFalse(line.equals(new Point(1, 2)));
+		assertFalse(line.equals(new Point(1, 2, false, Color.BLACK)));
 	}
 
 	@Test
 	public void testEqualsFalseExpectedStartPoint() {
-		assertFalse(line.equals(new Line(new Point(2, 2), new Point(3, 4), false, Color.BLACK)));
+		assertFalse(line.equals(new Line(new Point(2, 2, false, Color.BLACK), new Point(3, 4, false, Color.BLACK), false, Color.BLACK)));
 	}
 
 	@Test
 	public void testEqualsFalseExpectedEndPoint() {
-		assertFalse(line.equals(new Line(new Point(1, 2), new Point(3, 5), false, Color.BLACK)));
+		assertFalse(line.equals(new Line(new Point(1, 2, false, Color.BLACK), new Point(3, 5, false, Color.BLACK), false, Color.BLACK)));
 	}
 
 	@Test
 	public void testEqualsTrueExpected() {
-		assertTrue(line.equals(new Line(new Point(1, 2), new Point(3, 4), false, Color.BLACK)));
+		assertTrue(line.equals(new Line(new Point(1, 2, false, Color.BLACK), new Point(3, 4, false, Color.BLACK), false, Color.BLACK)));
 	}
 
 	@Test

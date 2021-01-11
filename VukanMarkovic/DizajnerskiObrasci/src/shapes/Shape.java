@@ -6,8 +6,9 @@ import java.io.Serializable;
 public abstract class Shape implements Cloneable, Serializable {
 	private static final long serialVersionUID = 1L;
 	public final int SELECT_RECTANGLE_GAP = 3;
+	public final int SELECT_RECTANGLE_SIDE_LENGTH = 6;
 	private boolean selected;
-	private Color outerColor = Color.BLACK;
+	private Color outerColor;
 
 	public Shape() {
 	}
@@ -20,8 +21,8 @@ public abstract class Shape implements Cloneable, Serializable {
 	public abstract boolean contains(int xCoordinate, int yCoordinate);
 
 	public abstract void draw(Graphics graphics);
-	
-	public abstract void drawSelection(Graphics graphics);
+
+	protected abstract void drawSelection(Graphics graphics);
 
 	public boolean isSelected() {
 		return selected;
@@ -29,6 +30,10 @@ public abstract class Shape implements Cloneable, Serializable {
 
 	public Color getOuterColor() {
 		return outerColor;
+	}
+
+	public Color getSelectionColor() {
+		return Color.BLUE;
 	}
 
 	public void setSelected(boolean selected) {

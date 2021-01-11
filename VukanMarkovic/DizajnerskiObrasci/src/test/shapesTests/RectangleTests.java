@@ -9,49 +9,42 @@ import java.awt.Graphics;
 
 public class RectangleTests {
 	private Rectangle rectangle;
-	private Rectangle rectangleMock;
 	private Graphics graphics;
 
 	@Before
 	public void setUp() {
-		rectangle = new Rectangle(new Point(1, 2), 1, 2);
-		rectangleMock = spy(Rectangle.class);
-		rectangleMock.setUpperLeftPoint(new Point(1, 2));
-		rectangleMock.setHeight(1);
-		rectangleMock.setWidth(2);
+		rectangle = new Rectangle(new Point(1, 2, false, Color.BLACK), 1, 2, false, Color.BLACK, Color.WHITE);
 		graphics = mock(Graphics.class);
 	}
 
 	@Test
 	public void testDrawShapeNotSelected() {
-		rectangleMock.draw(graphics);
-		verify(graphics).setColor(rectangleMock.getOuterColor());
+		rectangle.draw(graphics);
+		verify(graphics).setColor(rectangle.getOuterColor());
 
-		verify(graphics).drawRect(rectangleMock.getUpperLeftPoint().getXcoordinate(),
-				rectangleMock.getUpperLeftPoint().getYcoordinate(), rectangleMock.getWidth(),
-				rectangleMock.getHeight());
+		verify(graphics).drawRect(rectangle.getUpperLeftPoint().getXcoordinate(),
+				rectangle.getUpperLeftPoint().getYcoordinate(), rectangle.getWidth(), rectangle.getHeight());
 
-		verify(rectangleMock).fillShape(graphics);
+		verify(graphics).setColor(rectangle.getInnerColor());
+
+		verify(graphics).fillRect(rectangle.getUpperLeftPoint().getXcoordinate(),
+				rectangle.getUpperLeftPoint().getYcoordinate(), rectangle.getWidth(), rectangle.getHeight());
 	}
 
 	@Test
 	public void testDrawShapeSelected() {
-		rectangleMock.setSelected(true);
-		rectangleMock.draw(graphics);
+		rectangle.setSelected(true);
+		rectangle.draw(graphics);
 
-		verify(graphics).setColor(rectangleMock.getOuterColor());
+		verify(graphics).setColor(rectangle.getOuterColor());
 
-		verify(graphics).drawRect(rectangleMock.getUpperLeftPoint().getXcoordinate(),
-				rectangleMock.getUpperLeftPoint().getYcoordinate(), rectangleMock.getWidth(),
-				rectangleMock.getHeight());
+		verify(graphics).drawRect(rectangle.getUpperLeftPoint().getXcoordinate(),
+				rectangle.getUpperLeftPoint().getYcoordinate(), rectangle.getWidth(), rectangle.getHeight());
 
-		verify(rectangleMock).fillShape(graphics);
-		verify(rectangleMock).drawSelection(graphics);
-	}
+		verify(graphics).setColor(rectangle.getInnerColor());
 
-	@Test
-	public void testDrawSelection() {
-		rectangle.drawSelection(graphics);
+		verify(graphics).fillRect(rectangle.getUpperLeftPoint().getXcoordinate(),
+				rectangle.getUpperLeftPoint().getYcoordinate(), rectangle.getWidth(), rectangle.getHeight());
 
 		verify(graphics).setColor(Color.BLUE);
 
@@ -69,15 +62,6 @@ public class RectangleTests {
 	}
 
 	@Test
-	public void testFillShape() {
-		rectangle.fillShape(graphics);
-		verify(graphics).setColor(rectangle.getInnerColor());
-
-		verify(graphics).fillRect(rectangle.getUpperLeftPoint().getXcoordinate(),
-				rectangle.getUpperLeftPoint().getYcoordinate(), rectangle.getWidth(), rectangle.getHeight());
-	}
-
-	@Test
 	public void testContainsTrueExcepted() {
 		assertTrue(rectangle.contains(1, 2));
 	}
@@ -89,33 +73,33 @@ public class RectangleTests {
 
 	@Test
 	public void testEqualsNotSameType() {
-		assertFalse(rectangle.equals(new Point(1, 2)));
+		assertFalse(rectangle.equals(new Point(1, 2, false, Color.BLACK)));
 	}
 
 	@Test
 	public void testEqualsFalseExpectedUpperLeftPoint() {
-		assertFalse(rectangle.equals(new Rectangle(new Point(2, 2), 1, 2)));
+		assertFalse(rectangle.equals(new Rectangle(new Point(2, 2, false, Color.BLACK), 1, 2, false, Color.BLACK, Color.WHITE)));
 	}
 
 	@Test
 	public void testEqualsFalseExpectedWidth() {
-		assertFalse(rectangle.equals(new Rectangle(new Point(1, 2), 1, 3)));
+		assertFalse(rectangle.equals(new Rectangle(new Point(1, 2, false, Color.BLACK), 1, 3, false, Color.BLACK, Color.WHITE)));
 	}
 
 	@Test
 	public void testEqualsFalseExpectedHeight() {
-		assertFalse(rectangle.equals(new Rectangle(new Point(1, 2), 3, 2)));
+		assertFalse(rectangle.equals(new Rectangle(new Point(1, 2, false, Color.BLACK), 3, 2, false, Color.BLACK, Color.WHITE)));
 	}
 
 	@Test
 	public void testEqualsTrueExpected() {
-		assertTrue(rectangle.equals(new Rectangle(new Point(1, 2), 1, 2)));
+		assertTrue(rectangle.equals(new Rectangle(new Point(1, 2, false, Color.BLACK), 1, 2, false, Color.BLACK, Color.WHITE)));
 	}
 
 	@Test
 	public void testToString() {
 		assertEquals("Upper left point: " + rectangle.getUpperLeftPoint() + ", height: " + rectangle.getHeight()
-				+ " , width: " + rectangle.getWidth() + " , Inner color: " + rectangle.getInnerColor().getRGB()
-				+ " , Outer color: " + rectangle.getOuterColor().getRGB(), rectangle.toString());
+				+ " , width: " + rectangle.getWidth() + " , Outer color: " + rectangle.getOuterColor().getRGB()
+				+ " , Inner color: " + rectangle.getInnerColor().getRGB(), rectangle.toString());
 	}
 }

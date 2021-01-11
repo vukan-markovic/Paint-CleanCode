@@ -14,9 +14,9 @@ public class CmdModifyCircleTests {
 
 	@Before
 	public void setUp() {
-		oldState = new Circle(new Point(1, 1), 2, false, Color.BLACK, Color.WHITE);
-		newState = new Circle(new Point(1, 2), 1, true, Color.WHITE, Color.BLACK);
-		originalState = new Circle(new Point(1, 1), 2, false, Color.BLACK, Color.WHITE);
+		oldState = new Circle(new Point(1, 1, false, Color.BLACK), 2, false, Color.BLACK, Color.WHITE);
+		newState = new Circle(new Point(1, 2, false, Color.BLACK), 1, true, Color.WHITE, Color.BLACK);
+		originalState = new Circle(new Point(1, 1, false, Color.BLACK), 2, false, Color.BLACK, Color.WHITE);
 		cmdModifyCircle = new CmdModifyCircle(oldState, newState);
 	}
 

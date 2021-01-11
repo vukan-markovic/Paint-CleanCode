@@ -9,11 +9,6 @@ public class Point extends Shape {
 	private int xCoordinate;
 	private int yCoordinate;
 
-	public Point(int xCoordinate, int yCoordinate) {
-		this.xCoordinate = xCoordinate;
-		this.yCoordinate = yCoordinate;
-	}
-
 	public Point(int xCoordinate, int yCoordinate, boolean selected, Color outerColor) {
 		super(selected, outerColor);
 		this.xCoordinate = xCoordinate;
@@ -31,9 +26,11 @@ public class Point extends Shape {
 	}
 
 	@Override
-	public void drawSelection(Graphics graphics) {
-		graphics.setColor(Color.BLUE);
-		graphics.drawRect(xCoordinate - SELECT_RECTANGLE_GAP, yCoordinate - SELECT_RECTANGLE_GAP, 6, 6);
+	protected void drawSelection(Graphics graphics) {
+		graphics.setColor(getSelectionColor());
+
+		graphics.drawRect(xCoordinate - SELECT_RECTANGLE_GAP, yCoordinate - SELECT_RECTANGLE_GAP,
+				SELECT_RECTANGLE_SIDE_LENGTH, SELECT_RECTANGLE_SIDE_LENGTH);
 	}
 
 	public boolean contains(int xCoordinate, int yCoordinate) {
@@ -43,9 +40,7 @@ public class Point extends Shape {
 	}
 
 	public double calculateDistance(int xCoodinate, int yCoodinate) {
-		double xCoodinatesDifference = xCoordinate - xCoodinate;
-		double yCoodinatesDifference = yCoordinate - yCoodinate;
-		return Math.sqrt(xCoodinatesDifference * xCoodinatesDifference + yCoodinatesDifference * yCoodinatesDifference);
+		return Math.sqrt(Math.pow(xCoordinate - xCoodinate, 2) + Math.pow(yCoordinate - yCoodinate, 2));
 	}
 
 	public boolean equals(Object object) {

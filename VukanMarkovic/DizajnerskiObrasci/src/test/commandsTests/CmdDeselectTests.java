@@ -1,6 +1,9 @@
 package test.commandsTests;
 
 import static org.junit.Assert.*;
+
+import java.awt.Color;
+
 import org.junit.*;
 import shapes.*;
 import commands.CmdDeselect;
@@ -14,7 +17,7 @@ public class CmdDeselectTests {
 	@Before
 	public void setUp() {
 		model = new DrawingModel();
-		shape = new Point(1, 2);
+		shape = new Point(1, 2, false, Color.BLACK);
 		model.addShape(shape);
 		model.selectShape(shape);
 		cmdDeselect = new CmdDeselect(model, shape);
@@ -22,7 +25,7 @@ public class CmdDeselectTests {
 
 	@Test
 	public void testExecuteShapeIsNotEqual() {
-		Line line = new Line(new Point(1, 1), new Point(2, 2));
+		Line line = new Line(new Point(1, 1, false, Color.BLACK), new Point(2, 2, false, Color.BLACK), false, Color.BLACK);
 		model.addShape(line);
 		model.selectShape(line);
 		cmdDeselect = new CmdDeselect(model, shape);
@@ -45,7 +48,7 @@ public class CmdDeselectTests {
 
 	@Test
 	public void testUnexecuteShapeIsNotEqual() {
-		Line line = new Line(new Point(1, 1), new Point(2, 2));
+		Line line = new Line(new Point(1, 1, false, Color.BLACK), new Point(2, 2, false, Color.BLACK), false, Color.BLACK);
 		model.addShape(line);
 		cmdDeselect = new CmdDeselect(model, shape);
 		cmdDeselect.unexecute();

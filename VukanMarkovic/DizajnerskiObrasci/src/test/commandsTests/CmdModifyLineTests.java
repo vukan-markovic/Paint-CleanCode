@@ -14,9 +14,9 @@ public class CmdModifyLineTests {
 
 	@Before
 	public void setUp() {
-		oldState = new Line(new Point(1, 1), new Point(3, 2), false, Color.BLACK);
-		newState = new Line(new Point(1, 2), new Point(4, 1), true, Color.WHITE);
-		originalState = new Line(new Point(1, 1), new Point(3, 2), false, Color.BLACK);
+		oldState = new Line(new Point(1, 1, false, Color.BLACK), new Point(3, 2, false, Color.BLACK), false, Color.BLACK);
+		newState = new Line(new Point(1, 2, false, Color.BLACK), new Point(4, 1, false, Color.BLACK), true, Color.WHITE);
+		originalState = new Line(new Point(1, 1, false, Color.BLACK), new Point(3, 2, false, Color.BLACK), false, Color.BLACK);
 		cmdModifyLine = new CmdModifyLine(oldState, newState);
 	}
 

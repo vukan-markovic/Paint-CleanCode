@@ -3,6 +3,9 @@ package test.commandsTests;
 import org.junit.*;
 import shapes.*;
 import static org.junit.Assert.assertEquals;
+
+import java.awt.Color;
+
 import commands.CmdToBack;
 import mvc.DrawingModel;
 
@@ -16,8 +19,8 @@ public class CmdToBackTests {
 	@Before
 	public void setUp() {
 		model = new DrawingModel();
-		point = new Point(1, 2);
-		line = new Line(new Point(1, 2), new Point(3, 4));
+		point = new Point(1, 2, false, Color.BLACK);
+		line = new Line(new Point(1, 2, false, Color.BLACK), new Point(3, 4, false, Color.BLACK), false, Color.BLACK);
 	}
 
 	@Test
