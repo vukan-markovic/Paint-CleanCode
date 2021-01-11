@@ -10,24 +10,24 @@ public class CmdModifyCircle implements Command {
 	public CmdModifyCircle(Circle oldState, Circle newState) {
 		this.oldState = oldState;
 		this.newState = newState;
+		originalState = oldState.clone();
 	}
 
 	@Override
 	public void execute() {
-		originalState = oldState.clone();
-		oldState.setCenter(newState.getCenter());
-		oldState.setRadius(newState.getRadius());
-		oldState.setOuterColor(newState.getInnerColor());
-		oldState.setInnerColor(newState.getInnerColor());
-		oldState.setSelected(newState.isSelected());
+		setOldState(newState);
 	}
 
 	@Override
 	public void unexecute() {
-		oldState.setCenter(originalState.getCenter());
-		oldState.setRadius(originalState.getRadius());
-		oldState.setOuterColor(originalState.getInnerColor());
-		oldState.setInnerColor(originalState.getInnerColor());
-		oldState.setSelected(originalState.isSelected());
+		setOldState(originalState);
+	}
+
+	private void setOldState(Circle state) {
+		oldState.setCenter(state.getCenter());
+		oldState.setRadius(state.getRadius());
+		oldState.setOuterColor(state.getInnerColor());
+		oldState.setInnerColor(state.getInnerColor());
+		oldState.setSelected(state.isSelected());
 	}
 }

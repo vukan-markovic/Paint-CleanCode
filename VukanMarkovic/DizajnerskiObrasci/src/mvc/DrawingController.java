@@ -81,13 +81,13 @@ public class DrawingController {
 				Shape shape = model.getShapeByIndex(indexOfShape);
 
 				if (shape.contains(click.getX(), click.getY()) && shape.isSelected()) {
-					executeCommand(new CmdDeselect(model, model.getShapeByIndex(indexOfShape)));
+					executeCommand(new CmdDeselect(model, shape));
 					logCommand("Deselect - " + model.getShapeByIndex(indexOfShape).getClass().getSimpleName() + " "
 							+ model.getShapeByIndex(indexOfShape).toString());
 					fireEvents();
 					break;
 				} else if (shape.contains(click.getX(), click.getY()) && !shape.isSelected()) {
-					executeCommand(new CmdSelect(model.getShapeByIndex(indexOfShape), model));
+					executeCommand(new CmdSelect(model, shape));
 					logCommand("Select - " + model.getShapeByIndex(indexOfShape).getClass().getSimpleName() + " "
 							+ model.getShapeByIndex(indexOfShape).toString());
 					fireEvents();
@@ -205,7 +205,7 @@ public class DrawingController {
 	}
 
 	public void addDonut(DialogDonut dialogDonut, Point center) {
-		Donut donut = new Donut(center, Integer.parseInt(dialogDonut.getOuterRadius().getText()),
+		Donut donut = new Donut(center, Integer.parseInt(dialogDonut.getRadius().getText()),
 				Integer.parseInt(dialogDonut.getInnerRadius().getText()), false, outerColor, innerColor);
 
 		cmdAdd = new CmdAdd(model, donut);
@@ -274,9 +274,9 @@ public class DrawingController {
 	}
 
 	public void createLineDialog(Shape selectedShape) {
-		dialogLine.getXCoordinateOfStartPoint()
+		dialogLine.getXcoordinate()
 				.setText(String.valueOf(((Line) selectedShape).getStartPoint().getXcoordinate()));
-		dialogLine.getYCoordinateOfStartPoint()
+		dialogLine.getYcoordinate()
 				.setText(String.valueOf(((Line) selectedShape).getStartPoint().getYcoordinate()));
 		dialogLine.getXCoordinateOfEndPoint()
 				.setText(String.valueOf(((Line) selectedShape).getEndPoint().getXcoordinate()));
@@ -291,8 +291,8 @@ public class DrawingController {
 		Line oldState = (Line) selectedShape;
 
 		Line newState = new Line(
-				new Point(Integer.parseInt(dialogLine.getXCoordinateOfStartPoint().getText()),
-						Integer.parseInt(dialogLine.getYCoordinateOfStartPoint().getText()), oldState.isSelected(),
+				new Point(Integer.parseInt(dialogLine.getXcoordinate().getText()),
+						Integer.parseInt(dialogLine.getYcoordinate().getText()), oldState.isSelected(),
 						dialogLine.getOuterColor()),
 				new Point(Integer.parseInt(dialogLine.getXCoordinateOfEndPoint().getText()),
 						Integer.parseInt(dialogLine.getYCoordinateOfEndPoint().getText()), oldState.isSelected(),
@@ -314,7 +314,7 @@ public class DrawingController {
 
 		dialogRectangle.getheight().setText(String.valueOf(((Rectangle) selectedShape).getHeight()));
 		dialogRectangle.getwidth().setText(String.valueOf(((Rectangle) selectedShape).getWidth()));
-		dialogRectangle.setOuterColor(((Rectangle) selectedShape).getInnerColor());
+		dialogRectangle.setOuterColor(((Rectangle) selectedShape).getOuterColor());
 		dialogRectangle.setInnerColor(((Rectangle) selectedShape).getInnerColor());
 		dialogRectangle.getBtnOuterColor().setBackground(dialogRectangle.getOuterColor());
 		dialogRectangle.getBtnInnerColor().setBackground(dialogRectangle.getInnerColor());
@@ -341,9 +341,9 @@ public class DrawingController {
 	public void createDonutModifyDialog(Shape selectedShape) {
 		dialogDonut.getXcoordinate().setText(String.valueOf(((Donut) selectedShape).getCenter().getXcoordinate()));
 		dialogDonut.getYcoordinate().setText(String.valueOf(((Donut) selectedShape).getCenter().getYcoordinate()));
-		dialogDonut.getOuterRadius().setText(String.valueOf(((Donut) selectedShape).getRadius()));
+		dialogDonut.getRadius().setText(String.valueOf(((Donut) selectedShape).getRadius()));
 		dialogDonut.getInnerRadius().setText(String.valueOf(((Donut) selectedShape).getInnerRadius()));
-		dialogDonut.setOuterColor(((Donut) selectedShape).getInnerColor());
+		dialogDonut.setOuterColor(((Donut) selectedShape).getOuterColor());
 		dialogDonut.setInnerColor(((Donut) selectedShape).getInnerColor());
 		dialogDonut.getBtnOuterColor().setBackground(dialogDonut.getOuterColor());
 		dialogDonut.getBtnInnerColor().setBackground(dialogDonut.getInnerColor());
@@ -357,7 +357,7 @@ public class DrawingController {
 				new Point(Integer.parseInt(dialogDonut.getXcoordinate().getText()),
 						Integer.parseInt(dialogDonut.getYcoordinate().getText()), oldState.isSelected(),
 						dialogDonut.getOuterColor()),
-				Integer.parseInt(dialogDonut.getOuterRadius().getText()),
+				Integer.parseInt(dialogDonut.getRadius().getText()),
 				Integer.parseInt(dialogDonut.getInnerRadius().getText()), oldState.isSelected(),
 				dialogDonut.getOuterColor(), dialogDonut.getInnerColor());
 
@@ -371,7 +371,7 @@ public class DrawingController {
 		dialogCircle.getXcoordinate().setText(String.valueOf(((Circle) selectedShape).getCenter().getXcoordinate()));
 		dialogCircle.getYcoordinate().setText(String.valueOf(((Circle) selectedShape).getCenter().getYcoordinate()));
 		dialogCircle.getRadius().setText(String.valueOf(((Circle) selectedShape).getRadius()));
-		dialogCircle.setOuterColor(((Circle) selectedShape).getInnerColor());
+		dialogCircle.setOuterColor(((Circle) selectedShape).getOuterColor());
 		dialogCircle.setInnerColor(((Circle) selectedShape).getInnerColor());
 		dialogCircle.getBtnOuterColor().setBackground(dialogCircle.getOuterColor());
 		dialogCircle.getBtnInnerColor().setBackground(dialogCircle.getInnerColor());
@@ -389,7 +389,7 @@ public class DrawingController {
 				dialogCircle.getOuterColor(), dialogCircle.getInnerColor());
 
 		logCommand("Modify - " + newState.getClass().getSimpleName() + " from " + oldState + " to " + " " + newState);
-		cmdModifyCircle = new CmdModifyCircle(oldState, (Circle) newState);
+		cmdModifyCircle = new CmdModifyCircle(oldState, newState);
 		executeCommand(cmdModifyCircle);
 		clearUnexecutedCommands();
 	}
@@ -770,7 +770,7 @@ public class DrawingController {
 				(Integer.parseInt(logLine[11]) == 0 ? new Color(0, 0, 0, 0)
 						: new Color(Integer.parseInt(logLine[11]))));
 
-		cmdSelect = new CmdSelect(point, model);
+		cmdSelect = new CmdSelect(model, point);
 		executeCommand(cmdSelect);
 	}
 
@@ -787,7 +787,7 @@ public class DrawingController {
 				(Integer.parseInt(logLine[29]) == 0 ? new Color(0, 0, 0, 0)
 						: new Color(Integer.parseInt(logLine[29]))));
 
-		cmdSelect = new CmdSelect(lineShape, model);
+		cmdSelect = new CmdSelect(model, lineShape);
 		executeCommand(cmdSelect);
 	}
 
@@ -801,7 +801,7 @@ public class DrawingController {
 				(Integer.parseInt(logLine[28]) == 0 ? new Color(0, 0, 0, 0)
 						: new Color(Integer.parseInt(logLine[28]))));
 
-		cmdSelect = new CmdSelect(rectangle, model);
+		cmdSelect = new CmdSelect(model, rectangle);
 		executeCommand(cmdSelect);
 	}
 
@@ -815,7 +815,7 @@ public class DrawingController {
 				(Integer.parseInt(logLine[23]) == 0 ? new Color(0, 0, 0, 0)
 						: new Color(Integer.parseInt(logLine[23]))));
 
-		cmdSelect = new CmdSelect(circle, model);
+		cmdSelect = new CmdSelect(model, circle);
 		executeCommand(cmdSelect);
 	}
 
@@ -829,7 +829,7 @@ public class DrawingController {
 				(Integer.parseInt(logLine[35]) == 0 ? new Color(0, 0, 0, 0)
 						: new Color(Integer.parseInt(logLine[35]))));
 
-		cmdSelect = new CmdSelect(donut, model);
+		cmdSelect = new CmdSelect(model, donut);
 		executeCommand(cmdSelect);
 	}
 
@@ -844,7 +844,7 @@ public class DrawingController {
 				(Integer.parseInt(logLine[23]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[23]))),
 				false);
 
-		cmdSelect = new CmdSelect(hexagon, model);
+		cmdSelect = new CmdSelect(model, hexagon);
 		executeCommand(cmdSelect);
 	}
 

@@ -10,22 +10,23 @@ public class CmdModifyLine implements Command {
 	public CmdModifyLine(Line oldState, Line newState) {
 		this.oldState = oldState;
 		this.newState = newState;
+		originalState = oldState.clone();
 	}
 
 	@Override
 	public void execute() {
-		originalState = oldState.clone();
-		oldState.setStartPoint(newState.getStartPoint());
-		oldState.setEndPoint(newState.getEndPoint());
-		oldState.setOuterColor(newState.getOuterColor());
-		oldState.setSelected(newState.isSelected());
+		setOldState(newState);
 	}
 
 	@Override
 	public void unexecute() {
-		oldState.setStartPoint(originalState.getStartPoint());
-		oldState.setEndPoint(originalState.getEndPoint());
-		oldState.setOuterColor(originalState.getOuterColor());
-		oldState.setSelected(originalState.isSelected());
+		setOldState(originalState);
+	}
+
+	private void setOldState(Line state) {
+		oldState.setStartPoint(state.getStartPoint());
+		oldState.setEndPoint(state.getEndPoint());
+		oldState.setOuterColor(state.getOuterColor());
+		oldState.setSelected(state.isSelected());
 	}
 }

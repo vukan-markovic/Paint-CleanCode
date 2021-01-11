@@ -16,6 +16,7 @@ public class CmdModifyRectangleTests {
 	public void setUp() {
 		oldState = new Rectangle(new Point(1, 3), 6, 7, false, Color.BLACK, Color.WHITE);
 		newState = new Rectangle(new Point(2, 4), 4, 9, true, Color.WHITE, Color.BLACK);
+		originalState = new Rectangle(new Point(1, 3), 6, 7, false, Color.BLACK, Color.WHITE);
 		cmdModifyRectangle = new CmdModifyRectangle(oldState, newState);
 	}
 
@@ -25,16 +26,8 @@ public class CmdModifyRectangleTests {
 		assertEquals(newState, oldState);
 	}
 
-	@Test()
-	public void testUnexecuteExecuteNotCalledOldStateNotEqualsOriginalState() {
-		cmdModifyRectangle.unexecute();
-		assertNotEquals(originalState, oldState);
-	}
-
 	@Test
 	public void testUnexecuteOldStateEqualsOriginalState() {
-		originalState = new Rectangle(new Point(1, 3), 6, 7, false, Color.BLACK, Color.WHITE);
-		cmdModifyRectangle.execute();
 		cmdModifyRectangle.unexecute();
 		assertEquals(originalState, oldState);
 	}

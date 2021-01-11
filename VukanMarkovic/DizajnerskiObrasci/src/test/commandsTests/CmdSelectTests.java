@@ -16,14 +16,14 @@ public class CmdSelectTests {
 		model = new DrawingModel();
 		shape = new Point(1, 2);
 		model.addShape(shape);
-		cmdSelect = new CmdSelect(shape, model);
+		cmdSelect = new CmdSelect(model, shape);
 	}
 
 	@Test
 	public void testExecuteShapeIsNotEqual() {
 		Line line = new Line(new Point(1, 1), new Point(2, 2));
 		model.addShape(line);
-		cmdSelect = new CmdSelect(shape, model);
+		cmdSelect = new CmdSelect(model, shape);
 		cmdSelect.execute();
 		assertFalse(model.getShapeByIndex(model.getIndexOfShape(line)).isSelected());
 		assertFalse(model.getSelectedShapes().contains(line));
@@ -39,16 +39,6 @@ public class CmdSelectTests {
 	public void testExecuteShapeRemovedFromSelectedShapes() {
 		cmdSelect.execute();
 		assertTrue(model.getSelectedShapes().contains(shape));
-	}
-
-	@Test
-	public void testUnexecuteShapeIsNotEqual() {
-		Line line = new Line(new Point(1, 1), new Point(2, 2));
-		model.addShape(line);
-		cmdSelect = new CmdSelect(shape, model);
-		cmdSelect.unexecute();
-		assertFalse(model.getShapeByIndex(model.getIndexOfShape(line)).isSelected());
-		assertTrue(model.getSelectedShapes().contains(line));
 	}
 
 	@Test

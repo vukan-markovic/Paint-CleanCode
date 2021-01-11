@@ -15,7 +15,6 @@ import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Robot;
 import java.awt.event.MouseEvent;
-import java.util.stream.Collectors;
 import hexagon.Hexagon;
 import org.junit.rules.TemporaryFolder;
 import org.mockito.Mockito;
@@ -241,11 +240,11 @@ public class DrawingControllerTests {
 	@Test
 	public void testAddDonut() {
 		DialogDonut dialogDonut = new DialogDonut();
-		dialogDonut.getOuterRadius().setText("1");
+		dialogDonut.getRadius().setText("1");
 		dialogDonut.getInnerRadius().setText("1");
 		Point point = new Point(1, 2);
 
-		Donut donut = new Donut(point, Integer.parseInt(dialogDonut.getOuterRadius().getText()),
+		Donut donut = new Donut(point, Integer.parseInt(dialogDonut.getRadius().getText()),
 				Integer.parseInt(dialogDonut.getInnerRadius().getText()), false, controllerMock.getOuterColor(),
 				controllerMock.getInnerColor());
 
@@ -348,9 +347,9 @@ public class DrawingControllerTests {
 		Line line = new Line(new Point(1, 2), new Point(3, 4));
 		controller.setDialogLine(dialogLine);
 		controller.createLineDialog(line);
-		assertEquals("1", dialogLine.getXCoordinateOfStartPoint().getText());
+		assertEquals("1", dialogLine.getXcoordinate().getText());
 		assertEquals("3", dialogLine.getXCoordinateOfEndPoint().getText());
-		assertEquals("2", dialogLine.getYCoordinateOfStartPoint().getText());
+		assertEquals("2", dialogLine.getYcoordinate().getText());
 		assertEquals("4", dialogLine.getYCoordinateOfEndPoint().getText());
 		assertEquals(Color.BLACK, dialogLine.getOuterColor());
 		assertEquals(Color.BLACK, dialogLine.getBtnOuterColor().getBackground());
@@ -360,14 +359,14 @@ public class DrawingControllerTests {
 	@Test
 	public void testModifyLine() {
 		Line oldState = new Line(new Point(1, 2), new Point(3, 4));
-		dialogLine.getXCoordinateOfStartPoint().setText("1");
-		dialogLine.getYCoordinateOfStartPoint().setText("2");
+		dialogLine.getXcoordinate().setText("1");
+		dialogLine.getYcoordinate().setText("2");
 		dialogLine.getXCoordinateOfEndPoint().setText("3");
 		dialogLine.getYCoordinateOfEndPoint().setText("4");
 
 		Line newState = new Line(
-				new Point(Integer.parseInt(dialogLine.getXCoordinateOfStartPoint().getText()),
-						Integer.parseInt(dialogLine.getYCoordinateOfStartPoint().getText()), oldState.isSelected(),
+				new Point(Integer.parseInt(dialogLine.getXcoordinate().getText()),
+						Integer.parseInt(dialogLine.getYcoordinate().getText()), oldState.isSelected(),
 						dialogLine.getOuterColor()),
 				new Point(Integer.parseInt(dialogLine.getXCoordinateOfEndPoint().getText()),
 						Integer.parseInt(dialogLine.getYCoordinateOfEndPoint().getText()), oldState.isSelected(),
@@ -434,7 +433,7 @@ public class DrawingControllerTests {
 		controller.createDonutModifyDialog(donut);
 		assertEquals("1", dialogDonut.getXcoordinate().getText());
 		assertEquals("2", dialogDonut.getYcoordinate().getText());
-		assertEquals("4", dialogDonut.getOuterRadius().getText());
+		assertEquals("4", dialogDonut.getRadius().getText());
 		assertEquals("3", dialogDonut.getInnerRadius().getText());
 		assertEquals(Color.BLACK, dialogDonut.getOuterColor());
 		assertEquals(Color.BLACK, dialogDonut.getInnerColor());
@@ -448,14 +447,14 @@ public class DrawingControllerTests {
 		Donut oldState = new Donut(new Point(1, 2), 3, 4, true, Color.BLACK, Color.BLACK);
 		dialogDonut.getXcoordinate().setText("1");
 		dialogDonut.getYcoordinate().setText("2");
-		dialogDonut.getOuterRadius().setText("4");
+		dialogDonut.getRadius().setText("4");
 		dialogDonut.getInnerRadius().setText("3");
 
 		Donut newState = new Donut(
 				new Point(Integer.parseInt(dialogDonut.getXcoordinate().getText()),
 						Integer.parseInt(dialogDonut.getYcoordinate().getText()), oldState.isSelected(),
 						dialogDonut.getOuterColor()),
-				Integer.parseInt(dialogDonut.getOuterRadius().getText()),
+				Integer.parseInt(dialogDonut.getRadius().getText()),
 				Integer.parseInt(dialogDonut.getInnerRadius().getText()), oldState.isSelected(),
 				dialogDonut.getOuterColor(), dialogDonut.getInnerColor());
 
@@ -552,9 +551,9 @@ public class DrawingControllerTests {
 		Point point = new Point(1, 2, true, Color.BLACK);
 		Line line = new Line(new Point(1, 2), new Point(3, 4));
 		controllerMock.executeCommand(new CmdAdd(model, point));
-		controllerMock.executeCommand(new CmdSelect(model.getShapeByIndex(0), model));
+		controllerMock.executeCommand(new CmdSelect(model, model.getShapeByIndex(0)));
 		controllerMock.executeCommand(new CmdAdd(model, line));
-		controllerMock.executeCommand(new CmdSelect(model.getShapeByIndex(1), model));
+		controllerMock.executeCommand(new CmdSelect(model, model.getShapeByIndex(1)));
 		controllerMock.btnModifyClicked();
 		DialogPoint dialogPoint = controllerMock.getDialogPoint();
 		verify(controllerMock, never()).createPointDialog(point);
@@ -565,7 +564,7 @@ public class DrawingControllerTests {
 	public void testModifyPointInstance() {
 		Point point = new Point(1, 2, true, Color.BLACK);
 		controllerMock.executeCommand(new CmdAdd(model, point));
-		controllerMock.executeCommand(new CmdSelect(model.getShapeByIndex(0), model));
+		controllerMock.executeCommand(new CmdSelect(model, model.getShapeByIndex(0)));
 		controllerMock.btnModifyClicked();
 		DialogPoint dialogPoint = controllerMock.getDialogPoint();
 		verify(controllerMock).createPointDialog(point);
@@ -576,7 +575,7 @@ public class DrawingControllerTests {
 	public void testModifyLineInstance() {
 		Line line = new Line(new Point(1, 2), new Point(3, 4));
 		controllerMock.executeCommand(new CmdAdd(model, line));
-		controllerMock.executeCommand(new CmdSelect(model.getShapeByIndex(0), model));
+		controllerMock.executeCommand(new CmdSelect(model, model.getShapeByIndex(0)));
 		controllerMock.btnModifyClicked();
 		DialogLine dialogLine = controllerMock.getDialogLine();
 		verify(controllerMock).createLineDialog(line);
@@ -587,7 +586,7 @@ public class DrawingControllerTests {
 	public void testModifyRectangleInstance() {
 		Rectangle rectangle = new Rectangle(new Point(1, 2), 3, 4);
 		controllerMock.executeCommand(new CmdAdd(model, rectangle));
-		controllerMock.executeCommand(new CmdSelect(model.getShapeByIndex(0), model));
+		controllerMock.executeCommand(new CmdSelect(model, model.getShapeByIndex(0)));
 		controllerMock.btnModifyClicked();
 		DialogRectangle dialogRectangle = controllerMock.getDialogRectangle();
 		verify(controllerMock).createRectangleModifyDialog(rectangle);
@@ -599,7 +598,7 @@ public class DrawingControllerTests {
 		Point center = new Point(1, 2);
 		Donut donut = new Donut(center, 3, 4, true, Color.BLACK, Color.BLACK);
 		controllerMock.executeCommand(new CmdAdd(model, donut));
-		controllerMock.executeCommand(new CmdSelect(model.getShapeByIndex(0), model));
+		controllerMock.executeCommand(new CmdSelect(model, model.getShapeByIndex(0)));
 		controllerMock.btnModifyClicked();
 		DialogDonut dialogDonut = controllerMock.getDialogDonut();
 		verify(controllerMock).createDonutModifyDialog(donut);
@@ -611,7 +610,7 @@ public class DrawingControllerTests {
 		Point center = new Point(1, 2);
 		Circle circle = new Circle(center, 3);
 		controllerMock.executeCommand(new CmdAdd(model, circle));
-		controllerMock.executeCommand(new CmdSelect(model.getShapeByIndex(0), model));
+		controllerMock.executeCommand(new CmdSelect(model, model.getShapeByIndex(0)));
 		controllerMock.btnModifyClicked();
 		DialogCircle dialogCircle = controllerMock.getDialogCircle();
 		verify(controllerMock).createCircleModifyDialog(circle);
@@ -624,7 +623,7 @@ public class DrawingControllerTests {
 		HexagonAdapter hexagon = new HexagonAdapter(center.getXcoordinate(), center.getYcoordinate(), 3, Color.BLACK,
 				Color.BLACK, true);
 		controllerMock.executeCommand(new CmdAdd(model, hexagon));
-		controllerMock.executeCommand(new CmdSelect(model.getShapeByIndex(0), model));
+		controllerMock.executeCommand(new CmdSelect(model, model.getShapeByIndex(0)));
 		controllerMock.btnModifyClicked();
 		DialogHexagon dialogHexagon = controllerMock.getDialogHexagon();
 		verify(controllerMock).createHexagonModifyDialog(hexagon);
@@ -643,7 +642,7 @@ public class DrawingControllerTests {
 	public void testDelete() {
 		HexagonAdapter hexagon = new HexagonAdapter(1, 2, 3, Color.BLACK, Color.BLACK, true);
 		controllerMock.executeCommand(new CmdAdd(model, hexagon));
-		controllerMock.executeCommand(new CmdSelect(model.getShapeByIndex(0), model));
+		controllerMock.executeCommand(new CmdSelect(model, model.getShapeByIndex(0)));
 		controllerMock.btnRemoveClicked();
 		verify(controllerMock).removeShapes();
 		verify(controllerMock).logCommand("Deleted");
@@ -655,9 +654,9 @@ public class DrawingControllerTests {
 		Point point = new Point(1, 2, true, Color.BLACK);
 		Line line = new Line(new Point(1, 2), new Point(3, 4));
 		controllerMock.executeCommand(new CmdAdd(model, point));
-		controllerMock.executeCommand(new CmdSelect(model.getShapeByIndex(0), model));
+		controllerMock.executeCommand(new CmdSelect(model, model.getShapeByIndex(0)));
 		controllerMock.executeCommand(new CmdAdd(model, line));
-		controllerMock.executeCommand(new CmdSelect(model.getShapeByIndex(1), model));
+		controllerMock.executeCommand(new CmdSelect(model, model.getShapeByIndex(1)));
 		controllerMock.removeShapes();
 		CmdRemove cmdRemove = controllerMock.getCmdRemove();
 		verify(controllerMock).executeCommand(cmdRemove);
@@ -765,9 +764,9 @@ public class DrawingControllerTests {
 		Point point = new Point(1, 2, true, Color.BLACK);
 		Line line = new Line(new Point(1, 2), new Point(3, 4));
 		controllerMock.executeCommand(new CmdAdd(model, point));
-		controllerMock.executeCommand(new CmdSelect(model.getShapeByIndex(0), model));
+		controllerMock.executeCommand(new CmdSelect(model, model.getShapeByIndex(0)));
 		controllerMock.executeCommand(new CmdAdd(model, line));
-		controllerMock.executeCommand(new CmdSelect(model.getShapeByIndex(1), model));
+		controllerMock.executeCommand(new CmdSelect(model, model.getShapeByIndex(1)));
 		controllerMock.btnToBackClicked();
 		CmdToBack cmdToBack = controllerMock.getCmdToBack();
 
@@ -785,7 +784,7 @@ public class DrawingControllerTests {
 	public void testToBack() {
 		Point point = new Point(1, 2, true, Color.BLACK);
 		controllerMock.executeCommand(new CmdAdd(model, point));
-		controllerMock.executeCommand(new CmdSelect(model.getShapeByIndex(0), model));
+		controllerMock.executeCommand(new CmdSelect(model, model.getShapeByIndex(0)));
 		controllerMock.btnToBackClicked();
 		CmdToBack cmdToBack = controllerMock.getCmdToBack();
 
@@ -799,9 +798,9 @@ public class DrawingControllerTests {
 		Point point = new Point(1, 2, true, Color.BLACK);
 		Line line = new Line(new Point(1, 2), new Point(3, 4));
 		controllerMock.executeCommand(new CmdAdd(model, point));
-		controllerMock.executeCommand(new CmdSelect(model.getShapeByIndex(0), model));
+		controllerMock.executeCommand(new CmdSelect(model, model.getShapeByIndex(0)));
 		controllerMock.executeCommand(new CmdAdd(model, line));
-		controllerMock.executeCommand(new CmdSelect(model.getShapeByIndex(1), model));
+		controllerMock.executeCommand(new CmdSelect(model, model.getShapeByIndex(1)));
 		controllerMock.btnToFrontClicked();
 		CmdToFront cmdToFront = controllerMock.getCmdToFront();
 
@@ -818,7 +817,7 @@ public class DrawingControllerTests {
 	public void testToFront() {
 		Point point = new Point(1, 2, true, Color.BLACK);
 		controllerMock.executeCommand(new CmdAdd(model, point));
-		controllerMock.executeCommand(new CmdSelect(model.getShapeByIndex(0), model));
+		controllerMock.executeCommand(new CmdSelect(model, model.getShapeByIndex(0)));
 		controllerMock.btnToFrontClicked();
 		CmdToFront cmdToFront = controllerMock.getCmdToFront();
 		verify(controllerMock).executeCommand(cmdToFront);
@@ -832,9 +831,9 @@ public class DrawingControllerTests {
 		Point point = new Point(1, 2, true, Color.BLACK);
 		Line line = new Line(new Point(1, 2), new Point(3, 4));
 		controllerMock.executeCommand(new CmdAdd(model, point));
-		controllerMock.executeCommand(new CmdSelect(model.getShapeByIndex(0), model));
+		controllerMock.executeCommand(new CmdSelect(model, model.getShapeByIndex(0)));
 		controllerMock.executeCommand(new CmdAdd(model, line));
-		controllerMock.executeCommand(new CmdSelect(model.getShapeByIndex(1), model));
+		controllerMock.executeCommand(new CmdSelect(model, model.getShapeByIndex(1)));
 		controllerMock.btnSendToBackClicked();
 		CmdSendToBack cmdSendToBack = controllerMock.getCmdSendToBack();
 		verify(controllerMock, never()).executeCommand(cmdSendToBack);
@@ -851,7 +850,7 @@ public class DrawingControllerTests {
 	public void testSendToBack() {
 		Point point = new Point(1, 2, true, Color.BLACK);
 		controllerMock.executeCommand(new CmdAdd(model, point));
-		controllerMock.executeCommand(new CmdSelect(model.getShapeByIndex(0), model));
+		controllerMock.executeCommand(new CmdSelect(model, model.getShapeByIndex(0)));
 		controllerMock.btnSendToBackClicked();
 		CmdSendToBack cmdSendToBack = controllerMock.getCmdSendToBack();
 		verify(controllerMock).executeCommand(cmdSendToBack);
@@ -865,9 +864,9 @@ public class DrawingControllerTests {
 		Point point = new Point(1, 2, true, Color.BLACK);
 		Line line = new Line(new Point(1, 2), new Point(3, 4));
 		controllerMock.executeCommand(new CmdAdd(model, point));
-		controllerMock.executeCommand(new CmdSelect(model.getShapeByIndex(0), model));
+		controllerMock.executeCommand(new CmdSelect(model, model.getShapeByIndex(0)));
 		controllerMock.executeCommand(new CmdAdd(model, line));
-		controllerMock.executeCommand(new CmdSelect(model.getShapeByIndex(1), model));
+		controllerMock.executeCommand(new CmdSelect(model, model.getShapeByIndex(1)));
 		controllerMock.btnBringToFrontClicked();
 		CmdBringToFront cmdBringToFront = controllerMock.getCmdBringToFront();
 		verify(controllerMock, never()).executeCommand(cmdBringToFront);
@@ -882,7 +881,7 @@ public class DrawingControllerTests {
 	public void testBringToFront() {
 		Point point = new Point(1, 2, true, Color.BLACK);
 		controllerMock.executeCommand(new CmdAdd(model, point));
-		controllerMock.executeCommand(new CmdSelect(model.getShapeByIndex(0), model));
+		controllerMock.executeCommand(new CmdSelect(model, model.getShapeByIndex(0)));
 		controllerMock.btnBringToFrontClicked();
 		CmdBringToFront cmdBringToFront = controllerMock.getCmdBringToFront();
 		verify(controllerMock).executeCommand(cmdBringToFront);
@@ -906,7 +905,7 @@ public class DrawingControllerTests {
 	public void testFireEvents() {
 		Point point = new Point(1, 2, true, Color.BLACK);
 		controllerMock.executeCommand(new CmdAdd(model, point));
-		controllerMock.executeCommand(new CmdSelect(model.getShapeByIndex(0), model));
+		controllerMock.executeCommand(new CmdSelect(model, model.getShapeByIndex(0)));
 		controller.fireEvents();
 		assertTrue(frame.getBtnDelete().isEnabled());
 		assertTrue(frame.getBtnModify().isEnabled());
@@ -1302,7 +1301,7 @@ public class DrawingControllerTests {
 
 		Point point = new Point(45, 78, false, new Color(250, 128, 114));
 		controllerMock.executeCommand(new CmdAdd(model, point));
-		controllerMock.executeCommand(new CmdSelect(point, model));
+		controllerMock.executeCommand(new CmdSelect(model, point));
 
 		Point newState = new Point(Integer.parseInt(line[17]), Integer.parseInt(line[20]), true,
 				(Integer.parseInt(line[24]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[24]))));
@@ -1323,7 +1322,7 @@ public class DrawingControllerTests {
 
 		Line lineShape = new Line(new Point(77, 86), new Point(79, 197), false, new Color(250, 128, 114));
 		controllerMock.executeCommand(new CmdAdd(model, lineShape));
-		controllerMock.executeCommand(new CmdSelect(lineShape, model));
+		controllerMock.executeCommand(new CmdSelect(model, lineShape));
 
 		Point startPoint = new Point(Integer.parseInt(line[36]), Integer.parseInt(line[39]), false,
 				(Integer.parseInt(line[43]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[43]))));
@@ -1351,7 +1350,7 @@ public class DrawingControllerTests {
 		Rectangle rectangle = new Rectangle(new Point(142, 60), 12, 21, false, new Color(250, 128, 114),
 				new Color(255, 235, 205));
 		controllerMock.executeCommand(new CmdAdd(model, rectangle));
-		controllerMock.executeCommand(new CmdSelect(rectangle, model));
+		controllerMock.executeCommand(new CmdSelect(model, rectangle));
 
 		Point point = new Point(Integer.parseInt(line[36]), Integer.parseInt(line[39]), false,
 				(Integer.parseInt(line[43]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[43]))));
@@ -1375,7 +1374,7 @@ public class DrawingControllerTests {
 
 		Circle circle = new Circle(new Point(521, 256), 21, false, new Color(250, 128, 114), new Color(255, 235, 205));
 		controllerMock.executeCommand(new CmdAdd(model, circle));
-		controllerMock.executeCommand(new CmdSelect(circle, model));
+		controllerMock.executeCommand(new CmdSelect(model, circle));
 
 		Point point = new Point(Integer.parseInt(line[29]), Integer.parseInt(line[32]), false,
 				(Integer.parseInt(line[36]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[36]))));
@@ -1402,7 +1401,7 @@ public class DrawingControllerTests {
 				new Color(255, 235, 205));
 
 		controllerMock.executeCommand(new CmdAdd(model, donut));
-		controllerMock.executeCommand(new CmdSelect(donut, model));
+		controllerMock.executeCommand(new CmdSelect(model, donut));
 
 		Point point = new Point(Integer.parseInt(line[41]), Integer.parseInt(line[44]), false,
 				(Integer.parseInt(line[48]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[48]))));
@@ -1428,7 +1427,7 @@ public class DrawingControllerTests {
 				false);
 
 		controllerMock.executeCommand(new CmdAdd(model, hexagon));
-		controllerMock.executeCommand(new CmdSelect(hexagon, model));
+		controllerMock.executeCommand(new CmdSelect(model, hexagon));
 
 		Point point = new Point(Integer.parseInt(line[29]), Integer.parseInt(line[32]), false,
 				(Integer.parseInt(line[36]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[36]))));

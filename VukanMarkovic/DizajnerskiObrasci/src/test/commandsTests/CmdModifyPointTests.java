@@ -16,6 +16,7 @@ public class CmdModifyPointTests {
 	public void setUp() {
 		oldState = new Point(1, 3, false, Color.BLACK);
 		newState = new Point(2, 4, true, Color.WHITE);
+		originalState = new Point(1, 3, false, Color.BLACK);
 		cmdModifyPoint = new CmdModifyPoint(oldState, newState);
 	}
 
@@ -32,15 +33,8 @@ public class CmdModifyPointTests {
 		assertEquals(newState, oldState);
 	}
 
-	@Test(expected = NullPointerException.class)
-	public void testUnexecuteExecuteNotCalledExceptionExpected() {
-		cmdModifyPoint.unexecute();
-	}
-
 	@Test
 	public void testUnexecuteOldStateEqualsOriginalState() {
-		originalState = new Point(1, 3, false, Color.BLACK);
-		cmdModifyPoint.execute();
 		cmdModifyPoint.unexecute();
 		assertEquals(originalState, oldState);
 	}

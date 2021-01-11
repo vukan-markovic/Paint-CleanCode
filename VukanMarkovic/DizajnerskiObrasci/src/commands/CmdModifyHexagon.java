@@ -10,24 +10,24 @@ public class CmdModifyHexagon implements Command {
 	public CmdModifyHexagon(HexagonAdapter oldState, HexagonAdapter newState) {
 		this.oldState = oldState;
 		this.newState = newState;
+		originalState = oldState.clone();
 	}
 
 	@Override
 	public void execute() {
-		originalState = oldState.clone();
-		oldState.setXcoordinate(newState.getXcoordinate());
-		oldState.setYcoordinate(newState.getYcoordinate());
-		oldState.setRadius(newState.getRadius());
-		oldState.setOuterColor(newState.getInnerColor());
-		oldState.setInnerColor(newState.getInnerColor());
+		setOldState(newState);
 	}
 
 	@Override
 	public void unexecute() {
-		oldState.setXcoordinate(originalState.getXcoordinate());
-		oldState.setYcoordinate(originalState.getYcoordinate());
-		oldState.setRadius(originalState.getRadius());
-		oldState.setOuterColor(originalState.getInnerColor());
-		oldState.setInnerColor(originalState.getInnerColor());
+		setOldState(originalState);
+	}
+
+	private void setOldState(HexagonAdapter state) {
+		oldState.setXcoordinate(state.getXcoordinate());
+		oldState.setYcoordinate(state.getYcoordinate());
+		oldState.setRadius(state.getRadius());
+		oldState.setOuterColor(state.getInnerColor());
+		oldState.setInnerColor(state.getInnerColor());
 	}
 }

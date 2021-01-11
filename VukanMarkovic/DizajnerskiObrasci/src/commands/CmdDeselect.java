@@ -14,19 +14,13 @@ public class CmdDeselect implements Command {
 
 	@Override
 	public void execute() {
-		Shape shapeToSelect = model.getShapes().stream().filter(modelShape -> modelShape.equals(shape)).findFirst()
-				.get();
-
-		shapeToSelect.setSelected(false);
-		model.removeSelectedShape(shapeToSelect);
+		shape.setSelected(false);
+		model.removeSelectedShape(shape);
 	}
 
 	@Override
 	public void unexecute() {
-		Shape shapeToSelect = model.getShapes().stream().filter(modelShape -> modelShape.equals(shape)).findFirst()
-				.get();
-
-		shapeToSelect.setSelected(true);
-		model.addSelectedShape(shapeToSelect);
+		shape.setSelected(true);
+		model.addSelectedShape(shape);
 	}
 }

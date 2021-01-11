@@ -5,106 +5,109 @@ import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
-public class DialogDonut extends DialogSurfaceShape {
+public class DialogDonut extends DialogCircle {
 	private static final long serialVersionUID = 1L;
-	private JTextField outerRadius;
 	private JTextField innerRadius;
+	private JLabel lblInnerRadius;
 
 	public DialogDonut() {
-		buildDialogUI();
+		setTitle("Donut dialog");
+		setIcon();
+		buildLayout();
 		addListener();
 	}
 
 	@Override
-	public void buildDialogUI() {
-		setTitle("Donut dialog");
+	public void setIcon() {
+		getLblIcon().setVerticalAlignment(SwingConstants.BOTTOM);
+		getLblIcon().setIcon(new ImageIcon(new ImageIcon(this.getClass().getResource("/donut.png")).getImage()));
+	}
 
-		outerRadius = new JTextField();
-		outerRadius.setColumns(10);
-		outerRadius.addKeyListener(getListener());
-
+	@Override
+	public void buildLayout() {
 		innerRadius = new JTextField();
+		lblInnerRadius = new JLabel("Inner radius:");
 		innerRadius.setColumns(10);
 		innerRadius.addKeyListener(getListener());
 
-		JLabel lblXcoordinate = new JLabel("X coordinate:");
-		JLabel lblYcoordinate = new JLabel("Y coordinate:");
-		JLabel lblOuterRadius = new JLabel("Outer radius:");
-		JLabel lblInnerRadius = new JLabel("Inner radius:");
-
-		JLabel lblIcon = new JLabel("");
-		lblIcon.setVerticalAlignment(SwingConstants.BOTTOM);
-		lblIcon.setHorizontalAlignment(SwingConstants.CENTER);
-		lblIcon.setIcon(new ImageIcon(new ImageIcon(this.getClass().getResource("/donut.png")).getImage()));
-
-		GroupLayout glContentPanel = new GroupLayout(getContentPanel());
-
-		glContentPanel.setHorizontalGroup(glContentPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(glContentPanel.createSequentialGroup().addContainerGap()
-						.addGroup(glContentPanel.createParallelGroup(Alignment.TRAILING)
-								.addGroup(glContentPanel.createSequentialGroup().addComponent(lblXcoordinate).addGap(18)
-										.addComponent(getXcoordinate(), GroupLayout.PREFERRED_SIZE,
+		getGlContentPanel().setHorizontalGroup(getGlContentPanel().createParallelGroup(Alignment.TRAILING)
+				.addGroup(getGlContentPanel().createSequentialGroup().addContainerGap()
+						.addGroup(getGlContentPanel().createParallelGroup(Alignment.TRAILING)
+								.addGroup(getGlContentPanel().createSequentialGroup().addComponent(getLblXcoodinate())
+										.addGap(18).addComponent(getXcoordinate(), GroupLayout.PREFERRED_SIZE,
 												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGroup(glContentPanel.createSequentialGroup().addGap(48)
-										.addGroup(glContentPanel.createParallelGroup(Alignment.TRAILING)
-												.addGroup(glContentPanel.createSequentialGroup()
-														.addComponent(lblOuterRadius, GroupLayout.DEFAULT_SIZE,
+								.addGroup(getGlContentPanel().createSequentialGroup().addGap(48)
+										.addGroup(getGlContentPanel().createParallelGroup(Alignment.TRAILING)
+												.addGroup(getGlContentPanel().createSequentialGroup()
+														.addComponent(getLblRadius(), GroupLayout.DEFAULT_SIZE,
 																GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 														.addGap(18)
-														.addComponent(outerRadius, GroupLayout.PREFERRED_SIZE,
+														.addComponent(getRadius(), GroupLayout.PREFERRED_SIZE,
 																GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-												.addGroup(glContentPanel.createSequentialGroup()
+												.addGroup(getGlContentPanel().createSequentialGroup()
 														.addPreferredGap(ComponentPlacement.RELATED, 4, Short.MAX_VALUE)
-														.addComponent(lblYcoordinate).addGap(18).addComponent(
+														.addComponent(getLblYcoordinate()).addGap(18).addComponent(
 																getYcoordinate(), GroupLayout.PREFERRED_SIZE,
 																GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-												.addGroup(glContentPanel.createSequentialGroup()
+												.addGroup(getGlContentPanel().createSequentialGroup()
 														.addComponent(lblInnerRadius).addGap(18)
 														.addComponent(innerRadius, GroupLayout.PREFERRED_SIZE,
 																GroupLayout.DEFAULT_SIZE,
 																GroupLayout.PREFERRED_SIZE)))))
 						.addGap(78)
-						.addGroup(glContentPanel.createParallelGroup(Alignment.TRAILING)
+						.addGroup(getGlContentPanel().createParallelGroup(Alignment.TRAILING)
 								.addComponent(getBtnOuterColor()).addComponent(getBtnInnerColor())
-								.addComponent(lblIcon, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE))
+								.addComponent(getLblIcon(), GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE))
 						.addGap(102)));
 
-		glContentPanel
-				.setVerticalGroup(glContentPanel.createParallelGroup(Alignment.LEADING).addGroup(glContentPanel
-						.createSequentialGroup().addContainerGap(31, Short.MAX_VALUE)
-						.addGroup(glContentPanel.createParallelGroup(Alignment.TRAILING).addGroup(glContentPanel
+		getGlContentPanel().setVerticalGroup(getGlContentPanel().createParallelGroup(Alignment.LEADING)
+				.addGroup(getGlContentPanel().createSequentialGroup().addContainerGap(31, Short.MAX_VALUE).addGroup(
+						getGlContentPanel().createParallelGroup(Alignment.TRAILING).addGroup(getGlContentPanel()
 								.createSequentialGroup()
-								.addGroup(glContentPanel.createParallelGroup(Alignment.BASELINE)
+								.addGroup(getGlContentPanel().createParallelGroup(Alignment.BASELINE)
 										.addComponent(getXcoordinate(), GroupLayout.PREFERRED_SIZE,
 												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblXcoordinate))
+										.addComponent(getLblXcoodinate()))
 								.addGap(18)
-								.addGroup(glContentPanel.createParallelGroup(Alignment.BASELINE)
+								.addGroup(getGlContentPanel().createParallelGroup(Alignment.BASELINE)
 										.addComponent(getYcoordinate(), GroupLayout.PREFERRED_SIZE,
 												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblYcoordinate))
+										.addComponent(getLblYcoordinate()))
 								.addGap(14)
-								.addGroup(glContentPanel.createParallelGroup(Alignment.BASELINE)
-										.addComponent(outerRadius, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+								.addGroup(getGlContentPanel().createParallelGroup(Alignment.BASELINE)
+										.addComponent(getRadius(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 												GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblOuterRadius)))
-								.addGroup(glContentPanel
-										.createSequentialGroup()
-										.addComponent(
-												lblIcon, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
+										.addComponent(getLblRadius())))
+								.addGroup(getGlContentPanel().createSequentialGroup()
+										.addComponent(getLblIcon(), GroupLayout.PREFERRED_SIZE, 81,
+												GroupLayout.PREFERRED_SIZE)
 										.addGap(18)))
-						.addGroup(glContentPanel.createParallelGroup(Alignment.LEADING).addGroup(glContentPanel
-								.createSequentialGroup().addGap(18)
-								.addGroup(glContentPanel.createParallelGroup(Alignment.BASELINE)
-										.addComponent(innerRadius, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblInnerRadius)))
-								.addGroup(glContentPanel.createSequentialGroup()
+						.addGroup(getGlContentPanel().createParallelGroup(Alignment.LEADING)
+								.addGroup(getGlContentPanel().createSequentialGroup().addGap(18)
+										.addGroup(getGlContentPanel().createParallelGroup(Alignment.BASELINE)
+												.addComponent(innerRadius, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addComponent(lblInnerRadius)))
+								.addGroup(getGlContentPanel().createSequentialGroup()
 										.addPreferredGap(ComponentPlacement.RELATED).addComponent(getBtnOuterColor())
 										.addGap(9).addComponent(getBtnInnerColor())))
 						.addGap(33)));
 
-		getContentPanel().setLayout(glContentPanel);
+		getContentPanel().setLayout(getGlContentPanel());
+	}
+
+	@Override
+	public boolean isInputValid() {
+		if (innerRadius.getText().isBlank() || getRadius().getText().isBlank() || getXcoordinate().getText().isBlank()
+				|| getYcoordinate().getText().isBlank())
+			return false;
+		return true;
+	}
+
+	private boolean isInputInvalidRadius() {
+		if (Integer.parseInt(innerRadius.getText()) >= Integer.parseInt(getRadius().getText()))
+			return true;
+		return false;
 	}
 
 	private void addListener() {
@@ -122,24 +125,6 @@ public class DialogDonut extends DialogSurfaceShape {
 				}
 			}
 		});
-	}
-
-	@Override
-	public boolean isInputValid() {
-		if (innerRadius.getText().isBlank() || outerRadius.getText().isBlank() || getXcoordinate().getText().isBlank()
-				|| getYcoordinate().getText().isBlank())
-			return false;
-		return true;
-	}
-
-	private boolean isInputInvalidRadius() {
-		if (Integer.parseInt(innerRadius.getText()) >= Integer.parseInt(outerRadius.getText()))
-			return true;
-		return false;
-	}
-
-	public JTextField getOuterRadius() {
-		return outerRadius;
 	}
 
 	public JTextField getInnerRadius() {

@@ -11,11 +11,11 @@ public class CmdBringToFront implements Command {
 	public CmdBringToFront(DrawingModel model, Shape shape) {
 		this.model = model;
 		this.shape = shape;
+		indexOfShape = model.getIndexOfShape(shape);
 	}
 
 	@Override
 	public void execute() {
-		indexOfShape = model.getIndexOfShape(shape);
 		model.removeShape(shape);
 		model.addShape(shape);
 	}

@@ -78,9 +78,9 @@ public class DialogDonutTests {
 			@Override
 			public void run() {
 				dialogDonut.setVisible(true);
-				dialogDonut.getOuterRadius().requestFocusInWindow();
+				dialogDonut.getRadius().requestFocusInWindow();
 				robot.keyPress(KeyEvent.VK_W);
-				assertFalse(dialogDonut.getOuterRadius().getText().contains("W"));
+				assertFalse(dialogDonut.getRadius().getText().contains("W"));
 			}
 		});
 	}
@@ -91,9 +91,9 @@ public class DialogDonutTests {
 			@Override
 			public void run() {
 				dialogDonut.setVisible(true);
-				dialogDonut.getOuterRadius().requestFocusInWindow();
+				dialogDonut.getRadius().requestFocusInWindow();
 				robot.keyPress(KeyEvent.VK_3);
-				assertTrue(dialogDonut.getOuterRadius().getText().contains("3"));
+				assertTrue(dialogDonut.getRadius().getText().contains("3"));
 			}
 		});
 	}
@@ -155,7 +155,7 @@ public class DialogDonutTests {
 			public void run() {
 				dialogDonut.getXcoordinate().setText(String.valueOf(1));
 				dialogDonut.getYcoordinate().setText(String.valueOf(2));
-				dialogDonut.getOuterRadius().setText(String.valueOf(3));
+				dialogDonut.getRadius().setText(String.valueOf(3));
 				dialogDonut.getBtnOk().doClick();
 				robot.keyPress(KeyEvent.VK_ENTER);
 				assertFalse(dialogDonut.isAccepted());
@@ -171,7 +171,7 @@ public class DialogDonutTests {
 			public void run() {
 				dialogDonut.getXcoordinate().setText(String.valueOf(1));
 				dialogDonut.getYcoordinate().setText(String.valueOf(2));
-				dialogDonut.getOuterRadius().setText(String.valueOf(3));
+				dialogDonut.getRadius().setText(String.valueOf(3));
 				dialogDonut.getInnerRadius().setText(String.valueOf(4));
 				dialogDonut.getBtnOk().doClick();
 				robot.keyPress(KeyEvent.VK_ENTER);
@@ -185,7 +185,7 @@ public class DialogDonutTests {
 	public void testBtnOkClicked() {
 		dialogDonut.getXcoordinate().setText(String.valueOf(1));
 		dialogDonut.getYcoordinate().setText(String.valueOf(2));
-		dialogDonut.getOuterRadius().setText(String.valueOf(4));
+		dialogDonut.getRadius().setText(String.valueOf(4));
 		dialogDonut.getInnerRadius().setText(String.valueOf(3));
 		dialogDonut.getBtnOk().doClick();
 		assertTrue(dialogDonut.isAccepted());

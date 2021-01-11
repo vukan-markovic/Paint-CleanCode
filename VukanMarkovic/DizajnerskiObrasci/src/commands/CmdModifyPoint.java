@@ -10,22 +10,23 @@ public class CmdModifyPoint implements Command {
 	public CmdModifyPoint(Point oldState, Point newState) {
 		this.oldState = oldState;
 		this.newState = newState;
+		originalState = oldState.clone();
 	}
 
 	@Override
 	public void execute() {
-		originalState = oldState.clone();
-		oldState.setXcoordinate(newState.getXcoordinate());
-		oldState.setYcoordinate(newState.getYcoordinate());
-		oldState.setOuterColor(newState.getOuterColor());
-		oldState.setSelected(newState.isSelected());
+		setOldState(newState);
 	}
 
 	@Override
 	public void unexecute() {
-		oldState.setXcoordinate(originalState.getXcoordinate());
-		oldState.setYcoordinate(originalState.getYcoordinate());
-		oldState.setOuterColor(originalState.getOuterColor());
-		oldState.setSelected(originalState.isSelected());
+		setOldState(originalState);
+	}
+
+	private void setOldState(Point state) {
+		oldState.setXcoordinate(state.getXcoordinate());
+		oldState.setYcoordinate(state.getYcoordinate());
+		oldState.setOuterColor(state.getOuterColor());
+		oldState.setSelected(state.isSelected());
 	}
 }

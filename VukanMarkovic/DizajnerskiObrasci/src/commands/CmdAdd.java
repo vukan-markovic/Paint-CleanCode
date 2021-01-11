@@ -14,7 +14,6 @@ public class CmdAdd implements Command {
 
 	@Override
 	public void execute() {
-		shape.setSelected(false);
 		model.addShape(shape);
 	}
 

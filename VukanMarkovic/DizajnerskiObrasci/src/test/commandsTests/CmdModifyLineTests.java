@@ -16,6 +16,7 @@ public class CmdModifyLineTests {
 	public void setUp() {
 		oldState = new Line(new Point(1, 1), new Point(3, 2), false, Color.BLACK);
 		newState = new Line(new Point(1, 2), new Point(4, 1), true, Color.WHITE);
+		originalState = new Line(new Point(1, 1), new Point(3, 2), false, Color.BLACK);
 		cmdModifyLine = new CmdModifyLine(oldState, newState);
 	}
 
@@ -25,15 +26,8 @@ public class CmdModifyLineTests {
 		assertEquals(newState, oldState);
 	}
 
-	@Test(expected = NullPointerException.class)
-	public void testUnexecuteExecuteNotCalledExceptionExpected() {
-		cmdModifyLine.unexecute();
-	}
-
 	@Test
 	public void testUnexecuteOldStateEqualsOriginalState() {
-		originalState = new Line(new Point(1, 1), new Point(3, 2), false, Color.BLACK);
-		cmdModifyLine.execute();
 		cmdModifyLine.unexecute();
 		assertEquals(originalState, oldState);
 	}

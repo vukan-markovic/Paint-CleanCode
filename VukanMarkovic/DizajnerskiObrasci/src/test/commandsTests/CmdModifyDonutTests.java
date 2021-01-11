@@ -16,6 +16,7 @@ public class CmdModifyDonutTests {
 	public void setUp() {
 		oldState = new Donut(new Point(1, 1), 3, 2, false, Color.BLACK, Color.WHITE);
 		newState = new Donut(new Point(1, 2), 4, 1, true, Color.WHITE, Color.BLACK);
+		originalState = new Donut(new Point(1, 1), 3, 2, false, Color.BLACK, Color.WHITE);
 		cmdModifyDonut = new CmdModifyDonut(oldState, newState);
 	}
 
@@ -25,15 +26,8 @@ public class CmdModifyDonutTests {
 		assertEquals(newState, oldState);
 	}
 
-	@Test(expected = NullPointerException.class)
-	public void testUnexecuteExecuteNotCalledExceptionExpected() {
-		cmdModifyDonut.unexecute();
-	}
-
 	@Test
 	public void testUnexecuteOldStateEqualsOriginalState() {
-		originalState = new Donut(new Point(1, 1), 3, 2, false, Color.BLACK, Color.WHITE);
-		cmdModifyDonut.execute();
 		cmdModifyDonut.unexecute();
 		assertEquals(originalState, oldState);
 	}

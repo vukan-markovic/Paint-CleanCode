@@ -16,6 +16,7 @@ public class CmdModifyHexagonTests {
 	public void setUp() {
 		oldState = new HexagonAdapter(3, 2, 3, Color.BLACK, Color.WHITE, false);
 		newState = new HexagonAdapter(4, 1, 5, Color.WHITE, Color.BLACK, true);
+		originalState = new HexagonAdapter(3, 2, 3, Color.BLACK, Color.WHITE, false);
 		cmdModifyHexagon = new CmdModifyHexagon(oldState, newState);
 	}
 
@@ -25,15 +26,8 @@ public class CmdModifyHexagonTests {
 		assertEquals(newState, oldState);
 	}
 
-	@Test(expected = NullPointerException.class)
-	public void testUnexecuteExecuteNotCalledExceptionExpected() {
-		cmdModifyHexagon.unexecute();
-	}
-
 	@Test
 	public void testUnexecuteOldStateEqualsOriginalState() {
-		originalState = new HexagonAdapter(3, 2, 3, Color.BLACK, Color.WHITE, false);
-		cmdModifyHexagon.execute();
 		cmdModifyHexagon.unexecute();
 		assertEquals(originalState, oldState);
 	}

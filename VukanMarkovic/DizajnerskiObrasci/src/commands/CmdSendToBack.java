@@ -11,11 +11,11 @@ public class CmdSendToBack implements Command {
 	public CmdSendToBack(DrawingModel model, Shape shape) {
 		this.model = model;
 		this.shape = shape;
+		indexOfShape = model.getIndexOfShape(shape);
 	}
 
 	@Override
 	public void execute() {
-		indexOfShape = model.getIndexOfShape(shape);
 		model.removeShape(shape);
 		model.addShapeToIndex(0, shape);
 	}

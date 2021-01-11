@@ -40,13 +40,12 @@ public class CmdToBackTests {
 		assertEquals(indexOfShape, model.getIndexOfShape(line));
 	}
 
-	@Test
 	public void testUnexecuteIndexIsZero() {
 		model.addShape(point);
 		indexOfShape = model.getIndexOfShape(point);
 		cmdToBack = new CmdToBack(model, point);
 		cmdToBack.unexecute();
-		assertEquals(0, model.getIndexOfShape(point));
+		assertEquals(indexOfShape, model.getIndexOfShape(point));
 	}
 
 	@Test
@@ -56,8 +55,8 @@ public class CmdToBackTests {
 		indexOfShape = model.getIndexOfShape(point);
 		cmdToBack = new CmdToBack(model, point);
 		cmdToBack.unexecute();
-		assertEquals(indexOfShape, model.getIndexOfShape(point));
-		assertEquals(indexOfShape - 1, model.getIndexOfShape(line));
+		assertEquals(indexOfShape - 1, model.getIndexOfShape(point));
+		assertEquals(indexOfShape, model.getIndexOfShape(line));
 	}
 
 	@Test

@@ -1,30 +1,29 @@
 package commands;
 
-import java.util.Collections;
+import java.util.*;
 import mvc.DrawingModel;
 import shapes.Shape;
 
 public class CmdToBack implements Command {
-	private DrawingModel model;
-	private Shape shape;
+	private List<Shape> shapes;
 	private int indexOfShape;
+	private int indexOfPreviousShape;
 
 	public CmdToBack(DrawingModel model, Shape shape) {
-		this.model = model;
-		this.shape = shape;
+		shapes = model.getShapes();
+		indexOfShape = shapes.indexOf(shape);
+		indexOfPreviousShape = indexOfShape - 1;
 	}
 
 	@Override
 	public void execute() {
-		indexOfShape = model.getIndexOfShape(shape);
-
 		if (indexOfShape != 0)
-			Collections.swap(model.getShapes(), indexOfShape - 1, indexOfShape);
+			Collections.swap(shapes, indexOfPreviousShape, indexOfShape);
 	}
 
 	@Override
 	public void unexecute() {
 		if (indexOfShape != 0)
-			Collections.swap(model.getShapes(), indexOfShape, indexOfShape - 1);
+			Collections.swap(shapes, indexOfShape, indexOfPreviousShape);
 	}
 }

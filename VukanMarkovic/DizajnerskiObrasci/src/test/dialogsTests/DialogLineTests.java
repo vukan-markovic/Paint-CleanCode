@@ -26,9 +26,9 @@ public class DialogLineTests {
 			@Override
 			public void run() {
 				dialogLine.setVisible(true);
-				dialogLine.getXCoordinateOfStartPoint().requestFocusInWindow();
+				dialogLine.getXcoordinate().requestFocusInWindow();
 				robot.keyPress(KeyEvent.VK_W);
-				assertFalse(dialogLine.getXCoordinateOfStartPoint().getText().contains("W"));
+				assertFalse(dialogLine.getXcoordinate().getText().contains("W"));
 			}
 		});
 	}
@@ -39,9 +39,9 @@ public class DialogLineTests {
 			@Override
 			public void run() {
 				dialogLine.setVisible(true);
-				dialogLine.getXCoordinateOfStartPoint().requestFocusInWindow();
+				dialogLine.getXcoordinate().requestFocusInWindow();
 				robot.keyPress(KeyEvent.VK_3);
-				assertTrue(dialogLine.getXCoordinateOfStartPoint().getText().contains("3"));
+				assertTrue(dialogLine.getXcoordinate().getText().contains("3"));
 			}
 		});
 	}
@@ -52,9 +52,9 @@ public class DialogLineTests {
 			@Override
 			public void run() {
 				dialogLine.setVisible(true);
-				dialogLine.getYCoordinateOfStartPoint().requestFocusInWindow();
+				dialogLine.getYcoordinate().requestFocusInWindow();
 				robot.keyPress(KeyEvent.VK_W);
-				assertFalse(dialogLine.getYCoordinateOfStartPoint().getText().contains("W"));
+				assertFalse(dialogLine.getYcoordinate().getText().contains("W"));
 			}
 		});
 	}
@@ -65,9 +65,9 @@ public class DialogLineTests {
 			@Override
 			public void run() {
 				dialogLine.setVisible(true);
-				dialogLine.getYCoordinateOfStartPoint().requestFocusInWindow();
+				dialogLine.getYcoordinate().requestFocusInWindow();
 				robot.keyPress(KeyEvent.VK_3);
-				assertTrue(dialogLine.getYCoordinateOfStartPoint().getText().contains("3"));
+				assertTrue(dialogLine.getYcoordinate().getText().contains("3"));
 			}
 		});
 	}
@@ -141,8 +141,8 @@ public class DialogLineTests {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				dialogLine.getXCoordinateOfStartPoint().setText(String.valueOf(1));
-				dialogLine.getYCoordinateOfStartPoint().setText(String.valueOf(2));
+				dialogLine.getXcoordinate().setText(String.valueOf(1));
+				dialogLine.getYcoordinate().setText(String.valueOf(2));
 				dialogLine.getYCoordinateOfEndPoint().setText(String.valueOf(4));
 				dialogLine.getBtnOk().doClick();
 				robot.keyPress(KeyEvent.VK_ENTER);
@@ -154,8 +154,8 @@ public class DialogLineTests {
 
 	@Test
 	public void testBtnOkClicked() {
-		dialogLine.getXCoordinateOfStartPoint().setText(String.valueOf(1));
-		dialogLine.getYCoordinateOfStartPoint().setText(String.valueOf(2));
+		dialogLine.getXcoordinate().setText(String.valueOf(1));
+		dialogLine.getYcoordinate().setText(String.valueOf(2));
 		dialogLine.getXCoordinateOfEndPoint().setText(String.valueOf(3));
 		dialogLine.getYCoordinateOfEndPoint().setText(String.valueOf(4));
 		dialogLine.getBtnOk().doClick();

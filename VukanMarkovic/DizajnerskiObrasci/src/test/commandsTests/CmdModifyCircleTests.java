@@ -16,6 +16,7 @@ public class CmdModifyCircleTests {
 	public void setUp() {
 		oldState = new Circle(new Point(1, 1), 2, false, Color.BLACK, Color.WHITE);
 		newState = new Circle(new Point(1, 2), 1, true, Color.WHITE, Color.BLACK);
+		originalState = new Circle(new Point(1, 1), 2, false, Color.BLACK, Color.WHITE);
 		cmdModifyCircle = new CmdModifyCircle(oldState, newState);
 	}
 
@@ -25,15 +26,8 @@ public class CmdModifyCircleTests {
 		assertEquals(newState, oldState);
 	}
 
-	@Test(expected = NullPointerException.class)
-	public void testUnexecuteExecuteNotCalledExceptionExpected() {
-		cmdModifyCircle.unexecute();
-	}
-
 	@Test
 	public void testUnexecuteOldStateEqualsOriginalState() {
-		originalState = new Circle(new Point(1, 1), 2, false, Color.BLACK, Color.WHITE);
-		cmdModifyCircle.execute();
 		cmdModifyCircle.unexecute();
 		assertEquals(originalState, oldState);
 	}

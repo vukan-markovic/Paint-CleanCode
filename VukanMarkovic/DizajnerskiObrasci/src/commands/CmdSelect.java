@@ -4,29 +4,23 @@ import mvc.DrawingModel;
 import shapes.Shape;
 
 public class CmdSelect implements Command {
-	private Shape shape;
 	private DrawingModel model;
+	private Shape shape;
 
-	public CmdSelect(Shape shape, DrawingModel model) {
-		this.shape = shape;
+	public CmdSelect(DrawingModel model, Shape shape) {
 		this.model = model;
+		this.shape = shape;
 	}
 
 	@Override
 	public void execute() {
-		Shape shapeToSelect = model.getShapes().stream().filter(modelShape -> modelShape.equals(shape)).findFirst()
-				.get();
-
-		shapeToSelect.setSelected(true);
-		model.addSelectedShape(shapeToSelect);
+		shape.setSelected(true);
+		model.addSelectedShape(shape);
 	}
 
 	@Override
 	public void unexecute() {
-		Shape shapeToSelect = model.getShapes().stream().filter(modelShape -> modelShape.equals(shape)).findFirst()
-				.get();
-
-		shapeToSelect.setSelected(false);
-		model.removeSelectedShape(shapeToSelect);
+		shape.setSelected(false);
+		model.removeSelectedShape(shape);
 	}
 }
