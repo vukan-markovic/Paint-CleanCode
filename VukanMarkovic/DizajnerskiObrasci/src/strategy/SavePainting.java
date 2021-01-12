@@ -2,7 +2,6 @@ package strategy;
 
 import java.io.*;
 import java.util.List;
-
 import shapes.Shape;
 
 public class SavePainting implements Save {

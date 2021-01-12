@@ -3,6 +3,7 @@ package observer;
 import java.beans.*;
 
 public class DrawingObserver {
+	private PropertyChangeSupport changeSupport;
 	private boolean btnDeleteEnabled;
 	private boolean btnModifyEnabled;
 	private boolean btnUndoEnabled;
@@ -11,7 +12,6 @@ public class DrawingObserver {
 	private boolean btnToFrontEnabled;
 	private boolean btnSendToBackEnabled;
 	private boolean btnBringToFrontEnabled;
-	private PropertyChangeSupport changeSupport;
 
 	public DrawingObserver() {
 		changeSupport = new PropertyChangeSupport(this);

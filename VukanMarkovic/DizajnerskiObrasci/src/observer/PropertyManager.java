@@ -12,30 +12,32 @@ public class PropertyManager implements PropertyChangeListener {
 
 	@Override
 	public void propertyChange(PropertyChangeEvent changeEvent) {
+		boolean newValue = (boolean) changeEvent.getNewValue();
+
 		switch (changeEvent.getPropertyName()) {
 		case "btnDelete":
-			frame.getBtnDelete().setEnabled((boolean) changeEvent.getNewValue());
+			frame.getBtnDelete().setEnabled(newValue);
 			break;
 		case "btnModify":
-			frame.getBtnModify().setEnabled((boolean) changeEvent.getNewValue());
+			frame.getBtnModify().setEnabled(newValue);
 			break;
 		case "btnUndo":
-			frame.getBtnUndo().setEnabled((boolean) changeEvent.getNewValue());
+			frame.getBtnUndo().setEnabled(newValue);
 			break;
 		case "btnRedo":
-			frame.getBtnRedo().setEnabled((boolean) changeEvent.getNewValue());
+			frame.getBtnRedo().setEnabled(newValue);
 			break;
 		case "btnToBack":
-			frame.getBtnToBack().setEnabled((boolean) changeEvent.getNewValue());
+			frame.getBtnToBack().setEnabled(newValue);
 			break;
 		case "btnToFront":
-			frame.getBtnToFront().setEnabled((boolean) changeEvent.getNewValue());
+			frame.getBtnToFront().setEnabled(newValue);
 			break;
 		case "btnSendToBack":
-			frame.getBtnSendToBack().setEnabled((boolean) changeEvent.getNewValue());
+			frame.getBtnSendToBack().setEnabled(newValue);
 			break;
 		case "btnBringToFront":
-			frame.getBtnBringToFront().setEnabled((boolean) changeEvent.getNewValue());
+			frame.getBtnBringToFront().setEnabled(newValue);
 			break;
 		}
 	}
