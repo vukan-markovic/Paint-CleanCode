@@ -1,4 +1,4 @@
-package test.dialogsTests;
+package dialogsTests;
 
 import java.awt.*;
 import org.junit.*;

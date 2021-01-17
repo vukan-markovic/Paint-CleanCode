@@ -1,4 +1,4 @@
-package test.commandsTests;
+package commandsTests;
 
 import static org.junit.Assert.*;
 
@@ -7,7 +7,7 @@ import java.awt.Color;
 import org.junit.*;
 import shapes.*;
 import commands.CmdSelect;
-import mvc.DrawingModel;
+import model.DrawingModel;
 
 public class CmdSelectTests {
 	private DrawingModel model;

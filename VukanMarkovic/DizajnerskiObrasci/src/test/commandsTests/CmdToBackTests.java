@@ -1,4 +1,4 @@
-package test.commandsTests;
+package commandsTests;
 
 import org.junit.*;
 import shapes.*;
@@ -7,7 +7,7 @@ import static org.junit.Assert.assertEquals;
 import java.awt.Color;
 
 import commands.CmdToBack;
-import mvc.DrawingModel;
+import model.DrawingModel;
 
 public class CmdToBackTests {
 	private DrawingModel model;

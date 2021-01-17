@@ -1,9 +1,10 @@
-package test.commandsTests;
+package commandsTests;
 
 import org.junit.*;
 import shapes.*;
 import commands.CmdToFront;
-import mvc.DrawingModel;
+import model.DrawingModel;
+
 import static org.junit.Assert.assertEquals;
 
 import java.awt.Color;

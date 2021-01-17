@@ -1,4 +1,4 @@
-package test.commandsTests;
+package commandsTests;
 
 import static org.junit.Assert.*;
 
@@ -7,7 +7,8 @@ import java.awt.Color;
 import org.junit.*;
 import shapes.*;
 import commands.CmdDeselect;
-import mvc.DrawingModel;
+import commands.CmdSelect;
+import model.DrawingModel;
 
 public class CmdDeselectTests {
 	private DrawingModel model;
@@ -19,17 +20,17 @@ public class CmdDeselectTests {
 		model = new DrawingModel();
 		shape = new Point(1, 2, false, Color.BLACK);
 		model.addShape(shape);
-		model.selectShape(shape);
+		new CmdSelect(model, shape).execute();
 		cmdDeselect = new CmdDeselect(model, shape);
 	}
 
 	@Test
 	public void testExecuteShapeIsNotEqual() {
-		Line line = new Line(new Point(1, 1, false, Color.BLACK), new Point(2, 2, false, Color.BLACK), false, Color.BLACK);
+		Line line = new Line(new Point(1, 1, false, Color.BLACK), new Point(2, 2, false, Color.BLACK), false,
+				Color.BLACK);
 		model.addShape(line);
-		model.selectShape(line);
-		cmdDeselect = new CmdDeselect(model, shape);
-		cmdDeselect.execute();
+		new CmdSelect(model, line).execute();
+		new CmdDeselect(model, shape).execute();
 		assertTrue(model.getShapeByIndex(model.getIndexOfShape(line)).isSelected());
 		assertTrue(model.getSelectedShapes().contains(line));
 	}
@@ -48,7 +49,8 @@ public class CmdDeselectTests {
 
 	@Test
 	public void testUnexecuteShapeIsNotEqual() {
-		Line line = new Line(new Point(1, 1, false, Color.BLACK), new Point(2, 2, false, Color.BLACK), false, Color.BLACK);
+		Line line = new Line(new Point(1, 1, false, Color.BLACK), new Point(2, 2, false, Color.BLACK), false,
+				Color.BLACK);
 		model.addShape(line);
 		cmdDeselect = new CmdDeselect(model, shape);
 		cmdDeselect.unexecute();

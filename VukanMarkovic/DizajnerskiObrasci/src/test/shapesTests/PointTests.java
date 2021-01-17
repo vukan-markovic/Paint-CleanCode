@@ -1,4 +1,4 @@
-package test.shapesTests;
+package shapesTests;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;

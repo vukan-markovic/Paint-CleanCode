@@ -1,4 +1,4 @@
-package test.commandsTests;
+package commandsTests;
 
 import shapes.*;
 import org.junit.*;

@@ -1,8 +1,10 @@
-package test.observerTests;
+package observerTests;
 
 import org.junit.*;
+
+import frame.DrawingFrame;
 import observer.*;
-import mvc.DrawingFrame;
+
 import static org.junit.Assert.assertTrue;
 
 public class DrawingObserverTests {
@@ -19,49 +21,49 @@ public class DrawingObserverTests {
 	@Test
 	public void testSetBtnDeleteEnabled() {
 		observer.setBtnDeleteEnabled(true);
-		assertTrue(manager.getFrame().getBtnDelete().isEnabled());
+		assertTrue(manager.getFrame().getTopToolbar().getBtnDelete().isEnabled());
 	}
 
 	@Test
 	public void testSetBtnModifyEnabled() {
 		observer.setBtnModifyEnabled(true);
-		assertTrue(manager.getFrame().getBtnModify().isEnabled());
+		assertTrue(manager.getFrame().getTopToolbar().getBtnModify().isEnabled());
 	}
 
 	@Test
 	public void testSetBtnUndoEnabled() {
 		observer.setBtnUndoEnabled(true);
-		assertTrue(manager.getFrame().getBtnUndo().isEnabled());
+		assertTrue(manager.getFrame().getRightToolbar().getBtnUndo().isEnabled());
 	}
 
 	@Test
 	public void testSetBtnRedoEnabled() {
 		observer.setBtnRedoEnabled(true);
-		assertTrue(manager.getFrame().getBtnRedo().isEnabled());
+		assertTrue(manager.getFrame().getRightToolbar().getBtnRedo().isEnabled());
 	}
 
 	@Test
 	public void testSetBtnToBackEnabled() {
 		observer.setBtnToBackEnabled(true);
-		assertTrue(manager.getFrame().getBtnToBack().isEnabled());
+		assertTrue(manager.getFrame().getRightToolbar().getBtnToBack().isEnabled());
 	}
 
 	@Test
 	public void testSetBtnToFrontEnabled() {
 		observer.setBtnToFrontEnabled(true);
-		assertTrue(manager.getFrame().getBtnToFront().isEnabled());
+		assertTrue(manager.getFrame().getRightToolbar().getBtnToFront().isEnabled());
 	}
 
 	@Test
 	public void testSetBtnSendToBackEnabled() {
 		observer.setBtnSendToBackEnabled(true);
-		assertTrue(manager.getFrame().getBtnSendToBack().isEnabled());
+		assertTrue(manager.getFrame().getRightToolbar().getBtnSendToBack().isEnabled());
 	}
 
 	@Test
 	public void testSetBtnBringToFrontEnabled() {
 		observer.setBtnBringToFrontEnabled(true);
-		assertTrue(manager.getFrame().getBtnBringToFront().isEnabled());
+		assertTrue(manager.getFrame().getRightToolbar().getBtnBringToFront().isEnabled());
 	}
 
 	@After
