@@ -4,6 +4,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import shapes.*;
 
 public class DialogDonut extends DialogSurfaceShape {
 	private static final long serialVersionUID = 1L;
@@ -110,7 +111,32 @@ public class DialogDonut extends DialogSurfaceShape {
 			return false;
 		return true;
 	}
+	
+	@Override
+	public void setDialog(Point center) {
+		getBtnOuterColor().setVisible(false);
+		getBtnInnerColor().setVisible(false);
+		getXcoordinate().setText(String.valueOf(center.getXcoordinate()));
+		getYcoordinate().setText(String.valueOf(center.getYcoordinate()));
+		getXcoordinate().setEditable(false);
+		getYcoordinate().setEditable(false);
+		setVisible(true);
+	}
 
+	@Override
+	public void setModifyDialog(Shape selectedShape) {
+		Donut donut = (Donut) selectedShape;
+		getXcoordinate().setText(String.valueOf(donut.getCenter().getXcoordinate()));
+		getYcoordinate().setText(String.valueOf(donut.getCenter().getYcoordinate()));
+		getRadius().setText(String.valueOf(donut.getRadius()));
+		getInnerRadius().setText(String.valueOf(donut.getInnerRadius()));
+		setOuterColor(donut.getOuterColor());
+		setInnerColor(donut.getInnerColor());
+		getBtnOuterColor().setBackground(getOuterColor());
+		getBtnInnerColor().setBackground(getInnerColor());
+		setVisible(true);
+	}
+	
 	private boolean isInputInvalidRadius() {
 		if (Integer.parseInt(innerRadius.getText()) >= Integer.parseInt(radius.getText()))
 			return true;

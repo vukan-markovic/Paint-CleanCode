@@ -4,6 +4,9 @@ import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
+import shapes.Point;
+import shapes.Shape;
+
 public class DialogPoint extends DialogShape {
 	private static final long serialVersionUID = 1L;
 
@@ -64,5 +67,15 @@ public class DialogPoint extends DialogShape {
 		if (getXcoordinate().getText().isBlank() || getYcoordinate().getText().isBlank())
 			return false;
 		return true;
+	}
+
+	@Override
+	public void setModifyDialog(Shape selectedShape) {
+		Point point = (Point) selectedShape;
+		getXcoordinate().setText(String.valueOf(point.getXcoordinate()));
+		getYcoordinate().setText(String.valueOf(point.getYcoordinate()));
+		setOuterColor(point.getOuterColor());
+		getBtnOuterColor().setBackground(getOuterColor());
+		setVisible(true);
 	}
 }

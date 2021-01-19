@@ -4,6 +4,9 @@ import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
+import shapes.Line;
+import shapes.Shape;
+
 public class DialogLine extends DialogShape {
 	private static final long serialVersionUID = 1L;
 	private JTextField xCoordinateOfEndPoint;
@@ -94,6 +97,18 @@ public class DialogLine extends DialogShape {
 				|| xCoordinateOfEndPoint.getText().isBlank() || yCoordinateOfEndPoint.getText().isBlank())
 			return false;
 		return true;
+	}
+
+	@Override
+	public void setModifyDialog(Shape selectedShape) {
+		Line line = (Line) selectedShape;
+		getXcoordinate().setText(String.valueOf(line.getStartPoint().getXcoordinate()));
+		getYcoordinate().setText(String.valueOf(line.getStartPoint().getYcoordinate()));
+		getXCoordinateOfEndPoint().setText(String.valueOf(line.getEndPoint().getXcoordinate()));
+		getYCoordinateOfEndPoint().setText(String.valueOf(line.getEndPoint().getYcoordinate()));
+		setOuterColor(line.getOuterColor());
+		getBtnOuterColor().setBackground(getOuterColor());
+		setVisible(true);
 	}
 
 	public JTextField getXCoordinateOfEndPoint() {

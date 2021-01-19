@@ -34,9 +34,7 @@ public class Point extends Shape {
 	}
 
 	public boolean contains(int xCoordinate, int yCoordinate) {
-		if (calculateDistance(xCoordinate, yCoordinate) <= POINT_CLICK_TRESHOLD)
-			return true;
-		return false;
+		return calculateDistance(xCoordinate, yCoordinate) <= POINT_CLICK_TRESHOLD;
 	}
 
 	public double calculateDistance(int xCoodinate, int yCoodinate) {
@@ -46,9 +44,7 @@ public class Point extends Shape {
 	public boolean equals(Object object) {
 		if (object instanceof Point) {
 			Point point = (Point) object;
-
-			if (xCoordinate == point.xCoordinate && yCoordinate == point.yCoordinate)
-				return true;
+			return xCoordinate == point.xCoordinate && yCoordinate == point.yCoordinate;
 		}
 
 		return false;

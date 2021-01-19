@@ -63,4 +63,8 @@ public class DrawingModel {
 	public void setShapes(List<Shape> shapes) {
 		this.shapes = shapes;
 	}
+
+	public void addShapes(ArrayList<Shape> shapes) {
+		shapes.addAll(shapes);
+	}
 }

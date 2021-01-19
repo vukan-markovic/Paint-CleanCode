@@ -8,10 +8,9 @@ public class HexagonAdapter extends Shape {
 	private Hexagon hexagon;
 
 	public HexagonAdapter(Hexagon hexagon, boolean selected, Color outerColor, Color innerColor) {
-		this.hexagon = hexagon;
-		setSelected(selected);
+		super(selected, innerColor);
 		setOuterColor(outerColor);
-		setInnerColor(innerColor);
+		this.hexagon = hexagon;
 	}
 
 	@Override
@@ -33,9 +32,8 @@ public class HexagonAdapter extends Shape {
 		if (object instanceof HexagonAdapter) {
 			HexagonAdapter hexagonAdapter = (HexagonAdapter) object;
 
-			if (getRadius() == hexagonAdapter.getRadius() && getXcoordinate() == hexagonAdapter.getXcoordinate()
-					&& getYcoordinate() == hexagonAdapter.getYcoordinate())
-				return true;
+			return getRadius() == hexagonAdapter.getRadius() && getXcoordinate() == hexagonAdapter.getXcoordinate()
+					&& getYcoordinate() == hexagonAdapter.getYcoordinate();
 		}
 
 		return false;

@@ -108,7 +108,6 @@ public class TopToolbar implements Toolbar {
 	@Override
 	public void setToolbar() {
 		toolBar.setBounds(3, 5, 429, 24);
-
 	}
 
 	public JToolBar getToolBar() {

@@ -47,9 +47,8 @@ public class Donut extends Circle {
 		if (object instanceof Donut) {
 			Donut donut = (Donut) object;
 
-			if (getCenter().equals(donut.getCenter()) && getRadius() == donut.getRadius()
-					&& innerRadius == donut.innerRadius)
-				return true;
+			return getCenter().equals(donut.getCenter()) && getRadius() == donut.getRadius()
+					&& innerRadius == donut.innerRadius;
 		}
 
 		return false;

@@ -23,9 +23,9 @@ public class DrawingController {
 	private Queue<String> commandsLog;
 	private Stack<Command> executedCommands;
 	private Stack<Command> unexecutedCommands;
-	private StrategyManager strategy;
-	private SaveLog saveLog;
-	private SavePainting savePainting;
+	private FileManager strategy;
+	private FileLog fileLog;
+	private FilePainting filePainting;
 	private JFileChooser fileChooser;
 	private String log;
 	private Color innerColor;
@@ -49,7 +49,7 @@ public class DrawingController {
 	private CmdToBack cmdToBack;
 	private CmdToFront cmdToFront;
 	private CmdBringToFront cmdBringToFront;
-	private CmdSendToBack cmdSendToBack;
+	private CmdBringToBack cmdBringToBack;
 	private CmdSelect cmdSelect;
 	private CmdDeselect cmdDeselect;
 
@@ -150,38 +150,19 @@ public class DrawingController {
 		logCommand("Add - " + rectangle.getClass().getSimpleName() + " " + rectangle);
 	}
 
-	public void createRectangleDialog(Point point) {
-		dialogRectangle.getBtnOuterColor().setVisible(false);
-		dialogRectangle.getBtnInnerColor().setVisible(false);
-		dialogRectangle.getXcoordinate().setText(String.valueOf(point.getXcoordinate()));
-		dialogRectangle.getYcoordinate().setText(String.valueOf(point.getYcoordinate()));
-		dialogRectangle.getXcoordinate().setEditable(false);
-		dialogRectangle.getYcoordinate().setEditable(false);
-		dialogRectangle.setVisible(true);
-	}
-
 	public void btnRectangleClicked(MouseEvent click) {
 		point = new Point(click.getX(), click.getY(), false, outerColor);
 		dialogRectangle = new DialogRectangle();
-		createRectangleDialog(point);
+		dialogRectangle.setDialog(point);
 
 		if (dialogRectangle.isAccepted())
 			addRectangle(dialogRectangle, point);
 	}
 
-	public void createCircleDialog(Point center) {
-		dialogCircle.getBtnOuterColor().setVisible(false);
-		dialogCircle.getBtnInnerColor().setVisible(false);
-		dialogCircle.getXcoordinate().setText(String.valueOf(center.getXcoordinate()));
-		dialogCircle.getYcoordinate().setText(String.valueOf(center.getYcoordinate()));
-		dialogCircle.getXcoordinate().setEditable(false);
-		dialogCircle.getYcoordinate().setEditable(false);
-		dialogCircle.setVisible(true);
-	}
-
 	public void addCircle(DialogCircle dialogCircle, Point center) {
 		Circle circle = new Circle(center, Integer.parseInt(dialogCircle.getRadius().getText()), false, outerColor,
 				innerColor);
+
 		cmdAdd = new CmdAdd(model, circle);
 		executeCommand(cmdAdd);
 		clearUnexecutedCommands();
@@ -191,20 +172,10 @@ public class DrawingController {
 	public void btnCircleClicked(MouseEvent click) {
 		point = new Point(click.getX(), click.getY(), false, outerColor);
 		dialogCircle = new DialogCircle();
-		createCircleDialog(point);
+		dialogCircle.setDialog(point);
 
 		if (dialogCircle.isAccepted())
 			addCircle(dialogCircle, point);
-	}
-
-	public void createDonutDialog(Point center) {
-		dialogDonut.getBtnOuterColor().setVisible(false);
-		dialogDonut.getBtnInnerColor().setVisible(false);
-		dialogDonut.getXcoordinate().setText(String.valueOf(center.getXcoordinate()));
-		dialogDonut.getYcoordinate().setText(String.valueOf(center.getYcoordinate()));
-		dialogDonut.getXcoordinate().setEditable(false);
-		dialogDonut.getYcoordinate().setEditable(false);
-		dialogDonut.setVisible(true);
 	}
 
 	public void addDonut(DialogDonut dialogDonut, Point center) {
@@ -220,20 +191,10 @@ public class DrawingController {
 	public void btnDonutClicked(MouseEvent click) {
 		point = new Point(click.getX(), click.getY(), false, outerColor);
 		dialogDonut = new DialogDonut();
-		createDonutDialog(point);
+		dialogDonut.setDialog(point);
 
 		if (dialogDonut.isAccepted())
 			addDonut(dialogDonut, point);
-	}
-
-	public void createHexagonDialog(Point center) {
-		dialogHexagon.getBtnOuterColor().setVisible(false);
-		dialogHexagon.getBtnInnerColor().setVisible(false);
-		dialogHexagon.getXcoordinate().setText(String.valueOf(center.getXcoordinate()));
-		dialogHexagon.getYcoordinate().setText(String.valueOf(center.getYcoordinate()));
-		dialogHexagon.getXcoordinate().setEditable(false);
-		dialogHexagon.getYcoordinate().setEditable(false);
-		dialogHexagon.setVisible(true);
 	}
 
 	public void addHexagon(DialogHexagon dialogHexagon, Point center) {
@@ -249,18 +210,10 @@ public class DrawingController {
 	public void btnHexagonClicked(MouseEvent click) {
 		point = new Point(click.getX(), click.getY(), false, outerColor);
 		dialogHexagon = new DialogHexagon();
-		createHexagonDialog(point);
+		dialogHexagon.setDialog(point);
 
 		if (dialogHexagon.isAccepted())
 			addHexagon(dialogHexagon, point);
-	}
-
-	public void createPointDialog(Shape selectedShape) {
-		dialogPoint.getXcoordinate().setText(String.valueOf(((Point) selectedShape).getXcoordinate()));
-		dialogPoint.getYcoordinate().setText(String.valueOf(((Point) selectedShape).getYcoordinate()));
-		dialogPoint.setOuterColor(((Point) selectedShape).getOuterColor());
-		dialogPoint.getBtnOuterColor().setBackground(dialogPoint.getOuterColor());
-		dialogPoint.setVisible(true);
 	}
 
 	public void modifyPoint(Shape selectedShape, DialogPoint dialogPoint) {
@@ -274,18 +227,6 @@ public class DrawingController {
 		cmdModifyPoint = new CmdModifyPoint(oldState, (Point) newState);
 		executeCommand(cmdModifyPoint);
 		clearUnexecutedCommands();
-	}
-
-	public void createLineDialog(Shape selectedShape) {
-		dialogLine.getXcoordinate().setText(String.valueOf(((Line) selectedShape).getStartPoint().getXcoordinate()));
-		dialogLine.getYcoordinate().setText(String.valueOf(((Line) selectedShape).getStartPoint().getYcoordinate()));
-		dialogLine.getXCoordinateOfEndPoint()
-				.setText(String.valueOf(((Line) selectedShape).getEndPoint().getXcoordinate()));
-		dialogLine.getYCoordinateOfEndPoint()
-				.setText(String.valueOf(((Line) selectedShape).getEndPoint().getYcoordinate()));
-		dialogLine.setOuterColor(((Line) selectedShape).getOuterColor());
-		dialogLine.getBtnOuterColor().setBackground(dialogLine.getOuterColor());
-		dialogLine.setVisible(true);
 	}
 
 	public void modifyLine(Shape selectedShape, DialogLine dialogLine) {
@@ -306,22 +247,6 @@ public class DrawingController {
 		clearUnexecutedCommands();
 	}
 
-	public void createRectangleModifyDialog(Shape selectedShape) {
-		dialogRectangle.getXcoordinate()
-				.setText(String.valueOf(((Rectangle) selectedShape).getUpperLeftPoint().getXcoordinate()));
-
-		dialogRectangle.getYcoordinate()
-				.setText(String.valueOf(((Rectangle) selectedShape).getUpperLeftPoint().getYcoordinate()));
-
-		dialogRectangle.getheight().setText(String.valueOf(((Rectangle) selectedShape).getHeight()));
-		dialogRectangle.getwidth().setText(String.valueOf(((Rectangle) selectedShape).getWidth()));
-		dialogRectangle.setOuterColor(((Rectangle) selectedShape).getOuterColor());
-		dialogRectangle.setInnerColor(((Rectangle) selectedShape).getInnerColor());
-		dialogRectangle.getBtnOuterColor().setBackground(dialogRectangle.getOuterColor());
-		dialogRectangle.getBtnInnerColor().setBackground(dialogRectangle.getInnerColor());
-		dialogRectangle.setVisible(true);
-	}
-
 	public void modifyRectangle(Shape selectedShape, DialogRectangle dialogRectangle) {
 		Rectangle oldState = (Rectangle) selectedShape;
 
@@ -337,18 +262,6 @@ public class DrawingController {
 		cmdModifyRectangle = new CmdModifyRectangle(oldState, (Rectangle) newState);
 		executeCommand(cmdModifyRectangle);
 		clearUnexecutedCommands();
-	}
-
-	public void createDonutModifyDialog(Shape selectedShape) {
-		dialogDonut.getXcoordinate().setText(String.valueOf(((Donut) selectedShape).getCenter().getXcoordinate()));
-		dialogDonut.getYcoordinate().setText(String.valueOf(((Donut) selectedShape).getCenter().getYcoordinate()));
-		dialogDonut.getRadius().setText(String.valueOf(((Donut) selectedShape).getRadius()));
-		dialogDonut.getInnerRadius().setText(String.valueOf(((Donut) selectedShape).getInnerRadius()));
-		dialogDonut.setOuterColor(((Donut) selectedShape).getOuterColor());
-		dialogDonut.setInnerColor(((Donut) selectedShape).getInnerColor());
-		dialogDonut.getBtnOuterColor().setBackground(dialogDonut.getOuterColor());
-		dialogDonut.getBtnInnerColor().setBackground(dialogDonut.getInnerColor());
-		dialogDonut.setVisible(true);
 	}
 
 	public void modifyDonut(Shape selectedShape, DialogDonut dialogDonut) {
@@ -368,17 +281,6 @@ public class DrawingController {
 		clearUnexecutedCommands();
 	}
 
-	public void createCircleModifyDialog(Shape selectedShape) {
-		dialogCircle.getXcoordinate().setText(String.valueOf(((Circle) selectedShape).getCenter().getXcoordinate()));
-		dialogCircle.getYcoordinate().setText(String.valueOf(((Circle) selectedShape).getCenter().getYcoordinate()));
-		dialogCircle.getRadius().setText(String.valueOf(((Circle) selectedShape).getRadius()));
-		dialogCircle.setOuterColor(((Circle) selectedShape).getOuterColor());
-		dialogCircle.setInnerColor(((Circle) selectedShape).getInnerColor());
-		dialogCircle.getBtnOuterColor().setBackground(dialogCircle.getOuterColor());
-		dialogCircle.getBtnInnerColor().setBackground(dialogCircle.getInnerColor());
-		dialogCircle.setVisible(true);
-	}
-
 	public void modifyCircle(Shape selectedShape, DialogCircle dialogCircle) {
 		Circle oldState = (Circle) selectedShape;
 
@@ -393,17 +295,6 @@ public class DrawingController {
 		cmdModifyCircle = new CmdModifyCircle(oldState, newState);
 		executeCommand(cmdModifyCircle);
 		clearUnexecutedCommands();
-	}
-
-	public void createHexagonModifyDialog(Shape selectedShape) {
-		dialogHexagon.getXcoordinate().setText(String.valueOf(((HexagonAdapter) selectedShape).getXcoordinate()));
-		dialogHexagon.getYcoordinate().setText(String.valueOf(((HexagonAdapter) selectedShape).getYcoordinate()));
-		dialogHexagon.getRadius().setText(String.valueOf(((HexagonAdapter) selectedShape).getRadius()));
-		dialogHexagon.setOuterColor(((HexagonAdapter) selectedShape).getInnerColor());
-		dialogHexagon.setInnerColor(((HexagonAdapter) selectedShape).getInnerColor());
-		dialogHexagon.getBtnOuterColor().setBackground(dialogHexagon.getOuterColor());
-		dialogHexagon.getBtnInnerColor().setBackground(dialogHexagon.getInnerColor());
-		dialogHexagon.setVisible(true);
 	}
 
 	public void modifyHexagon(Shape selectedShape, DialogHexagon dialogHexagon) {
@@ -429,32 +320,32 @@ public class DrawingController {
 
 		if (selectedShape instanceof Point) {
 			dialogPoint = new DialogPoint();
-			createPointDialog(selectedShape);
+			dialogPoint.setModifyDialog(selectedShape);
 			if (dialogPoint.isAccepted())
 				modifyPoint(selectedShape, dialogPoint);
 		} else if (selectedShape instanceof Line) {
 			dialogLine = new DialogLine();
-			createLineDialog(selectedShape);
+			dialogLine.setModifyDialog(selectedShape);
 			if (dialogLine.isAccepted())
 				modifyLine(selectedShape, dialogLine);
 		} else if (selectedShape instanceof Rectangle) {
 			dialogRectangle = new DialogRectangle();
-			createRectangleModifyDialog(selectedShape);
+			dialogRectangle.setModifyDialog(selectedShape);
 			if (dialogRectangle.isAccepted())
 				modifyRectangle(selectedShape, dialogRectangle);
 		} else if (selectedShape instanceof Donut) {
 			dialogDonut = new DialogDonut();
-			createDonutModifyDialog(selectedShape);
+			dialogDonut.setModifyDialog(selectedShape);
 			if (dialogDonut.isAccepted())
 				modifyDonut(selectedShape, dialogDonut);
 		} else if (selectedShape instanceof Circle) {
 			dialogCircle = new DialogCircle();
-			createCircleModifyDialog(selectedShape);
+			dialogCircle.setModifyDialog(selectedShape);
 			if (dialogCircle.isAccepted())
 				modifyCircle(selectedShape, dialogCircle);
 		} else if (selectedShape instanceof HexagonAdapter) {
 			dialogHexagon = new DialogHexagon();
-			createHexagonModifyDialog(selectedShape);
+			dialogHexagon.setModifyDialog(selectedShape);
 			if (dialogHexagon.isAccepted())
 				modifyHexagon(selectedShape, dialogHexagon);
 		}
@@ -560,8 +451,8 @@ public class DrawingController {
 	public void btnSendToBackClicked() {
 		if (model.getSelectedShapes().size() == 1) {
 			Shape shape = model.getFirstSelectedShape();
-			cmdSendToBack = new CmdSendToBack(model, shape);
-			executeCommand(cmdSendToBack);
+			cmdBringToBack = new CmdBringToBack(model, shape);
+			executeCommand(cmdBringToBack);
 			clearUnexecutedCommands();
 			logCommand("SendToBack - " + shape.getClass().getSimpleName() + " " + shape.toString());
 			frame.getView().repaint();
@@ -594,20 +485,15 @@ public class DrawingController {
 	}
 
 	public void saveDrawing() {
-		savePainting.setShapes(model.getShapes());
-		strategy.setStrategy(savePainting);
+		filePainting = new FilePainting(model);
+		strategy = new FileManager(filePainting);
 		strategy.save(fileChooser.getSelectedFile().getAbsolutePath() + "\\"
 				+ frame.getRightToolbar().getFileName().getText() + ".bin");
 	}
 
 	public void saveLog() {
-		log = "";
-
-		for (int i = 0; i < frame.getCommandsListModel().getSize(); i++)
-			log = log + frame.getCommandsListModel().get(i) + "\n";
-
-		saveLog.setCommandsLog(log);
-		strategy.setStrategy(saveLog);
+		fileLog = new FileLog(frame.getCommandsListModel());
+		strategy = new FileManager(fileLog);
 		strategy.save(fileChooser.getSelectedFile().getAbsolutePath() + "\\"
 				+ frame.getRightToolbar().getFileName().getText() + ".txt");
 	}
@@ -633,13 +519,7 @@ public class DrawingController {
 
 		if (showFileChooser("Specify the location where you want to save your drawing",
 				JFileChooser.DIRECTORIES_ONLY) == JFileChooser.APPROVE_OPTION) {
-
-			saveLog = new SaveLog();
-			strategy = new StrategyManager();
 			saveLog();
-
-			savePainting = new SavePainting();
-			strategy = new StrategyManager();
 			saveDrawing();
 		}
 	}
@@ -1240,12 +1120,12 @@ public class DrawingController {
 		this.cmdBringToFront = cmdBringToFront;
 	}
 
-	public CmdSendToBack getCmdSendToBack() {
-		return cmdSendToBack;
+	public CmdBringToBack getCmdSendToBack() {
+		return cmdBringToBack;
 	}
 
-	public void setCmdSendToBack(CmdSendToBack cmdSendToBack) {
-		this.cmdSendToBack = cmdSendToBack;
+	public void setCmdSendToBack(CmdBringToBack cmdBringToBack) {
+		this.cmdBringToBack = cmdBringToBack;
 	}
 
 	public CmdSelect getCmdSelect() {
@@ -1328,28 +1208,28 @@ public class DrawingController {
 		this.point = point;
 	}
 
-	public StrategyManager getStrategy() {
+	public FileManager getStrategy() {
 		return strategy;
 	}
 
-	public void setStrategy(StrategyManager strategy) {
+	public void setStrategy(FileManager strategy) {
 		this.strategy = strategy;
 	}
 
-	public SaveLog getSaveLog() {
-		return saveLog;
+	public FileLog getSaveLog() {
+		return fileLog;
 	}
 
-	public void setSaveLog(SaveLog saveLog) {
-		this.saveLog = saveLog;
+	public void setSaveLog(FileLog fileLog) {
+		this.fileLog = fileLog;
 	}
 
-	public SavePainting getSavePainting() {
-		return savePainting;
+	public FilePainting getSavePainting() {
+		return filePainting;
 	}
 
-	public void setSavePainting(SavePainting savePainting) {
-		this.savePainting = savePainting;
+	public void setSavePainting(FilePainting filePainting) {
+		this.filePainting = filePainting;
 	}
 
 	public JFileChooser getFileChooser() {

@@ -31,27 +31,13 @@ public class Circle extends SurfaceShape {
 
 	@Override
 	protected void drawSelection(Graphics graphics) {
-		graphics.setColor(getSelectionColor());
-
-		graphics.drawRect(center.getXcoordinate() - SELECT_RECTANGLE_GAP,
-				center.getYcoordinate() - SELECT_RECTANGLE_GAP, SELECT_RECTANGLE_SIDE_LENGTH,
-				SELECT_RECTANGLE_SIDE_LENGTH);
-
-		graphics.drawRect(center.getXcoordinate() + getRadius() - SELECT_RECTANGLE_GAP,
-				center.getYcoordinate() - SELECT_RECTANGLE_GAP, SELECT_RECTANGLE_SIDE_LENGTH,
-				SELECT_RECTANGLE_SIDE_LENGTH);
-
-		graphics.drawRect(center.getXcoordinate() - getRadius() - SELECT_RECTANGLE_GAP,
-				center.getYcoordinate() - SELECT_RECTANGLE_GAP, SELECT_RECTANGLE_SIDE_LENGTH,
-				SELECT_RECTANGLE_SIDE_LENGTH);
-
-		graphics.drawRect(center.getXcoordinate() - SELECT_RECTANGLE_GAP,
-				center.getYcoordinate() + radius - SELECT_RECTANGLE_GAP, SELECT_RECTANGLE_SIDE_LENGTH,
-				SELECT_RECTANGLE_SIDE_LENGTH);
-
-		graphics.drawRect(center.getXcoordinate() - SELECT_RECTANGLE_GAP,
-				center.getYcoordinate() - radius - SELECT_RECTANGLE_GAP, SELECT_RECTANGLE_SIDE_LENGTH,
-				SELECT_RECTANGLE_SIDE_LENGTH);
+		new Line(new Point(center.getXcoordinate(), center.getYcoordinate() - radius, true, Color.WHITE),
+				new Point(center.getXcoordinate(), center.getYcoordinate() + radius, true, Color.WHITE), true,
+				Color.WHITE).drawSelection(graphics);
+		
+		new Line(new Point(center.getXcoordinate() - radius, center.getYcoordinate(), true, Color.WHITE),
+				new Point(center.getXcoordinate() + radius, center.getYcoordinate(), true, Color.WHITE), true,
+				Color.WHITE).drawSelection(graphics);
 	}
 
 	public boolean contains(int xCoordinate, int yCoordinate) {

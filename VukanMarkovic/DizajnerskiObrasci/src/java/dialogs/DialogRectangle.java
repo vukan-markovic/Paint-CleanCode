@@ -4,6 +4,10 @@ import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
+import shapes.Point;
+import shapes.Rectangle;
+import shapes.Shape;
+
 public class DialogRectangle extends DialogSurfaceShape {
 	private static final long serialVersionUID = 1L;
 	private JTextField height;
@@ -103,6 +107,31 @@ public class DialogRectangle extends DialogSurfaceShape {
 				|| getYcoordinate().getText().isBlank()))
 			return false;
 		return true;
+	}
+
+	@Override
+	public void setDialog(Point upperLeftPoint) {
+		getBtnOuterColor().setVisible(false);
+		getBtnInnerColor().setVisible(false);
+		getXcoordinate().setText(String.valueOf(upperLeftPoint.getXcoordinate()));
+		getYcoordinate().setText(String.valueOf(upperLeftPoint.getYcoordinate()));
+		getXcoordinate().setEditable(false);
+		getYcoordinate().setEditable(false);
+		setVisible(true);
+	}
+
+	@Override
+	public void setModifyDialog(Shape selectedShape) {
+		Rectangle rectangle = (Rectangle) selectedShape;
+		getXcoordinate().setText(String.valueOf(rectangle.getUpperLeftPoint().getXcoordinate()));
+		getYcoordinate().setText(String.valueOf(rectangle.getUpperLeftPoint().getYcoordinate()));
+		getheight().setText(String.valueOf(rectangle.getHeight()));
+		getwidth().setText(String.valueOf(rectangle.getWidth()));
+		setOuterColor(rectangle.getOuterColor());
+		setInnerColor(rectangle.getInnerColor());
+		getBtnOuterColor().setBackground(getOuterColor());
+		getBtnInnerColor().setBackground(getInnerColor());
+		setVisible(true);
 	}
 
 	public JTextField getheight() {

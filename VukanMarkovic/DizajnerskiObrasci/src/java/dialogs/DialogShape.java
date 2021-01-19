@@ -1,9 +1,13 @@
 package dialogs;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+
+import shapes.Shape;
 
 public abstract class DialogShape extends JDialog {
 	private static final long serialVersionUID = 1L;
@@ -109,6 +113,8 @@ public abstract class DialogShape extends JDialog {
 	public abstract void setIcon();
 
 	public abstract boolean isInputValid();
+	
+	public abstract void setModifyDialog(Shape shape);
 
 	public JTextField getXcoordinate() {
 		return xCoordinate;

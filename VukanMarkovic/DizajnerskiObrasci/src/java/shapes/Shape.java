@@ -10,9 +10,6 @@ public abstract class Shape implements Cloneable, Serializable {
 	private boolean selected;
 	private Color outerColor;
 
-	public Shape() {
-	}
-
 	Shape(boolean selected, Color innerColor) {
 		this.selected = selected;
 		this.outerColor = innerColor;

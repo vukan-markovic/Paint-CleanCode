@@ -27,19 +27,9 @@ public class Line extends Shape {
 
 	@Override
 	protected void drawSelection(Graphics graphics) {
-		graphics.setColor(getSelectionColor());
-
-		graphics.drawRect(startPoint.getXcoordinate() - SELECT_RECTANGLE_GAP,
-				startPoint.getYcoordinate() - SELECT_RECTANGLE_GAP, SELECT_RECTANGLE_SIDE_LENGTH,
-				SELECT_RECTANGLE_SIDE_LENGTH);
-
-		graphics.drawRect(endPoint.getXcoordinate() - SELECT_RECTANGLE_GAP,
-				endPoint.getYcoordinate() - SELECT_RECTANGLE_GAP, SELECT_RECTANGLE_SIDE_LENGTH,
-				SELECT_RECTANGLE_SIDE_LENGTH);
-
-		graphics.drawRect(getMiddleOfLine().getXcoordinate() - SELECT_RECTANGLE_GAP,
-				getMiddleOfLine().getYcoordinate() - SELECT_RECTANGLE_GAP, SELECT_RECTANGLE_SIDE_LENGTH,
-				SELECT_RECTANGLE_SIDE_LENGTH);
+		startPoint.drawSelection(graphics);
+		endPoint.drawSelection(graphics);
+		getMiddleOfLine().drawSelection(graphics);
 	}
 
 	public Point getMiddleOfLine() {
@@ -48,10 +38,8 @@ public class Line extends Shape {
 	}
 
 	public boolean contains(int xCoordinate, int yCoordinate) {
-		if ((startPoint.calculateDistance(xCoordinate, yCoordinate)
-				+ endPoint.calculateDistance(xCoordinate, yCoordinate)) - calculateLength() <= LINE_CLICK_TRESHOLD)
-			return true;
-		return false;
+		return (startPoint.calculateDistance(xCoordinate, yCoordinate)
+				+ endPoint.calculateDistance(xCoordinate, yCoordinate)) - calculateLength() <= LINE_CLICK_TRESHOLD;
 	}
 
 	public double calculateLength() {
@@ -61,9 +49,7 @@ public class Line extends Shape {
 	public boolean equals(Object object) {
 		if (object instanceof Line) {
 			Line line = (Line) object;
-
-			if (this.startPoint.equals(line.startPoint) && this.endPoint.equals(line.endPoint))
-				return true;
+			return this.startPoint.equals(line.startPoint) && this.endPoint.equals(line.endPoint);
 		}
 
 		return false;

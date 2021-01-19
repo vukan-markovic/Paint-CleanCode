@@ -46,7 +46,7 @@ public class RightToolbar implements Toolbar {
 		btnBringToFront = new JButton("Bring to front");
 		btnToBack = new JButton("To back");
 		btnToFront = new JButton("To front");
-		btnSave = new JButton("Save");
+		btnSave = new JButton("FileStrategy");
 		btnLoadLog = new JButton("Load log");
 		btnLoadPainting = new JButton("Load painting");
 		btnNext = new JButton("Next");
@@ -164,7 +164,7 @@ public class RightToolbar implements Toolbar {
 		btnBringToFront.setToolTipText("Bring shape to front");
 		btnToBack.setToolTipText("Move shape to back");
 		btnToFront.setToolTipText("Move shape to front");
-		btnSave.setToolTipText("Save painting and log");
+		btnSave.setToolTipText("FileStrategy painting and log");
 		btnLoadLog.setToolTipText("Load log file");
 		btnLoadPainting.setToolTipText("Load painting file");
 	}
