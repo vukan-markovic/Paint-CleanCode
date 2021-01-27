@@ -11,13 +11,13 @@ import javax.swing.border.EmptyBorder;
 public class DrawingFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private DrawingView view;
-	private DrawingController controller;
-	private DefaultListModel<String> commandsListModel;
 	private JPanel contentPanel;
 	private JScrollPane scrollPane;
+	private DefaultListModel<String> commandsListModel;
 	private JList<String> commandsList;
 	private TopToolbar topToolbar;
 	private RightToolbar rightToolbar;
+	private DrawingController controller;
 
 	public DrawingFrame() {
 		view = new DrawingView();
@@ -83,6 +83,14 @@ public class DrawingFrame extends JFrame {
 		});
 	}
 
+	public DrawingView getView() {
+		return view;
+	}
+
+	public DefaultListModel<String> getCommandsListModel() {
+		return commandsListModel;
+	}
+
 	public TopToolbar getTopToolbar() {
 		return topToolbar;
 	}
@@ -91,16 +99,8 @@ public class DrawingFrame extends JFrame {
 		return rightToolbar;
 	}
 
-	public DrawingView getView() {
-		return view;
-	}
-
 	public DrawingController getController() {
 		return controller;
-	}
-
-	public DefaultListModel<String> getCommandsListModel() {
-		return commandsListModel;
 	}
 
 	public void setController(DrawingController controller) {

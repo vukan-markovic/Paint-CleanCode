@@ -8,9 +8,9 @@ public class FileLog implements FileStrategy {
 	private DefaultListModel<String> executedLogCommands;
 	private Queue<String> logCommandsFromFile;
 
-	public FileLog(DefaultListModel<String> log, Queue<String> commandsLog) {
-		this.executedLogCommands = log;
-		this.logCommandsFromFile = commandsLog;
+	public FileLog(DefaultListModel<String> executedLogCommands, Queue<String> logCommandsFromFile) {
+		this.executedLogCommands = executedLogCommands;
+		this.logCommandsFromFile = logCommandsFromFile;
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public class FileLog implements FileStrategy {
 		}
 	}
 
-	public DefaultListModel<String> getLog() {
+	public DefaultListModel<String> getExecutedLogCommands() {
 		return executedLogCommands;
 	}
 }

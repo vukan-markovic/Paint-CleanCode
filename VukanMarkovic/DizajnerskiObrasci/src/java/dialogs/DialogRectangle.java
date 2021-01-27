@@ -1,6 +1,7 @@
 package dialogs;
 
 import shapes.*;
+import java.awt.Color;
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -8,14 +9,14 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 public class DialogRectangle extends DialogSurfaceShape {
 	private static final long serialVersionUID = 1L;
 	private JTextField height;
-	private JTextField width;
 	private JLabel lblHeight;
+	private JTextField width;
 	private JLabel lblWidth;
 
 	public DialogRectangle() {
 		height = new JTextField();
-		width = new JTextField();
 		lblHeight = new JLabel("Height:");
+		width = new JTextField();
 		lblWidth = new JLabel("Width:");
 		setTitle("Rectangle dialog");
 		setIcon();
@@ -24,18 +25,20 @@ public class DialogRectangle extends DialogSurfaceShape {
 
 	@Override
 	public void setIcon() {
-		getLblIcon().setIcon(new ImageIcon(getClass().getResource("/rect.png")));
+		ImageIcon icon = new ImageIcon(getClass().getResource("/rect.png"));
+		getLblIcon().setIcon(icon);
 	}
 
 	@Override
 	public void buildLayout() {
 		height.setColumns(10);
-		height.addKeyListener(getListener());
+		height.addKeyListener(getInputListener());
+
 		width.setColumns(10);
-		width.addKeyListener(getListener());
+		width.addKeyListener(getInputListener());
 
 		// Automatically generated code by Java Swing, GUI modification is recommended
-		
+
 		getGlContentPanel().setHorizontalGroup(getGlContentPanel().createParallelGroup(Alignment.LEADING)
 				.addGroup(getGlContentPanel().createSequentialGroup().addGap(25)
 						.addGroup(getGlContentPanel()
@@ -101,20 +104,29 @@ public class DialogRectangle extends DialogSurfaceShape {
 
 	@Override
 	public boolean isInputValid() {
-		if ((width.getText().isBlank() || height.getText().isBlank() || getXcoordinate().getText().isBlank()
-				|| getYcoordinate().getText().isBlank()))
+		String xCoordinateValue = getXcoordinate().getText();
+		String yCoordinateValue = getYcoordinate().getText();
+		String heightValue = height.getText();
+		String widthValue = width.getText();
+
+		if (xCoordinateValue.isBlank() || yCoordinateValue.isBlank() || heightValue.isBlank() || widthValue.isBlank())
 			return false;
 		return true;
 	}
 
 	@Override
-	public void setDialog(Point upperLeftPoint) {
+	public void setCreateDialog(Point upperLeftPoint) {
+		String xCoordinateValue = String.valueOf(upperLeftPoint.getXcoordinate());
+		getXcoordinate().setText(xCoordinateValue);
+		getXcoordinate().setEditable(false);
+
+		String yCoordinateValue = String.valueOf(upperLeftPoint.getYcoordinate());
+		getYcoordinate().setText(yCoordinateValue);
+		getYcoordinate().setEditable(false);
+
 		getBtnOuterColor().setVisible(false);
 		getBtnInnerColor().setVisible(false);
-		getXcoordinate().setText(String.valueOf(upperLeftPoint.getXcoordinate()));
-		getYcoordinate().setText(String.valueOf(upperLeftPoint.getYcoordinate()));
-		getXcoordinate().setEditable(false);
-		getYcoordinate().setEditable(false);
+
 		setVisible(true);
 	}
 
@@ -122,19 +134,27 @@ public class DialogRectangle extends DialogSurfaceShape {
 	public void setModifyDialog(Shape selectedShape) {
 		Rectangle rectangle = (Rectangle) selectedShape;
 		Point upperLeftPoint = rectangle.getUpperLeftPoint();
-		String xCoordinateValue = String.valueOf(upperLeftPoint.getXcoordinate());
-		String yCoordinateValue = String.valueOf(upperLeftPoint.getYcoordinate());
-		String heightValue = String.valueOf(rectangle.getHeight());
-		String widthValue = String.valueOf(rectangle.getWidth());
 
+		String xCoordinateValue = String.valueOf(upperLeftPoint.getXcoordinate());
 		getXcoordinate().setText(xCoordinateValue);
+
+		String yCoordinateValue = String.valueOf(upperLeftPoint.getYcoordinate());
 		getYcoordinate().setText(yCoordinateValue);
+
+		String heightValue = String.valueOf(rectangle.getHeight());
 		height.setText(heightValue);
+
+		String widthValue = String.valueOf(rectangle.getWidth());
 		width.setText(widthValue);
-		setOuterColor(rectangle.getOuterColor());
-		setInnerColor(rectangle.getInnerColor());
+
+		Color outerColor = rectangle.getOuterColor();
+		setOuterColor(outerColor);
 		getBtnOuterColor().setBackground(getOuterColor());
-		getBtnInnerColor().setBackground(getInnerColor());
+
+		Color innerColor = rectangle.getInnerColor();
+		setInnerColor(innerColor);
+		getBtnInnerColor().setBackground(innerColor);
+
 		setVisible(true);
 	}
 

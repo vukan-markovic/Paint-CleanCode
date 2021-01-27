@@ -1,7 +1,6 @@
 package logger;
 
 import javax.swing.DefaultListModel;
-
 import frame.DrawingFrame;
 import shapes.Shape;
 

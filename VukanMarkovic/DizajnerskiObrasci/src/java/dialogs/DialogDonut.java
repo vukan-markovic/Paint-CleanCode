@@ -1,5 +1,6 @@
 package dialogs;
 
+import java.awt.Color;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
@@ -9,9 +10,9 @@ import shapes.*;
 public class DialogDonut extends DialogSurfaceShape {
 	private static final long serialVersionUID = 1L;
 	private JTextField radius;
+	private JLabel lblRadius;
 	private JTextField innerRadius;
 	private JLabel lblInnerRadius;
-	private JLabel lblRadius;
 
 	public DialogDonut() {
 		radius = new JTextField();
@@ -21,25 +22,26 @@ public class DialogDonut extends DialogSurfaceShape {
 		setTitle("Donut dialog");
 		setIcon();
 		buildLayout();
-		addListener();
+		addBtnOkListener();
 	}
 
 	@Override
 	public void setIcon() {
 		getLblIcon().setVerticalAlignment(SwingConstants.BOTTOM);
-		getLblIcon().setIcon(new ImageIcon(new ImageIcon(this.getClass().getResource("/donut.png")).getImage()));
+		ImageIcon icon = new ImageIcon(getClass().getResource("/donut.png"));
+		getLblIcon().setIcon(icon);
 	}
 
 	@Override
 	public void buildLayout() {
 		radius.setColumns(10);
-		radius.addKeyListener(getListener());
+		radius.addKeyListener(getInputListener());
 
 		innerRadius.setColumns(10);
-		innerRadius.addKeyListener(getListener());
+		innerRadius.addKeyListener(getInputListener());
 
 		// Automatically generated code by Java Swing, GUI modification is recommended
-		
+
 		getGlContentPanel().setHorizontalGroup(getGlContentPanel().createParallelGroup(Alignment.TRAILING)
 				.addGroup(getGlContentPanel().createSequentialGroup().addContainerGap()
 						.addGroup(getGlContentPanel().createParallelGroup(Alignment.TRAILING)
@@ -105,52 +107,13 @@ public class DialogDonut extends DialogSurfaceShape {
 		getContentPanel().setLayout(getGlContentPanel());
 	}
 
-	@Override
-	public boolean isInputValid() {
-		if (innerRadius.getText().isBlank() || radius.getText().isBlank() || getXcoordinate().getText().isBlank()
-				|| getYcoordinate().getText().isBlank())
-			return false;
-		return true;
-	}
-
-	@Override
-	public void setDialog(Point center) {
-		getBtnOuterColor().setVisible(false);
-		getBtnInnerColor().setVisible(false);
-		getXcoordinate().setText(String.valueOf(center.getXcoordinate()));
-		getYcoordinate().setText(String.valueOf(center.getYcoordinate()));
-		getXcoordinate().setEditable(false);
-		getYcoordinate().setEditable(false);
-		setVisible(true);
-	}
-
-	@Override
-	public void setModifyDialog(Shape selectedShape) {
-		Donut donut = (Donut) selectedShape;
-		getXcoordinate().setText(String.valueOf(donut.getCenter().getXcoordinate()));
-		getYcoordinate().setText(String.valueOf(donut.getCenter().getYcoordinate()));
-		getRadius().setText(String.valueOf(donut.getRadius()));
-		getInnerRadius().setText(String.valueOf(donut.getInnerRadius()));
-		setOuterColor(donut.getOuterColor());
-		setInnerColor(donut.getInnerColor());
-		getBtnOuterColor().setBackground(getOuterColor());
-		getBtnInnerColor().setBackground(getInnerColor());
-		setVisible(true);
-	}
-
-	private boolean isInputInvalidRadius() {
-		if (Integer.parseInt(innerRadius.getText()) >= Integer.parseInt(radius.getText()))
-			return true;
-		return false;
-	}
-
-	private void addListener() {
+	private void addBtnOkListener() {
 		getBtnOk().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				if (!isInputValid())
 					JOptionPane.showMessageDialog(new JFrame(), "You have not filled in all the fields, try again!",
 							"Error!", JOptionPane.ERROR_MESSAGE);
-				else if (isInputInvalidRadius())
+				else if (isInnerRadiusInputInvalid())
 					JOptionPane.showMessageDialog(new JFrame(), "The inner radius must be larger than the outer one!",
 							"Error!", JOptionPane.ERROR_MESSAGE);
 				else {
@@ -159,6 +122,76 @@ public class DialogDonut extends DialogSurfaceShape {
 				}
 			}
 		});
+	}
+
+	@Override
+	public boolean isInputValid() {
+		String innerRadiusValue = innerRadius.getText();
+		String radiusValue = radius.getText();
+		String xCoordinateValue = getXcoordinate().getText();
+		String yCoordinateValue = getYcoordinate().getText();
+
+		if (xCoordinateValue.isBlank() || yCoordinateValue.isBlank() || innerRadiusValue.isBlank()
+				|| radiusValue.isBlank())
+			return false;
+		return true;
+	}
+
+	private boolean isInnerRadiusInputInvalid() {
+		int innerRadiusValue = Integer.parseInt(innerRadius.getText());
+		int radiusValue = Integer.parseInt(radius.getText());
+
+		if (innerRadiusValue >= radiusValue)
+			return true;
+		return false;
+	}
+
+	@Override
+	public void setCreateDialog(Point center) {
+		String xCoordinateValue = String.valueOf(center.getXcoordinate());
+		getXcoordinate().setText(xCoordinateValue);
+		getXcoordinate().setEditable(false);
+
+		String yCoordinateValue = String.valueOf(center.getYcoordinate());
+		getYcoordinate().setText(yCoordinateValue);
+		getYcoordinate().setEditable(false);
+
+		getBtnOuterColor().setVisible(false);
+		getBtnInnerColor().setVisible(false);
+
+		setVisible(true);
+	}
+
+	@Override
+	public void setModifyDialog(Shape selectedShape) {
+		Donut donut = (Donut) selectedShape;
+		Point center = donut.getCenter();
+
+		String xCoordinateValue = String.valueOf(center.getXcoordinate());
+		getXcoordinate().setText(xCoordinateValue);
+		getXcoordinate().setEditable(true);
+
+		String yCoordinateValue = String.valueOf(center.getYcoordinate());
+		getYcoordinate().setText(yCoordinateValue);
+		getYcoordinate().setEditable(true);
+
+		String radiusValue = String.valueOf(donut.getRadius());
+		getRadius().setText(radiusValue);
+
+		String innerRadiusValue = String.valueOf(donut.getInnerRadius());
+		getInnerRadius().setText(innerRadiusValue);
+
+		Color outerColor = donut.getOuterColor();
+		setOuterColor(outerColor);
+		getBtnOuterColor().setBackground(outerColor);
+		getBtnOuterColor().setVisible(true);
+
+		Color innerColor = donut.getInnerColor();
+		setInnerColor(innerColor);
+		getBtnInnerColor().setBackground(innerColor);
+		getBtnInnerColor().setVisible(true);
+
+		setVisible(true);
 	}
 
 	public JTextField getRadius() {

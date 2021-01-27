@@ -110,7 +110,7 @@ public class DrawingController {
 
 	public void drawRectangle(MouseEvent click) {
 		pointClick = new Point(click.getX(), click.getY(), false, optionsController.getOuterColor());
-		dialogRectangle.setDialog(pointClick);
+		dialogRectangle.setCreateDialog(pointClick);
 
 		if (dialogRectangle.isAccepted())
 			rectangleCommandsExecutor.addShape();
@@ -120,7 +120,7 @@ public class DrawingController {
 
 	public void drawCircle(MouseEvent click) {
 		pointClick = new Point(click.getX(), click.getY(), false, optionsController.getOuterColor());
-		dialogCircle.setDialog(pointClick);
+		dialogCircle.setCreateDialog(pointClick);
 
 		if (dialogCircle.isAccepted())
 			circleCommandsExecutor.addShape();
@@ -130,7 +130,7 @@ public class DrawingController {
 
 	public void drawDonut(MouseEvent click) {
 		pointClick = new Point(click.getX(), click.getY(), false, optionsController.getOuterColor());
-		dialogDonut.setDialog(pointClick);
+		dialogDonut.setCreateDialog(pointClick);
 
 		if (dialogDonut.isAccepted())
 			donutCommandsExecutor.addShape();
@@ -140,7 +140,7 @@ public class DrawingController {
 
 	public void drawHexagon(MouseEvent click) {
 		pointClick = new Point(click.getX(), click.getY(), false, optionsController.getOuterColor());
-		dialogHexagon.setDialog(pointClick);
+		dialogHexagon.setCreateDialog(pointClick);
 
 		if (dialogHexagon.isAccepted())
 			hexagonCommandsExecutor.addShape();

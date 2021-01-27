@@ -3,9 +3,9 @@ package dialogs;
 import shapes.Shape;
 
 public interface Dialog {
-	void buildLayout();
-
 	void setIcon();
+
+	void buildLayout();
 
 	boolean isInputValid();
 

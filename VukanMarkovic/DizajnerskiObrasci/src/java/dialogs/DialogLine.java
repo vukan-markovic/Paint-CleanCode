@@ -1,6 +1,7 @@
 package dialogs;
 
 import shapes.*;
+import java.awt.Color;
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -8,14 +9,14 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 public class DialogLine extends DialogShape {
 	private static final long serialVersionUID = 1L;
 	private JTextField xCoordinateOfEndPoint;
-	private JTextField yCoordinateOfEndPoint;
 	private JLabel lblXCoordinateOfEndPoint;
+	private JTextField yCoordinateOfEndPoint;
 	private JLabel lblYCoordinateOfEndPoint;
 
 	public DialogLine() {
 		xCoordinateOfEndPoint = new JTextField();
-		yCoordinateOfEndPoint = new JTextField();
 		lblXCoordinateOfEndPoint = new JLabel("X coordinate of end point:");
+		yCoordinateOfEndPoint = new JTextField();
 		lblYCoordinateOfEndPoint = new JLabel("Y coordinate of end point:");
 		setTitle("Line dialog");
 		setIcon();
@@ -24,15 +25,17 @@ public class DialogLine extends DialogShape {
 
 	@Override
 	public void setIcon() {
-		getLblIcon().setIcon(new ImageIcon(new ImageIcon(this.getClass().getResource("/line.png")).getImage()));
+		ImageIcon icon = new ImageIcon(getClass().getResource("/line.png"));
+		getLblIcon().setIcon(icon);
 	}
 
 	@Override
 	public void buildLayout() {
 		xCoordinateOfEndPoint.setColumns(10);
-		xCoordinateOfEndPoint.addKeyListener(getListener());
+		xCoordinateOfEndPoint.addKeyListener(getInputListener());
+
 		yCoordinateOfEndPoint.setColumns(10);
-		yCoordinateOfEndPoint.addKeyListener(getListener());
+		yCoordinateOfEndPoint.addKeyListener(getInputListener());
 
 		// Automatically generated code by Java Swing, GUI modification is recommended
 
@@ -92,8 +95,13 @@ public class DialogLine extends DialogShape {
 
 	@Override
 	public boolean isInputValid() {
-		if (getXcoordinate().getText().isBlank() || getYcoordinate().getText().isBlank()
-				|| xCoordinateOfEndPoint.getText().isBlank() || yCoordinateOfEndPoint.getText().isBlank())
+		String xCoordinateOfStartPointValue = getXcoordinate().getText();
+		String yCoordinateOfStartPointValue = getYcoordinate().getText();
+		String xCoordinateOfEndPointValue = xCoordinateOfEndPoint.getText();
+		String yCoordinateOfEndPointValue = yCoordinateOfEndPoint.getText();
+
+		if (xCoordinateOfStartPointValue.isBlank() || yCoordinateOfStartPointValue.isBlank()
+				|| xCoordinateOfEndPointValue.isBlank() || yCoordinateOfEndPointValue.isBlank())
 			return false;
 		return true;
 	}
@@ -101,12 +109,25 @@ public class DialogLine extends DialogShape {
 	@Override
 	public void setModifyDialog(Shape selectedShape) {
 		Line line = (Line) selectedShape;
-		getXcoordinate().setText(String.valueOf(line.getStartPoint().getXcoordinate()));
-		getYcoordinate().setText(String.valueOf(line.getStartPoint().getYcoordinate()));
-		getXCoordinateOfEndPoint().setText(String.valueOf(line.getEndPoint().getXcoordinate()));
-		getYCoordinateOfEndPoint().setText(String.valueOf(line.getEndPoint().getYcoordinate()));
-		setOuterColor(line.getOuterColor());
-		getBtnOuterColor().setBackground(getOuterColor());
+		Point startPoint = line.getStartPoint();
+		Point endPoint = line.getEndPoint();
+
+		String xCoordinateOfStartPointValue = String.valueOf(startPoint.getXcoordinate());
+		getXcoordinate().setText(xCoordinateOfStartPointValue);
+
+		String yCoordinateOfStartPointValue = String.valueOf(startPoint.getYcoordinate());
+		getYcoordinate().setText(yCoordinateOfStartPointValue);
+
+		String xCoordinateOfEndPointValue = String.valueOf(endPoint.getXcoordinate());
+		getXCoordinateOfEndPoint().setText(xCoordinateOfEndPointValue);
+
+		String yCoordinateOfEndPointValue = String.valueOf(endPoint.getYcoordinate());
+		getYCoordinateOfEndPoint().setText(yCoordinateOfEndPointValue);
+
+		Color outerColor = line.getOuterColor();
+		setOuterColor(outerColor);
+		getBtnOuterColor().setBackground(outerColor);
+
 		setVisible(true);
 	}
 

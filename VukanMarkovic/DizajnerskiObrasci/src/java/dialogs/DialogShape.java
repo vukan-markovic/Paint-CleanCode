@@ -11,26 +11,31 @@ public abstract class DialogShape extends JDialog implements Dialog {
 	private GroupLayout glContentPanel;
 	private JLabel lblIcon;
 	private JTextField xCoordinate;
-	private JTextField yCoordinate;
 	private JLabel lblXcoodinate;
+	private JTextField yCoordinate;
 	private JLabel lblYcoordinate;
+	private KeyAdapter inputListener;
+	private JButton btnOuterColor;
 	private JButton btnOk;
 	private JButton btnCancel;
-	private JButton btnOuterColor;
 	private Color outerColor = Color.BLACK;
-	private KeyAdapter listener;
 	private boolean accepted;
 
 	public DialogShape() {
-		lblIcon = new JLabel("");
 		contentPanel = new JPanel();
+		lblIcon = new JLabel("");
 		xCoordinate = new JTextField();
-		yCoordinate = new JTextField();
 		lblXcoodinate = new JLabel("X coodinate:");
+		yCoordinate = new JTextField();
 		lblYcoordinate = new JLabel("Y coodinate:");
 		btnOuterColor = new JButton("Outer color");
 		btnOk = new JButton("OK");
+		btnCancel = new JButton("Cancel");
 		buildBasicLayout();
+		initializeCharListener();
+		addBtnOuterColorListener();
+		addBtnOkListener();
+		addBtnCancelListener();
 	}
 
 	private void buildBasicLayout() {
@@ -43,24 +48,10 @@ public abstract class DialogShape extends JDialog implements Dialog {
 		lblIcon.setHorizontalAlignment(SwingConstants.CENTER);
 
 		xCoordinate.setColumns(10);
-		xCoordinate.addKeyListener(getListener());
+		xCoordinate.addKeyListener(getInputListener());
 
 		yCoordinate.setColumns(10);
-		yCoordinate.addKeyListener(getListener());
-
-		listener = new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent event) {
-				preventInvalidChar(event);
-			}
-		};
-
-		btnOuterColor.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				outerColor = JColorChooser.showDialog(getContentPane(), "Choose outer color", outerColor);
-				btnOuterColor.setBackground(outerColor);
-			}
-		});
+		yCoordinate.addKeyListener(getInputListener());
 
 		JPanel btnPanel = new JPanel();
 		btnPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -70,26 +61,17 @@ public abstract class DialogShape extends JDialog implements Dialog {
 		btnPanel.add(btnOk);
 		getRootPane().setDefaultButton(btnOk);
 
-		btnOk.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				if (isInputValid()) {
-					setAccepted(true);
-					setVisible(false);
-				} else
-					JOptionPane.showMessageDialog(new JFrame(), "You have not filled in all the fields, try again!",
-							"Error!", JOptionPane.ERROR_MESSAGE);
-			}
-		});
-
-		btnCancel = new JButton("Cancel");
 		btnCancel.setActionCommand("Cancel");
 		btnPanel.add(btnCancel);
+	}
 
-		btnCancel.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				dispose();
+	private void initializeCharListener() {
+		inputListener = new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent event) {
+				preventInvalidChar(event);
 			}
-		});
+		};
 	}
 
 	public void preventInvalidChar(KeyEvent event) {
@@ -106,28 +88,39 @@ public abstract class DialogShape extends JDialog implements Dialog {
 				|| charInput == KeyEvent.VK_DELETE;
 	}
 
-	public JTextField getXcoordinate() {
-		return xCoordinate;
+	private void addBtnOuterColorListener() {
+		btnOuterColor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				outerColor = JColorChooser.showDialog(getContentPane(), "Choose outer color", outerColor);
+				btnOuterColor.setBackground(outerColor);
+			}
+		});
 	}
 
-	public int getXcoordinateValue() {
-		return Integer.parseInt(xCoordinate.getText());
+	private void addBtnOkListener() {
+		btnOk.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				if (isInputValid()) {
+					setAccepted(true);
+					setVisible(false);
+				} else
+					JOptionPane.showMessageDialog(new JFrame(), "You have not filled in all the fields, try again!",
+							"Error!", JOptionPane.ERROR_MESSAGE);
+			}
+		});
+
 	}
 
-	public JTextField getYcoordinate() {
-		return yCoordinate;
+	private void addBtnCancelListener() {
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				dispose();
+			}
+		});
 	}
 
-	public int getYcoordinateValue() {
-		return Integer.parseInt(yCoordinate.getText());
-	}
-
-	public JLabel getLblXcoodinate() {
-		return lblXcoodinate;
-	}
-
-	public JLabel getLblYcoordinate() {
-		return lblYcoordinate;
+	public JPanel getContentPanel() {
+		return contentPanel;
 	}
 
 	public GroupLayout getGlContentPanel() {
@@ -138,6 +131,38 @@ public abstract class DialogShape extends JDialog implements Dialog {
 		return lblIcon;
 	}
 
+	public JTextField getXcoordinate() {
+		return xCoordinate;
+	}
+
+	public int getXcoordinateValue() {
+		return Integer.parseInt(xCoordinate.getText());
+	}
+
+	public JLabel getLblXcoodinate() {
+		return lblXcoodinate;
+	}
+
+	public JTextField getYcoordinate() {
+		return yCoordinate;
+	}
+
+	public int getYcoordinateValue() {
+		return Integer.parseInt(yCoordinate.getText());
+	}
+
+	public JLabel getLblYcoordinate() {
+		return lblYcoordinate;
+	}
+
+	public KeyAdapter getInputListener() {
+		return inputListener;
+	}
+
+	public JButton getBtnOuterColor() {
+		return btnOuterColor;
+	}
+
 	public JButton getBtnOk() {
 		return btnOk;
 	}
@@ -146,16 +171,8 @@ public abstract class DialogShape extends JDialog implements Dialog {
 		return btnCancel;
 	}
 
-	public JButton getBtnOuterColor() {
-		return btnOuterColor;
-	}
-
 	public Color getOuterColor() {
 		return outerColor;
-	}
-
-	public KeyAdapter getListener() {
-		return listener;
 	}
 
 	public boolean isAccepted() {
@@ -168,9 +185,5 @@ public abstract class DialogShape extends JDialog implements Dialog {
 
 	public void setAccepted(boolean accepted) {
 		this.accepted = accepted;
-	}
-
-	public JPanel getContentPanel() {
-		return contentPanel;
 	}
 }

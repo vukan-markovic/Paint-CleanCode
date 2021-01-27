@@ -1,6 +1,7 @@
 package dialogs;
 
 import shapes.*;
+import java.awt.Color;
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -16,7 +17,8 @@ public class DialogPoint extends DialogShape {
 
 	@Override
 	public void setIcon() {
-		getLblIcon().setIcon(new ImageIcon(new ImageIcon(this.getClass().getResource("/point3.png")).getImage()));
+		ImageIcon icon = new ImageIcon(getClass().getResource("/point3.png"));
+		getLblIcon().setIcon(icon);
 	}
 
 	@Override
@@ -64,7 +66,10 @@ public class DialogPoint extends DialogShape {
 	}
 
 	public boolean isInputValid() {
-		if (getXcoordinate().getText().isBlank() || getYcoordinate().getText().isBlank())
+		String xCoordinateValue = getXcoordinate().getText();
+		String yCoordinateValue = getYcoordinate().getText();
+
+		if (xCoordinateValue.isBlank() || yCoordinateValue.isBlank())
 			return false;
 		return true;
 	}
@@ -72,10 +77,17 @@ public class DialogPoint extends DialogShape {
 	@Override
 	public void setModifyDialog(Shape selectedShape) {
 		Point point = (Point) selectedShape;
-		getXcoordinate().setText(String.valueOf(point.getXcoordinate()));
-		getYcoordinate().setText(String.valueOf(point.getYcoordinate()));
-		setOuterColor(point.getOuterColor());
-		getBtnOuterColor().setBackground(getOuterColor());
+
+		String xCoordinateValue = String.valueOf(point.getXcoordinate());
+		getXcoordinate().setText(xCoordinateValue);
+
+		String yCoordinateValue = String.valueOf(point.getYcoordinate());
+		getYcoordinate().setText(yCoordinateValue);
+
+		Color outerColor = point.getOuterColor();
+		setOuterColor(outerColor);
+		getBtnOuterColor().setBackground(outerColor);
+
 		setVisible(true);
 	}
 }

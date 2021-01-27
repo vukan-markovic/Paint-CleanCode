@@ -1,7 +1,6 @@
 package dialogs;
 
-import java.awt.Image;
-
+import java.awt.Color;
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -22,17 +21,17 @@ public class DialogCircle extends DialogSurfaceShape {
 
 	@Override
 	public void setIcon() {
-		Image icon = new ImageIcon(this.getClass().getResource("/circle.png")).getImage();
-		getLblIcon().setIcon(new ImageIcon(icon));
+		ImageIcon icon = new ImageIcon(getClass().getResource("/circle.png"));
+		getLblIcon().setIcon(icon);
 	}
 
 	@Override
 	public void buildLayout() {
 		radius.setColumns(10);
-		radius.addKeyListener(getListener());
+		radius.addKeyListener(getInputListener());
 
 		// Automatically generated code by Java Swing, GUI modification is recommended
-		
+
 		getGlContentPanel().setHorizontalGroup(getGlContentPanel().createParallelGroup(Alignment.TRAILING)
 				.addGroup(getGlContentPanel().createSequentialGroup().addContainerGap()
 						.addGroup(getGlContentPanel().createParallelGroup(Alignment.TRAILING)
@@ -89,37 +88,57 @@ public class DialogCircle extends DialogSurfaceShape {
 
 	@Override
 	public boolean isInputValid() {
-		if ((radius.getText().isBlank() || getXcoordinate().getText().isBlank()
-				|| getYcoordinate().getText().isBlank()))
+		String xCoordinateValue = getXcoordinate().getText();
+		String yCoordinateValue = getYcoordinate().getText();
+		String radiusValue = radius.getText();
+
+		if (xCoordinateValue.isBlank() || yCoordinateValue.isBlank() || radiusValue.isBlank())
 			return false;
 		return true;
 	}
 
 	@Override
-	public void setDialog(Point center) {
+	public void setCreateDialog(Point center) {
+		String xCoordinateValue = String.valueOf(center.getXcoordinate());
+		getXcoordinate().setText(xCoordinateValue);
+		getXcoordinate().setEditable(false);
+
+		String yCoordinateValue = String.valueOf(center.getYcoordinate());
+		getYcoordinate().setText(yCoordinateValue);
+		getYcoordinate().setEditable(false);
+
 		getBtnOuterColor().setVisible(false);
 		getBtnInnerColor().setVisible(false);
-		getXcoordinate().setText(String.valueOf(center.getXcoordinate()));
-		getYcoordinate().setText(String.valueOf(center.getYcoordinate()));
-		getXcoordinate().setEditable(false);
-		getYcoordinate().setEditable(false);
+
 		setVisible(true);
 	}
 
 	@Override
 	public void setModifyDialog(Shape selectedShape) {
 		Circle circle = (Circle) selectedShape;
-		getBtnOuterColor().setVisible(true);
-		getBtnInnerColor().setVisible(true);
+		Point center = circle.getCenter();
+
+		String xCoordinateValue = String.valueOf(center.getXcoordinate());
+		getXcoordinate().setText(xCoordinateValue);
 		getXcoordinate().setEditable(true);
+
+		String yCoordinateValue = String.valueOf(center.getYcoordinate());
+		getYcoordinate().setText(yCoordinateValue);
 		getYcoordinate().setEditable(true);
-		getXcoordinate().setText(String.valueOf(circle.getCenter().getXcoordinate()));
-		getYcoordinate().setText(String.valueOf(circle.getCenter().getYcoordinate()));
-		radius.setText(String.valueOf(circle.getRadius()));
-		setOuterColor(circle.getOuterColor());
-		setInnerColor(circle.getInnerColor());
-		getBtnOuterColor().setBackground(getOuterColor());
-		getBtnInnerColor().setBackground(getInnerColor());
+
+		String radiusValue = String.valueOf(circle.getRadius());
+		radius.setText(radiusValue);
+
+		Color outerColor = circle.getOuterColor();
+		setOuterColor(outerColor);
+		getBtnOuterColor().setBackground(outerColor);
+		getBtnOuterColor().setVisible(true);
+
+		Color innerColor = circle.getInnerColor();
+		setInnerColor(innerColor);
+		getBtnInnerColor().setBackground(innerColor);
+		getBtnInnerColor().setVisible(true);
+
 		setVisible(true);
 	}
 

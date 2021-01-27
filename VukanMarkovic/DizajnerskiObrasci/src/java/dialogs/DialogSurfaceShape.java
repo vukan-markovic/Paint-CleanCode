@@ -11,10 +11,10 @@ public abstract class DialogSurfaceShape extends DialogShape {
 	private Color innerColor = Color.WHITE;
 
 	public DialogSurfaceShape() {
-		addBtnListener();
+		addBtnInnerColorListener();
 	}
 
-	public void addBtnListener() {
+	public void addBtnInnerColorListener() {
 		btnInnerColor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				innerColor = JColorChooser.showDialog(getContentPane(), "Choose inner color", innerColor);
@@ -22,8 +22,8 @@ public abstract class DialogSurfaceShape extends DialogShape {
 			}
 		});
 	}
-	
-	public abstract void setDialog(Point point);
+
+	public abstract void setCreateDialog(Point point);
 
 	public JButton getBtnInnerColor() {
 		return btnInnerColor;

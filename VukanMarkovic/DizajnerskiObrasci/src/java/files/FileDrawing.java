@@ -2,7 +2,6 @@ package files;
 
 import java.io.*;
 import java.util.ArrayList;
-
 import frame.DrawingFrame;
 import model.DrawingModel;
 import shapes.Shape;

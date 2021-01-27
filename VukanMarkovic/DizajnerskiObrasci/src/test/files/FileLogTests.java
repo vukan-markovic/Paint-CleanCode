@@ -36,7 +36,7 @@ public class FileLogTests {
 		String filePath = "";
 		strategy.save(filePath);
 		reader = new BufferedReader(new FileReader(filePath));
-		assertEquals(fileLog.getLog(), reader.lines().collect(Collectors.joining("\n")));
+		assertEquals(fileLog.getExecutedLogCommands(), reader.lines().collect(Collectors.joining("\n")));
 	}
 
 	@Test
@@ -46,7 +46,7 @@ public class FileLogTests {
 		String filePath = folder.newFile("myfile1.txt").getAbsolutePath();
 		strategy.save(filePath);
 		reader = new BufferedReader(new FileReader(filePath));
-		assertEquals(fileLog.getLog().get(0), reader.lines().collect(Collectors.joining("\n")));
+		assertEquals(fileLog.getExecutedLogCommands().get(0), reader.lines().collect(Collectors.joining("\n")));
 	}
 
 	@AfterClass
