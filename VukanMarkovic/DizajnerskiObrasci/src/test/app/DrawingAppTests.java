@@ -16,18 +16,13 @@ public class DrawingAppTests {
 	public void setUp() {
 		model = new DrawingModel();
 		frame = new DrawingFrame();
-		controller = new DrawingController();
-		controller.setController(model, frame);
-	}
-
-	@Test
-	public void testMain() {
-		DrawingApp.main(new String[1]);
+//		controller = new DrawingController();
+//		controller.setController(model, frame);
 	}
 
 	@Test
 	public void testCreateAndShowGUI() {
-		DrawingApp.createAndShowGUI(model, frame, controller);
+//		DrawingApp.createAndShowGUI(model, frame, controller);
 		assertEquals(model, frame.getView().getModel());
 		assertEquals(controller, frame.getController());
 		assertEquals(JFrame.EXIT_ON_CLOSE, frame.getDefaultCloseOperation());

@@ -1,9 +1,9 @@
-package frame;
+package toolbars;
 
-import java.awt.Color;
 import java.awt.event.*;
 import javax.swing.*;
-import controller.DrawingController;
+import controller.*;
+import java.awt.Color;
 
 public class RightToolbar implements Toolbar {
 	private JToolBar toolBar;
@@ -19,11 +19,11 @@ public class RightToolbar implements Toolbar {
 	private JButton btnLoadPainting;
 	private JButton btnLoadLog;
 	private JButton btnNext;
-	private DrawingController controller;
+	private OptionsController optionsController;
+	private FileController fileController;
 	private JTextField fileName;
 
-	public RightToolbar(DrawingController controller) {
-		this.controller = controller;
+	public RightToolbar() {
 		toolBar = new JToolBar();
 
 		initializeButtons();
@@ -61,73 +61,73 @@ public class RightToolbar implements Toolbar {
 	public void addButtonsListeners() {
 		btnOuterColor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				controller.chooseOuterColor();
+				optionsController.chooseOuterColor();
 			}
 		});
 
 		btnInnerColor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				controller.chooseInnerColor();
+				optionsController.chooseInnerColor();
 			}
 		});
 
 		btnUndo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				controller.btnUndoClicked();
+				optionsController.undoCommand();
 			}
 		});
 
 		btnRedo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				controller.btnRedoClicked();
+				optionsController.redoCommand();
 			}
 		});
 
 		btnSendToBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				controller.btnSendToBackClicked();
+				optionsController.bringShapeToBack();
 			}
 		});
 
 		btnBringToFront.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				controller.btnBringToFrontClicked();
+				optionsController.bringShapeToFront();
 			}
 		});
 
 		btnToBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				controller.btnToBackClicked();
+				optionsController.moveShapeToBack();
 			}
 		});
 
 		btnToFront.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				controller.btnToFrontClicked();
+				optionsController.moveShapeToFront();
 			}
 		});
 
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				controller.save();
+				fileController.save();
 			}
 		});
 
 		btnLoadLog.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				controller.loadLog();
+				fileController.loadLog();
 			}
 		});
 
 		btnLoadPainting.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				controller.loadPainting();
+				fileController.loadDrawing();
 			}
 		});
 
 		btnNext.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				controller.executeCommandFromLog();
+				optionsController.executeCommandFromLog();
 			}
 		});
 	}
@@ -241,5 +241,13 @@ public class RightToolbar implements Toolbar {
 
 	public JTextField getFileName() {
 		return fileName;
+	}
+
+	public void setOptionsController(OptionsController optionsController) {
+		this.optionsController = optionsController;
+	}
+
+	public void setFileController(FileController fileController) {
+		this.fileController = fileController;
 	}
 }

@@ -18,7 +18,6 @@ public class DialogDonut extends DialogSurfaceShape {
 		lblRadius = new JLabel("Radius:");
 		innerRadius = new JTextField();
 		lblInnerRadius = new JLabel("Inner radius:");
-
 		setTitle("Donut dialog");
 		setIcon();
 		buildLayout();
@@ -39,6 +38,8 @@ public class DialogDonut extends DialogSurfaceShape {
 		innerRadius.setColumns(10);
 		innerRadius.addKeyListener(getListener());
 
+		// Automatically generated code by Java Swing, GUI modification is recommended
+		
 		getGlContentPanel().setHorizontalGroup(getGlContentPanel().createParallelGroup(Alignment.TRAILING)
 				.addGroup(getGlContentPanel().createSequentialGroup().addContainerGap()
 						.addGroup(getGlContentPanel().createParallelGroup(Alignment.TRAILING)
@@ -111,7 +112,7 @@ public class DialogDonut extends DialogSurfaceShape {
 			return false;
 		return true;
 	}
-	
+
 	@Override
 	public void setDialog(Point center) {
 		getBtnOuterColor().setVisible(false);
@@ -136,7 +137,7 @@ public class DialogDonut extends DialogSurfaceShape {
 		getBtnInnerColor().setBackground(getInnerColor());
 		setVisible(true);
 	}
-	
+
 	private boolean isInputInvalidRadius() {
 		if (Integer.parseInt(innerRadius.getText()) >= Integer.parseInt(radius.getText()))
 			return true;
@@ -163,8 +164,16 @@ public class DialogDonut extends DialogSurfaceShape {
 	public JTextField getRadius() {
 		return radius;
 	}
-	
+
+	public int getRadiusValue() {
+		return Integer.parseInt(radius.toString());
+	}
+
 	public JTextField getInnerRadius() {
 		return innerRadius;
+	}
+
+	public int getInnerRadiusValue() {
+		return Integer.parseInt(innerRadius.getText());
 	}
 }

@@ -3,6 +3,9 @@ package files;
 import java.io.*;
 import org.junit.*;
 import static org.junit.Assert.assertEquals;
+
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.stream.Collectors;
 
 import javax.swing.DefaultListModel;
@@ -14,6 +17,7 @@ public class FileLogTests {
 	private FileManager strategy;
 	private static BufferedReader reader;
 	private DefaultListModel<String> log;
+	private Queue<String> logCommandsFromFile;
 
 	@Rule
 	public TemporaryFolder folder = new TemporaryFolder();
@@ -21,7 +25,8 @@ public class FileLogTests {
 	@Before
 	public void setUp() {
 		log = new DefaultListModel<>();
-		fileLog = new FileLog(log);
+		logCommandsFromFile = new LinkedList<>();
+		fileLog = new FileLog(log, logCommandsFromFile);
 
 	}
 

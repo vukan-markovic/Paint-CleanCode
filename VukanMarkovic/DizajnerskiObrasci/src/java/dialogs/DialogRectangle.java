@@ -1,12 +1,9 @@
 package dialogs;
 
+import shapes.*;
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
-
-import shapes.Point;
-import shapes.Rectangle;
-import shapes.Shape;
 
 public class DialogRectangle extends DialogSurfaceShape {
 	private static final long serialVersionUID = 1L;
@@ -20,7 +17,6 @@ public class DialogRectangle extends DialogSurfaceShape {
 		width = new JTextField();
 		lblHeight = new JLabel("Height:");
 		lblWidth = new JLabel("Width:");
-
 		setTitle("Rectangle dialog");
 		setIcon();
 		buildLayout();
@@ -38,6 +34,8 @@ public class DialogRectangle extends DialogSurfaceShape {
 		width.setColumns(10);
 		width.addKeyListener(getListener());
 
+		// Automatically generated code by Java Swing, GUI modification is recommended
+		
 		getGlContentPanel().setHorizontalGroup(getGlContentPanel().createParallelGroup(Alignment.LEADING)
 				.addGroup(getGlContentPanel().createSequentialGroup().addGap(25)
 						.addGroup(getGlContentPanel()
@@ -123,10 +121,16 @@ public class DialogRectangle extends DialogSurfaceShape {
 	@Override
 	public void setModifyDialog(Shape selectedShape) {
 		Rectangle rectangle = (Rectangle) selectedShape;
-		getXcoordinate().setText(String.valueOf(rectangle.getUpperLeftPoint().getXcoordinate()));
-		getYcoordinate().setText(String.valueOf(rectangle.getUpperLeftPoint().getYcoordinate()));
-		getheight().setText(String.valueOf(rectangle.getHeight()));
-		getwidth().setText(String.valueOf(rectangle.getWidth()));
+		Point upperLeftPoint = rectangle.getUpperLeftPoint();
+		String xCoordinateValue = String.valueOf(upperLeftPoint.getXcoordinate());
+		String yCoordinateValue = String.valueOf(upperLeftPoint.getYcoordinate());
+		String heightValue = String.valueOf(rectangle.getHeight());
+		String widthValue = String.valueOf(rectangle.getWidth());
+
+		getXcoordinate().setText(xCoordinateValue);
+		getYcoordinate().setText(yCoordinateValue);
+		height.setText(heightValue);
+		width.setText(widthValue);
 		setOuterColor(rectangle.getOuterColor());
 		setInnerColor(rectangle.getInnerColor());
 		getBtnOuterColor().setBackground(getOuterColor());
@@ -138,7 +142,15 @@ public class DialogRectangle extends DialogSurfaceShape {
 		return height;
 	}
 
+	public int getheightValue() {
+		return Integer.parseInt(height.getText());
+	}
+
 	public JTextField getwidth() {
 		return width;
+	}
+
+	public int getwidthValue() {
+		return Integer.parseInt(width.getText());
 	}
 }

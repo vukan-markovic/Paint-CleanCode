@@ -1,8 +1,6 @@
 package commands;
 
-import java.util.Collections;
-import java.util.List;
-
+import java.util.*;
 import model.DrawingModel;
 import shapes.Shape;
 
@@ -21,13 +19,17 @@ public class CmdToFront implements Command {
 
 	@Override
 	public void execute() {
-		if (indexOfShape != indexOfLastShape)
+		if (isNotLastShape())
 			Collections.swap(shapes, indexOfNextShape, indexOfShape);
 	}
 
 	@Override
 	public void unexecute() {
-		if (indexOfShape != indexOfLastShape)
+		if (isNotLastShape())
 			Collections.swap(shapes, indexOfShape, indexOfNextShape);
+	}
+
+	private boolean isNotLastShape() {
+		return indexOfShape != indexOfLastShape;
 	}
 }

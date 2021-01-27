@@ -1,23 +1,29 @@
 package app;
 
-import javax.swing.JFrame;
+import java.util.*;
 import controller.*;
+import javax.swing.JFrame;
 import frame.DrawingFrame;
 import model.DrawingModel;
+import stack.CommandsStack;
+import view.DrawingView;
 
 public class DrawingApp {
 
 	public static void main(String[] args) {
 		DrawingModel model = new DrawingModel();
 		DrawingFrame frame = new DrawingFrame();
-		DrawingController controller = new DrawingController();
-		controller.setController(model, frame);
-		createAndShowGUI(model, frame, controller);
-	}
+		Queue<String> commandsLog = new LinkedList<String>();
+		CommandsStack commandsStack = new CommandsStack();
+		FileController fileController = new FileController(model, frame, commandsLog);
+		OptionsController optionsController = new OptionsController(model, frame, commandsStack, commandsLog);
+		DrawingController drawingController = new DrawingController(model, frame, commandsStack, optionsController);
 
-	public static void createAndShowGUI(DrawingModel model, DrawingFrame frame, DrawingController controller) {
-		frame.getView().setModel(model);
-		frame.setController(controller);
+		DrawingView view = frame.getView();
+		view.setModel(model);
+		frame.setController(drawingController);
+		frame.setFileController(fileController);
+		frame.setOptionsController(optionsController);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 	}

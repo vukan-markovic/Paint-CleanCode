@@ -1,11 +1,9 @@
 package dialogs;
 
+import shapes.*;
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
-
-import shapes.Point;
-import shapes.Shape;
 
 public class DialogPoint extends DialogShape {
 	private static final long serialVersionUID = 1L;
@@ -23,6 +21,8 @@ public class DialogPoint extends DialogShape {
 
 	@Override
 	public void buildLayout() {
+		// Automatically generated code by Java Swing, GUI modification is recommended
+
 		getGlContentPanel().setHorizontalGroup(getGlContentPanel().createParallelGroup(Alignment.TRAILING)
 				.addGroup(getGlContentPanel().createSequentialGroup().addContainerGap(46, Short.MAX_VALUE).addGroup(
 						getGlContentPanel().createParallelGroup(Alignment.LEADING).addGroup(getGlContentPanel()

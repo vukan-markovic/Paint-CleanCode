@@ -1,7 +1,6 @@
 package commands;
 
 import java.util.Collections;
-
 import model.DrawingModel;
 import shapes.Shape;
 

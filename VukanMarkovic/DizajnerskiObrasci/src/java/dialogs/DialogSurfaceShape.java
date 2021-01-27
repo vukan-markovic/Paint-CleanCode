@@ -3,7 +3,6 @@ package dialogs;
 import java.awt.Color;
 import java.awt.event.*;
 import javax.swing.*;
-
 import shapes.Point;
 
 public abstract class DialogSurfaceShape extends DialogShape {

@@ -1,8 +1,7 @@
-package frame;
+package toolbars;
 
 import java.awt.event.*;
 import javax.swing.*;
-
 import controller.DrawingController;
 
 public class TopToolbar implements Toolbar {
@@ -19,8 +18,7 @@ public class TopToolbar implements Toolbar {
 	private JButton btnDelete;
 	private ButtonGroup btnGroup;
 
-	public TopToolbar(DrawingController controller) {
-		this.controller = controller;
+	public TopToolbar() {
 		toolBar = new JToolBar();
 		btnGroup = new ButtonGroup();
 
@@ -62,13 +60,13 @@ public class TopToolbar implements Toolbar {
 	public void addButtonsListeners() {
 		btnModify.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				controller.btnModifyClicked();
+				controller.modifyShape();
 			}
 		});
 
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				controller.btnRemoveClicked();
+				controller.removeShapes();
 			}
 		});
 	}
@@ -148,5 +146,9 @@ public class TopToolbar implements Toolbar {
 
 	public JToggleButton getBtnSelect() {
 		return btnSelect;
+	}
+
+	public void setController(DrawingController controller) {
+		this.controller = controller;
 	}
 }

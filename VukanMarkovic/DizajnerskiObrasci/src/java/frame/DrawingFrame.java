@@ -3,10 +3,10 @@ package frame;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import controller.*;
+import toolbars.*;
 import view.DrawingView;
 import javax.swing.border.EmptyBorder;
-
-import controller.*;
 
 public class DrawingFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -25,9 +25,9 @@ public class DrawingFrame extends JFrame {
 		scrollPane = new JScrollPane();
 		commandsListModel = new DefaultListModel<>();
 		commandsList = new JList<String>();
-		topToolbar = new TopToolbar(controller);
-		rightToolbar = new RightToolbar(controller);
 		commandsList.setModel(commandsListModel);
+		topToolbar = new TopToolbar();
+		rightToolbar = new RightToolbar();
 
 		setScrollPane();
 		setContentPanel();
@@ -63,19 +63,19 @@ public class DrawingFrame extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent click) {
 				if (topToolbar.getBtnSelect().isSelected())
-					controller.btnSelectClicked(click);
+					controller.selectShape(click);
 				else if (topToolbar.getBtnPoint().isSelected())
-					controller.btnPointClicked(click);
+					controller.drawPoint(click);
 				else if (topToolbar.getBtnLine().isSelected())
-					controller.btnLineClicked(click);
+					controller.drawLine(click);
 				else if (topToolbar.getBtnRectangle().isSelected())
-					controller.btnRectangleClicked(click);
+					controller.drawRectangle(click);
 				else if (topToolbar.getBtnCircle().isSelected())
-					controller.btnCircleClicked(click);
+					controller.drawCircle(click);
 				else if (topToolbar.getBtnDonut().isSelected())
-					controller.btnDonutClicked(click);
+					controller.drawDonut(click);
 				else if (topToolbar.getBtnHexagon().isSelected())
-					controller.btnHexagonClicked(click);
+					controller.drawHexagon(click);
 
 				view.repaint();
 				controller.fireEventsForUndoAndRedoButtons();
@@ -86,7 +86,7 @@ public class DrawingFrame extends JFrame {
 	public TopToolbar getTopToolbar() {
 		return topToolbar;
 	}
-	
+
 	public RightToolbar getRightToolbar() {
 		return rightToolbar;
 	}
@@ -105,5 +105,14 @@ public class DrawingFrame extends JFrame {
 
 	public void setController(DrawingController controller) {
 		this.controller = controller;
+		topToolbar.setController(controller);
+	}
+
+	public void setFileController(FileController fileController) {
+		rightToolbar.setFileController(fileController);
+	}
+
+	public void setOptionsController(OptionsController optionsController) {
+		rightToolbar.setOptionsController(optionsController);
 	}
 }

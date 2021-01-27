@@ -15,7 +15,7 @@ public class DrawingFrameTests {
 		controller = mock(DrawingController.class);
 		frame = new DrawingFrame();
 		model = new DrawingModel();
-		controller.setController(model, frame);
+//		controller.setController(model, frame);
 		frame.setController(controller);
 	}
 

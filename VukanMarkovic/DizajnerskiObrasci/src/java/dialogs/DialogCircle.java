@@ -1,5 +1,7 @@
 package dialogs;
 
+import java.awt.Image;
+
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -13,7 +15,6 @@ public class DialogCircle extends DialogSurfaceShape {
 	public DialogCircle() {
 		radius = new JTextField();
 		lblRadius = new JLabel("Radius:");
-
 		setTitle("Circle dialog");
 		setIcon();
 		buildLayout();
@@ -21,13 +22,17 @@ public class DialogCircle extends DialogSurfaceShape {
 
 	@Override
 	public void setIcon() {
-		getLblIcon().setIcon(new ImageIcon(new ImageIcon(this.getClass().getResource("/circle.png")).getImage()));
+		Image icon = new ImageIcon(this.getClass().getResource("/circle.png")).getImage();
+		getLblIcon().setIcon(new ImageIcon(icon));
 	}
 
+	@Override
 	public void buildLayout() {
 		radius.setColumns(10);
 		radius.addKeyListener(getListener());
 
+		// Automatically generated code by Java Swing, GUI modification is recommended
+		
 		getGlContentPanel().setHorizontalGroup(getGlContentPanel().createParallelGroup(Alignment.TRAILING)
 				.addGroup(getGlContentPanel().createSequentialGroup().addContainerGap()
 						.addGroup(getGlContentPanel().createParallelGroup(Alignment.TRAILING)
@@ -104,9 +109,13 @@ public class DialogCircle extends DialogSurfaceShape {
 	@Override
 	public void setModifyDialog(Shape selectedShape) {
 		Circle circle = (Circle) selectedShape;
+		getBtnOuterColor().setVisible(true);
+		getBtnInnerColor().setVisible(true);
+		getXcoordinate().setEditable(true);
+		getYcoordinate().setEditable(true);
 		getXcoordinate().setText(String.valueOf(circle.getCenter().getXcoordinate()));
 		getYcoordinate().setText(String.valueOf(circle.getCenter().getYcoordinate()));
-		getRadius().setText(String.valueOf(circle.getRadius()));
+		radius.setText(String.valueOf(circle.getRadius()));
 		setOuterColor(circle.getOuterColor());
 		setInnerColor(circle.getInnerColor());
 		getBtnOuterColor().setBackground(getOuterColor());
@@ -116,6 +125,10 @@ public class DialogCircle extends DialogSurfaceShape {
 
 	public JTextField getRadius() {
 		return radius;
+	}
+
+	public int getRadiusValue() {
+		return Integer.parseInt(radius.getText());
 	}
 
 	public JLabel getLblRadius() {

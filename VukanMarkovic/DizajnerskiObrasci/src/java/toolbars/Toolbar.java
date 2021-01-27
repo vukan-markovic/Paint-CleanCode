@@ -1,4 +1,4 @@
-package frame;
+package toolbars;
 
 public interface Toolbar {
 	void initializeButtons();

@@ -1,11 +1,9 @@
 package dialogs;
 
+import shapes.*;
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
-
-import shapes.Line;
-import shapes.Shape;
 
 public class DialogLine extends DialogShape {
 	private static final long serialVersionUID = 1L;
@@ -19,7 +17,6 @@ public class DialogLine extends DialogShape {
 		yCoordinateOfEndPoint = new JTextField();
 		lblXCoordinateOfEndPoint = new JLabel("X coordinate of end point:");
 		lblYCoordinateOfEndPoint = new JLabel("Y coordinate of end point:");
-
 		setTitle("Line dialog");
 		setIcon();
 		buildLayout();
@@ -36,6 +33,8 @@ public class DialogLine extends DialogShape {
 		xCoordinateOfEndPoint.addKeyListener(getListener());
 		yCoordinateOfEndPoint.setColumns(10);
 		yCoordinateOfEndPoint.addKeyListener(getListener());
+
+		// Automatically generated code by Java Swing, GUI modification is recommended
 
 		getGlContentPanel().setHorizontalGroup(getGlContentPanel().createParallelGroup(Alignment.LEADING)
 				.addGroup(getGlContentPanel().createSequentialGroup().addGap(41)
@@ -115,7 +114,15 @@ public class DialogLine extends DialogShape {
 		return xCoordinateOfEndPoint;
 	}
 
+	public int getXCoordinateOfEndPointValue() {
+		return Integer.parseInt(xCoordinateOfEndPoint.getText());
+	}
+
 	public JTextField getYCoordinateOfEndPoint() {
 		return yCoordinateOfEndPoint;
+	}
+
+	public int getYCoordinateOfEndPointValue() {
+		return Integer.parseInt(yCoordinateOfEndPoint.getText());
 	}
 }

@@ -39,12 +39,20 @@ public class DrawingModel {
 	public int getNumberOfShapes() {
 		return shapes.size();
 	}
+	
+	public int getNumberOfSelectedShapes() {
+		return selectedShapes.size();
+	}
 
 	public int getIndexOfShape(Shape shape) {
 		return shapes.indexOf(shape);
 	}
 
 	public Shape getShapeByIndex(int indexOfShape) {
+		return shapes.get(indexOfShape);
+	}
+	
+	public Shape getSelectedShapeByIndex(int indexOfShape) {
 		return shapes.get(indexOfShape);
 	}
 
@@ -66,5 +74,9 @@ public class DrawingModel {
 
 	public void addShapes(ArrayList<Shape> shapes) {
 		shapes.addAll(shapes);
+	}
+	
+	public void clearSelectedShapes() {
+		selectedShapes.clear();
 	}
 }

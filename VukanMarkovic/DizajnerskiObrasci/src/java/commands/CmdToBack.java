@@ -1,7 +1,6 @@
 package commands;
 
 import java.util.*;
-
 import model.DrawingModel;
 import shapes.Shape;
 
@@ -18,13 +17,17 @@ public class CmdToBack implements Command {
 
 	@Override
 	public void execute() {
-		if (indexOfShape != 0)
+		if (isNotFirstShape())
 			Collections.swap(shapes, indexOfPreviousShape, indexOfShape);
 	}
 
 	@Override
 	public void unexecute() {
-		if (indexOfShape != 0)
+		if (isNotFirstShape())
 			Collections.swap(shapes, indexOfShape, indexOfPreviousShape);
+	}
+
+	private boolean isNotFirstShape() {
+		return indexOfShape != 0;
 	}
 }

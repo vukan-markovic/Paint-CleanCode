@@ -26,7 +26,7 @@ public class CmdModifyCircle implements Command {
 	private void setOldState(Circle state) {
 		oldState.setCenter(state.getCenter());
 		oldState.setRadius(state.getRadius());
-		oldState.setOuterColor(state.getInnerColor());
+		oldState.setOuterColor(state.getOuterColor());
 		oldState.setInnerColor(state.getInnerColor());
 		oldState.setSelected(state.isSelected());
 	}

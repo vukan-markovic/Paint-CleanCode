@@ -2,95 +2,100 @@ package frame;
 
 import static org.mockito.Mockito.*;
 import org.junit.*;
-import controller.DrawingController;
+import controller.*;
+import toolbars.RightToolbar;
 
 public class RightToolbarTests {
 	private RightToolbar rightToolbar;
-	private DrawingController controller;
+	private OptionsController optionsController;
+	private FileController fileController;
 
 	@Before
 	public void setUp() {
-		controller = mock(DrawingController.class);
-		rightToolbar = new RightToolbar(controller);
+		optionsController = mock(OptionsController.class);
+		fileController = mock(FileController.class);
+		rightToolbar = new RightToolbar();
+		rightToolbar.setFileController(fileController);
+		rightToolbar.setOptionsController(optionsController);
 	}
 
 	@Test
 	public void testBtnOuterColorClicked() {
 		rightToolbar.getBtnOuterColor().doClick();
-		verify(controller).chooseOuterColor();
+		verify(optionsController).chooseOuterColor();
 	}
 
 	@Test
 	public void testBtnInnerColorClicked() {
 		rightToolbar.getBtnInnerColor().doClick();
-		verify(controller).chooseInnerColor();
+		verify(optionsController).chooseInnerColor();
 	}
 
 	@Test
 	public void testBtnUndoClicked() {
 		rightToolbar.getBtnUndo().setEnabled(true);
 		rightToolbar.getBtnUndo().doClick();
-		verify(controller).btnUndoClicked();
+		verify(optionsController).undoCommand();
 	}
 
 	@Test
 	public void testBtnRedoClicked() {
 		rightToolbar.getBtnRedo().setEnabled(true);
 		rightToolbar.getBtnRedo().doClick();
-		verify(controller).btnRedoClicked();
+		verify(optionsController).redoCommand();
 	}
 
 	@Test
 	public void testBtnSendToBackClicked() {
 		rightToolbar.getBtnSendToBack().setEnabled(true);
 		rightToolbar.getBtnSendToBack().doClick();
-		verify(controller).btnSendToBackClicked();
+		verify(optionsController).bringShapeToBack();
 	}
 
 	@Test
 	public void testBtnBringToFrontClicked() {
 		rightToolbar.getBtnBringToFront().setEnabled(true);
 		rightToolbar.getBtnBringToFront().doClick();
-		verify(controller).btnBringToFrontClicked();
+		verify(optionsController).bringShapeToFront();
 	}
 
 	@Test
 	public void testBtnToBackClicked() {
 		rightToolbar.getBtnToBack().setEnabled(true);
 		rightToolbar.getBtnToBack().doClick();
-		verify(controller).btnToBackClicked();
+		verify(optionsController).moveShapeToBack();
 	}
 
 	@Test
 	public void testBtnToFrontClicked() {
 		rightToolbar.getBtnToFront().setEnabled(true);
 		rightToolbar.getBtnToFront().doClick();
-		verify(controller).btnToFrontClicked();
+		verify(optionsController).moveShapeToFront();
 	}
 
 	@Test
 	public void testBtnSaveClicked() {
 		rightToolbar.getBtnSave().doClick();
-		verify(controller).save();
+		verify(fileController).save();
 	}
 
 	@Test
 	public void testBtnLoadLogClicked() {
 		rightToolbar.getBtnLoadLog().setEnabled(true);
 		rightToolbar.getBtnLoadLog().doClick();
-		verify(controller).loadLog();
+		verify(fileController).loadLog();
 	}
 
 	@Test
 	public void testBtnLoadPaintingClicked() {
 		rightToolbar.getBtnLoadPainting().doClick();
-		verify(controller).loadPainting();
+		verify(fileController).loadDrawing();
 	}
 
 	@Test
 	public void testBtnNextClicked() {
 		rightToolbar.getBtnNext().setEnabled(true);
 		rightToolbar.getBtnNext().doClick();
-		verify(controller).executeCommandFromLog();
+		verify(optionsController).executeCommandFromLog();
 	}
 }

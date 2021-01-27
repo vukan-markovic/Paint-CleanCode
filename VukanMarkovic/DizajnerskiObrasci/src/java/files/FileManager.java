@@ -1,7 +1,5 @@
 package files;
 
-import java.io.File;
-
 public class FileManager {
 	private FileStrategy strategy;
 	
@@ -13,7 +11,7 @@ public class FileManager {
 		strategy.saveFile(filePath);
 	}
 
-	public void open(File filePath) {
+	public void open(String filePath) {
 		strategy.openFile(filePath);
 	}
 }

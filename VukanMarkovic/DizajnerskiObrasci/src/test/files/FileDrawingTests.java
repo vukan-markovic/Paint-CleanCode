@@ -8,13 +8,15 @@ import shapes.*;
 import static org.junit.Assert.assertEquals;
 import org.junit.rules.TemporaryFolder;
 
+import frame.DrawingFrame;
 import model.DrawingModel;
 
-public class FilePaintingTests {
-	private FilePainting filePainting;
+public class FileDrawingTests {
+	private FileDrawing fileDrawing;
 	private FileManager strategy;
 	private static ObjectInputStream inputStream;
 	private DrawingModel model;
+	private DrawingFrame frame;
 
 	@Rule
 	public TemporaryFolder folder = new TemporaryFolder();
@@ -22,16 +24,17 @@ public class FilePaintingTests {
 	@Before
 	public void setUp() {
 		model = new DrawingModel();
-		filePainting = new FilePainting(model);
+		frame = new DrawingFrame();
+		fileDrawing = new FileDrawing(model, frame);
 	}
 
 	@Test(expected = IOException.class)
 	public void testSavePaintingIOExceptionExpected() throws IOException, ClassNotFoundException {
-		strategy = new FileManager(filePainting);
+		strategy = new FileManager(fileDrawing);
 		String filePath = "";
 		strategy.save(filePath);
 		inputStream = new ObjectInputStream(new FileInputStream(filePath));
-		assertEquals(filePainting.getModel().getShapes(), inputStream.readObject());
+		assertEquals(fileDrawing.getModel().getShapes(), inputStream.readObject());
 	}
 
 	@Test
@@ -39,11 +42,11 @@ public class FilePaintingTests {
 		model.addShapes(new ArrayList<Shape>(Arrays.asList(new Point(1, 2, false, Color.BLACK), new Line(
 				new Point(1, 2, false, Color.BLACK), new Point(3, 4, false, Color.BLACK), false, Color.BLACK))));
 
-		strategy = new FileManager(filePainting);
+		strategy = new FileManager(fileDrawing);
 		String filePath = folder.newFile("myfile1.txt").getAbsolutePath();
 		strategy.save(filePath);
 		inputStream = new ObjectInputStream(new FileInputStream(filePath));
-		assertEquals(filePainting.getModel().getShapes(), inputStream.readObject());
+		assertEquals(fileDrawing.getModel().getShapes(), inputStream.readObject());
 	}
 
 	@AfterClass

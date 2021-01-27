@@ -1,7 +1,6 @@
 package observer;
 
 import java.beans.*;
-
 import frame.DrawingFrame;
 
 public class PropertyManager implements PropertyChangeListener {

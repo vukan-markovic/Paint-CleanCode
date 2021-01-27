@@ -10,9 +10,9 @@ public abstract class Shape implements Cloneable, Serializable {
 	private boolean selected;
 	private Color outerColor;
 
-	Shape(boolean selected, Color innerColor) {
+	Shape(boolean selected, Color outerColor) {
 		this.selected = selected;
-		this.outerColor = innerColor;
+		this.outerColor = outerColor;
 	}
 
 	public abstract boolean contains(int xCoordinate, int yCoordinate);

@@ -918,7 +918,7 @@ package controller;
 //
 //	@Test
 //	public void testSaveDrawing() throws IOException {
-//		FilePainting savePainting = new FilePainting();
+//		FileDrawing savePainting = new FileDrawing();
 //		controller.setStrategy(files);
 //		controller.setSavePainting(savePainting);
 //		File file = folder.newFile(frame.getFileName().getText() + ".bin");
