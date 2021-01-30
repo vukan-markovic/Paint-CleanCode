@@ -65,7 +65,7 @@ public class DonutLogReader extends CircleLogReader {
 		else
 			centerColor = new Color(centerColorNumber);
 
-		center = new Point(xCoordinate, yCoordinate, false, centerColor);
+		center = new Point(xCoordinate, yCoordinate, true, centerColor);
 	}
 
 	private void readModifiedDonut() {
@@ -85,14 +85,15 @@ public class DonutLogReader extends CircleLogReader {
 		else
 			fillColor = new Color(fillColorNumber);
 
-		donut = new Donut(center, radius, innerRadius, false, borderColor, fillColor);
+		donut = new Donut(center, radius, innerRadius, true, borderColor, fillColor);
 	}
 
 	@Override
 	public void selectShapeFromLog(String[] logLine) {
 		setLogLine(logLine);
 		readCenter();
-		readDonut();
+		readShape();
+		donut = new Donut(getCenter(), radius, innerRadius, false, borderColor, fillColor);
 		cmdSelect = new CmdSelect(model, donut);
 		cmdSelect.execute();
 		commandsStack.addCommand(cmdSelect);
@@ -102,7 +103,8 @@ public class DonutLogReader extends CircleLogReader {
 	public void deselectShapeFromLog(String[] logLine) {
 		setLogLine(logLine);
 		readCenter();
-		readDonut();
+		readShape();
+		donut = new Donut(getCenter(), radius, innerRadius, true, borderColor, fillColor);
 		cmdDeselect = new CmdDeselect(model, donut);
 		cmdDeselect.execute();
 		commandsStack.addCommand(cmdDeselect);

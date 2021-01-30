@@ -1,13 +1,10 @@
 package logger;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import java.awt.Color;
+import static org.junit.Assert.*;
 import org.junit.*;
+import shapes.*;
 import model.DrawingModel;
-import shapes.Circle;
-import shapes.Point;
+import java.awt.Color;
 import stack.CommandsStack;
 
 public class CircleLogReaderTests {
@@ -55,20 +52,28 @@ public class CircleLogReaderTests {
 
 	@Test
 	public void testSelectShapeFromLog() {
+		String[] lineLogAdd = "Add - Circle Center: (x: 521 , y: 256 , Border color: -360334 ), radius: 21 , Border color: -360334 , Fill color: -5171"
+				.split(" ");
+		logReader.addShapeFromLog(lineLogAdd);
+		
 		String[] line = "Select - Circle Center: (x: 521 , y: 256 , Border color: -360334 ), radius: 21 , Border color: -360334 , Fill color: -5171"
 				.split(" ");
+		
 		logReader.selectShapeFromLog(line);
-		assertTrue(logReader.getCircle().isSelected());
 		assertTrue(model.doesContainSelectedShape(logReader.getCircle()));
 		assertTrue(commandsStack.getExecutedCommands().contains(logReader.getCmdSelect()));
 	}
 
 	@Test
 	public void testDeselectShapeFromLog() {
+		String[] lineLogAdd = "Add - Circle Center: (x: 521 , y: 256 , Border color: -360334 ), radius: 21 , Border color: -360334 , Fill color: -5171"
+				.split(" ");
+		logReader.addShapeFromLog(lineLogAdd);
+		
 		String[] line = "Deselect - Circle Center: (x: 521 , y: 256 , Border color: -360334 ), radius: 21 , Border color: -360334 , Fill color: -5171"
 				.split(" ");
+		
 		logReader.deselectShapeFromLog(line);
-		assertFalse(logReader.getCircle().isSelected());
 		assertFalse(model.doesContainSelectedShape(logReader.getCircle()));
 		assertTrue(commandsStack.getExecutedCommands().contains(logReader.getCmdDeselect()));
 	}

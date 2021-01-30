@@ -39,17 +39,9 @@ public class CommandsStack {
 	public Stack<Command> getExecutedCommands() {
 		return executedCommands;
 	}
-
+	
 	public Stack<Command> getUnexecutedCommands() {
 		return unexecutedCommands;
-	}
-
-	public void setExecutedCommands(Stack<Command> executedCommands) {
-		this.executedCommands = executedCommands;
-	}
-
-	public void setUnexecutedCommands(Stack<Command> unexecutedCommands) {
-		this.unexecutedCommands = unexecutedCommands;
 	}
 
 	public void clearUnexecutedCommands() {

@@ -26,7 +26,6 @@ public class FileLogTests {
 		log = new DefaultListModel<>();
 		logCommandsFromFile = new LinkedList<>();
 		fileLog = new FileLog(log, logCommandsFromFile);
-
 	}
 
 	@Test(expected = IOException.class)
@@ -52,6 +51,7 @@ public class FileLogTests {
 	public void testOpenLogInvalidPath() throws IOException {
 		file = tempFolder.newFile("");
 		openFile();
+
 		assertEquals(logCommandsFromFile.stream().collect(Collectors.joining(",")),
 				reader.lines().collect(Collectors.joining(",")));
 	}
@@ -60,6 +60,7 @@ public class FileLogTests {
 	public void testOpenLog() throws IOException {
 		file = tempFolder.newFile("log.txt");
 		openFile();
+
 		assertEquals(logCommandsFromFile.stream().collect(Collectors.joining(",")),
 				reader.lines().collect(Collectors.joining(",")));
 	}

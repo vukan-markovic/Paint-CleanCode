@@ -1,7 +1,6 @@
 package dialogs;
 
 import java.awt.Color;
-import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -22,7 +21,6 @@ public class DialogDonut extends DialogSurfaceShape {
 		setTitle("Donut dialog");
 		setIcon();
 		buildLayout();
-		addBtnOkListener();
 	}
 
 	@Override
@@ -107,26 +105,8 @@ public class DialogDonut extends DialogSurfaceShape {
 		getContentPanel().setLayout(getGlContentPanel());
 	}
 
-	private void addBtnOkListener() {
-		getBtnOk().addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				if (!isInputValid())
-					JOptionPane.showMessageDialog(new JFrame(), "You have not filled in all the fields, try again!",
-							"Error!", JOptionPane.ERROR_MESSAGE);
-				else if (isInnerRadiusInputInvalid())
-					JOptionPane.showMessageDialog(new JFrame(), "The inner radius must be larger than the outer one!",
-							"Error!", JOptionPane.ERROR_MESSAGE);
-				else {
-					setAccepted(true);
-					setVisible(false);
-				}
-			}
-		});
-	}
-
 	@Override
-	public boolean isInputValid() {
+	public boolean areAllFieldsFilled() {
 		String innerRadiusValue = innerRadius.getText();
 		String radiusValue = radius.getText();
 		String xCoordinateValue = getXcoordinate().getText();
@@ -138,13 +118,9 @@ public class DialogDonut extends DialogSurfaceShape {
 		return true;
 	}
 
-	private boolean isInnerRadiusInputInvalid() {
-		int innerRadiusValue = Integer.parseInt(innerRadius.getText());
-		int radiusValue = Integer.parseInt(radius.getText());
-
-		if (innerRadiusValue >= radiusValue)
-			return true;
-		return false;
+	@Override
+	public boolean areValuesValid() {
+		return getRadiusValue() > 0 && getInnerRadiusValue() > 0 && getInnerRadiusValue() < getRadiusValue();
 	}
 
 	@Override
@@ -165,6 +141,7 @@ public class DialogDonut extends DialogSurfaceShape {
 
 	@Override
 	public void setModifyDialog(Shape selectedShape) {
+		setAccepted(false);
 		Donut donut = (Donut) selectedShape;
 		Point center = donut.getCenter();
 

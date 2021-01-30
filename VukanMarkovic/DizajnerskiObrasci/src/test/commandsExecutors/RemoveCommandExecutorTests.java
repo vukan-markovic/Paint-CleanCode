@@ -1,11 +1,9 @@
 package commandsExecutors;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+import org.junit.*;
 
-import org.junit.Before;
-import org.junit.Test;
-
+import commands.CmdAdd;
 import commands.CmdSelect;
 import frame.DrawingFrame;
 import model.DrawingModel;
@@ -17,6 +15,7 @@ public class RemoveCommandExecutorTests {
 	private DrawingFrame frame;
 	private CommandsStack commandsStack;
 	private RemoveCommandExecutor commandsExecutor;
+	private CmdAdd cmdAdd;
 	private CmdSelect cmdSelect;
 
 	@Before
@@ -30,15 +29,18 @@ public class RemoveCommandExecutorTests {
 	@Test
 	public void testRemoveShapes() {
 		Point firstShape = new Point(1, 2);
+		cmdAdd = new CmdAdd(model, firstShape);
+		cmdAdd.execute();
 		cmdSelect = new CmdSelect(model, firstShape);
 		cmdSelect.execute();
 		Point secondShape = new Point(3, 4);
+		cmdAdd = new CmdAdd(model, secondShape);
+		cmdAdd.execute();
 		cmdSelect = new CmdSelect(model, secondShape);
 		cmdSelect.execute();
 		commandsExecutor.removeShapes();
 		assertFalse(model.doesContainShape(firstShape));
 		assertFalse(model.doesContainShape(secondShape));
-		assertTrue(commandsStack.getExecutedCommands().contains(commandsExecutor.getCmdRemove()));
 		assertTrue(model.getSelectedShapes().isEmpty());
 	}
 }

@@ -59,10 +59,10 @@ public class LineCommandsExecutor implements ShapeCommandsExecutor {
 		color = dialogLine.getBorderColor();
 		Point startPoint = new Point(xCoordinateOfStartPoint, yCoordinateOfStartPoint, true, color);
 		Point endPoint = new Point(xCoordinateOfEndPoint, yCoordinateOfEndPoint, true, color);
-		line = new Line(startPoint, endPoint, false, color);
+		line = new Line(startPoint, endPoint, true, color);
 
 		logWriter.logModifyCommand(oldState, line);
-		cmdModifyLine = new CmdModifyLine(oldState, (Line) line);
+		cmdModifyLine = new CmdModifyLine(oldState, line);
 		cmdModifyLine.execute();
 		commandsStack.addCommand(cmdModifyLine);
 	}

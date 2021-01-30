@@ -5,22 +5,34 @@ import shapes.Shape;
 
 public class CmdSelect implements Command {
 	private DrawingModel model;
-	private Shape shape;
+	private Shape shapeToSelect;
 
-	public CmdSelect(DrawingModel model, Shape shape) {
+	public CmdSelect(DrawingModel model, Shape shapeToSelect) {
 		this.model = model;
-		this.shape = shape;
+		this.shapeToSelect = shapeToSelect;
 	}
 
 	@Override
 	public void execute() {
-		shape.setSelected(true);
-		model.addSelectedShape(shape);
+		for (int indexOfShape = 0; indexOfShape < model.getNumberOfShapes(); indexOfShape++) {
+			Shape shape = model.getShapeByIndex(indexOfShape);
+
+			if (shape.equals(shapeToSelect)) {
+				shape.setSelected(true);
+				model.addSelectedShape(shapeToSelect);
+			}
+		}
 	}
 
 	@Override
 	public void unexecute() {
-		shape.setSelected(false);
-		model.removeSelectedShape(shape);
+		for (int indexOfShape = 0; indexOfShape < model.getNumberOfShapes(); indexOfShape++) {
+			Shape shape = model.getShapeByIndex(indexOfShape);
+
+			if (shape.equals(shapeToSelect)) {
+				shape.setSelected(false);
+				model.removeSelectedShape(shapeToSelect);
+			}
+		}
 	}
 }

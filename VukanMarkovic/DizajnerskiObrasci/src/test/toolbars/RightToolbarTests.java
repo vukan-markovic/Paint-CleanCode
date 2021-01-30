@@ -3,12 +3,11 @@ package toolbars;
 import static org.mockito.Mockito.*;
 import org.junit.*;
 import controller.*;
-import toolbars.RightToolbar;
 
 public class RightToolbarTests {
-	private RightToolbar rightToolbar;
 	private OptionsController optionsController;
 	private FileController fileController;
+	private RightToolbar rightToolbar;
 
 	@Before
 	public void setUp() {
@@ -21,13 +20,13 @@ public class RightToolbarTests {
 
 	@Test
 	public void testBtnOuterColorClicked() {
-		rightToolbar.getBtnOuterColor().doClick();
+		rightToolbar.getBtnBorderColor().doClick();
 		verify(optionsController).setBorderColor();
 	}
 
 	@Test
 	public void testBtnInnerColorClicked() {
-		rightToolbar.getBtnInnerColor().doClick();
+		rightToolbar.getBtnFillColor().doClick();
 		verify(optionsController).setFillColor();
 	}
 

@@ -37,7 +37,9 @@ public class Rectangle extends SurfaceShape {
 	@Override
 	protected void fillShape(Graphics graphics) {
 		graphics.setColor(getFillColor());
-		graphics.fillRect(upperLeftPoint.getXcoordinate(), upperLeftPoint.getYcoordinate(), width, height);
+
+		graphics.fillRect(upperLeftPoint.getXcoordinate() + 1, upperLeftPoint.getYcoordinate() + 1, width - 1,
+				height - 1);
 	}
 
 	@Override
@@ -45,9 +47,9 @@ public class Rectangle extends SurfaceShape {
 		int xCoordinate = upperLeftPoint.getXcoordinate();
 		int yCoordinate = upperLeftPoint.getYcoordinate();
 		graphics.drawRect(xCoordinate - 3, yCoordinate - 3, 6, 6);
-		graphics.drawRect(xCoordinate - 3 + getWidth(), yCoordinate - 3, 6, 6);
-		graphics.drawRect(xCoordinate - 3, yCoordinate - 3 + getHeight(), 6, 6);
-		graphics.drawRect(xCoordinate + getWidth() - 3, yCoordinate + getHeight() - 3, 6, 6);
+		graphics.drawRect(xCoordinate - 3 + width, yCoordinate - 3, 6, 6);
+		graphics.drawRect(xCoordinate - 3, yCoordinate - 3 + height, 6, 6);
+		graphics.drawRect(xCoordinate + width - 3, yCoordinate + height - 3, 6, 6);
 	}
 
 	@Override

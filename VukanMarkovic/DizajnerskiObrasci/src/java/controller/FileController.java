@@ -2,6 +2,8 @@ package controller;
 
 import java.util.*;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import files.*;
 import frame.DrawingFrame;
 import model.DrawingModel;
@@ -14,11 +16,11 @@ public class FileController {
 	private Queue<String> commandsLog;
 	private FileManager strategy;
 	private FileLog fileLog;
-	private String log;
 	private FileDrawing fileDrawing;
 	private JFileChooser fileChooser;
 	private String filePath;
 	private String fileName;
+	private JButton btnNext;
 
 	public FileController(DrawingModel model, DrawingFrame frame, Queue<String> commandsLog) {
 		this.model = model;
@@ -33,28 +35,32 @@ public class FileController {
 			return;
 		}
 
-		createAndSetFileChooser("Specify the location where you want to save your drawing",
-				JFileChooser.DIRECTORIES_ONLY);
+		if (frame.getRightToolbar().getFileName().getText().isBlank()) {
+			JOptionPane.showMessageDialog(frame, "Please specify file name!", "Error", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+
+		fileChooser = new JFileChooser();
+		fileChooser.setDialogTitle("Specify the location where you want to save your drawing");
+		fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
 		if (fileChooser.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
+			setFilePath();
+			setFileName();
 			saveLog();
 			saveDrawing();
 		}
 	}
 
-	public void saveLog() {
+	private void saveLog() {
 		fileLog = new FileLog(frame.getCommandsListModel(), commandsLog);
 		strategy = new FileManager(fileLog);
-		setFilePath();
-		setFileName();
 		strategy.save(filePath + "\\" + fileName + ".txt");
 	}
 
-	public void saveDrawing() {
+	private void saveDrawing() {
 		fileDrawing = new FileDrawing(model, frame);
 		strategy = new FileManager(fileDrawing);
-		setFilePath();
-		setFileName();
 		strategy.save(filePath + "\\" + fileName + ".bin");
 	}
 
@@ -70,16 +76,20 @@ public class FileController {
 
 	public void loadLog() {
 		RightToolbar toolbar = frame.getRightToolbar();
-		JButton btnNext = toolbar.getBtnNextCommand();
+		btnNext = toolbar.getBtnNextCommand();
 		btnNext.setEnabled(true);
 		commandsLog.clear();
-		createAndSetFileChooser("Specify the log you want to open", JFileChooser.FILES_ONLY);
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Text files", "txt");
+		fileChooser = new JFileChooser();
+		fileChooser.setDialogTitle("Specify the log you want to open");
+		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		fileChooser.setFileFilter(filter);
 
 		if (fileChooser.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION)
 			openLog();
 	}
 
-	public void openLog() {
+	private void openLog() {
 		fileLog = new FileLog(frame.getCommandsListModel(), commandsLog);
 		strategy = new FileManager(fileLog);
 		setFilePath();
@@ -87,23 +97,21 @@ public class FileController {
 	}
 
 	public void loadDrawing() {
-		createAndSetFileChooser("Specify the painting you want to open", JFileChooser.FILES_ONLY);
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Drawing files", "bin");
+		fileChooser = new JFileChooser();
+		fileChooser.setDialogTitle("Specify the painting you want to open");
+		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		fileChooser.setFileFilter(filter);
 
 		if (fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION)
 			openDrawing();
 	}
 
-	public void openDrawing() {
+	private void openDrawing() {
 		fileDrawing = new FileDrawing(model, frame);
 		strategy = new FileManager(fileDrawing);
 		setFilePath();
 		strategy.open(filePath);
-	}
-
-	public void createAndSetFileChooser(String title, int mode) {
-		fileChooser = new JFileChooser();
-		fileChooser.setDialogTitle(title);
-		fileChooser.setFileSelectionMode(mode);
 	}
 
 	public Queue<String> getCommandsLog() {
@@ -118,35 +126,15 @@ public class FileController {
 		return fileLog;
 	}
 
-	public String getLog() {
-		return log;
-	}
-
 	public FileDrawing getFileDrawing() {
 		return fileDrawing;
 	}
 
-	public JFileChooser getFileChooser() {
-		return fileChooser;
+	public String getFilePath() {
+		return filePath;
 	}
 
-	public void setCommandsLog(Queue<String> commandsLog) {
-		this.commandsLog = commandsLog;
-	}
-
-	public void setStrategy(FileManager strategy) {
-		this.strategy = strategy;
-	}
-
-	public void setFileLog(FileLog fileLog) {
-		this.fileLog = fileLog;
-	}
-
-	public void setFileDrawing(FileDrawing fileDrawing) {
-		this.fileDrawing = fileDrawing;
-	}
-
-	public void setFileChooser(JFileChooser fileChooser) {
-		this.fileChooser = fileChooser;
+	public JButton getBtnNext() {
+		return btnNext;
 	}
 }

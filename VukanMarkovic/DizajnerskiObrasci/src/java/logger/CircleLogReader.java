@@ -51,7 +51,7 @@ public class CircleLogReader implements LogReader {
 		Circle oldState = (Circle) selectedShape;
 		readModifiedCenter();
 		readModifiedCircle();
-		circle = new Circle(center, radius, false, borderColor, fillColor);
+		circle = new Circle(center, radius, true, borderColor, fillColor);
 		model.getSelectedShapes().remove(oldState);
 		model.getSelectedShapes().add(circle);
 		cmdModifyCircle = new CmdModifyCircle(oldState, circle);
@@ -69,7 +69,7 @@ public class CircleLogReader implements LogReader {
 		else
 			centerColor = new Color(centerColorNumber);
 
-		center = new Point(xCoordinate, yCoordinate, false, centerColor);
+		center = new Point(xCoordinate, yCoordinate, true, centerColor);
 	}
 
 	protected void readModifiedCircle() {
@@ -105,7 +105,7 @@ public class CircleLogReader implements LogReader {
 		this.logLine = logLine;
 		readCenter();
 		readShape();
-		circle = new Circle(center, radius, false, borderColor, fillColor);
+		circle = new Circle(center, radius, true, borderColor, fillColor);
 		cmdDeselect = new CmdDeselect(model, circle);
 		cmdDeselect.execute();
 		commandsStack.addCommand(cmdDeselect);

@@ -1,23 +1,25 @@
 package controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.LinkedList;
-import java.util.Queue;
-import org.junit.Before;
-import org.junit.Test;
-import files.FileDrawing;
-import files.FileLog;
+import static org.junit.Assert.*;
+
+import java.awt.Color;
+import java.util.*;
+import org.junit.*;
+import org.junit.rules.TemporaryFolder;
+import commands.CmdAdd;
 import frame.DrawingFrame;
 import model.DrawingModel;
-import stack.CommandsStack;
+import shapes.Point;
 
 public class FileControllerTests {
 	private DrawingModel model;
 	private DrawingFrame frame;
 	private Queue<String> commandsLog;
 	private FileController fileController;
-	
+
+	@Rule
+	public TemporaryFolder tempFolder = new TemporaryFolder();
+
 	@Before
 	public void setUp() {
 		model = new DrawingModel();
@@ -25,32 +27,38 @@ public class FileControllerTests {
 		commandsLog = new LinkedList<String>();
 		fileController = new FileController(model, frame, commandsLog);
 	}
-	
+
 	@Test
-	public void testSaveDrawing() throws IOException {
-//		FileDrawing savePainting = new FileDrawing();
-//		fileController.setStrategy(files);
-//		fileController.setSavePainting(savePainting);
-//		File file = tempFolder.newFile(frame.getFileName().getText() + ".bin");
-//		fileChooser.setSelectedFile(file);
-//		fileController.setFileChooser(fileChooser);
-//		fileController.saveDrawing();
-//		assertEquals(model.getShapes(), savePainting.getShapes());
-//		verify(files).setStrategy(savePainting);
-//		verify(files).save(fileChooser.getSelectedFile().getAbsolutePath() + "\\" + file.getName());
+	public void testSaveNoShapes() {
+		fileController.save();
+		assertNull(fileController.getFilePath());
+		assertNull(fileController.getFileDrawing());
+		assertNull(fileController.getFileLog());
+		assertNull(fileController.getStrategy());
 	}
 
 	@Test
-	public void testSaveLog() throws IOException {
-//		FileLog saveLog = new FileLog();
-//		fileController.setStrategy(files);
-//		fileController.setSaveLog(saveLog);
-//		File file = tempFolder.newFile(frame.getFileName().getText() + ".txt");
-//		fileChooser.setSelectedFile(file);
-//		fileController.setFileChooser(fileChooser);
-//		fileController.saveLog();
-//		assertEquals(fileController.getLog(), saveLog.getCommandsLog());
-//		verify(files).setStrategy(saveLog);
-//		verify(files).save(fileChooser.getSelectedFile().getAbsolutePath() + "\\" + file.getName());
+	public void testSave() {
+		Point point = new Point(1, 2, false, Color.BLACK);
+		new CmdAdd(model, point).execute();
+		frame.getCommandsListModel().addElement("Add - " + point.getClassName() + " " + point);
+		fileController.save();
+		assertNotNull(fileController.getFilePath());
+		assertNotNull(fileController.getFileDrawing());
+		assertNotNull(fileController.getFileLog());
+		assertNotNull(fileController.getStrategy());
+	}
+
+	@Test
+	public void testLoadDrawing() {
+		fileController.loadDrawing();
+		assertFalse(model.getShapes().isEmpty());
+	}
+
+	@Test
+	public void testLoadLog() {
+		fileController.loadLog();
+		assertTrue(fileController.getBtnNext().isEnabled());
+		assertFalse(fileController.getCommandsLog().isEmpty());
 	}
 }

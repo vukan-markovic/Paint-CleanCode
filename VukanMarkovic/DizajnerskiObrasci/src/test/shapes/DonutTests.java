@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.geom.*;
 
 public class DonutTests {
+	private Graphics2D graphics;
 	private int xCoordinate;
 	private int yCoordinate;
 	private int outerRadius;
@@ -14,18 +15,17 @@ public class DonutTests {
 	private Color borderColor;
 	private Color fillColor;
 	private Donut donut;
-	private Graphics2D graphics;
 	private Area area;
 
 	@Before
 	public void setUp() {
+		graphics = mock(Graphics2D.class);
 		xCoordinate = 1;
 		yCoordinate = 2;
 		outerRadius = 3;
 		innerRadius = 2;
 		borderColor = Color.BLACK;
 		fillColor = Color.WHITE;
-		graphics = mock(Graphics2D.class);
 
 		donut = new Donut(new Point(xCoordinate, yCoordinate, false, Color.BLACK), outerRadius, innerRadius, false,
 				borderColor, fillColor);

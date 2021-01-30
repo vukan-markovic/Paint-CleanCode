@@ -1,19 +1,14 @@
 package commandsExecutors;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import java.awt.AWTException;
+import static org.junit.Assert.*;
 import java.awt.Color;
-import java.util.LinkedList;
-import java.util.Queue;
-import org.junit.Before;
-import org.junit.Test;
+import java.util.*;
+import org.junit.*;
+import shapes.*;
 import controller.OptionsController;
 import dialogs.DialogRectangle;
 import frame.DrawingFrame;
 import model.DrawingModel;
-import shapes.Point;
-import shapes.Rectangle;
 import stack.CommandsStack;
 
 public class RectangleCommandsExecutorTests {
@@ -26,7 +21,7 @@ public class RectangleCommandsExecutorTests {
 	private RectangleCommandsExecutor commandsExecutor;
 
 	@Before
-	public void setUp() throws AWTException {
+	public void setUp() {
 		model = new DrawingModel();
 		frame = new DrawingFrame();
 		commandsStack = new CommandsStack();

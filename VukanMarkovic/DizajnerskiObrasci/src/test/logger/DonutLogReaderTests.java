@@ -1,15 +1,10 @@
 package logger;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.awt.Color;
-
+import static org.junit.Assert.*;
 import org.junit.*;
+import shapes.*;
 import model.DrawingModel;
-import shapes.Donut;
-import shapes.Point;
+import java.awt.Color;
 import stack.CommandsStack;
 
 public class DonutLogReaderTests {
@@ -59,22 +54,30 @@ public class DonutLogReaderTests {
 
 	@Test
 	public void testSelectShapeFromLog() {
+		String[] lineLogAdd = "Add - Donut Center: (x: 330 , y: 156 , Border color: -360334 ), radius: 121 , Border color: -360334 , Fill color: -5171 , inner radius: 21 , Border color: -360334 , Fill Color: -5171"
+				.split(" ");
+
+		logReader.addShapeFromLog(lineLogAdd);
+
 		String[] line = "Select - Donut Center: (x: 330 , y: 156 , Border color: -360334 ), radius: 121 , Border color: -360334 , Fill color: -5171 , inner radius: 21 , Border color: -360334 , Fill Color: -5171"
 				.split(" ");
 
 		logReader.selectShapeFromLog(line);
-		assertTrue(logReader.getDonut().isSelected());
 		assertTrue(model.doesContainSelectedShape(logReader.getDonut()));
 		assertTrue(commandsStack.getExecutedCommands().contains(logReader.getCmdSelect()));
 	}
 
 	@Test
 	public void testDeselectShapeFromLog() {
+		String[] lineLogAdd = "Add - Donut Center: (x: 330 , y: 156 , Border color: -360334 ), radius: 121 , Border color: -360334 , Fill color: -5171 , inner radius: 21 , Border color: -360334 , Fill Color: -5171"
+				.split(" ");
+
+		logReader.addShapeFromLog(lineLogAdd);
+
 		String[] line = "Deselect - Donut Center: (x: 330 , y: 156 , Border color: -360334 ), radius: 121 , Border color: -360334 , Fill color: -5171 , inner radius: 21 , Border color: -360334 , Fill Color: -5171"
 				.split(" ");
 
 		logReader.deselectShapeFromLog(line);
-		assertFalse(logReader.getDonut().isSelected());
 		assertFalse(model.doesContainSelectedShape(logReader.getDonut()));
 		assertTrue(commandsStack.getExecutedCommands().contains(logReader.getCmdDeselect()));
 	}

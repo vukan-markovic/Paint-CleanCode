@@ -1,15 +1,14 @@
 package commandsExecutors;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.*;
 import java.awt.Color;
 import java.util.*;
 import org.junit.*;
+import shapes.*;
 import controller.OptionsController;
 import dialogs.DialogDonut;
 import frame.DrawingFrame;
 import model.DrawingModel;
-import shapes.*;
 import stack.CommandsStack;
 
 public class DonutCommandsExecutorTests {

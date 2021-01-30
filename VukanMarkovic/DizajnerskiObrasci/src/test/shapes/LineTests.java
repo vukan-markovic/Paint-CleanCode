@@ -7,20 +7,25 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class LineTests {
-	int xCoordinateOfStartPoint = 1;
-	int yCoordinateOfStartPoint = 2;
-	int xCoordinateOfEndPoint = 3;
-	int yCoordinateOfEndPoint = 4;
-	Color borderColor = Color.BLACK;
-	private Line line;
 	private Graphics graphics;
+	int xCoordinateOfStartPoint;
+	int yCoordinateOfStartPoint;
+	int xCoordinateOfEndPoint;
+	int yCoordinateOfEndPoint;
+	Color borderColor;
+	private Line line;
 
 	@Before
 	public void setUp() {
+		graphics = mock(Graphics.class);
+		xCoordinateOfStartPoint = 1;
+		yCoordinateOfStartPoint = 2;
+		xCoordinateOfEndPoint = 3;
+		yCoordinateOfEndPoint = 4;
+		borderColor = Color.BLACK;
+
 		line = new Line(new Point(xCoordinateOfStartPoint, yCoordinateOfStartPoint, false, borderColor),
 				new Point(xCoordinateOfEndPoint, yCoordinateOfEndPoint, false, borderColor), false, borderColor);
-
-		graphics = mock(Graphics.class);
 	}
 
 	@Test
@@ -36,11 +41,14 @@ public class LineTests {
 		line.setSelected(true);
 		line.draw(graphics);
 		verify(graphics).setColor(line.getBorderColor());
+
 		verify(graphics).drawLine(xCoordinateOfStartPoint, yCoordinateOfStartPoint, xCoordinateOfEndPoint,
 				yCoordinateOfEndPoint);
+
 		verify(graphics).setColor(Color.BLUE);
 		verify(graphics).drawRect(xCoordinateOfStartPoint - 3, yCoordinateOfStartPoint - 3, 6, 6);
 		verify(graphics).drawRect(xCoordinateOfEndPoint - 3, yCoordinateOfEndPoint - 3, 6, 6);
+
 		verify(graphics).drawRect(line.getMiddleOfLine().getXcoordinate() - 3,
 				line.getMiddleOfLine().getYcoordinate() - 3, 6, 6);
 	}

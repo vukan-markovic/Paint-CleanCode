@@ -1,17 +1,14 @@
 package commandsExecutors;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.*;
 import java.awt.Color;
-import java.util.LinkedList;
-import java.util.Queue;
-import org.junit.Before;
-import org.junit.Test;
+import java.util.*;
+import org.junit.*;
+import shapes.*;
 import controller.OptionsController;
 import dialogs.DialogCircle;
 import frame.DrawingFrame;
 import model.DrawingModel;
-import shapes.*;
 import stack.CommandsStack;
 
 public class CircleCommandsExecutorTests {

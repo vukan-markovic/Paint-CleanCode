@@ -63,7 +63,7 @@ public class RectangleCommandsExecutor implements SurfaceShapeCommandsExecutor {
 		int height = dialogRectangle.getheightValue();
 		int width = dialogRectangle.getwidthValue();
 		Point upperLeftPoint = new Point(xCoordinate, yCoordinate, isSelected, outerColor);
-		rectangle = new Rectangle(upperLeftPoint, height, width, false, outerColor, innerColor);
+		rectangle = new Rectangle(upperLeftPoint, height, width, isSelected, outerColor, innerColor);
 	}
 	
 	public CmdAdd getCmdAdd() {

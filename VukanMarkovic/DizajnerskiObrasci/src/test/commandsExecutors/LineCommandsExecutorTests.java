@@ -1,19 +1,14 @@
 package commandsExecutors;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.*;
 import java.awt.Color;
-import java.util.LinkedList;
-import java.util.Queue;
-import org.junit.Before;
-import org.junit.Test;
+import java.util.*;
+import org.junit.*;
+import shapes.*;
 import controller.OptionsController;
 import dialogs.DialogLine;
 import frame.DrawingFrame;
 import model.DrawingModel;
-import shapes.Line;
-import shapes.Point;
 import stack.CommandsStack;
 
 public class LineCommandsExecutorTests {
@@ -59,6 +54,7 @@ public class LineCommandsExecutorTests {
 	public void testModifyShape() {
 		Line oldState = new Line(new Point(1, 2, true, Color.BLACK), new Point(3, 4, true, Color.BLACK), true,
 				Color.BLACK);
+		
 		commandsExecutor.modifyShape(oldState);
 		assertEquals(oldState, commandsExecutor.getLine());
 		assertTrue(commandsStack.getExecutedCommands().contains(commandsExecutor.getCmdModifyLine()));

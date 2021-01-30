@@ -31,8 +31,8 @@ public abstract class DialogShape extends JDialog implements Dialog {
 		btnOuterColor = new JButton("Border color");
 		btnOk = new JButton("OK");
 		btnCancel = new JButton("Cancel");
-		buildBasicLayout();
 		initializeCharListener();
+		buildBasicLayout();
 		addBtnBorderColorListener();
 		addBtnOkListener();
 		addBtnCancelListener();
@@ -46,12 +46,12 @@ public abstract class DialogShape extends JDialog implements Dialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		glContentPanel = new GroupLayout(getContentPanel());
 		lblIcon.setHorizontalAlignment(SwingConstants.CENTER);
-
+		
 		xCoordinate.setColumns(10);
-		xCoordinate.addKeyListener(getInputListener());
-
+		xCoordinate.addKeyListener(inputListener);
+		
 		yCoordinate.setColumns(10);
-		yCoordinate.addKeyListener(getInputListener());
+		yCoordinate.addKeyListener(inputListener);
 
 		JPanel btnPanel = new JPanel();
 		btnPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -74,7 +74,7 @@ public abstract class DialogShape extends JDialog implements Dialog {
 		};
 	}
 
-	public void preventInvalidChar(KeyEvent event) {
+	private void preventInvalidChar(KeyEvent event) {
 		char charInput = event.getKeyChar();
 
 		if (isCharInvalid(charInput)) {
@@ -98,19 +98,22 @@ public abstract class DialogShape extends JDialog implements Dialog {
 		});
 	}
 
-	private void addBtnOkListener() {
+	public void addBtnOkListener() {
 		btnOk.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				if (isInputValid()) {
-					setAccepted(true);
-					setVisible(false);
-				} else
+				if (!areAllFieldsFilled())
 					JOptionPane.showMessageDialog(new JFrame(), "You have not filled in all the fields, try again!",
 							"Error!", JOptionPane.ERROR_MESSAGE);
+				else if (!areValuesValid())
+					JOptionPane.showMessageDialog(new JFrame(), "Values are invalid, try again!",
+							"Error!", JOptionPane.ERROR_MESSAGE);
+				else {
+					setAccepted(true);
+					setVisible(false);
+				}
 			}
 		});
-
 	}
 
 	private void addBtnCancelListener() {

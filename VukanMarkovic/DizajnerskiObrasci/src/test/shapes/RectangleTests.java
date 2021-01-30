@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class RectangleTests {
+	private Graphics graphics;
 	private int xCoordinate;
 	private int yCoordinate;
 	private int height;
@@ -14,19 +15,19 @@ public class RectangleTests {
 	private Color borderColor;
 	private Color fillColor;
 	private Rectangle rectangle;
-	private Graphics graphics;
 
 	@Before
 	public void setUp() {
+		graphics = mock(Graphics.class);
 		xCoordinate = 1;
 		yCoordinate = 2;
 		height = 1;
 		width = 2;
 		borderColor = Color.BLACK;
 		fillColor = Color.WHITE;
+
 		rectangle = new Rectangle(new Point(xCoordinate, yCoordinate, false, Color.BLACK), height, width, false,
 				borderColor, fillColor);
-		graphics = mock(Graphics.class);
 	}
 
 	@Test
@@ -35,7 +36,7 @@ public class RectangleTests {
 		verify(graphics).setColor(rectangle.getBorderColor());
 		verify(graphics).drawRect(xCoordinate, yCoordinate, width, height);
 		verify(graphics).setColor(rectangle.getFillColor());
-		verify(graphics).fillRect(xCoordinate, yCoordinate, width, height);
+		verify(graphics).fillRect(xCoordinate + 1, yCoordinate + 1, width - 1, height - 1);
 	}
 
 	@Test
@@ -45,7 +46,7 @@ public class RectangleTests {
 		verify(graphics).setColor(borderColor);
 		verify(graphics).drawRect(xCoordinate, yCoordinate, width, height);
 		verify(graphics).setColor(fillColor);
-		verify(graphics).fillRect(xCoordinate, yCoordinate, width, height);
+		verify(graphics).fillRect(xCoordinate + 1, yCoordinate + 1, width - 1, height - 1);
 		verify(graphics).setColor(Color.BLUE);
 		verify(graphics).drawRect(xCoordinate - 3, yCoordinate - 3, 6, 6);
 		verify(graphics).drawRect(xCoordinate - 3 + width, yCoordinate - 3, 6, 6);

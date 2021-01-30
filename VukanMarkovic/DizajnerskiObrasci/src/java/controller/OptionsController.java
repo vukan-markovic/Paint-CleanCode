@@ -24,6 +24,7 @@ public class OptionsController {
 	private PropertyManager manager;
 	private Color fillColor;
 	private Color borderColor;
+	private LogParser parser;
 
 	public OptionsController(DrawingModel model, DrawingFrame frame, CommandsStack commandsStack,
 			Queue<String> commandsLog) {
@@ -38,6 +39,7 @@ public class OptionsController {
 		observer.addPropertyChangeListener(manager);
 		fillColor = Color.WHITE;
 		borderColor = Color.BLACK;
+		parser = new LogParser(this);
 	}
 
 	public void undoCommand() {
@@ -57,7 +59,6 @@ public class OptionsController {
 	}
 
 	public void executeCommandFromLog() {
-		LogParser parser = new LogParser(this);
 		parser.parse(commandsLog.peek().split(" "));
 
 		if (commandsLog.size() == 1)
@@ -72,6 +73,7 @@ public class OptionsController {
 	public void fireEventsForOptionsButtons() {
 		int numberOfSelectedShapes = model.getNumberOfSelectedShapes();
 		boolean isNumberOfSelectedShapesOne = numberOfSelectedShapes == 1;
+		observer.setBtnSelectEnabled(model.getNumberOfShapes() > 0);
 		observer.setBtnDeleteEnabled(numberOfSelectedShapes > 0);
 		observer.setBtnModifyEnabled(isNumberOfSelectedShapesOne);
 		observer.setBtnToBackEnabled(isNumberOfSelectedShapesOne);
@@ -84,7 +86,10 @@ public class OptionsController {
 		int numberOfExecutedCommands = commandsStack.getExecutedCommands().size();
 		boolean isNumberOfExecutedCommandsGreaterThanZero = numberOfExecutedCommands > 0;
 		observer.setBtnUndoEnabled(isNumberOfExecutedCommandsGreaterThanZero);
-		observer.setBtnRedoEnabled(isNumberOfExecutedCommandsGreaterThanZero);
+
+		int numberOfUnexecutedCommands = commandsStack.getUnexecutedCommands().size();
+		boolean isNumberOfUnexecutedCommandsGreaterThanZero = numberOfUnexecutedCommands > 0;
+		observer.setBtnRedoEnabled(isNumberOfUnexecutedCommandsGreaterThanZero);
 	}
 
 	private void disableButton() {
@@ -102,8 +107,8 @@ public class OptionsController {
 
 	private void setBtnBorderColor() {
 		RightToolbar toolbar = frame.getRightToolbar();
-		JButton btnOuterColor = toolbar.getBtnOuterColor();
-		btnOuterColor.setBackground(borderColor);
+		JButton btnBorderColor = toolbar.getBtnBorderColor();
+		btnBorderColor.setBackground(borderColor);
 	}
 
 	public void setFillColor() {
@@ -115,7 +120,7 @@ public class OptionsController {
 
 	private void setBtnFillColor() {
 		RightToolbar toolbar = frame.getRightToolbar();
-		JButton btnInnerColor = toolbar.getBtnInnerColor();
+		JButton btnInnerColor = toolbar.getBtnFillColor();
 		btnInnerColor.setBackground(fillColor);
 	}
 
@@ -151,8 +156,8 @@ public class OptionsController {
 		return commandsStack;
 	}
 
-	public LogWriter getLogWriter() {
-		return logWriter;
+	public Queue<String> getCommandsLog() {
+		return commandsLog;
 	}
 
 	public Color getFillColor() {
@@ -161,5 +166,9 @@ public class OptionsController {
 
 	public Color getBorderColor() {
 		return borderColor;
+	}
+
+	public PositionCommandsExecutor getPositionCommandsExecutor() {
+		return positionCommandsExecutor;
 	}
 }

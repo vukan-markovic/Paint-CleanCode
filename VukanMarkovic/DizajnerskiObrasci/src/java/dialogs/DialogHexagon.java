@@ -19,24 +19,29 @@ public class DialogHexagon extends DialogCircle {
 
 	@Override
 	public void setModifyDialog(Shape selectedShape) {
+		setAccepted(false);
 		HexagonAdapter hexagon = (HexagonAdapter) selectedShape;
 
 		String xCoordinateValue = String.valueOf(hexagon.getXcoordinate());
 		getXcoordinate().setText(xCoordinateValue);
+		getXcoordinate().setEditable(true);
 
 		String yCoordinateValue = String.valueOf(hexagon.getYcoordinate());
 		getYcoordinate().setText(yCoordinateValue);
+		getYcoordinate().setEditable(true);
 
 		String radiusValue = String.valueOf(hexagon.getRadius());
 		getRadius().setText(radiusValue);
 
-		Color outerColor = hexagon.getBorderColor();
-		setBorderColor(outerColor);
-		getBtnOuterColor().setBackground(outerColor);
+		Color borderColor = hexagon.getBorderColor();
+		setBorderColor(borderColor);
+		getBtnOuterColor().setBackground(borderColor);
+		getBtnOuterColor().setVisible(true);
 
-		Color innerColor = hexagon.getFillColor();
-		setFillColor(innerColor);
-		getBtnFillColor().setBackground(innerColor);
+		Color fillColor = hexagon.getFillColor();
+		setFillColor(fillColor);
+		getBtnFillColor().setBackground(fillColor);
+		getBtnFillColor().setVisible(true);
 
 		setVisible(true);
 	}

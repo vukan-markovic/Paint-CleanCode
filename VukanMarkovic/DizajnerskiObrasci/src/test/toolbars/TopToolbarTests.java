@@ -1,13 +1,12 @@
 package toolbars;
 
-import static org.mockito.Mockito.*;
 import org.junit.*;
+import static org.mockito.Mockito.*;
 import controller.DrawingController;
-import toolbars.TopToolbar;
 
 public class TopToolbarTests {
-	private TopToolbar topToolbar;
 	private DrawingController controller;
+	private TopToolbar topToolbar;
 
 	@Before
 	public void setUp() {

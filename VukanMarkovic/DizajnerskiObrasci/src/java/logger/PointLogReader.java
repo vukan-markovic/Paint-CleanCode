@@ -56,7 +56,7 @@ public class PointLogReader implements LogReader {
 		else
 			pointColor = new Color(pointColorNumber);
 
-		point = new Point(xCoordinate, yCoordinate, false, pointColor);
+		point = new Point(xCoordinate, yCoordinate, true, pointColor);
 	}
 
 	@Override

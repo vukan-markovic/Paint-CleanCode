@@ -1,13 +1,10 @@
 package logger;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import java.awt.Color;
+import static org.junit.Assert.*;
 import org.junit.*;
+import shapes.*;
 import model.DrawingModel;
-import shapes.Point;
-import shapes.Rectangle;
+import java.awt.Color;
 import stack.CommandsStack;
 
 public class RectangleLogReaderTests {
@@ -57,21 +54,30 @@ public class RectangleLogReaderTests {
 
 	@Test
 	public void testSelectShapeFromLog() {
+		String[] logLine = "Add - Rectangle Upper left point: (x: 142 , y: 60 , Border color: -360334 ), height: 12 , width: 21 , Border color: -360334 , Fill color: -5171"
+				.split(" ");
+
+		logReader.addShapeFromLog(logLine);
+
 		String[] line = "Select - Rectangle Upper left point: (x: 142 , y: 60 , Border color: -360334 ), height: 12 , width: 21 , Border color: -360334 , Fill color: -5171"
 				.split(" ");
 
-		logReader.selectShapeFromLog(line);
-		assertTrue(logReader.getRectangle().isSelected());
+		logReader.selectShapeFromLog(logLine);
 		assertTrue(model.doesContainSelectedShape(logReader.getRectangle()));
 		assertTrue(commandsStack.getExecutedCommands().contains(logReader.getCmdSelect()));
 	}
 
 	@Test
 	public void testDeselectShapeFromLog() {
+		String[] logLine = "Add - Rectangle Upper left point: (x: 142 , y: 60 , Border color: -360334 ), height: 12 , width: 21 , Border color: -360334 , Fill color: -5171"
+				.split(" ");
+
+		logReader.addShapeFromLog(logLine);
+
 		String[] line = "Deselect - Rectangle Upper left point: (x: 142 , y: 60 , Border color: -360334 ), height: 12 , width: 21 , Border color: -360334 , Fill color: -5171"
 				.split(" ");
 
-		logReader.deselectShapeFromLog(line);
+		logReader.deselectShapeFromLog(logLine);
 		assertFalse(logReader.getRectangle().isSelected());
 		assertFalse(model.doesContainSelectedShape(logReader.getRectangle()));
 		assertTrue(commandsStack.getExecutedCommands().contains(logReader.getCmdDeselect()));

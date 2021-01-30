@@ -87,7 +87,7 @@ public class DialogCircle extends DialogSurfaceShape {
 	}
 
 	@Override
-	public boolean isInputValid() {
+	public boolean areAllFieldsFilled() {
 		String xCoordinateValue = getXcoordinate().getText();
 		String yCoordinateValue = getYcoordinate().getText();
 		String radiusValue = radius.getText();
@@ -95,6 +95,11 @@ public class DialogCircle extends DialogSurfaceShape {
 		if (xCoordinateValue.isBlank() || yCoordinateValue.isBlank() || radiusValue.isBlank())
 			return false;
 		return true;
+	}
+
+	@Override
+	public boolean areValuesValid() {
+		return getRadiusValue() > 0;
 	}
 
 	@Override
@@ -115,6 +120,7 @@ public class DialogCircle extends DialogSurfaceShape {
 
 	@Override
 	public void setModifyDialog(Shape selectedShape) {
+		setAccepted(false);
 		Circle circle = (Circle) selectedShape;
 		Point center = circle.getCenter();
 
@@ -148,9 +154,5 @@ public class DialogCircle extends DialogSurfaceShape {
 
 	public int getRadiusValue() {
 		return Integer.parseInt(radius.getText());
-	}
-
-	public JLabel getLblRadius() {
-		return lblRadius;
 	}
 }

@@ -18,16 +18,20 @@ public class CmdToBack implements Command {
 	@Override
 	public void execute() {
 		if (isNotFirstShape())
-			Collections.swap(shapes, indexOfPreviousShape, indexOfShape);
+			swapShapes();
 	}
 
 	@Override
 	public void unexecute() {
 		if (isNotFirstShape())
-			Collections.swap(shapes, indexOfShape, indexOfPreviousShape);
+			swapShapes();
 	}
 
 	private boolean isNotFirstShape() {
 		return indexOfShape != 0;
+	}
+	
+	private void swapShapes() {
+		Collections.swap(shapes, indexOfPreviousShape, indexOfShape);
 	}
 }

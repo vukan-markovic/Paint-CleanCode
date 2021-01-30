@@ -35,7 +35,9 @@ public class Circle extends SurfaceShape {
 	@Override
 	protected void fillShape(Graphics graphics) {
 		graphics.setColor(getFillColor());
-		graphics.fillOval(center.getXcoordinate() - radius, center.getYcoordinate() - radius, radius * 2, radius * 2);
+		
+		graphics.fillOval(center.getXcoordinate() - radius + 1, center.getYcoordinate() - radius + 1, 2 * radius - 2,
+				2 * radius - 2);
 	}
 
 	@Override

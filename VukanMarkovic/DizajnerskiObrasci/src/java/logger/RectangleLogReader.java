@@ -60,12 +60,12 @@ public class RectangleLogReader implements LogReader {
 		yCoordinate = Integer.parseInt(logLine[39]);
 		upperLeftPointColorNumber = Integer.parseInt(logLine[43]);
 
-		if (upperLeftPointColorNumber == 0)
-			upperLeftPointColor = new Color(0, 0, 0, 0);
-		else
+//		if (upperLeftPointColorNumber == 0)
+//			upperLeftPointColor = new Color(0, 0, 0, 0);
+//		else
 			upperLeftPointColor = new Color(upperLeftPointColorNumber);
 
-		upperLeftPoint = new Point(xCoordinate, yCoordinate, false, upperLeftPointColor);
+		upperLeftPoint = new Point(xCoordinate, yCoordinate, true, upperLeftPointColor);
 	}
 
 	private void readModifiedRectangle() {
@@ -74,19 +74,19 @@ public class RectangleLogReader implements LogReader {
 
 		borderColorNumber = Integer.parseInt(logLine[53]);
 
-		if (borderColorNumber == 0)
-			borderColor = new Color(0, 0, 0, 0);
-		else
+//		if (borderColorNumber == 0)
+//			borderColor = new Color(0, 0, 0, 0);
+//		else
 			borderColor = new Color(borderColorNumber);
 
 		fillColorNumber = Integer.parseInt(logLine[57]);
 
-		if (fillColorNumber == 0)
-			fillColor = new Color(0, 0, 0, 0);
-		else
+//		if (fillColorNumber == 0)
+//			fillColor = new Color(0, 0, 0, 0);
+//		else
 			fillColor = new Color(fillColorNumber);
 
-		rectangle = new Rectangle(upperLeftPoint, height, width, false, borderColor, fillColor);
+		rectangle = new Rectangle(upperLeftPoint, height, width, true, borderColor, fillColor);
 	}
 
 	@Override
@@ -114,9 +114,9 @@ public class RectangleLogReader implements LogReader {
 		yCoordinate = Integer.parseInt(logLine[10]);
 		upperLeftPointColorNumber = Integer.parseInt(logLine[14]);
 
-		if (upperLeftPointColorNumber == 0)
-			upperLeftPointColor = new Color(0, 0, 0, 0);
-		else
+//		if (upperLeftPointColorNumber == 0)
+//			upperLeftPointColor = new Color(0, 0, 0, 0);
+//		else
 			upperLeftPointColor = new Color(upperLeftPointColorNumber);
 
 		upperLeftPoint = new Point(xCoordinate, yCoordinate, false, upperLeftPointColor);
@@ -128,16 +128,16 @@ public class RectangleLogReader implements LogReader {
 
 		borderColorNumber = Integer.parseInt(logLine[24]);
 
-		if (borderColorNumber == 0)
-			borderColor = new Color(0, 0, 0, 0);
-		else
+//		if (borderColorNumber == 0)
+//			borderColor = new Color(0, 0, 0, 0);
+//		else
 			borderColor = new Color(borderColorNumber);
 
 		fillColorNumber = Integer.parseInt(logLine[28]);
-
-		if (fillColorNumber == 0)
-			fillColor = new Color(0, 0, 0, 0);
-		else
+//
+//		if (fillColorNumber == 0)
+//			fillColor = new Color(0, 0, 0, 0);
+//		else
 			fillColor = new Color(fillColorNumber);
 
 		rectangle = new Rectangle(upperLeftPoint, height, width, false, borderColor, fillColor);

@@ -41,7 +41,7 @@ public class HexagonLogReader extends CircleLogReader {
 		readModifiedCenter();
 		readModifiedCircle();
 
-		hexagon = new HexagonAdapter(new Hexagon(getxCoordinate(), getyCoordinate(), getRadius()), false,
+		hexagon = new HexagonAdapter(new Hexagon(getxCoordinate(), getyCoordinate(), getRadius()), true,
 				getBorderColor(), getFillColor());
 
 		model.getSelectedShapes().remove(oldState);
@@ -56,7 +56,7 @@ public class HexagonLogReader extends CircleLogReader {
 		setLogLine(logLine);
 		readCenter();
 		readShape();
-
+		
 		hexagon = new HexagonAdapter(new Hexagon(getxCoordinate(), getyCoordinate(), getRadius()), false,
 				getBorderColor(), getFillColor());
 
@@ -70,7 +70,7 @@ public class HexagonLogReader extends CircleLogReader {
 		setLogLine(logLine);
 		readCenter();
 		readShape();
-
+		
 		hexagon = new HexagonAdapter(new Hexagon(getxCoordinate(), getyCoordinate(), getRadius()), false,
 				getBorderColor(), getFillColor());
 

@@ -19,7 +19,7 @@ public class DrawingModel {
 	public void addSelectedShape(Shape shape) {
 		selectedShapes.add(shape);
 	}
-
+	
 	public void addShapeToIndex(int index, Shape shape) {
 		shapes.add(index, shape);
 	}
@@ -31,7 +31,7 @@ public class DrawingModel {
 	public void removeSelectedShape(Shape shape) {
 		selectedShapes.remove(shape);
 	}
-
+	
 	public void removeShapeAtIndex(int index) {
 		shapes.remove(index);
 	}
@@ -57,7 +57,7 @@ public class DrawingModel {
 	}
 
 	public Shape getFirstSelectedShape() {
-		return selectedShapes.get(0);
+		return shapes.stream().filter(shape -> shape.isSelected()).findFirst().get();
 	}
 
 	public List<Shape> getShapes() {

@@ -38,6 +38,7 @@ public class TopToolbar implements Toolbar {
 	@Override
 	public void initializeButtons() {
 		btnPoint = new JToggleButton("Point");
+		btnPoint.setSelected(true);
 		btnLine = new JToggleButton("Line");
 		btnRectangle = new JToggleButton("Rectangle");
 		btnCircle = new JToggleButton("Circle");
@@ -65,6 +66,7 @@ public class TopToolbar implements Toolbar {
 
 	@Override
 	public void disableButtons() {
+		btnSelect.setEnabled(false);
 		btnModify.setEnabled(false);
 		btnDelete.setEnabled(false);
 	}

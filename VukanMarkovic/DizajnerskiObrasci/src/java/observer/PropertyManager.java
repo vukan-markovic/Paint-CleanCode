@@ -19,6 +19,9 @@ public class PropertyManager implements PropertyChangeListener {
 		boolean newValue = (boolean) changeEvent.getNewValue();
 
 		switch (changeEvent.getPropertyName()) {
+		case "btnSelect":
+			topToolbar.getBtnSelect().setEnabled(newValue);
+			break;
 		case "btnDelete":
 			topToolbar.getBtnDelete().setEnabled(newValue);
 			break;

@@ -7,18 +7,19 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class PointTests {
+	private Graphics graphics;
 	private int xCoordinate;
 	private int yCoordinate;
 	private Color borderColor;
 	private Point point;
-	private Graphics graphics;
 
 	@Before
 	public void setUp() {
+		graphics = mock(Graphics.class);
 		xCoordinate = 1;
 		yCoordinate = 2;
+		borderColor = Color.BLACK;
 		point = new Point(xCoordinate, yCoordinate, false, borderColor);
-		graphics = mock(Graphics.class);
 	}
 
 	@Test

@@ -7,7 +7,9 @@ public interface Dialog {
 
 	void buildLayout();
 
-	boolean isInputValid();
+	boolean areAllFieldsFilled();
+	
+	boolean areValuesValid();
 
 	void setModifyDialog(Shape shape);
 }

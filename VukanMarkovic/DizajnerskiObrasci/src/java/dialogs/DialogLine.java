@@ -94,7 +94,7 @@ public class DialogLine extends DialogShape {
 	}
 
 	@Override
-	public boolean isInputValid() {
+	public boolean areAllFieldsFilled() {
 		String xCoordinateOfStartPointValue = getXcoordinate().getText();
 		String yCoordinateOfStartPointValue = getYcoordinate().getText();
 		String xCoordinateOfEndPointValue = xCoordinateOfEndPoint.getText();
@@ -107,7 +107,13 @@ public class DialogLine extends DialogShape {
 	}
 
 	@Override
+	public boolean areValuesValid() {
+		return true;
+	}
+
+	@Override
 	public void setModifyDialog(Shape selectedShape) {
+		setAccepted(false);
 		Line line = (Line) selectedShape;
 		Point startPoint = line.getStartPoint();
 		Point endPoint = line.getEndPoint();
@@ -124,9 +130,9 @@ public class DialogLine extends DialogShape {
 		String yCoordinateOfEndPointValue = String.valueOf(endPoint.getYcoordinate());
 		getYCoordinateOfEndPoint().setText(yCoordinateOfEndPointValue);
 
-		Color outerColor = line.getBorderColor();
-		setBorderColor(outerColor);
-		getBtnOuterColor().setBackground(outerColor);
+		Color borderColor = line.getBorderColor();
+		setBorderColor(borderColor);
+		getBtnOuterColor().setBackground(borderColor);
 
 		setVisible(true);
 	}

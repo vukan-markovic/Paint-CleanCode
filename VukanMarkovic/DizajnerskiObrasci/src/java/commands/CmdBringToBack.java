@@ -1,29 +1,28 @@
 package commands;
 
-import java.util.Collections;
 import model.DrawingModel;
 import shapes.Shape;
 
 public class CmdBringToBack implements Command {
 	private DrawingModel model;
+	private Shape shape;
 	private int indexOfShape;
 
 	public CmdBringToBack(DrawingModel model, Shape shape) {
 		this.model = model;
-		indexOfShape = model.getIndexOfShape(shape);
+		this.shape = shape;
 	}
 
 	@Override
 	public void execute() {
-		swapShapes();
+		indexOfShape = model.getIndexOfShape(shape);
+		model.removeShapeAtIndex(indexOfShape);
+		model.addShapeToIndex(0, shape);
 	}
 
 	@Override
 	public void unexecute() {
-		swapShapes();
-	}
-
-	private void swapShapes() {
-		Collections.swap(model.getShapes(), 0, indexOfShape);
+		model.removeShapeAtIndex(0);
+		model.addShapeToIndex(indexOfShape, shape);
 	}
 }

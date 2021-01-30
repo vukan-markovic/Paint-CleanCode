@@ -2,8 +2,8 @@ package view;
 
 import static org.mockito.Mockito.*;
 import org.junit.*;
-import model.DrawingModel;
 import shapes.*;
+import model.DrawingModel;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 

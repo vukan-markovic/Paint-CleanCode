@@ -1,13 +1,8 @@
 package commandsExecutors;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
+import static org.junit.Assert.*;
+import org.junit.*;
 import java.awt.Color;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import frame.DrawingFrame;
 import model.DrawingModel;
 import shapes.Point;
@@ -18,7 +13,7 @@ public class SelectionCommandsExecutorTests {
 	private DrawingFrame frame;
 	private CommandsStack commandsStack;
 	private SelectionCommandsExecutor commandExecutor;
-	Point point;
+	private Point point;
 
 	@Before
 	public void setUp() {
@@ -31,8 +26,8 @@ public class SelectionCommandsExecutorTests {
 
 	@Test
 	public void testSelectShape() {
+		model.addShape(point);
 		commandExecutor.selectShape(point);
-		assertTrue(point.isSelected());
 		assertTrue(model.doesContainSelectedShape(point));
 		assertTrue(commandsStack.getExecutedCommands().contains(commandExecutor.getCmdSelect()));
 	}

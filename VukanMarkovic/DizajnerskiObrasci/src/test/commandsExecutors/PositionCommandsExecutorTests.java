@@ -1,18 +1,12 @@
 package commandsExecutors;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
+import static org.junit.Assert.*;
 import java.awt.Color;
-
 import org.junit.*;
-
-import commands.CmdAdd;
-import commands.CmdSelect;
+import commands.*;
+import shapes.*;
 import frame.DrawingFrame;
 import model.DrawingModel;
-import shapes.Line;
-import shapes.Point;
 import stack.CommandsStack;
 
 public class PositionCommandsExecutorTests {

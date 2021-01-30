@@ -1,10 +1,8 @@
 package observer;
 
 import org.junit.*;
+import toolbars.*;
 import frame.DrawingFrame;
-import toolbars.RightToolbar;
-import toolbars.TopToolbar;
-
 import static org.junit.Assert.assertTrue;
 
 public class DrawingObserverTests {

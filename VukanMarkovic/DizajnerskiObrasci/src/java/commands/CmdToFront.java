@@ -20,16 +20,20 @@ public class CmdToFront implements Command {
 	@Override
 	public void execute() {
 		if (isNotLastShape())
-			Collections.swap(shapes, indexOfNextShape, indexOfShape);
+			swapShapes();
 	}
 
 	@Override
 	public void unexecute() {
 		if (isNotLastShape())
-			Collections.swap(shapes, indexOfShape, indexOfNextShape);
+			swapShapes();
 	}
 
 	private boolean isNotLastShape() {
 		return indexOfShape != indexOfLastShape;
+	}
+	
+	private void swapShapes() {
+		Collections.swap(shapes, indexOfNextShape, indexOfShape);
 	}
 }

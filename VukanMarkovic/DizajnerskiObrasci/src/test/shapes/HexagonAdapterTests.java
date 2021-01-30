@@ -1,22 +1,19 @@
 package shapes;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-
+import static org.mockito.Mockito.*;
 import org.junit.*;
+import java.awt.*;
 import hexagon.Hexagon;
-import java.awt.Color;
-import java.awt.Graphics;
 
 public class HexagonAdapterTests {
-	private HexagonAdapter hexagonAdapter;
 	private Graphics graphics;
+	private HexagonAdapter hexagonAdapter;
 
 	@Before
 	public void setUp() {
-		hexagonAdapter = new HexagonAdapter(new Hexagon(1, 2, 3), false, Color.BLACK, Color.WHITE);
 		graphics = mock(Graphics.class);
+		hexagonAdapter = new HexagonAdapter(new Hexagon(1, 2, 3), false, Color.BLACK, Color.WHITE);
 	}
 
 	@Test

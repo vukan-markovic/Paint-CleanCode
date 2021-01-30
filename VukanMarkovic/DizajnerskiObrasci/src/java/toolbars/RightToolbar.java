@@ -43,15 +43,15 @@ public class RightToolbar implements Toolbar {
 
 	@Override
 	public void initializeButtons() {
-		btnOuterColor = new JButton("Set outer color");
-		btnInnerColor = new JButton("Set inner color");
+		btnOuterColor = new JButton("Set border color");
+		btnInnerColor = new JButton("Set fill color");
 		btnUndo = new JButton("Undo");
 		btnRedo = new JButton("Redo");
 		btnSendToBack = new JButton("Send to back");
 		btnBringToFront = new JButton("Bring to front");
 		btnToBack = new JButton("To back");
 		btnToFront = new JButton("To front");
-		btnSave = new JButton("FileStrategy");
+		btnSave = new JButton("Save");
 		btnLoadLog = new JButton("Load log");
 		btnLoadDrawing = new JButton("Load painting");
 		btnNextCommand = new JButton("Next");
@@ -186,11 +186,11 @@ public class RightToolbar implements Toolbar {
 		return toolBar;
 	}
 
-	public JButton getBtnOuterColor() {
+	public JButton getBtnBorderColor() {
 		return btnOuterColor;
 	}
 
-	public JButton getBtnInnerColor() {
+	public JButton getBtnFillColor() {
 		return btnInnerColor;
 	}
 

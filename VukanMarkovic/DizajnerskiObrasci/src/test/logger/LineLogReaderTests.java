@@ -1,13 +1,10 @@
 package logger;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import java.awt.Color;
+import static org.junit.Assert.*;
 import org.junit.*;
+import shapes.*;
 import model.DrawingModel;
-import shapes.Line;
-import shapes.Point;
+import java.awt.Color;
 import stack.CommandsStack;
 
 public class LineLogReaderTests {
@@ -58,22 +55,30 @@ public class LineLogReaderTests {
 
 	@Test
 	public void testSelectShapeFromLog() {
+		String[] lineLogAdd = "Add - Line Start point: (x: 77 , y: 86 , Border color: -360334 ), End point: (x: 79 , y: 197 , Border color: -360334 ), Border color: -360334"
+				.split(" ");
+		
+		logReader.addShapeFromLog(lineLogAdd);
+
 		String[] line = "Select - Line Start point: (x: 77 , y: 86 , Border color: -360334 ), End point: (x: 79 , y: 197 , Border color: -360334 ), Border color: -360334"
 				.split(" ");
-
+		
 		logReader.selectShapeFromLog(line);
-		assertTrue(logReader.getLine().isSelected());
 		assertTrue(model.doesContainSelectedShape(logReader.getLine()));
 		assertTrue(commandsStack.getExecutedCommands().contains(logReader.getCmdSelect()));
 	}
 
 	@Test
 	public void testDeselectShapeFromLog() {
+		String[] lineLogAdd = "Add - Line Start point: (x: 77 , y: 86 , Border color: -360334 ), End point: (x: 79 , y: 197 , Border color: -360334 ), Border color: -360334"
+				.split(" ");
+		
+		logReader.addShapeFromLog(lineLogAdd);
+		
 		String[] line = "Deselect - Line Start point: (x: 77 , y: 86 , Border color: -360334 ), End point: (x: 79 , y: 197 , Border color: -360334 ), Border color: -360334"
 				.split(" ");
 
 		logReader.deselectShapeFromLog(line);
-		assertFalse(logReader.getLine().isSelected());
 		assertFalse(model.doesContainSelectedShape(logReader.getLine()));
 		assertTrue(commandsStack.getExecutedCommands().contains(logReader.getCmdDeselect()));
 	}

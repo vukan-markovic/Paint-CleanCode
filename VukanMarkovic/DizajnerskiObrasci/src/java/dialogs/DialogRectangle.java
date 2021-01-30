@@ -103,7 +103,7 @@ public class DialogRectangle extends DialogSurfaceShape {
 	}
 
 	@Override
-	public boolean isInputValid() {
+	public boolean areAllFieldsFilled() {
 		String xCoordinateValue = getXcoordinate().getText();
 		String yCoordinateValue = getYcoordinate().getText();
 		String heightValue = height.getText();
@@ -112,6 +112,11 @@ public class DialogRectangle extends DialogSurfaceShape {
 		if (xCoordinateValue.isBlank() || yCoordinateValue.isBlank() || heightValue.isBlank() || widthValue.isBlank())
 			return false;
 		return true;
+	}
+
+	@Override
+	public boolean areValuesValid() {
+		return getwidthValue() > 0 && getheightValue() > 0;
 	}
 
 	@Override
@@ -132,14 +137,17 @@ public class DialogRectangle extends DialogSurfaceShape {
 
 	@Override
 	public void setModifyDialog(Shape selectedShape) {
+		setAccepted(false);
 		Rectangle rectangle = (Rectangle) selectedShape;
 		Point upperLeftPoint = rectangle.getUpperLeftPoint();
 
 		String xCoordinateValue = String.valueOf(upperLeftPoint.getXcoordinate());
 		getXcoordinate().setText(xCoordinateValue);
+		getXcoordinate().setEditable(true);
 
 		String yCoordinateValue = String.valueOf(upperLeftPoint.getYcoordinate());
 		getYcoordinate().setText(yCoordinateValue);
+		getYcoordinate().setEditable(true);
 
 		String heightValue = String.valueOf(rectangle.getHeight());
 		height.setText(heightValue);
@@ -150,10 +158,12 @@ public class DialogRectangle extends DialogSurfaceShape {
 		Color outerColor = rectangle.getBorderColor();
 		setBorderColor(outerColor);
 		getBtnOuterColor().setBackground(getBorderColor());
+		getBtnOuterColor().setVisible(true);
 
 		Color innerColor = rectangle.getFillColor();
 		setFillColor(innerColor);
 		getBtnFillColor().setBackground(innerColor);
+		getBtnFillColor().setVisible(true);
 
 		setVisible(true);
 	}

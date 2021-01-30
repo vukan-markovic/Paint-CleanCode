@@ -14,7 +14,7 @@ public abstract class DialogSurfaceShape extends DialogShape {
 		addBtnFillColorListener();
 	}
 
-	public void addBtnFillColorListener() {
+	private void addBtnFillColorListener() {
 		btnFillColor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				fillColor = JColorChooser.showDialog(getContentPane(), "Choose fill color", fillColor);

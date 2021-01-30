@@ -63,7 +63,7 @@ public class DrawingFrame extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent click) {
 				if (topToolbar.getBtnSelect().isSelected())
-					controller.selectShapeIfDrawIsNotEmpty(click);
+					controller.selectOrDeselectShapes(click);
 				else if (topToolbar.getBtnPoint().isSelected())
 					controller.drawPoint(click);
 				else if (topToolbar.getBtnLine().isSelected())
@@ -97,10 +97,6 @@ public class DrawingFrame extends JFrame {
 
 	public RightToolbar getRightToolbar() {
 		return rightToolbar;
-	}
-
-	public DrawingController getController() {
-		return controller;
 	}
 
 	public void setController(DrawingController controller) {

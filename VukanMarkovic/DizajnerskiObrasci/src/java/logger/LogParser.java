@@ -57,6 +57,8 @@ public class LogParser {
 			optionsController.bringShapeToFront();
 		else if (logLine[0].equals("SendToBack"))
 			optionsController.bringShapeToBack();
+		
+		optionsController.getFrame().getView().repaint();
 	}
 
 	private void parseAddCommand() {

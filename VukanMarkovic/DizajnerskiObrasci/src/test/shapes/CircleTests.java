@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class CircleTests {
+	private Graphics graphics;
 	private int xCoordinate;
 	private int yCoordinate;
 	private int radius;
@@ -14,10 +15,10 @@ public class CircleTests {
 	private Color borderColor;
 	private Color fillColor;
 	private Circle circle;
-	private Graphics graphics;
 
 	@Before
 	public void setUp() {
+		graphics = mock(Graphics.class);
 		xCoordinate = 1;
 		yCoordinate = 2;
 		radius = 3;
@@ -25,7 +26,6 @@ public class CircleTests {
 		fillColor = Color.WHITE;
 		center = new Point(xCoordinate, yCoordinate, false, borderColor);
 		circle = new Circle(center, radius, false, borderColor, fillColor);
-		graphics = mock(Graphics.class);
 	}
 
 	@Test
@@ -34,7 +34,7 @@ public class CircleTests {
 		verify(graphics).setColor(borderColor);
 		verify(graphics).drawOval(xCoordinate - radius, yCoordinate - radius, radius * 2, radius * 2);
 		verify(graphics).setColor(fillColor);
-		verify(graphics).fillOval(xCoordinate - radius, yCoordinate - radius, radius * 2, radius * 2);
+		verify(graphics).fillOval(xCoordinate - radius + 1, yCoordinate - radius + 1, radius * 2 -2, radius * 2 - 2);
 	}
 
 	@Test
@@ -44,7 +44,7 @@ public class CircleTests {
 		verify(graphics).setColor(borderColor);
 		verify(graphics).drawOval(xCoordinate - radius, yCoordinate - radius, radius * 2, radius * 2);
 		verify(graphics).setColor(fillColor);
-		verify(graphics).fillOval(xCoordinate - radius, yCoordinate - radius, radius * 2, radius * 2);
+		verify(graphics).fillOval(xCoordinate - radius + 1, yCoordinate - radius + 1, radius * 2 -2, radius * 2 - 2);
 		verify(graphics).setColor(Color.BLUE);
 		verify(graphics).drawRect(xCoordinate - 3, yCoordinate - 3, 6, 6);
 		verify(graphics).drawRect(xCoordinate + radius - 3, yCoordinate - 3, 6, 6);

@@ -68,7 +68,7 @@ public class LineLogReader implements LogReader {
 		else
 			startPointColor = new Color(startPointColorNumber);
 
-		startPoint = new Point(xCoordinateOfStartPoint, yCoordinateOfStartPoint, false, startPointColor);
+		startPoint = new Point(xCoordinateOfStartPoint, yCoordinateOfStartPoint, true, startPointColor);
 	}
 
 	private void readModifiedEndPoint() {
@@ -82,7 +82,7 @@ public class LineLogReader implements LogReader {
 		else
 			endPointColor = new Color(endPointColorNumber);
 
-		endPoint = new Point(xCoordinateOfEndPoint, yCoordinateOfEndPoint, false, endPointColor);
+		endPoint = new Point(xCoordinateOfEndPoint, yCoordinateOfEndPoint, true, endPointColor);
 	}
 
 	private void readModifiedLine() {
@@ -93,7 +93,7 @@ public class LineLogReader implements LogReader {
 		else
 			lineColor = new Color(lineColorNumber);
 
-		line = new Line(startPoint, endPoint, false, lineColor);
+		line = new Line(startPoint, endPoint, true, lineColor);
 	}
 
 	@Override
