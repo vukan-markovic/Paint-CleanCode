@@ -7,33 +7,33 @@ import shapes.Point;
 
 public abstract class DialogSurfaceShape extends DialogShape {
 	private static final long serialVersionUID = 1L;
-	private JButton btnInnerColor = new JButton("Inner color");
-	private Color innerColor = Color.WHITE;
+	private JButton btnFillColor = new JButton("Fill color");
+	private Color fillColor = Color.WHITE;
 
 	public DialogSurfaceShape() {
-		addBtnInnerColorListener();
+		addBtnFillColorListener();
 	}
 
-	public void addBtnInnerColorListener() {
-		btnInnerColor.addActionListener(new ActionListener() {
+	public void addBtnFillColorListener() {
+		btnFillColor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				innerColor = JColorChooser.showDialog(getContentPane(), "Choose inner color", innerColor);
-				btnInnerColor.setBackground(innerColor);
+				fillColor = JColorChooser.showDialog(getContentPane(), "Choose fill color", fillColor);
+				btnFillColor.setBackground(fillColor);
 			}
 		});
 	}
 
 	public abstract void setCreateDialog(Point point);
 
-	public JButton getBtnInnerColor() {
-		return btnInnerColor;
+	public JButton getBtnFillColor() {
+		return btnFillColor;
 	}
 
-	public Color getInnerColor() {
-		return innerColor;
+	public Color getFillColor() {
+		return fillColor;
 	}
 
-	public void setInnerColor(Color innerColor) {
-		this.innerColor = innerColor;
+	public void setFillColor(Color fillColor) {
+		this.fillColor = fillColor;
 	}
 }

@@ -17,8 +17,8 @@ public class RemoveCommandExecutor {
 	public RemoveCommandExecutor(DrawingModel model, DrawingFrame frame, CommandsStack commandsStack) {
 		this.model = model;
 		this.frame = frame;
+		logWriter = new LogWriter(frame);
 		this.commandsStack = commandsStack;
-		this.logWriter = new LogWriter(frame);
 	}
 
 	public void removeShapes() {
@@ -41,9 +41,5 @@ public class RemoveCommandExecutor {
 
 	public CmdRemove getCmdRemove() {
 		return cmdRemove;
-	}
-
-	public void setCmdRemove(CmdRemove cmdRemove) {
-		this.cmdRemove = cmdRemove;
 	}
 }

@@ -1,4 +1,4 @@
-package frame;
+package toolbars;
 
 import static org.mockito.Mockito.*;
 import org.junit.*;
@@ -27,6 +27,6 @@ public class TopToolbarTests {
 	public void testBtnDeleteClicked() {
 		topToolbar.getBtnDelete().setEnabled(true);
 		topToolbar.getBtnDelete().doClick();
-		verify(controller).removeShapes();
+		verify(controller).removeShapesIfUserConfirm();
 	}
 }

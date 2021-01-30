@@ -2,25 +2,24 @@ package files;
 
 import java.io.*;
 import org.junit.*;
+import java.util.*;
 import static org.junit.Assert.assertEquals;
-
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.stream.Collectors;
-
 import javax.swing.DefaultListModel;
-
 import org.junit.rules.TemporaryFolder;
 
 public class FileLogTests {
+	private DefaultListModel<String> log;
+	private Queue<String> logCommandsFromFile;
 	private FileLog fileLog;
 	private FileManager strategy;
 	private static BufferedReader reader;
-	private DefaultListModel<String> log;
-	private Queue<String> logCommandsFromFile;
+	private BufferedWriter writer;
+	private String filePath;
+	private File file;
 
 	@Rule
-	public TemporaryFolder folder = new TemporaryFolder();
+	public TemporaryFolder tempFolder = new TemporaryFolder();
 
 	@Before
 	public void setUp() {
@@ -31,9 +30,9 @@ public class FileLogTests {
 	}
 
 	@Test(expected = IOException.class)
-	public void testSaveLogIOExceptionExpected() throws IOException {
+	public void testSaveLogInvalidPath() throws IOException {
 		strategy = new FileManager(fileLog);
-		String filePath = "";
+		filePath = "";
 		strategy.save(filePath);
 		reader = new BufferedReader(new FileReader(filePath));
 		assertEquals(fileLog.getExecutedLogCommands(), reader.lines().collect(Collectors.joining("\n")));
@@ -43,10 +42,36 @@ public class FileLogTests {
 	public void testSaveLog() throws IOException {
 		log.addElement("Log\ntest");
 		strategy = new FileManager(fileLog);
-		String filePath = folder.newFile("myfile1.txt").getAbsolutePath();
+		filePath = tempFolder.newFile("myfile1.txt").getAbsolutePath();
 		strategy.save(filePath);
 		reader = new BufferedReader(new FileReader(filePath));
 		assertEquals(fileLog.getExecutedLogCommands().get(0), reader.lines().collect(Collectors.joining("\n")));
+	}
+
+	@Test(expected = IOException.class)
+	public void testOpenLogInvalidPath() throws IOException {
+		file = tempFolder.newFile("");
+		openFile();
+		assertEquals(logCommandsFromFile.stream().collect(Collectors.joining(",")),
+				reader.lines().collect(Collectors.joining(",")));
+	}
+
+	@Test
+	public void testOpenLog() throws IOException {
+		file = tempFolder.newFile("log.txt");
+		openFile();
+		assertEquals(logCommandsFromFile.stream().collect(Collectors.joining(",")),
+				reader.lines().collect(Collectors.joining(",")));
+	}
+
+	private void openFile() throws IOException {
+		filePath = file.getAbsolutePath();
+		writer = new BufferedWriter(new FileWriter(filePath));
+		writer.write("Log\ntest");
+		writer.close();
+		strategy = new FileManager(fileLog);
+		strategy.open(filePath);
+		reader = new BufferedReader(new FileReader(filePath));
 	}
 
 	@AfterClass

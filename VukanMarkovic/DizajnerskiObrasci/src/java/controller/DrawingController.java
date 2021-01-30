@@ -23,7 +23,6 @@ public class DrawingController {
 	private DialogHexagon dialogHexagon;
 	private DialogDonut dialogDonut;
 	private DialogCircle dialogCircle;
-
 	private PointCommandsExecutor pointCommandsExecutor;
 	private RectangleCommandsExecutor rectangleCommandsExecutor;
 	private HexagonCommandsExecutor hexagonCommandsExecutor;
@@ -31,14 +30,13 @@ public class DrawingController {
 	private LineCommandsExecutor lineCommandsExecutor;
 	private CircleCommandsExecutor circleCommandsExecutor;
 	private RemoveCommandExecutor removeCommandExecutor;
-	private SelectCommandExecutor selectCommandExecutor;
+	private SelectionCommandsExecutor selectionCommandsExecutor;
 	private Point pointClick;
 
-	public DrawingController(DrawingModel model, DrawingFrame frame, CommandsStack commandsStack,
-			OptionsController optionsController) {
-		this.model = model;
-		this.frame = frame;
-		this.commandsStack = commandsStack;
+	public DrawingController(OptionsController optionsController) {
+		this.model = optionsController.getModel();
+		frame = optionsController.getFrame();
+		this.commandsStack = optionsController.getCommandsStack();
 		this.optionsController = optionsController;
 		observer = new DrawingObserver();
 		manager = new PropertyManager(frame);
@@ -49,26 +47,17 @@ public class DrawingController {
 		dialogHexagon = new DialogHexagon();
 		dialogDonut = new DialogDonut();
 		dialogCircle = new DialogCircle();
-
-		pointCommandsExecutor = new PointCommandsExecutor(model, frame, commandsStack, dialogPoint, optionsController);
-		lineCommandsExecutor = new LineCommandsExecutor(model, frame, commandsStack, dialogLine, optionsController);
-
-		rectangleCommandsExecutor = new RectangleCommandsExecutor(model, frame, commandsStack, dialogRectangle,
-				optionsController);
-
-		hexagonCommandsExecutor = new HexagonCommandsExecutor(model, frame, commandsStack, dialogHexagon,
-				optionsController);
-
-		donutCommandsExecutor = new DonutCommandsExecutor(model, frame, commandsStack, dialogDonut, optionsController);
-
-		circleCommandsExecutor = new CircleCommandsExecutor(model, frame, commandsStack, dialogCircle,
-				optionsController);
-
+		pointCommandsExecutor = new PointCommandsExecutor(dialogPoint, optionsController);
+		lineCommandsExecutor = new LineCommandsExecutor(dialogLine, optionsController);
+		rectangleCommandsExecutor = new RectangleCommandsExecutor(dialogRectangle, optionsController);
+		hexagonCommandsExecutor = new HexagonCommandsExecutor(dialogHexagon, optionsController);
+		donutCommandsExecutor = new DonutCommandsExecutor(dialogDonut, optionsController);
+		circleCommandsExecutor = new CircleCommandsExecutor(dialogCircle, optionsController);
 		removeCommandExecutor = new RemoveCommandExecutor(model, frame, commandsStack);
-		selectCommandExecutor = new SelectCommandExecutor(model, frame, commandsStack);
+		selectionCommandsExecutor = new SelectionCommandsExecutor(model, frame, commandsStack);
 	}
 
-	public void selectShape(MouseEvent click) {
+	public void selectShapeIfDrawIsNotEmpty(MouseEvent click) {
 		if (model.getNumberOfShapes() != 0) {
 			for (int indexOfShape = model.getNumberOfShapes() - 1; indexOfShape >= 0; indexOfShape--) {
 				Shape shape = model.getShapeByIndex(indexOfShape);
@@ -77,8 +66,8 @@ public class DrawingController {
 					deselectShape(shape);
 					break;
 				} else if (shape.contains(click.getX(), click.getY()) && !shape.isSelected()) {
-					selectCommandExecutor.selectShape(shape);
-					fireEvents();
+					selectionCommandsExecutor.selectShape(shape);
+					optionsController.fireEventsForOptionsButtons();
 					break;
 				} else if (indexOfShape == 0)
 					deselectShapes();
@@ -94,22 +83,22 @@ public class DrawingController {
 	}
 
 	private void deselectShape(Shape shape) {
-		selectCommandExecutor.deselectShape(shape);
-		fireEvents();
+		selectionCommandsExecutor.deselectShape(shape);
+		optionsController.fireEventsForOptionsButtons();
 	}
 
 	public void drawPoint(MouseEvent click) {
-		pointCommandsExecutor.addPoint(click);
+		pointCommandsExecutor.addShape(click.getX(), click.getY());
 		commandsStack.clearUnexecutedCommands();
 	}
 
 	public void drawLine(MouseEvent click) {
-		lineCommandsExecutor.addLineOrCreateStartPoint(click);
+		lineCommandsExecutor.addShape(click.getX(), click.getY());
 		commandsStack.clearUnexecutedCommands();
 	}
 
 	public void drawRectangle(MouseEvent click) {
-		pointClick = new Point(click.getX(), click.getY(), false, optionsController.getOuterColor());
+		pointClick = new Point(click.getX(), click.getY(), false, optionsController.getBorderColor());
 		dialogRectangle.setCreateDialog(pointClick);
 
 		if (dialogRectangle.isAccepted())
@@ -119,7 +108,7 @@ public class DrawingController {
 	}
 
 	public void drawCircle(MouseEvent click) {
-		pointClick = new Point(click.getX(), click.getY(), false, optionsController.getOuterColor());
+		pointClick = new Point(click.getX(), click.getY(), false, optionsController.getBorderColor());
 		dialogCircle.setCreateDialog(pointClick);
 
 		if (dialogCircle.isAccepted())
@@ -129,7 +118,7 @@ public class DrawingController {
 	}
 
 	public void drawDonut(MouseEvent click) {
-		pointClick = new Point(click.getX(), click.getY(), false, optionsController.getOuterColor());
+		pointClick = new Point(click.getX(), click.getY(), false, optionsController.getBorderColor());
 		dialogDonut.setCreateDialog(pointClick);
 
 		if (dialogDonut.isAccepted())
@@ -139,7 +128,7 @@ public class DrawingController {
 	}
 
 	public void drawHexagon(MouseEvent click) {
-		pointClick = new Point(click.getX(), click.getY(), false, optionsController.getOuterColor());
+		pointClick = new Point(click.getX(), click.getY(), false, optionsController.getBorderColor());
 		dialogHexagon.setCreateDialog(pointClick);
 
 		if (dialogHexagon.isAccepted())
@@ -151,19 +140,16 @@ public class DrawingController {
 	public void modifyShape() {
 		Shape selectedShape = model.getFirstSelectedShape();
 
-		if (model.getSelectedShapes().size() != 1)
-			return;
-
 		if (selectedShape instanceof Point) {
 			dialogPoint.setModifyDialog(selectedShape);
 
 			if (dialogPoint.isAccepted())
-				pointCommandsExecutor.modifyPoint(selectedShape);
+				pointCommandsExecutor.modifyShape(selectedShape);
 		} else if (selectedShape instanceof Line) {
 			dialogLine.setModifyDialog(selectedShape);
 
 			if (dialogLine.isAccepted())
-				lineCommandsExecutor.modifyLine(selectedShape);
+				lineCommandsExecutor.modifyShape(selectedShape);
 		} else if (selectedShape instanceof Rectangle) {
 			dialogRectangle.setModifyDialog(selectedShape);
 
@@ -188,82 +174,75 @@ public class DrawingController {
 
 		commandsStack.clearUnexecutedCommands();
 		frame.getView().repaint();
-		fireEventsForUndoAndRedoButtons();
+		optionsController.fireEventsForUndoAndRedoButtons();
 	}
 
-	public void removeShapes() {
-		if (model.getSelectedShapes().size() == 0)
-			return;
-
+	public void removeShapesIfUserConfirm() {
 		if (JOptionPane.showConfirmDialog(new JFrame(), "Are you sure you want to delete selected shape/shapes?",
 				"Delete it?", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 			removeCommandExecutor.removeShapes();
 			commandsStack.clearUnexecutedCommands();
-			fireEvents();
+			optionsController.fireEventsForOptionsButtons();
 		}
 	}
 
-	public void fireEventsForUndoAndRedoButtons() {
-		optionsController.fireEventsForUndoAndRedoButtons();
-	}
-
-	public void fireEvents() {
-		optionsController.fireEventsForButtons();
-	}
-
-	public DialogRectangle getDialogRectangle() {
-		return dialogRectangle;
-	}
-
-	public void setDialogRectangle(DialogRectangle dialogRectangle) {
-		this.dialogRectangle = dialogRectangle;
-	}
-
-	public DialogCircle getDialogCircle() {
-		return dialogCircle;
-	}
-
-	public void setDialogCircle(DialogCircle dialogCircle) {
-		this.dialogCircle = dialogCircle;
-	}
-
-	public DialogDonut getDialogDonut() {
-		return dialogDonut;
-	}
-
-	public void setDialogDonut(DialogDonut dialogDonut) {
-		this.dialogDonut = dialogDonut;
-	}
-
-	public Point getPoint() {
-		return pointClick;
-	}
-
-	public void setPoint(Point point) {
-		this.pointClick = point;
+	public OptionsController getOptionsController() {
+		return optionsController;
 	}
 
 	public DialogPoint getDialogPoint() {
 		return dialogPoint;
 	}
 
-	public void setDialogPoint(DialogPoint dialogPoint) {
-		this.dialogPoint = dialogPoint;
-	}
-
 	public DialogLine getDialogLine() {
 		return dialogLine;
 	}
 
-	public void setDialogLine(DialogLine dialogLine) {
-		this.dialogLine = dialogLine;
+	public DialogRectangle getDialogRectangle() {
+		return dialogRectangle;
 	}
 
 	public DialogHexagon getDialogHexagon() {
 		return dialogHexagon;
 	}
 
+	public DialogDonut getDialogDonut() {
+		return dialogDonut;
+	}
+
+	public DialogCircle getDialogCircle() {
+		return dialogCircle;
+	}
+
+	public void setDialogPoint(DialogPoint dialogPoint) {
+		this.dialogPoint = dialogPoint;
+	}
+
+	public void setDialogLine(DialogLine dialogLine) {
+		this.dialogLine = dialogLine;
+	}
+
+	public void setDialogRectangle(DialogRectangle dialogRectangle) {
+		this.dialogRectangle = dialogRectangle;
+	}
+
 	public void setDialogHexagon(DialogHexagon dialogHexagon) {
 		this.dialogHexagon = dialogHexagon;
+	}
+
+	public void setDialogDonut(DialogDonut dialogDonut) {
+		this.dialogDonut = dialogDonut;
+	}
+
+	public void setDialogCircle(DialogCircle dialogCircle) {
+		this.dialogCircle = dialogCircle;
+	}
+
+	public Point getPointClick() {
+		return pointClick;
+	}
+
+	public void setPointClick(Point pointClick) {
+		this.pointClick = pointClick;
 	}
 }

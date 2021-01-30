@@ -1,45 +1,38 @@
 package commands;
 
 import static org.junit.Assert.*;
-import java.awt.Color;
 import org.junit.*;
 import shapes.*;
 import model.DrawingModel;
 
 public class CmdAddTests {
 	private DrawingModel model;
-	private Shape shape;
+	private Point point;
 	private CmdAdd cmdAdd;
 
 	@Before
 	public void setUp() {
 		model = new DrawingModel();
-		shape = new Point(1, 2, false, Color.BLACK);
-		cmdAdd = new CmdAdd(model, shape);
+		point = new Point(1, 2);
+		cmdAdd = new CmdAdd(model, point);
 	}
 
 	@Test
-	public void testExecuteShapeUnselected() {
+	public void testExecute() {
 		cmdAdd.execute();
-		assertFalse(shape.isSelected());
+		assertTrue(model.doesContainShape(point));
 	}
 
 	@Test
-	public void testExecuteShapeAddedToModelShapes() {
-		cmdAdd.execute();
-		assertTrue(model.getShapes().contains(shape));
-	}
-
-	@Test
-	public void testUnexecuteShapeRemovedFromModelShapesExecuteNotCalled() {
+	public void testUnexecuteExecuteNotCalled() {
 		cmdAdd.unexecute();
-		assertFalse(model.getShapes().contains(shape));
+		assertFalse(model.doesContainShape(point));
 	}
 
 	@Test
-	public void testUnexecuteShapeRemovedFromModelShapes() {
+	public void testUnexecuteExecuteCalled() {
 		cmdAdd.execute();
 		cmdAdd.unexecute();
-		assertFalse(model.getShapes().contains(shape));
+		assertFalse(model.doesContainShape(point));
 	}
 }

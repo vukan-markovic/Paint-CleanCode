@@ -104,7 +104,7 @@ public class DialogHexagonTests {
 			public void run() {
 				dialogHexagon.getBtnOuterColor().doClick();
 				robot.keyPress(KeyEvent.VK_ENTER);
-				assertEquals(dialogHexagon.getOuterColor(), dialogHexagon.getBtnOuterColor().getBackground());
+				assertEquals(dialogHexagon.getBorderColor(), dialogHexagon.getBtnOuterColor().getBackground());
 			}
 		});
 	}
@@ -114,9 +114,9 @@ public class DialogHexagonTests {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				dialogHexagon.getBtnInnerColor().doClick();
+				dialogHexagon.getBtnFillColor().doClick();
 				robot.keyPress(KeyEvent.VK_ENTER);
-				assertEquals(dialogHexagon.getInnerColor(), dialogHexagon.getBtnInnerColor().getBackground());
+				assertEquals(dialogHexagon.getFillColor(), dialogHexagon.getBtnFillColor().getBackground());
 			}
 		});
 	}

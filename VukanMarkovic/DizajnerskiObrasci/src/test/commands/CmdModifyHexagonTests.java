@@ -21,13 +21,13 @@ public class CmdModifyHexagonTests {
 	}
 
 	@Test
-	public void testExecuteOldStateEqualsNewState() {
+	public void testExecute() {
 		cmdModifyHexagon.execute();
 		assertEquals(newState, oldState);
 	}
 
 	@Test
-	public void testUnexecuteOldStateEqualsOriginalState() {
+	public void testUnexecute() {
 		cmdModifyHexagon.unexecute();
 		assertEquals(originalState, oldState);
 	}

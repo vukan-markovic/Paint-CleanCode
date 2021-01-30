@@ -2,12 +2,16 @@ package observer;
 
 import java.beans.*;
 import frame.DrawingFrame;
+import toolbars.RightToolbar;
+import toolbars.TopToolbar;
 
 public class PropertyManager implements PropertyChangeListener {
-	private DrawingFrame frame;
+	private TopToolbar topToolbar;
+	private RightToolbar rightToolbar;
 
 	public PropertyManager(DrawingFrame frame) {
-		this.frame = frame;
+		topToolbar = frame.getTopToolbar();
+		rightToolbar = frame.getRightToolbar();
 	}
 
 	@Override
@@ -16,33 +20,37 @@ public class PropertyManager implements PropertyChangeListener {
 
 		switch (changeEvent.getPropertyName()) {
 		case "btnDelete":
-			frame.getTopToolbar().getBtnDelete().setEnabled(newValue);
+			topToolbar.getBtnDelete().setEnabled(newValue);
 			break;
 		case "btnModify":
-			frame.getTopToolbar().getBtnModify().setEnabled(newValue);
+			topToolbar.getBtnModify().setEnabled(newValue);
 			break;
 		case "btnUndo":
-			frame.getRightToolbar().getBtnUndo().setEnabled(newValue);
+			rightToolbar.getBtnUndo().setEnabled(newValue);
 			break;
 		case "btnRedo":
-			frame.getRightToolbar().getBtnRedo().setEnabled(newValue);
+			rightToolbar.getBtnRedo().setEnabled(newValue);
 			break;
 		case "btnToBack":
-			frame.getRightToolbar().getBtnToBack().setEnabled(newValue);
+			rightToolbar.getBtnToBack().setEnabled(newValue);
 			break;
 		case "btnToFront":
-			frame.getRightToolbar().getBtnToFront().setEnabled(newValue);
+			rightToolbar.getBtnToFront().setEnabled(newValue);
 			break;
 		case "btnSendToBack":
-			frame.getRightToolbar().getBtnSendToBack().setEnabled(newValue);
+			rightToolbar.getBtnSendToBack().setEnabled(newValue);
 			break;
 		case "btnBringToFront":
-			frame.getRightToolbar().getBtnBringToFront().setEnabled(newValue);
+			rightToolbar.getBtnBringToFront().setEnabled(newValue);
 			break;
 		}
 	}
 
-	public DrawingFrame getFrame() {
-		return frame;
+	public TopToolbar getTopToolbar() {
+		return topToolbar;
+	}
+
+	public RightToolbar getRightToolbar() {
+		return rightToolbar;
 	}
 }

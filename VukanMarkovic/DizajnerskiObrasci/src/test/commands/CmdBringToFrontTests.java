@@ -1,42 +1,41 @@
 package commands;
 
 import static org.junit.Assert.*;
-import java.awt.Color;
 import org.junit.*;
 import shapes.*;
 import model.DrawingModel;
 
 public class CmdBringToFrontTests {
 	private DrawingModel model;
-	private Shape shape;
+	private Point point;
 	private int indexOfShape;
 	private CmdBringToFront cmdBringToFront;
 
 	@Before
 	public void setUp() {
 		model = new DrawingModel();
-		shape = new Point(1, 2, false, Color.BLACK);
-		model.addShape(shape);
-		indexOfShape = model.getIndexOfShape(shape);
-		cmdBringToFront = new CmdBringToFront(model, shape);
+		point = new Point(1, 2);
+		model.addShape(point);
+		indexOfShape = model.getIndexOfShape(point);
+		cmdBringToFront = new CmdBringToFront(model, point);
 	}
 
 	@Test
-	public void testExecuteShapeAddedToModelShapes() {
+	public void testExecute() {
 		cmdBringToFront.execute();
-		assertTrue(model.getShapes().contains(shape));
+		assertTrue(model.getShapes().contains(point));
 	}
 
 	@Test
-	public void testUnexecuteShapeAddedToModelShapesAtIndexExecuteNotCalled() {
+	public void testUnexecuteExecuteNotCalled() {
 		cmdBringToFront.unexecute();
-		assertEquals(indexOfShape, model.getIndexOfShape(shape));
+		assertEquals(indexOfShape, model.getIndexOfShape(point));
 	}
 
 	@Test
-	public void testUnexecuteShapeAddedToModelShapesAtIndex() {
+	public void testUnexecuteExecuteCalled() {
 		cmdBringToFront.execute();
 		cmdBringToFront.unexecute();
-		assertEquals(indexOfShape, model.getIndexOfShape(shape));
+		assertEquals(indexOfShape, model.getIndexOfShape(point));
 	}
 }

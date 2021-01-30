@@ -30,13 +30,13 @@ public class DialogHexagon extends DialogCircle {
 		String radiusValue = String.valueOf(hexagon.getRadius());
 		getRadius().setText(radiusValue);
 
-		Color outerColor = hexagon.getOuterColor();
-		setOuterColor(outerColor);
+		Color outerColor = hexagon.getBorderColor();
+		setBorderColor(outerColor);
 		getBtnOuterColor().setBackground(outerColor);
 
-		Color innerColor = hexagon.getInnerColor();
-		setInnerColor(innerColor);
-		getBtnInnerColor().setBackground(innerColor);
+		Color innerColor = hexagon.getFillColor();
+		setFillColor(innerColor);
+		getBtnFillColor().setBackground(innerColor);
 
 		setVisible(true);
 	}

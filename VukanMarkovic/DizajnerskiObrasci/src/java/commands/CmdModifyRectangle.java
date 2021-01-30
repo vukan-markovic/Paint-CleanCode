@@ -27,8 +27,8 @@ public class CmdModifyRectangle implements Command {
 		oldState.setUpperLeftPoint(state.getUpperLeftPoint());
 		oldState.setHeight(state.getHeight());
 		oldState.setWidth(state.getWidth());
-		oldState.setOuterColor(state.getInnerColor());
-		oldState.setInnerColor(state.getInnerColor());
+		oldState.setBorderColor(state.getBorderColor());
+		oldState.setFillColor(state.getFillColor());
 		oldState.setSelected(state.isSelected());
 	}
 }

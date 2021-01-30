@@ -26,7 +26,7 @@ public class CmdModifyPoint implements Command {
 	private void setOldState(Point state) {
 		oldState.setXcoordinate(state.getXcoordinate());
 		oldState.setYcoordinate(state.getYcoordinate());
-		oldState.setOuterColor(state.getOuterColor());
+		oldState.setBorderColor(state.getBorderColor());
 		oldState.setSelected(state.isSelected());
 	}
 }

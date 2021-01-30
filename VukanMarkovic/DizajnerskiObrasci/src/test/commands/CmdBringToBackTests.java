@@ -2,42 +2,41 @@ package commands;
 
 import shapes.*;
 import static org.junit.Assert.*;
-import java.awt.Color;
 import org.junit.*;
 import model.DrawingModel;
 
 public class CmdBringToBackTests {
 	private DrawingModel model;
-	private Shape shape;
+	private Point point;
 	private int indexOfShape;
 	private CmdBringToBack cmdBringToBack;
-	
+
 	@Before
 	public void setUp() {
 		model = new DrawingModel();
-		shape = new Point(1, 2, false, Color.BLACK);
-		model.addShape(new Line(new Point(1, 2, false, Color.BLACK), new Point(3, 4, false, Color.BLACK), false, Color.BLACK));
-		model.addShape(shape);
-		indexOfShape = model.getIndexOfShape(shape);
-		cmdBringToBack = new CmdBringToBack(model, shape);
+		point = new Point(1, 2);
+		model.addShape(new Line(new Point(1, 2), new Point(3, 4)));
+		model.addShape(point);
+		indexOfShape = model.getIndexOfShape(point);
+		cmdBringToBack = new CmdBringToBack(model, point);
 	}
 
 	@Test
-	public void testExecuteShapeAddedToModelShapes() {
+	public void testExecute() {
 		cmdBringToBack.execute();
-		assertEquals(0, model.getIndexOfShape(shape));
+		assertEquals(0, model.getIndexOfShape(point));
 	}
 
 	@Test
-	public void testUnexecuteShapeAddedToModelShapesAtIndexExecuteNotCalled() {
+	public void testUnexecuteExecuteNotCalled() {
 		cmdBringToBack.unexecute();
-		assertNotEquals(indexOfShape, model.getIndexOfShape(shape));
+		assertNotEquals(indexOfShape, model.getIndexOfShape(point));
 	}
 
 	@Test
-	public void testUnexecuteShapeAddedToModelShapesAtIndex() {
+	public void testUnexecuteExecuteCalled() {
 		cmdBringToBack.execute();
 		cmdBringToBack.unexecute();
-		assertEquals(indexOfShape, model.getIndexOfShape(shape));
+		assertEquals(indexOfShape, model.getIndexOfShape(point));
 	}
 }

@@ -7,41 +7,37 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class PointTests {
+	private int xCoordinate;
+	private int yCoordinate;
+	private Color borderColor;
 	private Point point;
 	private Graphics graphics;
 
 	@Before
 	public void setUp() {
-		point = new Point(1, 2, false, Color.BLACK);
+		xCoordinate = 1;
+		yCoordinate = 2;
+		point = new Point(xCoordinate, yCoordinate, false, borderColor);
 		graphics = mock(Graphics.class);
 	}
 
 	@Test
 	public void testDrawShapeNotSelected() {
 		point.draw(graphics);
-		verify(graphics).setColor(point.getOuterColor());
-
-		verify(graphics).drawLine(point.getXcoordinate() - 2, point.getYcoordinate(), point.getXcoordinate() + 2,
-				point.getYcoordinate());
-
-		verify(graphics).drawLine(point.getXcoordinate(), point.getYcoordinate() - 2, point.getXcoordinate(),
-				point.getYcoordinate() + 2);
+		verify(graphics).setColor(borderColor);
+		verify(graphics).drawLine(xCoordinate - 2, yCoordinate, xCoordinate + 2, yCoordinate);
+		verify(graphics).drawLine(xCoordinate, yCoordinate - 2, xCoordinate, yCoordinate + 2);
 	}
 
 	@Test
 	public void testDrawShapeSelected() {
 		point.setSelected(true);
 		point.draw(graphics);
-		verify(graphics).setColor(point.getOuterColor());
-
-		verify(graphics).drawLine(point.getXcoordinate() - 2, point.getYcoordinate(),
-				point.getXcoordinate() + 2, point.getYcoordinate());
-
-		verify(graphics).drawLine(point.getXcoordinate(), point.getYcoordinate() - 2,
-				point.getXcoordinate(), point.getYcoordinate() + 2);
-		
+		verify(graphics).setColor(borderColor);
+		verify(graphics).drawLine(xCoordinate - 2, yCoordinate, xCoordinate + 2, yCoordinate);
+		verify(graphics).drawLine(xCoordinate, yCoordinate - 2, xCoordinate, yCoordinate + 2);
 		verify(graphics).setColor(Color.BLUE);
-		verify(graphics).drawRect(point.getXcoordinate() - 3, point.getYcoordinate() - 3, 6, 6);
+		verify(graphics).drawRect(xCoordinate - 3, yCoordinate - 3, 6, 6);
 	}
 
 	@Test
@@ -56,21 +52,21 @@ public class PointTests {
 
 	@Test
 	public void testEqualsNotSameType() {
-		assertFalse(point.equals(new Line(new Point(0, 2, false, Color.BLACK), new Point(1, 2, false, Color.BLACK), false, Color.BLACK)));
+		assertFalse(point.equals(new Line(new Point(0, 2), new Point(1, 2))));
 	}
 
 	@Test
 	public void testEqualsFalseExpectedXcoordinate() {
-		assertFalse(point.equals(new Point(0, 2, false, Color.BLACK)));
+		assertFalse(point.equals(new Point(0, 2)));
 	}
 
 	@Test
 	public void testEqualsFalseExpectedYcoordinate() {
-		assertFalse(point.equals((new Point(1, 3, false, Color.BLACK))));
+		assertFalse(point.equals((new Point(1, 3))));
 	}
 
 	@Test
 	public void testEqualsTrueExpected() {
-		assertTrue(point.equals(new Point(1, 2, false, Color.BLACK)));
+		assertTrue(point.equals(new Point(1, 2)));
 	}
 }

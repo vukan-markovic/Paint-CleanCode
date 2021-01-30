@@ -12,12 +12,12 @@ public class LogWriter {
 	}
 
 	public void logAddCommand(Shape shape) {
-		commandsListModel.addElement("Add - " + shape.getClass().getSimpleName() + " " + shape);
+		commandsListModel.addElement("Add - " + shape.getClassName() + " " + shape);
 	}
 
 	public void logModifyCommand(Shape oldState, Shape newState) {
-		commandsListModel.addElement(
-				"Modify - " + newState.getClass().getSimpleName() + " from " + oldState + " to " + " " + newState);
+		commandsListModel
+				.addElement("Modify - " + newState.getClassName() + " from " + oldState + " to " + " " + newState);
 	}
 
 	public void logRemoveCommand() {
@@ -25,27 +25,27 @@ public class LogWriter {
 	}
 
 	public void logToFrontCommand(Shape shape) {
-		commandsListModel.addElement("ToFront - " + shape.getClass().getSimpleName() + " " + shape.toString());
+		commandsListModel.addElement("ToFront - " + shape.getClassName() + " " + shape.toString());
 	}
 
 	public void logToBackCommand(Shape shape) {
-		commandsListModel.addElement("ToBack - " + shape.getClass().getSimpleName() + " " + shape.toString());
+		commandsListModel.addElement("ToBack - " + shape.getClassName() + " " + shape.toString());
 	}
 
 	public void logBringToFrontCommand(Shape shape) {
-		commandsListModel.addElement("BringToFront - " + shape.getClass().getSimpleName() + " " + shape.toString());
+		commandsListModel.addElement("BringToFront - " + shape.getClassName() + " " + shape.toString());
 	}
 
 	public void logBringToBackCommand(Shape shape) {
-		commandsListModel.addElement("SendToBack - " + shape.getClass().getSimpleName() + " " + shape.toString());
+		commandsListModel.addElement("SendToBack - " + shape.getClassName() + " " + shape.toString());
 	}
 
 	public void logSelectCommand(Shape shape) {
-		commandsListModel.addElement("Select - " + shape.getClass().getSimpleName() + " " + shape.toString());
+		commandsListModel.addElement("Select - " + shape.getClassName() + " " + shape.toString());
 	}
 
 	public void logDeselectCommand(Shape shape) {
-		commandsListModel.addElement("Deselect - " + shape.getClass().getSimpleName() + " " + shape.toString());
+		commandsListModel.addElement("Deselect - " + shape.getClassName() + " " + shape.toString());
 	}
 
 	public void logUndoCommand() {

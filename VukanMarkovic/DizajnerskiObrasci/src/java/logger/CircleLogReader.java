@@ -13,6 +13,21 @@ public class CircleLogReader implements LogReader {
 	private DrawingModel model;
 	private CmdModifyCircle cmdModifyCircle;
 	private CommandsStack commandsStack;
+	private int xCoordinate;
+	private int yCoordinate;
+	private String[] logLine;
+	private Point center;
+	private int radius;
+	private int borderColorNumber;
+	private Color borderColor;
+	private int fillColorNumber;
+	private Color fillColor;
+	private Circle circle;
+	private int centerColorNumber;
+	private Color centerColor;
+
+	public CircleLogReader() {
+	}
 
 	public CircleLogReader(DrawingModel model, CommandsStack commandsStack) {
 		this.model = model;
@@ -21,31 +36,65 @@ public class CircleLogReader implements LogReader {
 
 	@Override
 	public void addShapeFromLog(String[] logLine) {
-		Point point = new Point(Integer.parseInt(logLine[5]), Integer.parseInt(logLine[8]), false,
-				(Integer.parseInt(logLine[12]) == 0 ? new Color(0, 0, 0, 0)
-						: new Color(Integer.parseInt(logLine[12]))));
-
-		Circle circle = new Circle(point, Integer.parseInt(logLine[15]), false,
-				(Integer.parseInt(logLine[19]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[19]))),
-				(Integer.parseInt(logLine[23]) == 0 ? new Color(0, 0, 0, 0)
-						: new Color(Integer.parseInt(logLine[23]))));
-
+		this.logLine = logLine;
+		readCenter();
+		readShape();
+		circle = new Circle(center, radius, false, borderColor, fillColor);
 		cmdAdd = new CmdAdd(model, circle);
 		cmdAdd.execute();
 		commandsStack.addCommand(cmdAdd);
 	}
 
 	@Override
+	public void modifyShapeFromLog(String[] logLine, Shape selectedShape) {
+		this.logLine = logLine;
+		Circle oldState = (Circle) selectedShape;
+		readModifiedCenter();
+		readModifiedCircle();
+		circle = new Circle(center, radius, false, borderColor, fillColor);
+		model.getSelectedShapes().remove(oldState);
+		model.getSelectedShapes().add(circle);
+		cmdModifyCircle = new CmdModifyCircle(oldState, circle);
+		cmdModifyCircle.execute();
+		commandsStack.addCommand(cmdModifyCircle);
+	}
+
+	protected void readModifiedCenter() {
+		xCoordinate = Integer.parseInt(logLine[29]);
+		yCoordinate = Integer.parseInt(logLine[32]);
+		centerColorNumber = Integer.parseInt(logLine[36]);
+
+		if (centerColorNumber == 0)
+			centerColor = new Color(0, 0, 0, 0);
+		else
+			centerColor = new Color(centerColorNumber);
+
+		center = new Point(xCoordinate, yCoordinate, false, centerColor);
+	}
+
+	protected void readModifiedCircle() {
+		radius = Integer.parseInt(logLine[39]);
+		borderColorNumber = Integer.parseInt(logLine[43]);
+
+		if (borderColorNumber == 0)
+			borderColor = new Color(0, 0, 0, 0);
+		else
+			borderColor = new Color(borderColorNumber);
+
+		fillColorNumber = Integer.parseInt(logLine[47]);
+
+		if (fillColorNumber == 0)
+			fillColor = new Color(0, 0, 0, 0);
+		else
+			fillColor = new Color(fillColorNumber);
+	}
+
+	@Override
 	public void selectShapeFromLog(String[] logLine) {
-		Point point = new Point(Integer.parseInt(logLine[5]), Integer.parseInt(logLine[8]), false,
-				(Integer.parseInt(logLine[12]) == 0 ? new Color(0, 0, 0, 0)
-						: new Color(Integer.parseInt(logLine[12]))));
-
-		Circle circle = new Circle(point, Integer.parseInt(logLine[15]), true,
-				(Integer.parseInt(logLine[19]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[19]))),
-				(Integer.parseInt(logLine[23]) == 0 ? new Color(0, 0, 0, 0)
-						: new Color(Integer.parseInt(logLine[23]))));
-
+		this.logLine = logLine;
+		readCenter();
+		readShape();
+		circle = new Circle(center, radius, false, borderColor, fillColor);
 		cmdSelect = new CmdSelect(model, circle);
 		cmdSelect.execute();
 		commandsStack.addCommand(cmdSelect);
@@ -53,38 +102,94 @@ public class CircleLogReader implements LogReader {
 
 	@Override
 	public void deselectShapeFromLog(String[] logLine) {
-		Point point = new Point(Integer.parseInt(logLine[5]), Integer.parseInt(logLine[8]), false,
-				(Integer.parseInt(logLine[12]) == 0 ? new Color(0, 0, 0, 0)
-						: new Color(Integer.parseInt(logLine[12]))));
-
-		Circle circle = new Circle(point, Integer.parseInt(logLine[15]), true,
-				(Integer.parseInt(logLine[19]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[19]))),
-				(Integer.parseInt(logLine[23]) == 0 ? new Color(0, 0, 0, 0)
-						: new Color(Integer.parseInt(logLine[23]))));
-
+		this.logLine = logLine;
+		readCenter();
+		readShape();
+		circle = new Circle(center, radius, false, borderColor, fillColor);
 		cmdDeselect = new CmdDeselect(model, circle);
 		cmdDeselect.execute();
 		commandsStack.addCommand(cmdDeselect);
 	}
 
-	@Override
-	public void modifyShapeFromLog(String[] logLine, Shape selectedShape) {
-		Circle oldState = (Circle) selectedShape;
+	protected void readCenter() {
+		xCoordinate = Integer.parseInt(logLine[5]);
+		yCoordinate = Integer.parseInt(logLine[8]);
+		centerColorNumber = Integer.parseInt(logLine[12]);
 
-		Point point = new Point(Integer.parseInt(logLine[29]), Integer.parseInt(logLine[32]), false,
-				(Integer.parseInt(logLine[36]) == 0 ? new Color(0, 0, 0, 0)
-						: new Color(Integer.parseInt(logLine[36]))));
+		if (centerColorNumber == 0)
+			centerColor = new Color(0, 0, 0, 0);
+		else
+			centerColor = new Color(centerColorNumber);
 
-		Circle newState = new Circle(point, Integer.parseInt(logLine[39]), true,
-				(Integer.parseInt(logLine[43]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[43]))),
-				(Integer.parseInt(logLine[47]) == 0 ? new Color(0, 0, 0, 0)
-						: new Color(Integer.parseInt(logLine[47]))));
+		center = new Point(xCoordinate, yCoordinate, false, centerColor);
+	}
 
-		model.getSelectedShapes().remove(oldState);
-		model.getSelectedShapes().add(newState);
+	protected void readShape() {
+		radius = Integer.parseInt(logLine[15]);
+		borderColorNumber = Integer.parseInt(logLine[19]);
 
-		cmdModifyCircle = new CmdModifyCircle(oldState, newState);
-		cmdModifyCircle.execute();
-		commandsStack.addCommand(cmdModifyCircle);
+		if (borderColorNumber == 0)
+			borderColor = new Color(0, 0, 0, 0);
+		else
+			borderColor = new Color(borderColorNumber);
+
+		fillColorNumber = Integer.parseInt(logLine[23]);
+
+		if (fillColorNumber == 0)
+			fillColor = new Color(0, 0, 0, 0);
+		else
+			fillColor = new Color(fillColorNumber);
+	}
+
+	public int getxCoordinate() {
+		return xCoordinate;
+	}
+
+	public int getyCoordinate() {
+		return yCoordinate;
+	}
+
+	public int getRadius() {
+		return radius;
+	}
+
+	public Color getBorderColor() {
+		return borderColor;
+	}
+
+	public Color getFillColor() {
+		return fillColor;
+	}
+
+	public CmdModifyCircle getCmdModifyCircle() {
+		return cmdModifyCircle;
+	}
+
+	public CmdAdd getCmdAdd() {
+		return cmdAdd;
+	}
+
+	public Circle getCircle() {
+		return circle;
+	}
+
+	public CmdSelect getCmdSelect() {
+		return cmdSelect;
+	}
+
+	public CmdDeselect getCmdDeselect() {
+		return cmdDeselect;
+	}
+
+	public String[] getLogLine() {
+		return logLine;
+	}
+
+	public Point getCenter() {
+		return center;
+	}
+
+	public void setLogLine(String[] logLine) {
+		this.logLine = logLine;
 	}
 }

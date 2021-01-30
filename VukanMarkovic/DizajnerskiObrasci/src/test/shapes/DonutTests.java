@@ -7,29 +7,42 @@ import java.awt.*;
 import java.awt.geom.*;
 
 public class DonutTests {
+	private int xCoordinate;
+	private int yCoordinate;
+	private int outerRadius;
+	private int innerRadius;
+	private Color borderColor;
+	private Color fillColor;
 	private Donut donut;
 	private Graphics2D graphics;
 	private Area area;
 
 	@Before
 	public void setUp() {
-		donut = new Donut(new Point(1, 2, false, Color.BLACK), 3, 2, false, Color.WHITE, Color.BLACK);
+		xCoordinate = 1;
+		yCoordinate = 2;
+		outerRadius = 3;
+		innerRadius = 2;
+		borderColor = Color.BLACK;
+		fillColor = Color.WHITE;
 		graphics = mock(Graphics2D.class);
 
-		area = new Area(new Ellipse2D.Double(donut.getCenter().getXcoordinate() - donut.getRadius(),
-				donut.getCenter().getYcoordinate() - donut.getRadius(), donut.getRadius() * 2, donut.getRadius() * 2));
+		donut = new Donut(new Point(xCoordinate, yCoordinate, false, Color.BLACK), outerRadius, innerRadius, false,
+				borderColor, fillColor);
 
-		area.subtract(new Area(new Ellipse2D.Double((donut.getCenter().getXcoordinate() - donut.getInnerRadius()),
-				(donut.getCenter().getYcoordinate() - donut.getInnerRadius()), donut.getInnerRadius() * 2,
-				donut.getInnerRadius() * 2)));
+		area = new Area(new Ellipse2D.Double(xCoordinate - outerRadius, yCoordinate - outerRadius, outerRadius * 2,
+				outerRadius * 2));
+
+		area.subtract(new Area(new Ellipse2D.Double((xCoordinate - innerRadius), (yCoordinate - innerRadius),
+				innerRadius * 2, innerRadius * 2)));
 	}
 
 	@Test
 	public void testDrawShapeNotSelected() {
 		donut.draw(graphics);
-		verify(graphics).setColor(donut.getOuterColor());
+		verify(graphics).setColor(borderColor);
 		verify(graphics).draw(donut.getArea());
-		verify(graphics).setColor(donut.getInnerColor());
+		verify(graphics).setColor(fillColor);
 		verify(graphics).fill(donut.getArea());
 	}
 
@@ -37,26 +50,16 @@ public class DonutTests {
 	public void testDrawShapeSelected() {
 		donut.setSelected(true);
 		donut.draw(graphics);
-		verify(graphics).setColor(donut.getOuterColor());
+		verify(graphics).setColor(borderColor);
 		verify(graphics).draw(donut.getArea());
-		verify(graphics).setColor(donut.getInnerColor());
-		verify(graphics).fill(donut.getArea());
-		verify(graphics).setColor(donut.getInnerColor());
+		verify(graphics).setColor(fillColor);
 		verify(graphics).fill(donut.getArea());
 		verify(graphics).setColor(Color.BLUE);
-		verify(graphics).drawRect(donut.getCenter().getXcoordinate() - 3, donut.getCenter().getYcoordinate() - 3, 6, 6);
-
-		verify(graphics).drawRect(donut.getCenter().getXcoordinate() + donut.getRadius() - 3,
-				donut.getCenter().getYcoordinate() - 3, 6, 6);
-
-		verify(graphics).drawRect(donut.getCenter().getXcoordinate() - donut.getRadius() - 3,
-				donut.getCenter().getYcoordinate() - 3, 6, 6);
-
-		verify(graphics).drawRect(donut.getCenter().getXcoordinate() - 3,
-				donut.getCenter().getYcoordinate() + donut.getRadius() - 3, 6, 6);
-
-		verify(graphics).drawRect(donut.getCenter().getXcoordinate() - 3,
-				donut.getCenter().getYcoordinate() - donut.getRadius() - 3, 6, 6);
+		verify(graphics).drawRect(xCoordinate - 3, yCoordinate - 3, 6, 6);
+		verify(graphics).drawRect(xCoordinate + outerRadius - 3, yCoordinate - 3, 6, 6);
+		verify(graphics).drawRect(xCoordinate - outerRadius - 3, yCoordinate - 3, 6, 6);
+		verify(graphics).drawRect(xCoordinate - 3, yCoordinate + outerRadius - 3, 6, 6);
+		verify(graphics).drawRect(xCoordinate - 3, yCoordinate - outerRadius - 3, 6, 6);
 	}
 
 	@Test
@@ -82,36 +85,35 @@ public class DonutTests {
 
 	@Test
 	public void testEqualsNotSameType() {
-		assertFalse(donut.equals(new Point(1, 2, false, Color.BLACK)));
+		assertFalse(donut.equals(new Point(1, 2)));
 	}
 
 	@Test
 	public void testEqualsFalseExpectedRadius() {
-		assertFalse(donut.equals(new Donut(new Point(1, 2, false, Color.BLACK), 1, 2, false, Color.WHITE, Color.BLACK)));
+		assertFalse(donut.equals(new Donut(new Point(1, 2), 1, 2)));
 	}
 
 	@Test
 	public void testEqualsFalseExpectedInnerRadius() {
-		assertFalse(donut.equals(new Donut(new Point(1, 2, false, Color.BLACK), 3, 1, false, Color.WHITE, Color.BLACK)));
+		assertFalse(donut.equals(new Donut(new Point(1, 2), 3, 1)));
 	}
 
 	@Test
 	public void testEqualsTrueExpected() {
-		assertTrue(donut.equals(new Donut(new Point(1, 2, false, Color.BLACK), 3, 2, false, Color.WHITE, Color.BLACK)));
+		assertTrue(donut.equals(new Donut(new Point(1, 2), 3, 2)));
 	}
 
 	@Test
 	public void testEqualsFalseExpected() {
-		assertFalse(donut.equals(new Donut(new Point(1, 2, false, Color.BLACK), 8, 5, false, Color.WHITE, Color.BLACK)));
+		assertFalse(donut.equals(new Donut(new Point(1, 2), 8, 5)));
 	}
 
 	@Test
 	public void testToString() {
 		assertEquals(
-				"Center: " + donut.getCenter() + ", radius: " + donut.getRadius() + " , Outer color: "
-						+ donut.getOuterColor().getRGB() + " , Inner color: " + donut.getInnerColor().getRGB()
-						+ " , inner radius: " + donut.getInnerRadius() + " , Outer color: "
-						+ donut.getOuterColor().getRGB() + " , Inner color: " + donut.getInnerColor().getRGB(),
+				"Center: " + donut.getCenter() + ", radius: " + outerRadius + " , Border color: " + borderColor.getRGB()
+						+ " , Fill color: " + fillColor.getRGB() + " , inner radius: " + innerRadius
+						+ " , Border color: " + borderColor.getRGB() + " , Fill color: " + fillColor.getRGB(),
 				donut.toString());
 	}
 }

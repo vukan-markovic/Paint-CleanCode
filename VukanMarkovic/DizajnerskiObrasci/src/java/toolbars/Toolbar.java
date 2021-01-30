@@ -1,6 +1,8 @@
 package toolbars;
 
 public interface Toolbar {
+	void setToolbar();
+
 	void initializeButtons();
 
 	void addButtonsListeners();
@@ -8,8 +10,4 @@ public interface Toolbar {
 	void disableButtons();
 
 	void addButtonsToToolbar();
-
-	void setButtonsToolTipText();
-
-	void setToolbar();
 }

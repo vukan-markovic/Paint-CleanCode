@@ -27,8 +27,8 @@ public class CmdModifyDonut implements Command {
 		oldState.setCenter(state.getCenter());
 		oldState.setRadius(state.getRadius());
 		oldState.setInnerRadius(state.getInnerRadius());
-		oldState.setOuterColor(state.getInnerColor());
-		oldState.setInnerColor(state.getInnerColor());
+		oldState.setBorderColor(state.getBorderColor());
+		oldState.setFillColor(state.getFillColor());
 		oldState.setSelected(state.isSelected());
 	}
 }

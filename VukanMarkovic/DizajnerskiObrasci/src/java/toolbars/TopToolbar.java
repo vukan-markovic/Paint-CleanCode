@@ -6,7 +6,7 @@ import controller.DrawingController;
 
 public class TopToolbar implements Toolbar {
 	private JToolBar toolBar;
-	private DrawingController controller;
+	private ButtonGroup btnGroup;
 	private JToggleButton btnPoint;
 	private JToggleButton btnLine;
 	private JToggleButton btnRectangle;
@@ -16,19 +16,23 @@ public class TopToolbar implements Toolbar {
 	private JToggleButton btnSelect;
 	private JButton btnModify;
 	private JButton btnDelete;
-	private ButtonGroup btnGroup;
+	private DrawingController controller;
 
 	public TopToolbar() {
 		toolBar = new JToolBar();
 		btnGroup = new ButtonGroup();
 
+		setToolbar();
 		initializeButtons();
-		addButtonsToToolbar();
-		setButtonsToolTipText();
 		addButtonsListeners();
 		disableButtons();
+		addButtonsToToolbar();
 		addButtonsToBtnGroup();
-		setToolbar();
+	}
+
+	@Override
+	public void setToolbar() {
+		toolBar.setBounds(3, 5, 429, 24);
 	}
 
 	@Override
@@ -44,18 +48,6 @@ public class TopToolbar implements Toolbar {
 		btnDelete = new JButton("Delete");
 	}
 
-	private void addButtonsToBtnGroup() {
-		btnGroup.add(btnPoint);
-		btnGroup.add(btnLine);
-		btnGroup.add(btnRectangle);
-		btnGroup.add(btnCircle);
-		btnGroup.add(btnDonut);
-		btnGroup.add(btnHexagon);
-		btnGroup.add(btnSelect);
-		btnGroup.add(btnModify);
-		btnGroup.add(btnDelete);
-	}
-
 	@Override
 	public void addButtonsListeners() {
 		btnModify.addActionListener(new ActionListener() {
@@ -66,7 +58,7 @@ public class TopToolbar implements Toolbar {
 
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				controller.removeShapes();
+				controller.removeShapesIfUserConfirm();
 			}
 		});
 	}
@@ -90,34 +82,20 @@ public class TopToolbar implements Toolbar {
 		toolBar.add(btnDelete);
 	}
 
-	@Override
-	public void setButtonsToolTipText() {
-		btnPoint.setToolTipText("Draw point");
-		btnLine.setToolTipText("Draw line");
-		btnRectangle.setToolTipText("Draw rectangle");
-		btnCircle.setToolTipText("Draw circle");
-		btnDonut.setToolTipText("Draw donut");
-		btnHexagon.setToolTipText("Draw hexagon");
-		btnSelect.setToolTipText("Select shape");
-		btnModify.setToolTipText("Modify shape");
-		btnDelete.setToolTipText("Delete shape");
-	}
-
-	@Override
-	public void setToolbar() {
-		toolBar.setBounds(3, 5, 429, 24);
+	private void addButtonsToBtnGroup() {
+		btnGroup.add(btnPoint);
+		btnGroup.add(btnLine);
+		btnGroup.add(btnRectangle);
+		btnGroup.add(btnCircle);
+		btnGroup.add(btnDonut);
+		btnGroup.add(btnHexagon);
+		btnGroup.add(btnSelect);
+		btnGroup.add(btnModify);
+		btnGroup.add(btnDelete);
 	}
 
 	public JToolBar getToolBar() {
 		return toolBar;
-	}
-
-	public JButton getBtnModify() {
-		return btnModify;
-	}
-
-	public JButton getBtnDelete() {
-		return btnDelete;
 	}
 
 	public JToggleButton getBtnPoint() {
@@ -146,6 +124,14 @@ public class TopToolbar implements Toolbar {
 
 	public JToggleButton getBtnSelect() {
 		return btnSelect;
+	}
+
+	public JButton getBtnModify() {
+		return btnModify;
+	}
+
+	public JButton getBtnDelete() {
+		return btnDelete;
 	}
 
 	public void setController(DrawingController controller) {

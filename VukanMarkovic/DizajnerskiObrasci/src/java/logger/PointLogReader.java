@@ -7,12 +7,18 @@ import model.DrawingModel;
 import stack.CommandsStack;
 
 public class PointLogReader implements LogReader {
+	private DrawingModel model;
+	private CommandsStack commandsStack;
 	private CmdAdd cmdAdd;
+	private CmdModifyPoint cmdModifyPoint;
 	private CmdSelect cmdSelect;
 	private CmdDeselect cmdDeselect;
-	private DrawingModel model;
-	private CmdModifyPoint cmdModifyPoint;
-	private CommandsStack commandsStack;
+	private int xCoordinate;
+	private int yCoordinate;
+	private int pointColorNumber;
+	private Color pointColor;
+	private String[] logLine;
+	private Point point;
 
 	public PointLogReader(DrawingModel model, CommandsStack commandsStack) {
 		this.model = model;
@@ -20,21 +26,43 @@ public class PointLogReader implements LogReader {
 	}
 
 	@Override
-	public void addShapeFromLog(String[] line) {
-		Point point = new Point(Integer.parseInt(line[4]), Integer.parseInt(line[7]), false,
-				(Integer.parseInt(line[11]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[11]))));
-
+	public void addShapeFromLog(String[] logLine) {
+		this.logLine = logLine;
+		readPoint();
 		cmdAdd = new CmdAdd(model, point);
 		cmdAdd.execute();
 		commandsStack.addCommand(cmdAdd);
 	}
 
 	@Override
-	public void selectShapeFromLog(String[] logLine) {
-		Point point = new Point(Integer.parseInt(logLine[4]), Integer.parseInt(logLine[7]), false,
-				(Integer.parseInt(logLine[11]) == 0 ? new Color(0, 0, 0, 0)
-						: new Color(Integer.parseInt(logLine[11]))));
+	public void modifyShapeFromLog(String[] logLine, Shape selectedShape) {
+		this.logLine = logLine;
+		Point oldState = (Point) selectedShape;
+		readModifiedPoint();
+		model.getSelectedShapes().remove(oldState);
+		model.getSelectedShapes().add(point);
+		cmdModifyPoint = new CmdModifyPoint(oldState, point);
+		cmdModifyPoint.execute();
+		commandsStack.addCommand(cmdModifyPoint);
+	}
 
+	private void readModifiedPoint() {
+		xCoordinate = Integer.parseInt(logLine[17]);
+		yCoordinate = Integer.parseInt(logLine[20]);
+		pointColorNumber = Integer.parseInt(logLine[24]);
+
+		if (pointColorNumber == 0)
+			pointColor = new Color(0, 0, 0, 0);
+		else
+			pointColor = new Color(pointColorNumber);
+
+		point = new Point(xCoordinate, yCoordinate, false, pointColor);
+	}
+
+	@Override
+	public void selectShapeFromLog(String[] logLine) {
+		this.logLine = logLine;
+		readPoint();
 		cmdSelect = new CmdSelect(model, point);
 		cmdSelect.execute();
 		commandsStack.addCommand(cmdSelect);
@@ -42,26 +70,43 @@ public class PointLogReader implements LogReader {
 
 	@Override
 	public void deselectShapeFromLog(String[] logLine) {
-		Point point = new Point(Integer.parseInt(logLine[4]), Integer.parseInt(logLine[7]), true,
-				(Integer.parseInt(logLine[11]) == 0 ? new Color(0, 0, 0, 0)
-						: new Color(Integer.parseInt(logLine[11]))));
-
+		this.logLine = logLine;
+		readPoint();
 		cmdDeselect = new CmdDeselect(model, point);
 		cmdDeselect.execute();
 		commandsStack.addCommand(cmdDeselect);
 	}
 
-	@Override
-	public void modifyShapeFromLog(String[] line, Shape selectedShape) {
-		Point oldState = (Point) selectedShape;
+	private void readPoint() {
+		xCoordinate = Integer.parseInt(logLine[4]);
+		yCoordinate = Integer.parseInt(logLine[7]);
+		pointColorNumber = Integer.parseInt(logLine[11]);
 
-		Point newState = new Point(Integer.parseInt(line[17]), Integer.parseInt(line[20]), true,
-				(Integer.parseInt(line[24]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[24]))));
+		if (pointColorNumber == 0)
+			pointColor = new Color(0, 0, 0, 0);
+		else
+			pointColor = new Color(pointColorNumber);
 
-		model.getSelectedShapes().remove(oldState);
-		model.getSelectedShapes().add(newState);
+		point = new Point(xCoordinate, yCoordinate, false, pointColor);
+	}
 
-		cmdModifyPoint = new CmdModifyPoint(oldState, newState);
-		cmdModifyPoint.execute();
+	public CmdAdd getCmdAdd() {
+		return cmdAdd;
+	}
+
+	public CmdModifyPoint getCmdModifyPoint() {
+		return cmdModifyPoint;
+	}
+
+	public CmdSelect getCmdSelect() {
+		return cmdSelect;
+	}
+
+	public CmdDeselect getCmdDeselect() {
+		return cmdDeselect;
+	}
+
+	public Point getPoint() {
+		return point;
 	}
 }

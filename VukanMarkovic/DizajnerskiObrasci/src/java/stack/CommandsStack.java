@@ -18,33 +18,41 @@ public class CommandsStack {
 
 	public void undoCommand() {
 		executedCommands.peek().unexecute();
+		moveCommandAfterUndo();
+	}
+
+	private void moveCommandAfterUndo() {
 		unexecutedCommands.push(executedCommands.peek());
 		executedCommands.pop();
 	}
 
 	public void redoCommand() {
 		unexecutedCommands.peek().execute();
-		executedCommands.push(unexecutedCommands.peek());
-		unexecutedCommands.pop();
+		moveCommandAfterRedo();
 	}
 
-	public void clearUnexecutedCommands() {
-		unexecutedCommands.clear();
+	private void moveCommandAfterRedo() {
+		executedCommands.push(unexecutedCommands.peek());
+		unexecutedCommands.pop();
 	}
 
 	public Stack<Command> getExecutedCommands() {
 		return executedCommands;
 	}
 
-	public void setExecutedCommands(Stack<Command> executedCommands) {
-		this.executedCommands = executedCommands;
-	}
-
 	public Stack<Command> getUnexecutedCommands() {
 		return unexecutedCommands;
 	}
 
+	public void setExecutedCommands(Stack<Command> executedCommands) {
+		this.executedCommands = executedCommands;
+	}
+
 	public void setUnexecutedCommands(Stack<Command> unexecutedCommands) {
 		this.unexecutedCommands = unexecutedCommands;
+	}
+
+	public void clearUnexecutedCommands() {
+		unexecutedCommands.clear();
 	}
 }

@@ -27,7 +27,7 @@ public class CmdModifyHexagon implements Command {
 		oldState.setXcoordinate(state.getXcoordinate());
 		oldState.setYcoordinate(state.getYcoordinate());
 		oldState.setRadius(state.getRadius());
-		oldState.setOuterColor(state.getInnerColor());
-		oldState.setInnerColor(state.getInnerColor());
+		oldState.setBorderColor(state.getBorderColor());
+		oldState.setFillColor(state.getFillColor());
 	}
 }

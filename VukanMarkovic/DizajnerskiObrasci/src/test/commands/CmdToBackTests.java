@@ -3,21 +3,20 @@ package commands;
 import org.junit.*;
 import shapes.*;
 import static org.junit.Assert.assertEquals;
-import java.awt.Color;
 import model.DrawingModel;
 
 public class CmdToBackTests {
 	private DrawingModel model;
-	private Shape point;
-	private Shape line;
+	private Point point;
+	private Line line;
 	private int indexOfShape;
 	private CmdToBack cmdToBack;
 
 	@Before
 	public void setUp() {
 		model = new DrawingModel();
-		point = new Point(1, 2, false, Color.BLACK);
-		line = new Line(new Point(1, 2, false, Color.BLACK), new Point(3, 4, false, Color.BLACK), false, Color.BLACK);
+		point = new Point(1, 2);
+		line = new Line(new Point(1, 2), new Point(3, 4));
 	}
 
 	@Test

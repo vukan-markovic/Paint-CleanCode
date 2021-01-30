@@ -7,12 +7,10 @@ import shapes.Shape;
 public class CmdBringToFront implements Command {
 	private DrawingModel model;
 	private int indexOfShape;
-	private int indexOfLastShape;
 
 	public CmdBringToFront(DrawingModel model, Shape shape) {
 		this.model = model;
 		indexOfShape = model.getIndexOfShape(shape);
-		indexOfLastShape = model.getNumberOfShapes() - 1;
 	}
 
 	@Override
@@ -26,6 +24,7 @@ public class CmdBringToFront implements Command {
 	}
 
 	private void swapShapes() {
+		int indexOfLastShape = model.getNumberOfShapes() - 1;
 		Collections.swap(model.getShapes(), indexOfLastShape, indexOfShape);
 	}
 }

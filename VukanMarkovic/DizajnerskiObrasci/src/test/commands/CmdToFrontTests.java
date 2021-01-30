@@ -4,20 +4,19 @@ import org.junit.*;
 import shapes.*;
 import model.DrawingModel;
 import static org.junit.Assert.assertEquals;
-import java.awt.Color;
 
 public class CmdToFrontTests {
 	private DrawingModel model;
-	private Shape point;
-	private Shape line;
+	private Point point;
+	private Line line;
 	private int indexOfShape;
 	private CmdToFront cmdToFront;
 
 	@Before
 	public void setUp() {
 		model = new DrawingModel();
-		point = new Point(1, 2, false, Color.BLACK);
-		line = new Line(new Point(1, 2, false, Color.BLACK), new Point(3, 4, false, Color.BLACK), false, Color.BLACK);
+		point = new Point(1, 2);
+		line = new Line(new Point(1, 2), new Point(3, 4));
 		model.addShape(point);
 	}
 

@@ -19,11 +19,11 @@ public class LineLogReader implements LogReader {
 	private int yCoordinateOfStartPoint;
 	private int startPointColorNumber;
 	private Color startPointColor;
+	private Point endPoint;
 	private int xCoordinateOfEndPoint;
 	private int yCoordinateOfEndPoint;
 	private int endPointColorNumber;
 	private Color endPointColor;
-	private Point endPoint;
 	private Line line;
 	private int lineColorNumber;
 	private Color lineColor;
@@ -53,9 +53,47 @@ public class LineLogReader implements LogReader {
 		readModifiedLine();
 		model.getSelectedShapes().remove(oldState);
 		model.getSelectedShapes().add(line);
-
 		cmdModifyLine = new CmdModifyLine(oldState, line);
 		cmdModifyLine.execute();
+		commandsStack.addCommand(cmdModifyLine);
+	}
+
+	private void readModifiedStartPoint() {
+		xCoordinateOfStartPoint = Integer.parseInt(logLine[36]);
+		yCoordinateOfStartPoint = Integer.parseInt(logLine[39]);
+		startPointColorNumber = Integer.parseInt(logLine[43]);
+
+		if (startPointColorNumber == 0)
+			startPointColor = new Color(0, 0, 0, 0);
+		else
+			startPointColor = new Color(startPointColorNumber);
+
+		startPoint = new Point(xCoordinateOfStartPoint, yCoordinateOfStartPoint, false, startPointColor);
+	}
+
+	private void readModifiedEndPoint() {
+		xCoordinateOfEndPoint = Integer.parseInt(logLine[48]);
+		yCoordinateOfEndPoint = Integer.parseInt(logLine[51]);
+
+		endPointColorNumber = Integer.parseInt(logLine[55]);
+
+		if (endPointColorNumber == 0)
+			endPointColor = new Color(0, 0, 0, 0);
+		else
+			endPointColor = new Color(endPointColorNumber);
+
+		endPoint = new Point(xCoordinateOfEndPoint, yCoordinateOfEndPoint, false, endPointColor);
+	}
+
+	private void readModifiedLine() {
+		lineColorNumber = Integer.parseInt(logLine[59]);
+
+		if (lineColorNumber == 0)
+			lineColor = new Color(0, 0, 0, 0);
+		else
+			lineColor = new Color(lineColorNumber);
+
+		line = new Line(startPoint, endPoint, false, lineColor);
 	}
 
 	@Override
@@ -118,41 +156,23 @@ public class LineLogReader implements LogReader {
 		line = new Line(startPoint, endPoint, false, lineColor);
 	}
 
-	private void readModifiedStartPoint() {
-		xCoordinateOfStartPoint = Integer.parseInt(logLine[36]);
-		yCoordinateOfStartPoint = Integer.parseInt(logLine[39]);
-		startPointColorNumber = Integer.parseInt(logLine[43]);
-
-		if (startPointColorNumber == 0)
-			startPointColor = new Color(0, 0, 0, 0);
-		else
-			startPointColor = new Color(startPointColorNumber);
-
-		startPoint = new Point(xCoordinateOfStartPoint, yCoordinateOfStartPoint, false, startPointColor);
+	public CmdAdd getCmdAdd() {
+		return cmdAdd;
 	}
 
-	private void readModifiedEndPoint() {
-		xCoordinateOfEndPoint = Integer.parseInt(logLine[48]);
-		yCoordinateOfEndPoint = Integer.parseInt(logLine[51]);
-
-		endPointColorNumber = Integer.parseInt(logLine[55]);
-
-		if (endPointColorNumber == 0)
-			endPointColor = new Color(0, 0, 0, 0);
-		else
-			endPointColor = new Color(endPointColorNumber);
-
-		endPoint = new Point(xCoordinateOfEndPoint, yCoordinateOfEndPoint, false, endPointColor);
+	public CmdModifyLine getCmdModifyLine() {
+		return cmdModifyLine;
 	}
 
-	private void readModifiedLine() {
-		lineColorNumber = Integer.parseInt(logLine[59]);
+	public CmdSelect getCmdSelect() {
+		return cmdSelect;
+	}
 
-		if (lineColorNumber == 0)
-			lineColor = new Color(0, 0, 0, 0);
-		else
-			lineColor = new Color(lineColorNumber);
+	public CmdDeselect getCmdDeselect() {
+		return cmdDeselect;
+	}
 
-		line = new Line(startPoint, endPoint, false, lineColor);
+	public Line getLine() {
+		return line;
 	}
 }

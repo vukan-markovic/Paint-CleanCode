@@ -26,7 +26,7 @@ public class CmdModifyLine implements Command {
 	private void setOldState(Line state) {
 		oldState.setStartPoint(state.getStartPoint());
 		oldState.setEndPoint(state.getEndPoint());
-		oldState.setOuterColor(state.getOuterColor());
+		oldState.setBorderColor(state.getBorderColor());
 		oldState.setSelected(state.isSelected());
 	}
 }

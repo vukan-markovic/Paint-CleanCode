@@ -12,9 +12,9 @@ public class FileController {
 	private DrawingModel model;
 	private DrawingFrame frame;
 	private Queue<String> commandsLog;
-	private String log;
 	private FileManager strategy;
 	private FileLog fileLog;
+	private String log;
 	private FileDrawing fileDrawing;
 	private JFileChooser fileChooser;
 	private String filePath;
@@ -70,7 +70,7 @@ public class FileController {
 
 	public void loadLog() {
 		RightToolbar toolbar = frame.getRightToolbar();
-		JButton btnNext = toolbar.getBtnNext();
+		JButton btnNext = toolbar.getBtnNextCommand();
 		btnNext.setEnabled(true);
 		commandsLog.clear();
 		createAndSetFileChooser("Specify the log you want to open", JFileChooser.FILES_ONLY);
@@ -106,11 +106,15 @@ public class FileController {
 		fileChooser.setFileSelectionMode(mode);
 	}
 
+	public Queue<String> getCommandsLog() {
+		return commandsLog;
+	}
+
 	public FileManager getStrategy() {
 		return strategy;
 	}
 
-	public FileLog getSaveLog() {
+	public FileLog getFileLog() {
 		return fileLog;
 	}
 
@@ -118,7 +122,7 @@ public class FileController {
 		return log;
 	}
 
-	public FileDrawing getSavePainting() {
+	public FileDrawing getFileDrawing() {
 		return fileDrawing;
 	}
 
@@ -126,27 +130,23 @@ public class FileController {
 		return fileChooser;
 	}
 
-	public Queue<String> getCommandsLog() {
-		return commandsLog;
+	public void setCommandsLog(Queue<String> commandsLog) {
+		this.commandsLog = commandsLog;
 	}
 
 	public void setStrategy(FileManager strategy) {
 		this.strategy = strategy;
 	}
 
-	public void setSaveLog(FileLog fileLog) {
+	public void setFileLog(FileLog fileLog) {
 		this.fileLog = fileLog;
 	}
 
-	public void setSavePainting(FileDrawing fileDrawing) {
+	public void setFileDrawing(FileDrawing fileDrawing) {
 		this.fileDrawing = fileDrawing;
 	}
 
 	public void setFileChooser(JFileChooser fileChooser) {
 		this.fileChooser = fileChooser;
-	}
-
-	public void setCommandsLog(Queue<String> commandsLog) {
-		this.commandsLog = commandsLog;
 	}
 }

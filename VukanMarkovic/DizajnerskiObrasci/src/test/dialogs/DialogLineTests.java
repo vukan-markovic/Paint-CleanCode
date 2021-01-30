@@ -130,7 +130,7 @@ public class DialogLineTests {
 			public void run() {
 				dialogLine.getBtnOuterColor().doClick();
 				robot.keyPress(KeyEvent.VK_ENTER);
-				assertEquals(dialogLine.getOuterColor(), dialogLine.getBtnOuterColor().getBackground());
+				assertEquals(dialogLine.getBorderColor(), dialogLine.getBtnOuterColor().getBackground());
 			}
 		});
 	}

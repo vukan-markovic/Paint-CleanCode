@@ -63,7 +63,7 @@ public class DrawingFrame extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent click) {
 				if (topToolbar.getBtnSelect().isSelected())
-					controller.selectShape(click);
+					controller.selectShapeIfDrawIsNotEmpty(click);
 				else if (topToolbar.getBtnPoint().isSelected())
 					controller.drawPoint(click);
 				else if (topToolbar.getBtnLine().isSelected())
@@ -78,7 +78,7 @@ public class DrawingFrame extends JFrame {
 					controller.drawHexagon(click);
 
 				view.repaint();
-				controller.fireEventsForUndoAndRedoButtons();
+				controller.getOptionsController().fireEventsForUndoAndRedoButtons();;
 			}
 		});
 	}

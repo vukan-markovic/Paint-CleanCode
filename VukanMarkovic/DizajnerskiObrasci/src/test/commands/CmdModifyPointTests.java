@@ -19,21 +19,14 @@ public class CmdModifyPointTests {
 		cmdModifyPoint = new CmdModifyPoint(oldState, newState);
 	}
 
-	@Test()
-	public void testExecuteOldStateNotEqualsNewState() {
-		cmdModifyPoint = new CmdModifyPoint(new Point(1, 2, false, Color.BLACK), new Point(3, 4, false, Color.BLACK));
-		cmdModifyPoint.execute();
-		assertNotEquals(newState, oldState);
-	}
-
 	@Test
-	public void testExecuteOldStateEqualsNewState() {
+	public void testExecute() {
 		cmdModifyPoint.execute();
 		assertEquals(newState, oldState);
 	}
 
 	@Test
-	public void testUnexecuteOldStateEqualsOriginalState() {
+	public void testUnexecute() {
 		cmdModifyPoint.unexecute();
 		assertEquals(originalState, oldState);
 	}

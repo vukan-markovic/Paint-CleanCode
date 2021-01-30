@@ -1,7 +1,6 @@
 package commands;
 
 import static org.junit.Assert.*;
-import java.awt.Color;
 import org.junit.*;
 import shapes.*;
 import model.DrawingModel;
@@ -14,31 +13,31 @@ public class CmdRemoveTests {
 	@Before
 	public void setUp() {
 		model = new DrawingModel();
-		shape = new Point(1, 2, false, Color.BLACK);
+		shape = new Point(1, 2);
 		cmdRemove = new CmdRemove(model, shape);
 	}
 
 	@Test
-	public void testExecuteShapeRemovedListEmpty() {
+	public void testExecuteListEmpty() {
 		cmdRemove.execute();
 		assertFalse(model.getShapes().contains(shape));
 	}
 
 	@Test
-	public void testExecuteShapeRemoved() {
+	public void testExecute() {
 		model.addShape(shape);
 		cmdRemove.execute();
 		assertFalse(model.getShapes().contains(shape));
 	}
 
 	@Test
-	public void testUnexecuteShapeAddedExecuteNotCalled() {
+	public void testUnexecuteExecuteNotCalled() {
 		cmdRemove.unexecute();
 		assertTrue(model.getShapes().contains(shape));
 	}
 
 	@Test
-	public void testUnexecuteShapeAdded() {
+	public void testUnexecuteExecuteCalled() {
 		model.addShape(shape);
 		cmdRemove.execute();
 		cmdRemove.unexecute();

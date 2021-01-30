@@ -78,7 +78,7 @@ public class DialogPointTests {
 			public void run() {
 				dialogPoint.getBtnOuterColor().doClick();
 				robot.keyPress(KeyEvent.VK_ENTER);
-				assertEquals(dialogPoint.getOuterColor(), dialogPoint.getBtnOuterColor().getBackground());
+				assertEquals(dialogPoint.getBorderColor(), dialogPoint.getBtnOuterColor().getBackground());
 			}
 		});
 	}

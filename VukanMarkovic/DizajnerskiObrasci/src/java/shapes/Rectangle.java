@@ -8,59 +8,58 @@ public class Rectangle extends SurfaceShape {
 	private int height;
 	private int width;
 
-	public Rectangle(Point upperLeftPoint, int height, int width, boolean selected, Color outerColor,
-			Color innerColor) {
-		super(selected, outerColor, innerColor);
+	public Rectangle(Point upperLeftPoint, int height, int width) {
 		this.upperLeftPoint = upperLeftPoint;
 		this.height = height;
 		this.width = width;
 	}
 
+	public Rectangle(Point upperLeftPoint, int height, int width, boolean selected, Color borderColor,
+			Color fillColor) {
+		this(upperLeftPoint, height, width);
+		setSelected(selected);
+		setBorderColor(borderColor);
+		setFillColor(fillColor);
+	}
+
 	@Override
 	public void draw(Graphics graphics) {
-		graphics.setColor(getOuterColor());
+		graphics.setColor(getBorderColor());
 		graphics.drawRect(upperLeftPoint.getXcoordinate(), upperLeftPoint.getYcoordinate(), width, height);
 		fillShape(graphics);
 
-		if (isSelected())
+		if (isSelected()) {
+			graphics.setColor(getSelectionColor());
 			drawSelection(graphics);
+		}
 	}
 
 	@Override
 	protected void fillShape(Graphics graphics) {
-		graphics.setColor(getInnerColor());
+		graphics.setColor(getFillColor());
 		graphics.fillRect(upperLeftPoint.getXcoordinate(), upperLeftPoint.getYcoordinate(), width, height);
 	}
 
 	@Override
 	protected void drawSelection(Graphics graphics) {
-		new Line(upperLeftPoint,
-				new Point(upperLeftPoint.getXcoordinate() + height, upperLeftPoint.getYcoordinate(), true, Color.WHITE),
-				true, Color.WHITE).drawSelection(graphics);
-
-		new Line(upperLeftPoint,
-				new Point(upperLeftPoint.getXcoordinate(), upperLeftPoint.getYcoordinate() + width, true, Color.WHITE),
-				true, Color.WHITE).drawSelection(graphics);
-
-		new Line(
-				new Point(upperLeftPoint.getXcoordinate() + height, upperLeftPoint.getYcoordinate(), true, Color.WHITE),
-				diagonal().getEndPoint(), true, Color.WHITE).drawSelection(graphics);
-
-		new Line(new Point(upperLeftPoint.getXcoordinate(), upperLeftPoint.getYcoordinate() + width, true, Color.WHITE),
-				diagonal().getEndPoint(), true, Color.WHITE).drawSelection(graphics);
+		int xCoordinate = upperLeftPoint.getXcoordinate();
+		int yCoordinate = upperLeftPoint.getYcoordinate();
+		graphics.drawRect(xCoordinate - 3, yCoordinate - 3, 6, 6);
+		graphics.drawRect(xCoordinate - 3 + getWidth(), yCoordinate - 3, 6, 6);
+		graphics.drawRect(xCoordinate - 3, yCoordinate - 3 + getHeight(), 6, 6);
+		graphics.drawRect(xCoordinate + getWidth() - 3, yCoordinate + getHeight() - 3, 6, 6);
 	}
 
-	public Line diagonal() {
-		return new Line(upperLeftPoint, new Point(upperLeftPoint.getXcoordinate() + height,
-				upperLeftPoint.getYcoordinate() + width, true, Color.WHITE), true, Color.WHITE);
-	}
-
+	@Override
 	public boolean contains(int xCoordinate, int yCoordinate) {
-		return upperLeftPoint.getXcoordinate() <= xCoordinate && xCoordinate <= upperLeftPoint.getXcoordinate() + width
-				&& upperLeftPoint.getYcoordinate() <= yCoordinate
-				&& yCoordinate <= upperLeftPoint.getYcoordinate() + height;
+		int upperLeftPointXcoordinate = upperLeftPoint.getXcoordinate();
+		int upperLeftPointYcoordinate = upperLeftPoint.getYcoordinate();
+
+		return upperLeftPointXcoordinate <= xCoordinate && xCoordinate <= upperLeftPointXcoordinate + width
+				&& upperLeftPointYcoordinate <= yCoordinate && yCoordinate <= upperLeftPointYcoordinate + height;
 	}
 
+	@Override
 	public boolean equals(Object object) {
 		if (object instanceof Rectangle) {
 			Rectangle rectangle = (Rectangle) object;
@@ -72,13 +71,15 @@ public class Rectangle extends SurfaceShape {
 		return false;
 	}
 
+	@Override
 	public Rectangle clone() {
-		return new Rectangle(upperLeftPoint.clone(), height, width, isSelected(), getOuterColor(), getInnerColor());
+		return new Rectangle(upperLeftPoint.clone(), height, width, isSelected(), getBorderColor(), getFillColor());
 	}
 
+	@Override
 	public String toString() {
-		return "Upper left point: " + upperLeftPoint + ", height: " + height + " , width: " + width + " , Outer color: "
-				+ getOuterColor().getRGB() + " , Inner color: " + getInnerColor().getRGB();
+		return "Upper left point: " + upperLeftPoint + ", height: " + height + " , width: " + width
+				+ " , Border color: " + getBorderColor().getRGB() + " , Fill color: " + getFillColor().getRGB();
 	}
 
 	public Point getUpperLeftPoint() {

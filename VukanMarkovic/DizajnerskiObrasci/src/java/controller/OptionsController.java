@@ -22,8 +22,8 @@ public class OptionsController {
 	private LogWriter logWriter;
 	private DrawingObserver observer;
 	private PropertyManager manager;
-	private Color innerColor;
-	private Color outerColor;
+	private Color fillColor;
+	private Color borderColor;
 
 	public OptionsController(DrawingModel model, DrawingFrame frame, CommandsStack commandsStack,
 			Queue<String> commandsLog) {
@@ -36,124 +36,130 @@ public class OptionsController {
 		observer = new DrawingObserver();
 		manager = new PropertyManager(frame);
 		observer.addPropertyChangeListener(manager);
-		innerColor = Color.WHITE;
-		outerColor = Color.BLACK;
+		fillColor = Color.WHITE;
+		borderColor = Color.BLACK;
 	}
 
 	public void undoCommand() {
-		if (commandsStack.getExecutedCommands().isEmpty())
-			return;
-
 		commandsStack.undoCommand();
 		logWriter.logUndoCommand();
 		frame.getView().repaint();
+		fireEventsForOptionsButtons();
 		fireEventsForUndoAndRedoButtons();
-		fireEventsForButtons();
 	}
 
 	public void redoCommand() {
-		if (commandsStack.getUnexecutedCommands().isEmpty())
-			return;
-
 		commandsStack.redoCommand();
 		logWriter.logRedoCommand();
 		frame.getView().repaint();
+		fireEventsForOptionsButtons();
 		fireEventsForUndoAndRedoButtons();
-		fireEventsForButtons();
 	}
 
 	public void executeCommandFromLog() {
-		LogParser parser = new LogParser(model, frame, this, commandsStack);
+		LogParser parser = new LogParser(this);
 		parser.parse(commandsLog.peek().split(" "));
 
 		if (commandsLog.size() == 1)
 			disableButton();
 
-		fireEventsForButtons();
+		fireEventsForOptionsButtons();
 		fireEventsForUndoAndRedoButtons();
 		frame.getView().repaint();
 		frame.getCommandsListModel().addElement(commandsLog.poll());
 	}
 
-	private void disableButton() {
-		RightToolbar toolbar = frame.getRightToolbar();
-		JButton btnNext = toolbar.getBtnNext();
-		btnNext.setEnabled(false);
-	}
-
-	public void chooseOuterColor() {
-		outerColor = JColorChooser.showDialog(frame, "Choose a color!", outerColor);
-
-		if (outerColor != null)
-			setBtnOuterColor();
-	}
-
-	public void chooseInnerColor() {
-		innerColor = JColorChooser.showDialog(frame, "Choose a color!", innerColor);
-
-		if (innerColor != null)
-			setBtnInnerColor();
-	}
-
-	private void setBtnInnerColor() {
-		RightToolbar toolbar = frame.getRightToolbar();
-		JButton btnInnerColor = toolbar.getBtnInnerColor();
-		btnInnerColor.setBackground(innerColor);
-	}
-
-	private void setBtnOuterColor() {
-		RightToolbar toolbar = frame.getRightToolbar();
-		JButton btnOuterColor = toolbar.getBtnOuterColor();
-		btnOuterColor.setBackground(outerColor);
-	}
-
-	public void moveShapeToBack() {
-		if (model.getSelectedShapes().size() == 1) {
-			positionCommandsExecutor.toBack();
-			commandsStack.clearUnexecutedCommands();
-		}
-	}
-
-	public void moveShapeToFront() {
-		if (model.getSelectedShapes().size() == 1) {
-			positionCommandsExecutor.toFront();
-			commandsStack.clearUnexecutedCommands();
-		}
-	}
-
-	public void bringShapeToBack() {
-		if (model.getSelectedShapes().size() == 1) {
-			positionCommandsExecutor.bringToBack();
-			commandsStack.clearUnexecutedCommands();
-		}
-	}
-
-	public void bringShapeToFront() {
-		if (model.getSelectedShapes().size() == 1) {
-			positionCommandsExecutor.bringToFront();
-			commandsStack.clearUnexecutedCommands();
-		}
+	public void fireEventsForOptionsButtons() {
+		int numberOfSelectedShapes = model.getNumberOfSelectedShapes();
+		boolean isNumberOfSelectedShapesOne = numberOfSelectedShapes == 1;
+		observer.setBtnDeleteEnabled(numberOfSelectedShapes > 0);
+		observer.setBtnModifyEnabled(isNumberOfSelectedShapesOne);
+		observer.setBtnToBackEnabled(isNumberOfSelectedShapesOne);
+		observer.setBtnToFrontEnabled(isNumberOfSelectedShapesOne);
+		observer.setBtnSendToBackEnabled(isNumberOfSelectedShapesOne);
+		observer.setBtnBringToFrontEnabled(isNumberOfSelectedShapesOne);
 	}
 
 	public void fireEventsForUndoAndRedoButtons() {
-		observer.setBtnUndoEnabled(commandsStack.getExecutedCommands().size() > 0);
-		observer.setBtnRedoEnabled(commandsStack.getUnexecutedCommands().size() > 0);
+		int numberOfExecutedCommands = commandsStack.getExecutedCommands().size();
+		boolean isNumberOfExecutedCommandsGreaterThanZero = numberOfExecutedCommands > 0;
+		observer.setBtnUndoEnabled(isNumberOfExecutedCommandsGreaterThanZero);
+		observer.setBtnRedoEnabled(isNumberOfExecutedCommandsGreaterThanZero);
 	}
 
-	public void fireEventsForButtons() {
-		observer.setBtnDeleteEnabled(model.getSelectedShapes().size() > 0);
-		observer.setBtnModifyEnabled(model.getSelectedShapes().size() == 1);
-		observer.setBtnToBackEnabled(model.getSelectedShapes().size() == 1);
-		observer.setBtnToFrontEnabled(model.getSelectedShapes().size() == 1);
-		observer.setBtnSendToBackEnabled(model.getSelectedShapes().size() == 1);
-		observer.setBtnBringToFrontEnabled(model.getSelectedShapes().size() == 1);
+	private void disableButton() {
+		RightToolbar toolbar = frame.getRightToolbar();
+		JButton btnNext = toolbar.getBtnNextCommand();
+		btnNext.setEnabled(false);
 	}
 
-	public Color getInnerColor() {
-		return innerColor;
+	public void setBorderColor() {
+		borderColor = JColorChooser.showDialog(frame, "Choose a color!", borderColor);
+
+		if (borderColor != null)
+			setBtnBorderColor();
 	}
 
-	public Color getOuterColor() {
-		return outerColor;
+	private void setBtnBorderColor() {
+		RightToolbar toolbar = frame.getRightToolbar();
+		JButton btnOuterColor = toolbar.getBtnOuterColor();
+		btnOuterColor.setBackground(borderColor);
+	}
+
+	public void setFillColor() {
+		fillColor = JColorChooser.showDialog(frame, "Choose a color!", fillColor);
+
+		if (fillColor != null)
+			setBtnFillColor();
+	}
+
+	private void setBtnFillColor() {
+		RightToolbar toolbar = frame.getRightToolbar();
+		JButton btnInnerColor = toolbar.getBtnInnerColor();
+		btnInnerColor.setBackground(fillColor);
+	}
+
+	public void moveShapeToBack() {
+		positionCommandsExecutor.toBack();
+		commandsStack.clearUnexecutedCommands();
+	}
+
+	public void moveShapeToFront() {
+		positionCommandsExecutor.toFront();
+		commandsStack.clearUnexecutedCommands();
+	}
+
+	public void bringShapeToBack() {
+		positionCommandsExecutor.bringToBack();
+		commandsStack.clearUnexecutedCommands();
+	}
+
+	public void bringShapeToFront() {
+		positionCommandsExecutor.bringToFront();
+		commandsStack.clearUnexecutedCommands();
+	}
+
+	public DrawingModel getModel() {
+		return model;
+	}
+
+	public DrawingFrame getFrame() {
+		return frame;
+	}
+
+	public CommandsStack getCommandsStack() {
+		return commandsStack;
+	}
+
+	public LogWriter getLogWriter() {
+		return logWriter;
+	}
+
+	public Color getFillColor() {
+		return fillColor;
+	}
+
+	public Color getBorderColor() {
+		return borderColor;
 	}
 }

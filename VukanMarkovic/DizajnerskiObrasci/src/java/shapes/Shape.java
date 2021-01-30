@@ -8,11 +8,9 @@ public abstract class Shape implements Cloneable, Serializable {
 	public final int SELECT_RECTANGLE_GAP = 3;
 	public final int SELECT_RECTANGLE_SIDE_LENGTH = 6;
 	private boolean selected;
-	private Color outerColor;
+	private Color borderColor;
 
-	Shape(boolean selected, Color outerColor) {
-		this.selected = selected;
-		this.outerColor = outerColor;
+	public Shape() {
 	}
 
 	public abstract boolean contains(int xCoordinate, int yCoordinate);
@@ -25,19 +23,23 @@ public abstract class Shape implements Cloneable, Serializable {
 		return selected;
 	}
 
-	public Color getOuterColor() {
-		return outerColor;
+	public Color getBorderColor() {
+		return borderColor;
 	}
 
 	public Color getSelectionColor() {
 		return Color.BLUE;
 	}
 
+	public String getClassName() {
+		return this.getClass().getSimpleName();
+	}
+
 	public void setSelected(boolean selected) {
 		this.selected = selected;
 	}
 
-	public void setOuterColor(Color outerColor) {
-		this.outerColor = outerColor;
+	public void setBorderColor(Color borderColor) {
+		this.borderColor = borderColor;
 	}
 }

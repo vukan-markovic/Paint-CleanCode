@@ -3,11 +3,11 @@ package logger;
 import shapes.Shape;
 
 public interface LogReader {
-	void addShapeFromLog(String[] line);
+	void addShapeFromLog(String[] logLine);
 
-	void modifyShapeFromLog(String[] line, Shape selectedShape);
+	void modifyShapeFromLog(String[] logLine, Shape selectedShape);
 
-	void selectShapeFromLog(String[] line);
+	void selectShapeFromLog(String[] logLine);
 
-	void deselectShapeFromLog(String[] line);
+	void deselectShapeFromLog(String[] logLine);
 }

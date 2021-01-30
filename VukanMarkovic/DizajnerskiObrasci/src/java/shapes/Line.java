@@ -8,21 +8,28 @@ public class Line extends Shape {
 	private Point startPoint;
 	private Point endPoint;
 
-	public Line(Point startPoint, Point endPoint, boolean selected, Color outerColor) {
-		super(selected, outerColor);
+	public Line(Point startPoint, Point endPoint) {
 		this.startPoint = startPoint;
 		this.endPoint = endPoint;
 	}
 
+	public Line(Point startPoint, Point endPoint, boolean selected, Color borderColor) {
+		this(startPoint, endPoint);
+		setSelected(selected);
+		setBorderColor(borderColor);
+	}
+
 	@Override
 	public void draw(Graphics graphics) {
-		graphics.setColor(getOuterColor());
+		graphics.setColor(getBorderColor());
 
 		graphics.drawLine(startPoint.getXcoordinate(), startPoint.getYcoordinate(), endPoint.getXcoordinate(),
 				endPoint.getYcoordinate());
 
-		if (isSelected())
+		if (isSelected()) {
+			graphics.setColor(Color.BLUE);
 			drawSelection(graphics);
+		}
 	}
 
 	@Override
@@ -33,35 +40,41 @@ public class Line extends Shape {
 	}
 
 	public Point getMiddleOfLine() {
-		return new Point((startPoint.getXcoordinate() + endPoint.getXcoordinate()) / 2,
-				(startPoint.getYcoordinate() + endPoint.getYcoordinate()) / 2, false, getOuterColor());
+		int xCoordinate = (startPoint.getXcoordinate() + endPoint.getXcoordinate()) / 2;
+		int yCoordinate = (startPoint.getYcoordinate() + endPoint.getYcoordinate()) / 2;
+		return new Point(xCoordinate, yCoordinate);
 	}
 
+	@Override
 	public boolean contains(int xCoordinate, int yCoordinate) {
-		return (startPoint.calculateDistance(xCoordinate, yCoordinate)
-				+ endPoint.calculateDistance(xCoordinate, yCoordinate)) - calculateLength() <= LINE_CLICK_TRESHOLD;
+		double startPointDistance = startPoint.calculateDistance(xCoordinate, yCoordinate);
+		double endPointDistance = endPoint.calculateDistance(xCoordinate, yCoordinate);
+		return startPointDistance + endPointDistance - calculateLength() <= LINE_CLICK_TRESHOLD;
 	}
 
 	public double calculateLength() {
 		return startPoint.calculateDistance(endPoint.getXcoordinate(), endPoint.getYcoordinate());
 	}
 
+	@Override
 	public boolean equals(Object object) {
 		if (object instanceof Line) {
 			Line line = (Line) object;
-			return this.startPoint.equals(line.startPoint) && this.endPoint.equals(line.endPoint);
+			return startPoint.equals(line.startPoint) && endPoint.equals(line.endPoint);
 		}
 
 		return false;
 	}
 
+	@Override
 	public Line clone() {
-		return new Line(startPoint.clone(), endPoint.clone(), isSelected(), getOuterColor());
+		return new Line(startPoint.clone(), endPoint.clone(), isSelected(), getBorderColor());
 	}
 
+	@Override
 	public String toString() {
-		return "Start point: " + startPoint + ", " + "End point: " + endPoint + ", Outer color: "
-				+ getOuterColor().getRGB();
+		return "Start point: " + startPoint + ", " + "End point: " + endPoint + ", Border color: "
+				+ getBorderColor().getRGB();
 	}
 
 	public Point getStartPoint() {

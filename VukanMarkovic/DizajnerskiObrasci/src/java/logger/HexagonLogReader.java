@@ -3,17 +3,17 @@ package logger;
 import commands.*;
 import shapes.*;
 import hexagon.Hexagon;
-import java.awt.Color;
 import model.DrawingModel;
 import stack.CommandsStack;
 
-public class HexagonLogReader implements LogReader {
+public class HexagonLogReader extends CircleLogReader {
+	private DrawingModel model;
+	private CommandsStack commandsStack;
 	private CmdAdd cmdAdd;
+	private CmdModifyHexagon cmdModifyHexagon;
 	private CmdSelect cmdSelect;
 	private CmdDeselect cmdDeselect;
-	private DrawingModel model;
-	private CmdModifyHexagon cmdModifyHexagon;
-	private CommandsStack commandsStack;
+	private HexagonAdapter hexagon;
 
 	public HexagonLogReader(DrawingModel model, CommandsStack commandsStack) {
 		this.model = model;
@@ -22,15 +22,12 @@ public class HexagonLogReader implements LogReader {
 
 	@Override
 	public void addShapeFromLog(String[] logLine) {
-		Point point = new Point(Integer.parseInt(logLine[5]), Integer.parseInt(logLine[8]), false,
-				(Integer.parseInt(logLine[12]) == 0 ? new Color(0, 0, 0, 0)
-						: new Color(Integer.parseInt(logLine[12]))));
+		setLogLine(logLine);
+		readCenter();
+		readShape();
 
-		HexagonAdapter hexagon = new HexagonAdapter(
-				new Hexagon(point.getXcoordinate(), point.getYcoordinate(), Integer.parseInt(logLine[15])), false,
-				(Integer.parseInt(logLine[19]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[19]))),
-				(Integer.parseInt(logLine[23]) == 0 ? new Color(0, 0, 0, 0)
-						: new Color(Integer.parseInt(logLine[23]))));
+		hexagon = new HexagonAdapter(new Hexagon(getxCoordinate(), getyCoordinate(), getRadius()), false,
+				getBorderColor(), getFillColor());
 
 		cmdAdd = new CmdAdd(model, hexagon);
 		cmdAdd.execute();
@@ -38,58 +35,67 @@ public class HexagonLogReader implements LogReader {
 	}
 
 	@Override
-	public void selectShapeFromLog(String[] logLine) {
-		Point point = new Point(Integer.parseInt(logLine[5]), Integer.parseInt(logLine[8]), false,
-				(Integer.parseInt(logLine[12]) == 0 ? new Color(0, 0, 0, 0)
-						: new Color(Integer.parseInt(logLine[12]))));
+	public void modifyShapeFromLog(String[] logLine, Shape selectedShape) {
+		setLogLine(logLine);
+		HexagonAdapter oldState = (HexagonAdapter) selectedShape;
+		readModifiedCenter();
+		readModifiedCircle();
 
-		HexagonAdapter hexagon = new HexagonAdapter(
-				new Hexagon(point.getXcoordinate(), point.getYcoordinate(), Integer.parseInt(logLine[15])), false,
-				(Integer.parseInt(logLine[19]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[19]))),
-				(Integer.parseInt(logLine[23]) == 0 ? new Color(0, 0, 0, 0)
-						: new Color(Integer.parseInt(logLine[23]))));
+		hexagon = new HexagonAdapter(new Hexagon(getxCoordinate(), getyCoordinate(), getRadius()), false,
+				getBorderColor(), getFillColor());
+
+		model.getSelectedShapes().remove(oldState);
+		model.getSelectedShapes().add(hexagon);
+		cmdModifyHexagon = new CmdModifyHexagon(oldState, hexagon);
+		cmdModifyHexagon.execute();
+		commandsStack.addCommand(cmdModifyHexagon);
+	}
+
+	@Override
+	public void selectShapeFromLog(String[] logLine) {
+		setLogLine(logLine);
+		readCenter();
+		readShape();
+
+		hexagon = new HexagonAdapter(new Hexagon(getxCoordinate(), getyCoordinate(), getRadius()), false,
+				getBorderColor(), getFillColor());
 
 		cmdSelect = new CmdSelect(model, hexagon);
 		cmdSelect.execute();
 		commandsStack.addCommand(cmdSelect);
-		commandsStack.addCommand(cmdAdd);
 	}
 
 	@Override
 	public void deselectShapeFromLog(String[] logLine) {
-		Point point = new Point(Integer.parseInt(logLine[5]), Integer.parseInt(logLine[8]), false,
-				(Integer.parseInt(logLine[12]) == 0 ? new Color(0, 0, 0, 0)
-						: new Color(Integer.parseInt(logLine[12]))));
+		setLogLine(logLine);
+		readCenter();
+		readShape();
 
-		HexagonAdapter hexagon = new HexagonAdapter(
-				new Hexagon(point.getXcoordinate(), point.getYcoordinate(), Integer.parseInt(logLine[15])), true,
-				(Integer.parseInt(logLine[19]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[19]))),
-				(Integer.parseInt(logLine[23]) == 0 ? new Color(0, 0, 0, 0)
-						: new Color(Integer.parseInt(logLine[23]))));
+		hexagon = new HexagonAdapter(new Hexagon(getxCoordinate(), getyCoordinate(), getRadius()), false,
+				getBorderColor(), getFillColor());
 
 		cmdDeselect = new CmdDeselect(model, hexagon);
 		cmdDeselect.execute();
 		commandsStack.addCommand(cmdDeselect);
 	}
 
-	@Override
-	public void modifyShapeFromLog(String[] logLine, Shape selectedShape) {
-		HexagonAdapter oldState = (HexagonAdapter) selectedShape;
+	public CmdAdd getCmdAdd() {
+		return cmdAdd;
+	}
 
-		Point point = new Point(Integer.parseInt(logLine[29]), Integer.parseInt(logLine[32]), false,
-				(Integer.parseInt(logLine[36]) == 0 ? new Color(0, 0, 0, 0)
-						: new Color(Integer.parseInt(logLine[36]))));
+	public CmdModifyHexagon getCmdModifyHexagon() {
+		return cmdModifyHexagon;
+	}
 
-		HexagonAdapter newState = new HexagonAdapter(
-				new Hexagon(point.getXcoordinate(), point.getYcoordinate(), Integer.parseInt(logLine[39])), true,
-				(Integer.parseInt(logLine[43]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[43]))),
-				(Integer.parseInt(logLine[47]) == 0 ? new Color(0, 0, 0, 0)
-						: new Color(Integer.parseInt(logLine[47]))));
+	public CmdSelect getCmdSelect() {
+		return cmdSelect;
+	}
 
-		model.getSelectedShapes().remove(oldState);
-		model.getSelectedShapes().add(newState);
+	public CmdDeselect getCmdDeselect() {
+		return cmdDeselect;
+	}
 
-		cmdModifyHexagon = new CmdModifyHexagon(oldState, newState);
-		cmdModifyHexagon.execute();
+	public HexagonAdapter getHexagon() {
+		return hexagon;
 	}
 }

@@ -13,20 +13,20 @@ public class CmdModifyRectangleTests {
 
 	@Before
 	public void setUp() {
-		oldState = new Rectangle(new Point(1, 3, false, Color.BLACK), 6, 7, false, Color.BLACK, Color.WHITE);
-		newState = new Rectangle(new Point(2, 4, false, Color.BLACK), 4, 9, true, Color.WHITE, Color.BLACK);
-		originalState = new Rectangle(new Point(1, 3, false, Color.BLACK), 6, 7, false, Color.BLACK, Color.WHITE);
+		oldState = new Rectangle(new Point(1, 3), 6, 7, false, Color.BLACK, Color.WHITE);
+		newState = new Rectangle(new Point(2, 4), 4, 9, true, Color.WHITE, Color.BLACK);
+		originalState = new Rectangle(new Point(1, 3), 6, 7, false, Color.BLACK, Color.WHITE);
 		cmdModifyRectangle = new CmdModifyRectangle(oldState, newState);
 	}
 
 	@Test
-	public void testExecuteOldStateEqualsNewState() {
+	public void testExecute() {
 		cmdModifyRectangle.execute();
 		assertEquals(newState, oldState);
 	}
 
 	@Test
-	public void testUnexecuteOldStateEqualsOriginalState() {
+	public void testUnexecute() {
 		cmdModifyRectangle.unexecute();
 		assertEquals(originalState, oldState);
 	}

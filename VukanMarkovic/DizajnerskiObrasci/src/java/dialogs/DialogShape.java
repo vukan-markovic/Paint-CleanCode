@@ -18,7 +18,7 @@ public abstract class DialogShape extends JDialog implements Dialog {
 	private JButton btnOuterColor;
 	private JButton btnOk;
 	private JButton btnCancel;
-	private Color outerColor = Color.BLACK;
+	private Color borderColor = Color.BLACK;
 	private boolean accepted;
 
 	public DialogShape() {
@@ -28,12 +28,12 @@ public abstract class DialogShape extends JDialog implements Dialog {
 		lblXcoodinate = new JLabel("X coodinate:");
 		yCoordinate = new JTextField();
 		lblYcoordinate = new JLabel("Y coodinate:");
-		btnOuterColor = new JButton("Outer color");
+		btnOuterColor = new JButton("Border color");
 		btnOk = new JButton("OK");
 		btnCancel = new JButton("Cancel");
 		buildBasicLayout();
 		initializeCharListener();
-		addBtnOuterColorListener();
+		addBtnBorderColorListener();
 		addBtnOkListener();
 		addBtnCancelListener();
 	}
@@ -88,17 +88,19 @@ public abstract class DialogShape extends JDialog implements Dialog {
 				|| charInput == KeyEvent.VK_DELETE;
 	}
 
-	private void addBtnOuterColorListener() {
+	private void addBtnBorderColorListener() {
 		btnOuterColor.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent event) {
-				outerColor = JColorChooser.showDialog(getContentPane(), "Choose outer color", outerColor);
-				btnOuterColor.setBackground(outerColor);
+				borderColor = JColorChooser.showDialog(getContentPane(), "Choose border color", borderColor);
+				btnOuterColor.setBackground(borderColor);
 			}
 		});
 	}
 
 	private void addBtnOkListener() {
 		btnOk.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent event) {
 				if (isInputValid()) {
 					setAccepted(true);
@@ -113,6 +115,7 @@ public abstract class DialogShape extends JDialog implements Dialog {
 
 	private void addBtnCancelListener() {
 		btnCancel.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent event) {
 				dispose();
 			}
@@ -171,16 +174,16 @@ public abstract class DialogShape extends JDialog implements Dialog {
 		return btnCancel;
 	}
 
-	public Color getOuterColor() {
-		return outerColor;
+	public Color getBorderColor() {
+		return borderColor;
 	}
 
 	public boolean isAccepted() {
 		return accepted;
 	}
 
-	public void setOuterColor(Color outerColor) {
-		this.outerColor = outerColor;
+	public void setBorderColor(Color borderColor) {
+		this.borderColor = borderColor;
 	}
 
 	public void setAccepted(boolean accepted) {

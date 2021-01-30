@@ -65,6 +65,7 @@ public class DialogPoint extends DialogShape {
 		getContentPanel().setLayout(getGlContentPanel());
 	}
 
+	@Override
 	public boolean isInputValid() {
 		String xCoordinateValue = getXcoordinate().getText();
 		String yCoordinateValue = getYcoordinate().getText();
@@ -84,8 +85,8 @@ public class DialogPoint extends DialogShape {
 		String yCoordinateValue = String.valueOf(point.getYcoordinate());
 		getYcoordinate().setText(yCoordinateValue);
 
-		Color outerColor = point.getOuterColor();
-		setOuterColor(outerColor);
+		Color outerColor = point.getBorderColor();
+		setBorderColor(outerColor);
 		getBtnOuterColor().setBackground(outerColor);
 
 		setVisible(true);

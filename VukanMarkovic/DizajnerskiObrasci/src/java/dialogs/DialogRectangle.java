@@ -63,7 +63,7 @@ public class DialogRectangle extends DialogSurfaceShape {
 										.addGap(39))
 								.addGroup(getGlContentPanel().createSequentialGroup().addGroup(getGlContentPanel()
 										.createParallelGroup(Alignment.TRAILING, false)
-										.addComponent(getBtnInnerColor(), Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+										.addComponent(getBtnFillColor(), Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
 												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 										.addComponent(getBtnOuterColor(), Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
 												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -96,7 +96,7 @@ public class DialogRectangle extends DialogSurfaceShape {
 												.addComponent(lblWidth)))
 								.addGroup(getGlContentPanel().createSequentialGroup().addGap(3)
 										.addComponent(getBtnOuterColor()).addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(getBtnInnerColor())))
+										.addComponent(getBtnFillColor())))
 						.addContainerGap(30, Short.MAX_VALUE)));
 
 		getContentPanel().setLayout(getGlContentPanel());
@@ -125,7 +125,7 @@ public class DialogRectangle extends DialogSurfaceShape {
 		getYcoordinate().setEditable(false);
 
 		getBtnOuterColor().setVisible(false);
-		getBtnInnerColor().setVisible(false);
+		getBtnFillColor().setVisible(false);
 
 		setVisible(true);
 	}
@@ -147,13 +147,13 @@ public class DialogRectangle extends DialogSurfaceShape {
 		String widthValue = String.valueOf(rectangle.getWidth());
 		width.setText(widthValue);
 
-		Color outerColor = rectangle.getOuterColor();
-		setOuterColor(outerColor);
-		getBtnOuterColor().setBackground(getOuterColor());
+		Color outerColor = rectangle.getBorderColor();
+		setBorderColor(outerColor);
+		getBtnOuterColor().setBackground(getBorderColor());
 
-		Color innerColor = rectangle.getInnerColor();
-		setInnerColor(innerColor);
-		getBtnInnerColor().setBackground(innerColor);
+		Color innerColor = rectangle.getFillColor();
+		setFillColor(innerColor);
+		getBtnFillColor().setBackground(innerColor);
 
 		setVisible(true);
 	}

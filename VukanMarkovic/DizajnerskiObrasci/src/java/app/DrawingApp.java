@@ -17,7 +17,7 @@ public class DrawingApp {
 		CommandsStack commandsStack = new CommandsStack();
 		FileController fileController = new FileController(model, frame, commandsLog);
 		OptionsController optionsController = new OptionsController(model, frame, commandsStack, commandsLog);
-		DrawingController drawingController = new DrawingController(model, frame, commandsStack, optionsController);
+		DrawingController drawingController = new DrawingController(optionsController);
 
 		DrawingView view = frame.getView();
 		view.setModel(model);

@@ -5,7 +5,6 @@ import shapes.*;
 import controller.OptionsController;
 import java.awt.Color;
 import dialogs.DialogHexagon;
-import frame.DrawingFrame;
 import hexagon.Hexagon;
 import logger.LogWriter;
 import model.DrawingModel;
@@ -24,11 +23,10 @@ public class HexagonCommandsExecutor implements SurfaceShapeCommandsExecutor {
 	private Color innerColor;
 	private HexagonAdapter hexagonAdapter;
 
-	public HexagonCommandsExecutor(DrawingModel model, DrawingFrame drawingFrame, CommandsStack commandsStack,
-			DialogHexagon dialogHexagon, OptionsController optionsController) {
-		this.model = model;
-		logWriter = new LogWriter(drawingFrame);
-		this.commandsStack = commandsStack;
+	public HexagonCommandsExecutor(DialogHexagon dialogHexagon, OptionsController optionsController) {
+		this.model = optionsController.getModel();
+		logWriter = new LogWriter(optionsController.getFrame());
+		this.commandsStack = optionsController.getCommandsStack();
 		this.dialogHexagon = dialogHexagon;
 		this.optionsController = optionsController;
 	}
@@ -36,9 +34,9 @@ public class HexagonCommandsExecutor implements SurfaceShapeCommandsExecutor {
 	@Override
 	public void addShape() {
 		isSelected = false;
-		outerColor = optionsController.getOuterColor();
-		innerColor = optionsController.getInnerColor();
-		setHexagon();
+		outerColor = optionsController.getBorderColor();
+		innerColor = optionsController.getFillColor();
+		createHexagon();
 
 		cmdAdd = new CmdAdd(model, hexagonAdapter);
 		cmdAdd.execute();
@@ -50,9 +48,9 @@ public class HexagonCommandsExecutor implements SurfaceShapeCommandsExecutor {
 	public void modifyShape(Shape selectedShape) {
 		HexagonAdapter oldState = (HexagonAdapter) selectedShape;
 		isSelected = true;
-		outerColor = dialogHexagon.getOuterColor();
-		innerColor = dialogHexagon.getInnerColor();
-		setHexagon();
+		outerColor = dialogHexagon.getBorderColor();
+		innerColor = dialogHexagon.getFillColor();
+		createHexagon();
 
 		logWriter.logModifyCommand(oldState, hexagonAdapter);
 		cmdModifyHexagon = new CmdModifyHexagon(oldState, hexagonAdapter);
@@ -60,7 +58,7 @@ public class HexagonCommandsExecutor implements SurfaceShapeCommandsExecutor {
 		commandsStack.addCommand(cmdModifyHexagon);
 	}
 
-	private void setHexagon() {
+	private void createHexagon() {
 		int xCoordinate = dialogHexagon.getXcoordinateValue();
 		int yCoordinate = dialogHexagon.getYcoordinateValue();
 		int radius = dialogHexagon.getRadiusValue();
@@ -68,11 +66,15 @@ public class HexagonCommandsExecutor implements SurfaceShapeCommandsExecutor {
 		hexagonAdapter = new HexagonAdapter(hexagon, isSelected, outerColor, innerColor);
 	}
 
-	public CmdModifyHexagon getCmdModifyHexagon() {
-		return cmdModifyHexagon;
+	public CmdAdd getCmdAdd() {
+		return cmdAdd;
 	}
 
-	public void setCmdModifyHexagon(CmdModifyHexagon cmdModifyHexagon) {
-		this.cmdModifyHexagon = cmdModifyHexagon;
+	public HexagonAdapter getHexagonAdapter() {
+		return hexagonAdapter;
+	}
+
+	public CmdModifyHexagon getCmdModifyHexagon() {
+		return cmdModifyHexagon;
 	}
 }

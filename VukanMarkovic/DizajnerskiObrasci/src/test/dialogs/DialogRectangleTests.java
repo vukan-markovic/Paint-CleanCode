@@ -96,7 +96,7 @@ public class DialogRectangleTests {
 			}
 		});
 	}
-	
+
 	@Test
 	public void testWidthInvalidInput() {
 		SwingUtilities.invokeLater(new Runnable() {
@@ -130,7 +130,7 @@ public class DialogRectangleTests {
 			public void run() {
 				dialogRectangle.getBtnOuterColor().doClick();
 				robot.keyPress(KeyEvent.VK_ENTER);
-				assertEquals(dialogRectangle.getOuterColor(), dialogRectangle.getBtnOuterColor().getBackground());
+				assertEquals(dialogRectangle.getBorderColor(), dialogRectangle.getBtnOuterColor().getBackground());
 			}
 		});
 	}
@@ -140,9 +140,9 @@ public class DialogRectangleTests {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				dialogRectangle.getBtnInnerColor().doClick();
+				dialogRectangle.getBtnFillColor().doClick();
 				robot.keyPress(KeyEvent.VK_ENTER);
-				assertEquals(dialogRectangle.getInnerColor(), dialogRectangle.getBtnInnerColor().getBackground());
+				assertEquals(dialogRectangle.getFillColor(), dialogRectangle.getBtnFillColor().getBackground());
 			}
 		});
 	}

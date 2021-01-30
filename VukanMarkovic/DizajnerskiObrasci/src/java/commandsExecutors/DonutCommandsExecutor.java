@@ -5,7 +5,6 @@ import shapes.*;
 import controller.OptionsController;
 import java.awt.Color;
 import dialogs.DialogDonut;
-import frame.DrawingFrame;
 import logger.LogWriter;
 import model.DrawingModel;
 import stack.CommandsStack;
@@ -23,11 +22,10 @@ public class DonutCommandsExecutor implements SurfaceShapeCommandsExecutor {
 	private Color innerColor;
 	private Donut donut;
 
-	public DonutCommandsExecutor(DrawingModel model, DrawingFrame drawingFrame, CommandsStack commandsStack,
-			DialogDonut dialogDonut, OptionsController optionsController) {
-		this.model = model;
-		logWriter = new LogWriter(drawingFrame);
-		this.commandsStack = commandsStack;
+	public DonutCommandsExecutor(DialogDonut dialogDonut, OptionsController optionsController) {
+		this.model = optionsController.getModel();
+		logWriter = new LogWriter(optionsController.getFrame());
+		this.commandsStack = optionsController.getCommandsStack();
 		this.dialogDonut = dialogDonut;
 		this.optionsController = optionsController;
 	}
@@ -35,9 +33,9 @@ public class DonutCommandsExecutor implements SurfaceShapeCommandsExecutor {
 	@Override
 	public void addShape() {
 		isSelected = false;
-		outerColor = optionsController.getOuterColor();
-		innerColor = optionsController.getInnerColor();
-		setDonut();
+		outerColor = optionsController.getBorderColor();
+		innerColor = optionsController.getFillColor();
+		createDonut();
 
 		cmdAdd = new CmdAdd(model, donut);
 		cmdAdd.execute();
@@ -49,9 +47,9 @@ public class DonutCommandsExecutor implements SurfaceShapeCommandsExecutor {
 	public void modifyShape(Shape selectedShape) {
 		Donut oldState = (Donut) selectedShape;
 		isSelected = true;
-		outerColor = dialogDonut.getOuterColor();
-		innerColor = dialogDonut.getInnerColor();
-		setDonut();
+		outerColor = dialogDonut.getBorderColor();
+		innerColor = dialogDonut.getFillColor();
+		createDonut();
 
 		logWriter.logModifyCommand(oldState, donut);
 		cmdModifyDonut = new CmdModifyDonut(oldState, donut);
@@ -59,7 +57,7 @@ public class DonutCommandsExecutor implements SurfaceShapeCommandsExecutor {
 		commandsStack.addCommand(cmdModifyDonut);
 	}
 
-	private void setDonut() {
+	private void createDonut() {
 		int xCoordinate = dialogDonut.getXcoordinateValue();
 		int yCoordinate = dialogDonut.getYcoordinateValue();
 		int radius = dialogDonut.getRadiusValue();
@@ -68,11 +66,15 @@ public class DonutCommandsExecutor implements SurfaceShapeCommandsExecutor {
 		donut = new Donut(center, radius, innerRadius, isSelected, outerColor, innerColor);
 	}
 
-	public CmdModifyDonut getCmdModifyDonut() {
-		return cmdModifyDonut;
+	public CmdAdd getCmdAdd() {
+		return cmdAdd;
 	}
 
-	public void setCmdModifyDonut(CmdModifyDonut cmdModifyDonut) {
-		this.cmdModifyDonut = cmdModifyDonut;
+	public Donut getDonut() {
+		return donut;
+	}
+
+	public CmdModifyDonut getCmdModifyDonut() {
+		return cmdModifyDonut;
 	}
 }

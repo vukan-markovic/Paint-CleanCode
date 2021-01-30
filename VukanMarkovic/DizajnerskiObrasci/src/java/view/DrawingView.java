@@ -10,10 +10,6 @@ public class DrawingView extends JPanel {
 
 	public DrawingView() {
 		model = new DrawingModel();
-		setView();
-	}
-	
-	private void setView() {
 		setBackground(Color.WHITE);
 		setVisible(true);
 		setPreferredSize(new Dimension(600, 400));
@@ -25,10 +21,6 @@ public class DrawingView extends JPanel {
 	public void paint(Graphics graphics) {
 		super.paintComponent(graphics);
 		model.getShapes().stream().forEach(shape -> shape.draw(graphics));
-	}
-
-	public DrawingModel getModel() {
-		return model;
 	}
 
 	public void setModel(DrawingModel model) {

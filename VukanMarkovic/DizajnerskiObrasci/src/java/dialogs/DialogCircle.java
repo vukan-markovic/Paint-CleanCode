@@ -55,7 +55,7 @@ public class DialogCircle extends DialogSurfaceShape {
 						.addGroup(getGlContentPanel().createParallelGroup(Alignment.TRAILING)
 								.addComponent(getLblIcon(), GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
 								.addGroup(getGlContentPanel().createParallelGroup(Alignment.LEADING)
-										.addComponent(getBtnInnerColor()).addComponent(getBtnOuterColor())))
+										.addComponent(getBtnFillColor()).addComponent(getBtnOuterColor())))
 						.addGap(86)));
 
 		getGlContentPanel().setVerticalGroup(getGlContentPanel().createParallelGroup(Alignment.LEADING)
@@ -81,7 +81,7 @@ public class DialogCircle extends DialogSurfaceShape {
 												GroupLayout.PREFERRED_SIZE)
 										.addGap(19)))
 						.addGap(10).addComponent(getBtnOuterColor()).addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(getBtnInnerColor()).addGap(21)));
+						.addComponent(getBtnFillColor()).addGap(21)));
 
 		getContentPanel().setLayout(getGlContentPanel());
 	}
@@ -108,7 +108,7 @@ public class DialogCircle extends DialogSurfaceShape {
 		getYcoordinate().setEditable(false);
 
 		getBtnOuterColor().setVisible(false);
-		getBtnInnerColor().setVisible(false);
+		getBtnFillColor().setVisible(false);
 
 		setVisible(true);
 	}
@@ -129,15 +129,15 @@ public class DialogCircle extends DialogSurfaceShape {
 		String radiusValue = String.valueOf(circle.getRadius());
 		radius.setText(radiusValue);
 
-		Color outerColor = circle.getOuterColor();
-		setOuterColor(outerColor);
+		Color outerColor = circle.getBorderColor();
+		setBorderColor(outerColor);
 		getBtnOuterColor().setBackground(outerColor);
 		getBtnOuterColor().setVisible(true);
 
-		Color innerColor = circle.getInnerColor();
-		setInnerColor(innerColor);
-		getBtnInnerColor().setBackground(innerColor);
-		getBtnInnerColor().setVisible(true);
+		Color innerColor = circle.getFillColor();
+		setFillColor(innerColor);
+		getBtnFillColor().setBackground(innerColor);
+		getBtnFillColor().setVisible(true);
 
 		setVisible(true);
 	}

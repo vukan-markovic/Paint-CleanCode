@@ -5,7 +5,6 @@ import shapes.*;
 import java.awt.Color;
 import controller.OptionsController;
 import dialogs.DialogCircle;
-import frame.DrawingFrame;
 import logger.LogWriter;
 import model.DrawingModel;
 import stack.CommandsStack;
@@ -23,11 +22,10 @@ public class CircleCommandsExecutor implements SurfaceShapeCommandsExecutor {
 	private Color innerColor;
 	private Circle circle;
 
-	public CircleCommandsExecutor(DrawingModel model, DrawingFrame drawingFrame, CommandsStack commandsStack,
-			DialogCircle dialogCircle, OptionsController optionsController) {
-		this.model = model;
-		logWriter = new LogWriter(drawingFrame);
-		this.commandsStack = commandsStack;
+	public CircleCommandsExecutor(DialogCircle dialogCircle, OptionsController optionsController) {
+		this.model = optionsController.getModel();
+		logWriter = new LogWriter(optionsController.getFrame());
+		this.commandsStack = optionsController.getCommandsStack();
 		this.dialogCircle = dialogCircle;
 		this.optionsController = optionsController;
 	}
@@ -35,9 +33,9 @@ public class CircleCommandsExecutor implements SurfaceShapeCommandsExecutor {
 	@Override
 	public void addShape() {
 		isSelected = false;
-		outerColor = optionsController.getOuterColor();
-		innerColor = optionsController.getInnerColor();
-		setCircle();
+		outerColor = optionsController.getBorderColor();
+		innerColor = optionsController.getFillColor();
+		createCircle();
 
 		cmdAdd = new CmdAdd(model, circle);
 		cmdAdd.execute();
@@ -49,9 +47,9 @@ public class CircleCommandsExecutor implements SurfaceShapeCommandsExecutor {
 	public void modifyShape(Shape selectedShape) {
 		Circle oldState = (Circle) selectedShape;
 		isSelected = true;
-		outerColor = dialogCircle.getOuterColor();
-		innerColor = dialogCircle.getInnerColor();
-		setCircle();
+		outerColor = dialogCircle.getBorderColor();
+		innerColor = dialogCircle.getFillColor();
+		createCircle();
 
 		logWriter.logModifyCommand(oldState, circle);
 		cmdModifyCircle = new CmdModifyCircle(oldState, circle);
@@ -59,19 +57,23 @@ public class CircleCommandsExecutor implements SurfaceShapeCommandsExecutor {
 		commandsStack.addCommand(cmdModifyCircle);
 	}
 
-	private void setCircle() {
+	private void createCircle() {
 		int xCoordinate = dialogCircle.getXcoordinateValue();
 		int yCoordinate = dialogCircle.getYcoordinateValue();
 		int radius = dialogCircle.getRadiusValue();
 		Point center = new Point(xCoordinate, yCoordinate, isSelected, outerColor);
 		circle = new Circle(center, radius, isSelected, outerColor, innerColor);
 	}
+	
+	public CmdAdd getCmdAdd() {
+		return cmdAdd;
+	}
+
+	public Circle getCircle() {
+		return circle;
+	}
 
 	public CmdModifyCircle getCmdModifyCircle() {
 		return cmdModifyCircle;
-	}
-
-	public void setCmdModifyCircle(CmdModifyCircle cmdModifyCircle) {
-		this.cmdModifyCircle = cmdModifyCircle;
 	}
 }

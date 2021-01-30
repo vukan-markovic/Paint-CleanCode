@@ -7,10 +7,15 @@ public class HexagonAdapter extends Shape {
 	private static final long serialVersionUID = 1L;
 	private Hexagon hexagon;
 
-	public HexagonAdapter(Hexagon hexagon, boolean selected, Color outerColor, Color innerColor) {
-		super(selected, innerColor);
-		setOuterColor(outerColor);
+	public HexagonAdapter(Hexagon hexagon) {
 		this.hexagon = hexagon;
+	}
+
+	public HexagonAdapter(Hexagon hexagon, boolean selected, Color borderColor, Color fillColor) {
+		this(hexagon);
+		setSelected(selected);
+		setBorderColor(borderColor);
+		setFillColor(fillColor);
 	}
 
 	@Override
@@ -28,6 +33,7 @@ public class HexagonAdapter extends Shape {
 		return hexagon.doesContain(xCoordinate, yCoordinate);
 	}
 
+	@Override
 	public boolean equals(Object object) {
 		if (object instanceof HexagonAdapter) {
 			HexagonAdapter hexagonAdapter = (HexagonAdapter) object;
@@ -39,15 +45,17 @@ public class HexagonAdapter extends Shape {
 		return false;
 	}
 
+	@Override
 	public HexagonAdapter clone() {
-		return new HexagonAdapter(new Hexagon(getXcoordinate(), getYcoordinate(), getRadius()), isSelected(), getOuterColor(),
-				getInnerColor());
+		return new HexagonAdapter(new Hexagon(getXcoordinate(), getYcoordinate(), getRadius()), isSelected(),
+				getBorderColor(), getFillColor());
 	}
 
+	@Override
 	public String toString() {
 		return "Center: " + new Point(hexagon.getX(), hexagon.getY(), false, Color.BLACK) + ", radius: "
-				+ hexagon.getR() + " , Outer color: " + getOuterColor().getRGB() + " , Inner color: "
-				+ getInnerColor().getRGB();
+				+ hexagon.getR() + " , Border color: " + getBorderColor().getRGB() + " , Fill color: "
+				+ getFillColor().getRGB();
 	}
 
 	public int getXcoordinate() {
@@ -62,11 +70,11 @@ public class HexagonAdapter extends Shape {
 		return hexagon.getR();
 	}
 
-	public Color getInnerColor() {
+	public Color getFillColor() {
 		return hexagon.getAreaColor();
 	}
 
-	public Color getOuterColor() {
+	public Color getBorderColor() {
 		return hexagon.getBorderColor();
 	}
 
@@ -86,14 +94,16 @@ public class HexagonAdapter extends Shape {
 		hexagon.setR(radius);
 	}
 
-	public void setInnerColor(Color innerColor) {
-		hexagon.setAreaColor(innerColor);
+	public void setFillColor(Color fillColor) {
+		hexagon.setAreaColor(fillColor);
 	}
 
-	public void setOuterColor(Color outerColor) {
-		hexagon.setBorderColor(outerColor);
+	@Override
+	public void setBorderColor(Color borderColor) {
+		hexagon.setBorderColor(borderColor);
 	}
 
+	@Override
 	public void setSelected(boolean selected) {
 		hexagon.setSelected(selected);
 	}

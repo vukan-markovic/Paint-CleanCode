@@ -67,7 +67,7 @@ public class DialogDonut extends DialogSurfaceShape {
 																GroupLayout.PREFERRED_SIZE)))))
 						.addGap(78)
 						.addGroup(getGlContentPanel().createParallelGroup(Alignment.TRAILING)
-								.addComponent(getBtnOuterColor()).addComponent(getBtnInnerColor())
+								.addComponent(getBtnOuterColor()).addComponent(getBtnFillColor())
 								.addComponent(getLblIcon(), GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE))
 						.addGap(102)));
 
@@ -101,7 +101,7 @@ public class DialogDonut extends DialogSurfaceShape {
 												.addComponent(lblInnerRadius)))
 								.addGroup(getGlContentPanel().createSequentialGroup()
 										.addPreferredGap(ComponentPlacement.RELATED).addComponent(getBtnOuterColor())
-										.addGap(9).addComponent(getBtnInnerColor())))
+										.addGap(9).addComponent(getBtnFillColor())))
 						.addGap(33)));
 
 		getContentPanel().setLayout(getGlContentPanel());
@@ -109,6 +109,7 @@ public class DialogDonut extends DialogSurfaceShape {
 
 	private void addBtnOkListener() {
 		getBtnOk().addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent event) {
 				if (!isInputValid())
 					JOptionPane.showMessageDialog(new JFrame(), "You have not filled in all the fields, try again!",
@@ -157,7 +158,7 @@ public class DialogDonut extends DialogSurfaceShape {
 		getYcoordinate().setEditable(false);
 
 		getBtnOuterColor().setVisible(false);
-		getBtnInnerColor().setVisible(false);
+		getBtnFillColor().setVisible(false);
 
 		setVisible(true);
 	}
@@ -181,15 +182,15 @@ public class DialogDonut extends DialogSurfaceShape {
 		String innerRadiusValue = String.valueOf(donut.getInnerRadius());
 		getInnerRadius().setText(innerRadiusValue);
 
-		Color outerColor = donut.getOuterColor();
-		setOuterColor(outerColor);
+		Color outerColor = donut.getBorderColor();
+		setBorderColor(outerColor);
 		getBtnOuterColor().setBackground(outerColor);
 		getBtnOuterColor().setVisible(true);
 
-		Color innerColor = donut.getInnerColor();
-		setInnerColor(innerColor);
-		getBtnInnerColor().setBackground(innerColor);
-		getBtnInnerColor().setVisible(true);
+		Color innerColor = donut.getFillColor();
+		setFillColor(innerColor);
+		getBtnFillColor().setBackground(innerColor);
+		getBtnFillColor().setVisible(true);
 
 		setVisible(true);
 	}
@@ -199,7 +200,7 @@ public class DialogDonut extends DialogSurfaceShape {
 	}
 
 	public int getRadiusValue() {
-		return Integer.parseInt(radius.toString());
+		return Integer.parseInt(radius.getText());
 	}
 
 	public JTextField getInnerRadius() {

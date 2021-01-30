@@ -2,7 +2,6 @@ package logger;
 
 import commandsExecutors.RemoveCommandExecutor;
 import controller.OptionsController;
-import frame.DrawingFrame;
 import model.DrawingModel;
 import shapes.Shape;
 import stack.CommandsStack;
@@ -20,18 +19,17 @@ public class LogParser {
 	private RemoveCommandExecutor removeCommandExecutor;
 	private String[] logLine;
 
-	public LogParser(DrawingModel model, DrawingFrame frame, OptionsController optionsController,
-			CommandsStack commandsStack) {
-		this.model = model;
+	public LogParser(OptionsController optionsController) {
+		this.model = optionsController.getModel();
 		this.optionsController = optionsController;
-		this.commandsStack = commandsStack;
+		this.commandsStack = optionsController.getCommandsStack();
 		circleLogReader = new CircleLogReader(model, commandsStack);
 		donutLogReader = new DonutLogReader(model, commandsStack);
 		hexagonLogReader = new HexagonLogReader(model, commandsStack);
 		lineLogReader = new LineLogReader(model, commandsStack);
 		pointLogReader = new PointLogReader(model, commandsStack);
 		rectangleLogReader = new RectangleLogReader(model, commandsStack);
-		removeCommandExecutor = new RemoveCommandExecutor(model, frame, commandsStack);
+		removeCommandExecutor = new RemoveCommandExecutor(model, optionsController.getFrame(), commandsStack);
 	}
 
 	public void parse(String[] logLine) {

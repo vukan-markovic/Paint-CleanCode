@@ -7,51 +7,50 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class CircleTests {
+	private int xCoordinate;
+	private int yCoordinate;
 	private int radius;
 	private Point center;
+	private Color borderColor;
+	private Color fillColor;
 	private Circle circle;
 	private Graphics graphics;
 
 	@Before
 	public void setUp() {
+		xCoordinate = 1;
+		yCoordinate = 2;
 		radius = 3;
-		center = new Point(1, 2, false, Color.BLACK);
-		circle = new Circle(center, radius, false, Color.BLACK, Color.WHITE);
+		borderColor = Color.BLACK;
+		fillColor = Color.WHITE;
+		center = new Point(xCoordinate, yCoordinate, false, borderColor);
+		circle = new Circle(center, radius, false, borderColor, fillColor);
 		graphics = mock(Graphics.class);
 	}
 
 	@Test
 	public void testDrawShapeNotSelected() {
 		circle.draw(graphics);
-		verify(graphics).setColor(circle.getOuterColor());
-
-		verify(graphics).drawOval(center.getXcoordinate() - radius, center.getYcoordinate() - radius, radius * 2,
-				radius * 2);
-
-		verify(graphics).setColor(circle.getInnerColor());
-		verify(graphics).fillOval(center.getXcoordinate() - radius, center.getYcoordinate() - radius, radius * 2,
-				radius * 2);
+		verify(graphics).setColor(borderColor);
+		verify(graphics).drawOval(xCoordinate - radius, yCoordinate - radius, radius * 2, radius * 2);
+		verify(graphics).setColor(fillColor);
+		verify(graphics).fillOval(xCoordinate - radius, yCoordinate - radius, radius * 2, radius * 2);
 	}
 
 	@Test
 	public void testDrawShapeSelected() {
 		circle.setSelected(true);
 		circle.draw(graphics);
-		verify(graphics).setColor(circle.getOuterColor());
-
-		verify(graphics).drawOval(center.getXcoordinate() - radius, center.getYcoordinate() - radius, radius * 2,
-				radius * 2);
-
-		verify(graphics).setColor(circle.getInnerColor());
-		verify(graphics).fillOval(center.getXcoordinate() - radius, center.getYcoordinate() - radius, radius * 2,
-				radius * 2);
-
+		verify(graphics).setColor(borderColor);
+		verify(graphics).drawOval(xCoordinate - radius, yCoordinate - radius, radius * 2, radius * 2);
+		verify(graphics).setColor(fillColor);
+		verify(graphics).fillOval(xCoordinate - radius, yCoordinate - radius, radius * 2, radius * 2);
 		verify(graphics).setColor(Color.BLUE);
-		verify(graphics).drawRect(center.getXcoordinate() - 3, center.getYcoordinate() - 3, 6, 6);
-		verify(graphics).drawRect(center.getXcoordinate() + circle.getRadius() - 3, center.getYcoordinate() - 3, 6, 6);
-		verify(graphics).drawRect(center.getXcoordinate() - circle.getRadius() - 3, center.getYcoordinate() - 3, 6, 6);
-		verify(graphics).drawRect(center.getXcoordinate() - 3, center.getYcoordinate() + radius - 3, 6, 6);
-		verify(graphics).drawRect(center.getXcoordinate() - 3, center.getYcoordinate() - radius - 3, 6, 6);
+		verify(graphics).drawRect(xCoordinate - 3, yCoordinate - 3, 6, 6);
+		verify(graphics).drawRect(xCoordinate + radius - 3, yCoordinate - 3, 6, 6);
+		verify(graphics).drawRect(xCoordinate - radius - 3, yCoordinate - 3, 6, 6);
+		verify(graphics).drawRect(xCoordinate - 3, yCoordinate + radius - 3, 6, 6);
+		verify(graphics).drawRect(xCoordinate - 3, yCoordinate - radius - 3, 6, 6);
 	}
 
 	@Test
@@ -66,27 +65,28 @@ public class CircleTests {
 
 	@Test
 	public void testEqualsNotSameType() {
-		assertFalse(circle.equals(new Point(1, 2, false, Color.BLACK)));
+		assertFalse(circle.equals(new Point(1, 2)));
 	}
 
 	@Test
 	public void testEqualsFalseExpectedRadius() {
-		assertFalse(circle.equals(new Circle(new Point(1, 2, false, Color.BLACK), 1, false, Color.BLACK, Color.WHITE)));
+		assertFalse(circle.equals(new Circle(new Point(1, 2), 1)));
 	}
 
 	@Test
 	public void testEqualsTrueExpected() {
-		assertTrue(circle.equals(new Circle(new Point(1, 2, false, Color.BLACK), 3, false, Color.BLACK, Color.WHITE)));
+		assertTrue(circle.equals(new Circle(new Point(1, 2), 3)));
 	}
 
 	@Test
 	public void testEqualsFalseExpected() {
-		assertFalse(circle.equals(new Circle(new Point(2, 3, false, Color.BLACK), 1, false, Color.BLACK, Color.WHITE)));
+		assertFalse(circle.equals(new Circle(new Point(2, 3), 1)));
 	}
 
 	@Test
 	public void testToString() {
-		assertEquals("Center: " + center + ", radius: " + radius + " , Outer color: " + circle.getOuterColor().getRGB()
-				+ " , Inner color: " + circle.getInnerColor().getRGB(), circle.toString());
+		assertEquals("Center: " + center + ", radius: " + radius + " , Border color: "
+				+ circle.getBorderColor().getRGB() + " , Fill color: " + circle.getFillColor().getRGB(),
+				circle.toString());
 	}
 }

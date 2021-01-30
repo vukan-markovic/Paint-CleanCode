@@ -130,7 +130,7 @@ public class DialogDonutTests {
 			public void run() {
 				dialogDonut.getBtnOuterColor().doClick();
 				robot.keyPress(KeyEvent.VK_ENTER);
-				assertEquals(dialogDonut.getOuterColor(), dialogDonut.getBtnOuterColor().getBackground());
+				assertEquals(dialogDonut.getBorderColor(), dialogDonut.getBtnOuterColor().getBackground());
 			}
 		});
 	}
@@ -140,9 +140,9 @@ public class DialogDonutTests {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				dialogDonut.getBtnInnerColor().doClick();
+				dialogDonut.getBtnFillColor().doClick();
 				robot.keyPress(KeyEvent.VK_ENTER);
-				assertEquals(dialogDonut.getInnerColor(), dialogDonut.getBtnInnerColor().getBackground());
+				assertEquals(dialogDonut.getFillColor(), dialogDonut.getBtnFillColor().getBackground());
 			}
 		});
 	}

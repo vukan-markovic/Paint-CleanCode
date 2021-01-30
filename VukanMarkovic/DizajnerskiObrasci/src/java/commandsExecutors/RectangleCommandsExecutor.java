@@ -5,7 +5,6 @@ import shapes.*;
 import java.awt.Color;
 import stack.CommandsStack;
 import dialogs.DialogRectangle;
-import frame.DrawingFrame;
 import logger.LogWriter;
 import model.DrawingModel;
 import controller.OptionsController;
@@ -23,11 +22,10 @@ public class RectangleCommandsExecutor implements SurfaceShapeCommandsExecutor {
 	private Color innerColor;
 	private Rectangle rectangle;
 
-	public RectangleCommandsExecutor(DrawingModel model, DrawingFrame drawingFrame, CommandsStack commandsStack,
-			DialogRectangle dialogRectangle, OptionsController optionsController) {
-		this.model = model;
-		logWriter = new LogWriter(drawingFrame);
-		this.commandsStack = commandsStack;
+	public RectangleCommandsExecutor(DialogRectangle dialogRectangle, OptionsController optionsController) {
+		this.model = optionsController.getModel();
+		logWriter = new LogWriter(optionsController.getFrame());
+		this.commandsStack = optionsController.getCommandsStack();
 		this.dialogRectangle = dialogRectangle;
 		this.optionsController = optionsController;
 	}
@@ -35,9 +33,9 @@ public class RectangleCommandsExecutor implements SurfaceShapeCommandsExecutor {
 	@Override
 	public void addShape() {
 		isSelected = false;
-		outerColor = optionsController.getOuterColor();
-		innerColor = optionsController.getInnerColor();
-		setRectangle();
+		outerColor = optionsController.getBorderColor();
+		innerColor = optionsController.getFillColor();
+		createRectangle();
 
 		cmdAdd = new CmdAdd(model, rectangle);
 		cmdAdd.execute();
@@ -49,9 +47,9 @@ public class RectangleCommandsExecutor implements SurfaceShapeCommandsExecutor {
 	public void modifyShape(Shape selectedShape) {
 		Rectangle oldState = (Rectangle) selectedShape;
 		isSelected = true;
-		outerColor = dialogRectangle.getOuterColor();
-		innerColor = dialogRectangle.getInnerColor();
-		setRectangle();
+		outerColor = dialogRectangle.getBorderColor();
+		innerColor = dialogRectangle.getFillColor();
+		createRectangle();
 
 		logWriter.logModifyCommand(oldState, rectangle);
 		cmdModifyRectangle = new CmdModifyRectangle(oldState, rectangle);
@@ -59,7 +57,7 @@ public class RectangleCommandsExecutor implements SurfaceShapeCommandsExecutor {
 		commandsStack.addCommand(cmdModifyRectangle);
 	}
 
-	private void setRectangle() {
+	private void createRectangle() {
 		int xCoordinate = dialogRectangle.getXcoordinateValue();
 		int yCoordinate = dialogRectangle.getYcoordinateValue();
 		int height = dialogRectangle.getheightValue();
@@ -67,12 +65,16 @@ public class RectangleCommandsExecutor implements SurfaceShapeCommandsExecutor {
 		Point upperLeftPoint = new Point(xCoordinate, yCoordinate, isSelected, outerColor);
 		rectangle = new Rectangle(upperLeftPoint, height, width, false, outerColor, innerColor);
 	}
+	
+	public CmdAdd getCmdAdd() {
+		return cmdAdd;
+	}
 
 	public CmdModifyRectangle getCmdModifyRectangle() {
 		return cmdModifyRectangle;
 	}
 
-	public void setCmdModifyRectangle(CmdModifyRectangle cmdModifyRectangle) {
-		this.cmdModifyRectangle = cmdModifyRectangle;
+	public Rectangle getRectangle() {
+		return rectangle;
 	}
 }

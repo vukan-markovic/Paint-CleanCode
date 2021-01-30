@@ -1,4 +1,4 @@
-package frame;
+package toolbars;
 
 import static org.mockito.Mockito.*;
 import org.junit.*;
@@ -22,13 +22,13 @@ public class RightToolbarTests {
 	@Test
 	public void testBtnOuterColorClicked() {
 		rightToolbar.getBtnOuterColor().doClick();
-		verify(optionsController).chooseOuterColor();
+		verify(optionsController).setBorderColor();
 	}
 
 	@Test
 	public void testBtnInnerColorClicked() {
 		rightToolbar.getBtnInnerColor().doClick();
-		verify(optionsController).chooseInnerColor();
+		verify(optionsController).setFillColor();
 	}
 
 	@Test
@@ -88,14 +88,14 @@ public class RightToolbarTests {
 
 	@Test
 	public void testBtnLoadPaintingClicked() {
-		rightToolbar.getBtnLoadPainting().doClick();
+		rightToolbar.getBtnLoadDrawing().doClick();
 		verify(fileController).loadDrawing();
 	}
 
 	@Test
 	public void testBtnNextClicked() {
-		rightToolbar.getBtnNext().setEnabled(true);
-		rightToolbar.getBtnNext().doClick();
+		rightToolbar.getBtnNextCommand().setEnabled(true);
+		rightToolbar.getBtnNextCommand().doClick();
 		verify(optionsController).executeCommandFromLog();
 	}
 }

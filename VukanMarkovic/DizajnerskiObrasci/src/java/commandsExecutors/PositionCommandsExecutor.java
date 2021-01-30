@@ -16,6 +16,7 @@ public class PositionCommandsExecutor {
 	private CmdToFront cmdToFront;
 	private CmdBringToBack cmdBringToBack;
 	private CmdBringToFront cmdBringToFront;
+	private Shape shape;
 
 	public PositionCommandsExecutor(DrawingModel model, DrawingFrame frame, CommandsStack commandsStack) {
 		this.model = model;
@@ -25,15 +26,16 @@ public class PositionCommandsExecutor {
 	}
 
 	public void toBack() {
-		Shape shape = model.getFirstSelectedShape();
+		shape = model.getFirstSelectedShape();
 		cmdToBack = new CmdToBack(model, shape);
 		cmdToBack.execute();
 		commandsStack.addCommand(cmdToBack);
 		logWriter.logToBackCommand(shape);
+		frame.getView().repaint();
 	}
 
 	public void toFront() {
-		Shape shape = model.getFirstSelectedShape();
+		shape = model.getFirstSelectedShape();
 		cmdToFront = new CmdToFront(model, shape);
 		cmdToFront.execute();
 		commandsStack.addCommand(cmdToFront);
@@ -42,7 +44,7 @@ public class PositionCommandsExecutor {
 	}
 
 	public void bringToBack() {
-		Shape shape = model.getFirstSelectedShape();
+		shape = model.getFirstSelectedShape();
 		cmdBringToBack = new CmdBringToBack(model, shape);
 		cmdBringToBack.execute();
 		commandsStack.addCommand(cmdBringToBack);
@@ -51,7 +53,7 @@ public class PositionCommandsExecutor {
 	}
 
 	public void bringToFront() {
-		Shape shape = model.getFirstSelectedShape();
+		shape = model.getFirstSelectedShape();
 		cmdBringToFront = new CmdBringToFront(model, shape);
 		cmdBringToFront.execute();
 		commandsStack.addCommand(cmdBringToFront);
@@ -73,21 +75,5 @@ public class PositionCommandsExecutor {
 
 	public CmdBringToBack getCmdSendToBack() {
 		return cmdBringToBack;
-	}
-
-	public void setCmdToBack(CmdToBack cmdToBack) {
-		this.cmdToBack = cmdToBack;
-	}
-
-	public void setCmdToFront(CmdToFront cmdToFront) {
-		this.cmdToFront = cmdToFront;
-	}
-
-	public void setCmdBringToFront(CmdBringToFront cmdBringToFront) {
-		this.cmdBringToFront = cmdBringToFront;
-	}
-
-	public void setCmdSendToBack(CmdBringToBack cmdBringToBack) {
-		this.cmdBringToBack = cmdBringToBack;
 	}
 }

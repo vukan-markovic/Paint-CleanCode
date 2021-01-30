@@ -7,17 +7,17 @@ import model.DrawingModel;
 import shapes.Shape;
 import stack.CommandsStack;
 
-public class SelectCommandExecutor {
+public class SelectionCommandsExecutor {
 	private DrawingModel model;
 	private LogWriter logWriter;
 	private CommandsStack commandsStack;
 	private CmdSelect cmdSelect;
 	private CmdDeselect cmdDeselect;
 
-	public SelectCommandExecutor(DrawingModel model, DrawingFrame drawingFrame, CommandsStack commandsStack) {
+	public SelectionCommandsExecutor(DrawingModel model, DrawingFrame frame, CommandsStack commandsStack) {
 		this.model = model;
+		logWriter = new LogWriter(frame);
 		this.commandsStack = commandsStack;
-		logWriter = new LogWriter(drawingFrame);
 	}
 
 	public void selectShape(Shape shape) {
@@ -40,13 +40,5 @@ public class SelectCommandExecutor {
 
 	public CmdDeselect getCmdDeselect() {
 		return cmdDeselect;
-	}
-
-	public void setCmdSelect(CmdSelect cmdSelect) {
-		this.cmdSelect = cmdSelect;
-	}
-
-	public void setCmdDeselect(CmdDeselect cmdDeselect) {
-		this.cmdDeselect = cmdDeselect;
 	}
 }

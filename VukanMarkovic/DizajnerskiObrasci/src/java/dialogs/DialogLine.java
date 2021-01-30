@@ -124,8 +124,8 @@ public class DialogLine extends DialogShape {
 		String yCoordinateOfEndPointValue = String.valueOf(endPoint.getYcoordinate());
 		getYCoordinateOfEndPoint().setText(yCoordinateOfEndPointValue);
 
-		Color outerColor = line.getOuterColor();
-		setOuterColor(outerColor);
+		Color outerColor = line.getBorderColor();
+		setBorderColor(outerColor);
 		getBtnOuterColor().setBackground(outerColor);
 
 		setVisible(true);

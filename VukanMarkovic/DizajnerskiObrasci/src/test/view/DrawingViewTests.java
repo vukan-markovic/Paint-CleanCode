@@ -11,7 +11,6 @@ public class DrawingViewTests {
 	private DrawingModel model;
 	private DrawingView view;
 	private Point point;
-	private Donut donut;
 	private Graphics2D graphics;
 
 	@Before
@@ -19,9 +18,7 @@ public class DrawingViewTests {
 		model = new DrawingModel();
 		view = new DrawingView();
 		point = mock(Point.class);
-		donut = mock(Donut.class);
 		model.addShape(point);
-		model.addShape(donut);
 		view.setModel(model);
 		graphics = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB).createGraphics();
 	}

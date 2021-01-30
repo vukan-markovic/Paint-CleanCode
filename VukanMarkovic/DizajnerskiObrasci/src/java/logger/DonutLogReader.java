@@ -6,13 +6,25 @@ import java.awt.Color;
 import model.DrawingModel;
 import stack.CommandsStack;
 
-public class DonutLogReader implements LogReader {
+public class DonutLogReader extends CircleLogReader {
 	private CmdAdd cmdAdd;
 	private CmdSelect cmdSelect;
 	private CmdDeselect cmdDeselect;
 	private DrawingModel model;
 	private CmdModifyDonut cmdModifyDonut;
 	private CommandsStack commandsStack;
+	private int radius;
+	private int innerRadius;
+	private int borderColorNumber;
+	private Color borderColor;
+	private int fillColorNumber;
+	private Color fillColor;
+	private Donut donut;
+	private int xCoordinate;
+	private int yCoordinate;
+	private int centerColorNumber;
+	private Color centerColor;
+	private Point center;
 
 	public DonutLogReader(DrawingModel model, CommandsStack commandsStack) {
 		this.model = model;
@@ -21,31 +33,66 @@ public class DonutLogReader implements LogReader {
 
 	@Override
 	public void addShapeFromLog(String[] logLine) {
-		Point point = new Point(Integer.parseInt(logLine[5]), Integer.parseInt(logLine[8]), false,
-				(Integer.parseInt(logLine[12]) == 0 ? new Color(0, 0, 0, 0)
-						: new Color(Integer.parseInt(logLine[12]))));
-
-		Donut donut = new Donut(point, Integer.parseInt(logLine[15]), Integer.parseInt(logLine[27]), false,
-				(Integer.parseInt(logLine[31]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[31]))),
-				(Integer.parseInt(logLine[35]) == 0 ? new Color(0, 0, 0, 0)
-						: new Color(Integer.parseInt(logLine[35]))));
-
+		setLogLine(logLine);
+		readCenter();
+		readDonut();
 		cmdAdd = new CmdAdd(model, donut);
 		cmdAdd.execute();
 		commandsStack.addCommand(cmdAdd);
 	}
 
 	@Override
+	public void modifyShapeFromLog(String[] logLine, Shape selectedShape) {
+		setLogLine(logLine);
+		Donut oldState = (Donut) selectedShape;
+		readModifiedCenter();
+		readModifiedDonut();
+		model.getSelectedShapes().remove(oldState);
+		model.getSelectedShapes().add(donut);
+		cmdModifyDonut = new CmdModifyDonut(oldState, donut);
+		cmdModifyDonut.execute();
+		commandsStack.addCommand(cmdModifyDonut);
+	}
+
+	@Override
+	protected void readModifiedCenter() {
+		xCoordinate = Integer.parseInt(getLogLine()[41]);
+		yCoordinate = Integer.parseInt(getLogLine()[44]);
+		centerColorNumber = Integer.parseInt(getLogLine()[48]);
+
+		if (centerColorNumber == 0)
+			centerColor = new Color(0, 0, 0, 0);
+		else
+			centerColor = new Color(centerColorNumber);
+
+		center = new Point(xCoordinate, yCoordinate, false, centerColor);
+	}
+
+	private void readModifiedDonut() {
+		radius = Integer.parseInt(getLogLine()[51]);
+		innerRadius = Integer.parseInt(getLogLine()[63]);
+		borderColorNumber = Integer.parseInt(getLogLine()[67]);
+
+		if (borderColorNumber == 0)
+			borderColor = new Color(0, 0, 0, 0);
+		else
+			borderColor = new Color(borderColorNumber);
+
+		fillColorNumber = Integer.parseInt(getLogLine()[71]);
+
+		if (fillColorNumber == 0)
+			fillColor = new Color(0, 0, 0, 0);
+		else
+			fillColor = new Color(fillColorNumber);
+
+		donut = new Donut(center, radius, innerRadius, false, borderColor, fillColor);
+	}
+
+	@Override
 	public void selectShapeFromLog(String[] logLine) {
-		Point point = new Point(Integer.parseInt(logLine[5]), Integer.parseInt(logLine[8]), false,
-				(Integer.parseInt(logLine[12]) == 0 ? new Color(0, 0, 0, 0)
-						: new Color(Integer.parseInt(logLine[12]))));
-
-		Donut donut = new Donut(point, Integer.parseInt(logLine[15]), Integer.parseInt(logLine[27]), true,
-				(Integer.parseInt(logLine[31]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[31]))),
-				(Integer.parseInt(logLine[35]) == 0 ? new Color(0, 0, 0, 0)
-						: new Color(Integer.parseInt(logLine[35]))));
-
+		setLogLine(logLine);
+		readCenter();
+		readDonut();
 		cmdSelect = new CmdSelect(model, donut);
 		cmdSelect.execute();
 		commandsStack.addCommand(cmdSelect);
@@ -53,37 +100,51 @@ public class DonutLogReader implements LogReader {
 
 	@Override
 	public void deselectShapeFromLog(String[] logLine) {
-		Point point = new Point(Integer.parseInt(logLine[5]), Integer.parseInt(logLine[8]), false,
-				(Integer.parseInt(logLine[12]) == 0 ? new Color(0, 0, 0, 0)
-						: new Color(Integer.parseInt(logLine[12]))));
-
-		Donut donut = new Donut(point, Integer.parseInt(logLine[15]), Integer.parseInt(logLine[27]), true,
-				(Integer.parseInt(logLine[31]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[31]))),
-				(Integer.parseInt(logLine[35]) == 0 ? new Color(0, 0, 0, 0)
-						: new Color(Integer.parseInt(logLine[35]))));
-
+		setLogLine(logLine);
+		readCenter();
+		readDonut();
 		cmdDeselect = new CmdDeselect(model, donut);
 		cmdDeselect.execute();
 		commandsStack.addCommand(cmdDeselect);
 	}
 
-	@Override
-	public void modifyShapeFromLog(String[] logLine, Shape selectedShape) {
-		Donut oldState = (Donut) selectedShape;
+	private void readDonut() {
+		radius = Integer.parseInt(getLogLine()[15]);
+		innerRadius = Integer.parseInt(getLogLine()[27]);
+		borderColorNumber = Integer.parseInt(getLogLine()[31]);
 
-		Point point = new Point(Integer.parseInt(logLine[41]), Integer.parseInt(logLine[44]), false,
-				(Integer.parseInt(logLine[48]) == 0 ? new Color(0, 0, 0, 0)
-						: new Color(Integer.parseInt(logLine[48]))));
+		if (borderColorNumber == 0)
+			borderColor = new Color(0, 0, 0, 0);
+		else
+			borderColor = new Color(borderColorNumber);
 
-		Donut newState = new Donut(point, Integer.parseInt(logLine[51]), Integer.parseInt(logLine[63]), true,
-				(Integer.parseInt(logLine[67]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(logLine[67]))),
-				(Integer.parseInt(logLine[71]) == 0 ? new Color(0, 0, 0, 0)
-						: new Color(Integer.parseInt(logLine[71]))));
+		fillColorNumber = Integer.parseInt(getLogLine()[35]);
 
-		model.getSelectedShapes().remove(oldState);
-		model.getSelectedShapes().add(newState);
-		cmdModifyDonut = new CmdModifyDonut(oldState, newState);
-		cmdModifyDonut.execute();
-		commandsStack.addCommand(cmdModifyDonut);
+		if (fillColorNumber == 0)
+			fillColor = new Color(0, 0, 0, 0);
+		else
+			fillColor = new Color(fillColorNumber);
+
+		donut = new Donut(getCenter(), radius, innerRadius, false, borderColor, fillColor);
+	}
+
+	public CmdAdd getCmdAdd() {
+		return cmdAdd;
+	}
+
+	public CmdSelect getCmdSelect() {
+		return cmdSelect;
+	}
+
+	public CmdDeselect getCmdDeselect() {
+		return cmdDeselect;
+	}
+
+	public CmdModifyDonut getCmdModifyDonut() {
+		return cmdModifyDonut;
+	}
+
+	public Donut getDonut() {
+		return donut;
 	}
 }

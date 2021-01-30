@@ -104,7 +104,7 @@ public class DialogCircleTests {
 			public void run() {
 				dialogCircle.getBtnOuterColor().doClick();
 				robot.keyPress(KeyEvent.VK_ENTER);
-				assertEquals(dialogCircle.getOuterColor(), dialogCircle.getBtnOuterColor().getBackground());
+				assertEquals(dialogCircle.getBorderColor(), dialogCircle.getBtnOuterColor().getBackground());
 			}
 		});
 	}
@@ -114,9 +114,9 @@ public class DialogCircleTests {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				dialogCircle.getBtnInnerColor().doClick();
+				dialogCircle.getBtnFillColor().doClick();
 				robot.keyPress(KeyEvent.VK_ENTER);
-				assertEquals(dialogCircle.getInnerColor(), dialogCircle.getBtnInnerColor().getBackground());
+				assertEquals(dialogCircle.getFillColor(), dialogCircle.getBtnFillColor().getBackground());
 			}
 		});
 	}
