@@ -125,7 +125,8 @@ public class DialogRectangle extends DialogSurfaceShape {
 
 	@Override
 	public boolean areValuesValid() {
-		return getwidthValue() > 0 && getheightValue() > 0;
+		return getwidthValue() > 0 && getheightValue() > 0 && getXcoordinate().getText().length() < 5
+				&& getYcoordinate().getText().length() < 5;
 	}
 
 	@Override
@@ -182,6 +183,9 @@ public class DialogRectangle extends DialogSurfaceShape {
 	}
 
 	public int getheightValue() {
+		if (height.getText().length() > 3)
+			return 0;
+
 		return Integer.parseInt(height.getText());
 	}
 
@@ -190,6 +194,9 @@ public class DialogRectangle extends DialogSurfaceShape {
 	}
 
 	public int getwidthValue() {
+		if (width.getText().length() > 3)
+			return 0;
+
 		return Integer.parseInt(width.getText());
 	}
 }

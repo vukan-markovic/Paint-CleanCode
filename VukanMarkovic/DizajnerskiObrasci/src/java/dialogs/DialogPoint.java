@@ -78,7 +78,7 @@ public class DialogPoint extends DialogShape {
 
 	@Override
 	public boolean areValuesValid() {
-		return true;
+		return getXcoordinate().getText().length() < 5 && getYcoordinate().getText().length() < 5;
 	}
 
 	@Override

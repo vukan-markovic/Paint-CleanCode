@@ -131,7 +131,8 @@ public class DialogDonut extends DialogSurfaceShape {
 
 	@Override
 	public boolean areValuesValid() {
-		return getRadiusValue() > 0 && getInnerRadiusValue() > 0 && getInnerRadiusValue() < getRadiusValue();
+		return getRadiusValue() > 0 && getInnerRadiusValue() > 0 && getInnerRadiusValue() < getRadiusValue()
+				&& getXcoordinate().getText().length() < 5 && getYcoordinate().getText().length() < 5;
 	}
 
 	@Override
@@ -188,6 +189,9 @@ public class DialogDonut extends DialogSurfaceShape {
 	}
 
 	public int getRadiusValue() {
+		if (radius.getText().length() > 3)
+			return 0;
+
 		return Integer.parseInt(radius.getText());
 	}
 
@@ -196,6 +200,9 @@ public class DialogDonut extends DialogSurfaceShape {
 	}
 
 	public int getInnerRadiusValue() {
+		if (innerRadius.getText().length() > 3)
+			return 0;
+
 		return Integer.parseInt(innerRadius.getText());
 	}
 }

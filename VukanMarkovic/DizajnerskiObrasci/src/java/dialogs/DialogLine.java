@@ -109,7 +109,7 @@ public class DialogLine extends DialogShape {
 
 	@Override
 	public boolean areValuesValid() {
-		return true;
+		return getXcoordinate().getText().length() < 5 && getYcoordinate().getText().length() < 5;
 	}
 
 	@Override
@@ -143,6 +143,9 @@ public class DialogLine extends DialogShape {
 	}
 
 	public int getXCoordinateOfEndPointValue() {
+		if (xCoordinateOfEndPoint.getText().length() > 3)
+			return 0;
+
 		return Integer.parseInt(xCoordinateOfEndPoint.getText());
 	}
 
@@ -151,6 +154,9 @@ public class DialogLine extends DialogShape {
 	}
 
 	public int getYCoordinateOfEndPointValue() {
+		if (yCoordinateOfEndPoint.getText().length() > 3)
+			return 0;
+
 		return Integer.parseInt(yCoordinateOfEndPoint.getText());
 	}
 }

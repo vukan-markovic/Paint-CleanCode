@@ -1,13 +1,12 @@
 package dialogs;
 
+import javax.swing.*;
+import shapes.*;
 import java.awt.Color;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
-import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import shapes.*;
 
 public class DialogCircle extends DialogSurfaceShape {
 	private static final long serialVersionUID = 1L;
@@ -110,7 +109,8 @@ public class DialogCircle extends DialogSurfaceShape {
 
 	@Override
 	public boolean areValuesValid() {
-		return getRadiusValue() > 0;
+		return getRadiusValue() > 0 && getXcoordinate().getText().length() < 5
+				&& getYcoordinate().getText().length() < 5;
 	}
 
 	@Override
@@ -164,6 +164,9 @@ public class DialogCircle extends DialogSurfaceShape {
 	}
 
 	public int getRadiusValue() {
+		if (radius.getText().length() > 3)
+			return 0;
+
 		return Integer.parseInt(radius.getText());
 	}
 }
