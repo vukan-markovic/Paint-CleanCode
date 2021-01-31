@@ -12,6 +12,10 @@ public class DrawingModel {
 		selectedShapes = new ArrayList<Shape>();
 	}
 
+	public void addShapes(ArrayList<Shape> shapes) {
+		shapes.addAll(shapes);
+	}
+
 	public void addShape(Shape shape) {
 		shapes.add(shape);
 	}
@@ -19,7 +23,7 @@ public class DrawingModel {
 	public void addSelectedShape(Shape shape) {
 		selectedShapes.add(shape);
 	}
-	
+
 	public void addShapeToIndex(int index, Shape shape) {
 		shapes.add(index, shape);
 	}
@@ -31,7 +35,7 @@ public class DrawingModel {
 	public void removeSelectedShape(Shape shape) {
 		selectedShapes.remove(shape);
 	}
-	
+
 	public void removeShapeAtIndex(int index) {
 		shapes.remove(index);
 	}
@@ -60,6 +64,18 @@ public class DrawingModel {
 		return shapes.stream().filter(shape -> shape.isSelected()).findFirst().get();
 	}
 
+	public void clearSelectedShapes() {
+		selectedShapes.clear();
+	}
+
+	public boolean doesContainShape(Shape shape) {
+		return shapes.contains(shape);
+	}
+
+	public boolean doesContainSelectedShape(Shape shape) {
+		return selectedShapes.contains(shape);
+	}
+
 	public List<Shape> getShapes() {
 		return shapes;
 	}
@@ -70,21 +86,5 @@ public class DrawingModel {
 
 	public void setShapes(List<Shape> shapes) {
 		this.shapes = shapes;
-	}
-
-	public void addShapes(ArrayList<Shape> shapes) {
-		shapes.addAll(shapes);
-	}
-
-	public void clearSelectedShapes() {
-		selectedShapes.clear();
-	}
-	
-	public boolean doesContainShape(Shape shape) {
-		return shapes.contains(shape);
-	}
-	
-	public boolean doesContainSelectedShape(Shape shape) {
-		return selectedShapes.contains(shape);
 	}
 }

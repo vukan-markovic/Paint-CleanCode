@@ -2,19 +2,19 @@ package controller;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
-import java.awt.Color;
 import java.util.*;
 import org.junit.*;
 import commands.*;
+import java.awt.Color;
+import commandsHandler.CommandsHandler;
 import frame.DrawingFrame;
 import model.DrawingModel;
 import shapes.Point;
-import stack.CommandsStack;
 
 public class OptionsControllerTests {
 	private DrawingModel model;
 	private DrawingFrame frame;
-	private CommandsStack commandsStack;
+	private CommandsHandler commandsHandler;
 	private Queue<String> commandsLog;
 	private OptionsController optionsController;
 
@@ -22,24 +22,45 @@ public class OptionsControllerTests {
 	public void setUp() {
 		model = new DrawingModel();
 		frame = new DrawingFrame();
-		commandsStack = spy(CommandsStack.class);
+		commandsHandler = spy(CommandsHandler.class);
 		commandsLog = new LinkedList<String>();
-		optionsController = new OptionsController(model, frame, commandsStack, commandsLog);
+		optionsController = new OptionsController(model, frame, commandsHandler, commandsLog);
 	}
 
 	@Test
 	public void testUndoCommand() {
-		commandsStack.addCommand(new CmdAdd(model, new Point(1, 2)));
+		commandsHandler.addExecutedCommand(new CmdAdd(model, new Point(1, 2)));
 		optionsController.undoCommand();
-		verify(commandsStack).undoCommand();
+		verify(commandsHandler).undoCommand();
+	}
+
+	@Test
+	public void testUndoRemoveCommands() {
+		commandsHandler.addExecutedCommand(new CmdAdd(model, new Point(1, 2)));
+		commandsHandler.addExecutedCommand(new CmdAdd(model, new Point(1, 3)));
+		commandsHandler.addExecutedCommand(new CmdRemove(model, new Point(1, 2)));
+		commandsHandler.addExecutedCommand(new CmdRemove(model, new Point(1, 2)));
+		optionsController.undoCommand();
+		verify(commandsHandler).undoCommand();
 	}
 
 	@Test
 	public void testRedoCommand() {
-		commandsStack.addCommand(new CmdAdd(model, new Point(1, 2)));
+		commandsHandler.addExecutedCommand(new CmdAdd(model, new Point(1, 2)));
 		optionsController.undoCommand();
 		optionsController.redoCommand();
-		verify(commandsStack).redoCommand();
+		verify(commandsHandler).redoCommand();
+	}
+
+	@Test
+	public void testRedoRemoveCommands() {
+		commandsHandler.addExecutedCommand(new CmdAdd(model, new Point(1, 2)));
+		commandsHandler.addExecutedCommand(new CmdAdd(model, new Point(1, 3)));
+		commandsHandler.addExecutedCommand(new CmdRemove(model, new Point(1, 2)));
+		commandsHandler.addExecutedCommand(new CmdRemove(model, new Point(1, 2)));
+		optionsController.undoCommand();
+		optionsController.redoCommand();
+		verify(commandsHandler).redoCommand();
 	}
 
 	@Test
@@ -87,7 +108,7 @@ public class OptionsControllerTests {
 		new CmdSelect(model, secondPoint).execute();
 		optionsController.moveShapeToBack();
 
-		assertTrue(commandsStack.getExecutedCommands()
+		assertTrue(commandsHandler.getExecutedCommands()
 				.contains(optionsController.getPositionCommandsExecutor().getCmdToBack()));
 	}
 
@@ -100,7 +121,7 @@ public class OptionsControllerTests {
 		new CmdAdd(model, secondPoint).execute();
 		optionsController.moveShapeToFront();
 
-		assertTrue(commandsStack.getExecutedCommands()
+		assertTrue(commandsHandler.getExecutedCommands()
 				.contains(optionsController.getPositionCommandsExecutor().getCmdToFront()));
 	}
 
@@ -111,8 +132,8 @@ public class OptionsControllerTests {
 		new CmdSelect(model, point).execute();
 		optionsController.bringShapeToBack();
 
-		assertTrue(commandsStack.getExecutedCommands()
-				.contains(optionsController.getPositionCommandsExecutor().getCmdSendToBack()));
+		assertTrue(commandsHandler.getExecutedCommands()
+				.contains(optionsController.getPositionCommandsExecutor().getCmdBringToBack()));
 	}
 
 	@Test
@@ -122,7 +143,7 @@ public class OptionsControllerTests {
 		new CmdSelect(model, point).execute();
 		optionsController.bringShapeToFront();
 
-		assertTrue(commandsStack.getExecutedCommands()
+		assertTrue(commandsHandler.getExecutedCommands()
 				.contains(optionsController.getPositionCommandsExecutor().getCmdBringToFront()));
 	}
 }

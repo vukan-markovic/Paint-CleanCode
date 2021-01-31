@@ -46,10 +46,18 @@ public class Rectangle extends SurfaceShape {
 	protected void drawSelection(Graphics graphics) {
 		int xCoordinate = upperLeftPoint.getXcoordinate();
 		int yCoordinate = upperLeftPoint.getYcoordinate();
-		graphics.drawRect(xCoordinate - 3, yCoordinate - 3, 6, 6);
-		graphics.drawRect(xCoordinate - 3 + width, yCoordinate - 3, 6, 6);
-		graphics.drawRect(xCoordinate - 3, yCoordinate - 3 + height, 6, 6);
-		graphics.drawRect(xCoordinate + width - 3, yCoordinate + height - 3, 6, 6);
+
+		graphics.drawRect(xCoordinate - SELECT_RECTANGLE_GAP, yCoordinate - SELECT_RECTANGLE_GAP,
+				SELECT_RECTANGLE_SIDE_LENGTH, SELECT_RECTANGLE_SIDE_LENGTH);
+
+		graphics.drawRect(xCoordinate - SELECT_RECTANGLE_GAP + width, yCoordinate - SELECT_RECTANGLE_GAP,
+				SELECT_RECTANGLE_SIDE_LENGTH, SELECT_RECTANGLE_SIDE_LENGTH);
+
+		graphics.drawRect(xCoordinate - SELECT_RECTANGLE_GAP, yCoordinate - SELECT_RECTANGLE_GAP + height,
+				SELECT_RECTANGLE_SIDE_LENGTH, SELECT_RECTANGLE_SIDE_LENGTH);
+
+		graphics.drawRect(xCoordinate + width - SELECT_RECTANGLE_GAP, yCoordinate + height - SELECT_RECTANGLE_GAP,
+				SELECT_RECTANGLE_SIDE_LENGTH, SELECT_RECTANGLE_SIDE_LENGTH);
 	}
 
 	@Override

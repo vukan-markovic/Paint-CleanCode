@@ -1,10 +1,9 @@
 package controller;
 
 import static org.junit.Assert.*;
-
-import java.awt.Color;
 import java.util.*;
 import org.junit.*;
+import java.awt.Color;
 import org.junit.rules.TemporaryFolder;
 import commands.CmdAdd;
 import frame.DrawingFrame;
@@ -29,8 +28,8 @@ public class FileControllerTests {
 	}
 
 	@Test
-	public void testSaveNoShapes() {
-		fileController.save();
+	public void testSaveDrawingAndLogNoShapes() {
+		fileController.saveDrawingAndLog();
 		assertNull(fileController.getFilePath());
 		assertNull(fileController.getFileDrawing());
 		assertNull(fileController.getFileLog());
@@ -38,11 +37,11 @@ public class FileControllerTests {
 	}
 
 	@Test
-	public void testSave() {
+	public void testSaveDrawingAndLog() {
 		Point point = new Point(1, 2, false, Color.BLACK);
 		new CmdAdd(model, point).execute();
 		frame.getCommandsListModel().addElement("Add - " + point.getClassName() + " " + point);
-		fileController.save();
+		fileController.saveDrawingAndLog();
 		assertNotNull(fileController.getFilePath());
 		assertNotNull(fileController.getFileDrawing());
 		assertNotNull(fileController.getFileLog());

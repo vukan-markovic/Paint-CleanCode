@@ -2,19 +2,20 @@ package controller;
 
 import javax.swing.*;
 import commandsExecutors.*;
+import commandsHandler.CommandsHandler;
 import dialogs.*;
 import observer.*;
 import shapes.*;
 import frame.DrawingFrame;
 import model.DrawingModel;
-import stack.CommandsStack;
+
 import java.awt.event.MouseEvent;
 
 public class DrawingController {
+	private OptionsController optionsController;
 	private DrawingModel model;
 	private DrawingFrame frame;
-	private CommandsStack commandsStack;
-	private OptionsController optionsController;
+	private CommandsHandler commandsHandler;
 	private DrawingObserver observer;
 	private PropertyManager manager;
 	private DialogPoint dialogPoint;
@@ -34,10 +35,10 @@ public class DrawingController {
 	private Point pointClick;
 
 	public DrawingController(OptionsController optionsController) {
-		this.model = optionsController.getModel();
-		frame = optionsController.getFrame();
-		this.commandsStack = optionsController.getCommandsStack();
 		this.optionsController = optionsController;
+		model = optionsController.getModel();
+		frame = optionsController.getFrame();
+		commandsHandler = optionsController.getCommandsHandler();
 		observer = new DrawingObserver();
 		manager = new PropertyManager(frame);
 		observer.addPropertyChangeListener(manager);
@@ -53,8 +54,8 @@ public class DrawingController {
 		hexagonCommandsExecutor = new HexagonCommandsExecutor(dialogHexagon, optionsController);
 		donutCommandsExecutor = new DonutCommandsExecutor(dialogDonut, optionsController);
 		circleCommandsExecutor = new CircleCommandsExecutor(dialogCircle, optionsController);
-		removeCommandExecutor = new RemoveCommandExecutor(model, frame, commandsStack);
-		selectionCommandsExecutor = new SelectionCommandsExecutor(model, frame, commandsStack);
+		removeCommandExecutor = new RemoveCommandExecutor(model, frame, commandsHandler);
+		selectionCommandsExecutor = new SelectionCommandsExecutor(model, frame, commandsHandler);
 	}
 
 	public void selectOrDeselectShapes(MouseEvent click) {
@@ -88,13 +89,13 @@ public class DrawingController {
 	public void drawPoint(MouseEvent click) {
 		pointCommandsExecutor.addShape(click.getX(), click.getY());
 		optionsController.fireEventsForOptionsButtons();
-		commandsStack.clearUnexecutedCommands();
+		commandsHandler.clearUnexecutedCommands();
 	}
 
 	public void drawLine(MouseEvent click) {
 		lineCommandsExecutor.addShape(click.getX(), click.getY());
 		optionsController.fireEventsForOptionsButtons();
-		commandsStack.clearUnexecutedCommands();
+		commandsHandler.clearUnexecutedCommands();
 	}
 
 	public void drawRectangle(MouseEvent click) {
@@ -105,8 +106,8 @@ public class DrawingController {
 			rectangleCommandsExecutor.addShape();
 			optionsController.fireEventsForOptionsButtons();
 		}
-		
-		commandsStack.clearUnexecutedCommands();
+
+		commandsHandler.clearUnexecutedCommands();
 	}
 
 	public void drawCircle(MouseEvent click) {
@@ -117,8 +118,8 @@ public class DrawingController {
 			circleCommandsExecutor.addShape();
 			optionsController.fireEventsForOptionsButtons();
 		}
-		
-		commandsStack.clearUnexecutedCommands();
+
+		commandsHandler.clearUnexecutedCommands();
 	}
 
 	public void drawDonut(MouseEvent click) {
@@ -129,20 +130,20 @@ public class DrawingController {
 			donutCommandsExecutor.addShape();
 			optionsController.fireEventsForOptionsButtons();
 		}
-		
-		commandsStack.clearUnexecutedCommands();
+
+		commandsHandler.clearUnexecutedCommands();
 	}
 
 	public void drawHexagon(MouseEvent click) {
 		pointClick = new Point(click.getX(), click.getY(), false, optionsController.getBorderColor());
 		dialogHexagon.setCreateDialog(pointClick);
 
-		if (dialogHexagon.isAccepted()) { 
+		if (dialogHexagon.isAccepted()) {
 			hexagonCommandsExecutor.addShape();
 			optionsController.fireEventsForOptionsButtons();
 		}
-		
-		commandsStack.clearUnexecutedCommands();
+
+		commandsHandler.clearUnexecutedCommands();
 	}
 
 	public void modifyShape() {
@@ -180,7 +181,7 @@ public class DrawingController {
 				hexagonCommandsExecutor.modifyShape(selectedShape);
 		}
 
-		commandsStack.clearUnexecutedCommands();
+		commandsHandler.clearUnexecutedCommands();
 		frame.getView().repaint();
 		optionsController.fireEventsForUndoAndRedoButtons();
 	}
@@ -189,7 +190,7 @@ public class DrawingController {
 		if (JOptionPane.showConfirmDialog(new JFrame(), "Are you sure you want to delete selected shape/shapes?",
 				"Delete it?", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 			removeCommandExecutor.removeShapes();
-			commandsStack.clearUnexecutedCommands();
+			commandsHandler.clearUnexecutedCommands();
 			optionsController.fireEventsForOptionsButtons();
 		}
 	}

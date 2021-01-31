@@ -66,8 +66,7 @@ public class Point extends Shape {
 
 	@Override
 	public String toString() {
-		return "(x: " + xCoordinate + " , y: " + yCoordinate + " , Border color: "
-				+ getBorderColor().getRGB() + " )";
+		return "(x: " + xCoordinate + " , y: " + yCoordinate + " , Border color: " + getBorderColor().getRGB() + " )";
 	}
 
 	public int getXcoordinate() {

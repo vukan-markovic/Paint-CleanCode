@@ -15,13 +15,13 @@ public class DialogHexagonTests {
 	}
 
 	@Test
-	public void testBtnOuterColorClicked() {
-		dialogHexagon.getBtnOuterColor().doClick();
-		assertEquals(dialogHexagon.getBorderColor(), dialogHexagon.getBtnOuterColor().getBackground());
+	public void testBtnBorderColorClicked() {
+		dialogHexagon.getBtnBorderColor().doClick();
+		assertEquals(dialogHexagon.getBorderColor(), dialogHexagon.getBtnBorderColor().getBackground());
 	}
 
 	@Test
-	public void testBtnInnerColorClicked() {
+	public void testBtnFillColorClicked() {
 		dialogHexagon.getBtnFillColor().doClick();
 		assertEquals(dialogHexagon.getFillColor(), dialogHexagon.getBtnFillColor().getBackground());
 	}

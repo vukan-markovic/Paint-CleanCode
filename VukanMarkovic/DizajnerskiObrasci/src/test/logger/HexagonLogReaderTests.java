@@ -3,84 +3,81 @@ package logger;
 import static org.junit.Assert.*;
 import org.junit.*;
 import shapes.*;
+import commandsHandler.CommandsHandler;
 import hexagon.Hexagon;
 import model.DrawingModel;
 import java.awt.Color;
-import stack.CommandsStack;
 
 public class HexagonLogReaderTests {
 	private DrawingModel model;
-	private CommandsStack commandsStack;
+	private CommandsHandler commandsHandler;
 	private HexagonLogReader logReader;
 
 	@Before
 	public void setUp() {
 		model = new DrawingModel();
-		commandsStack = new CommandsStack();
-		logReader = new HexagonLogReader(model, commandsStack);
+		commandsHandler = new CommandsHandler();
+		logReader = new HexagonLogReader(model, commandsHandler);
 	}
 
 	@Test
 	public void testAddShapeFromLog() {
-		String[] line = "Add - HexagonAdapter Center: (x: 267 , y: 302 , Border color: -360334 ), radius: 123 , Border color: -360334 , Fill color: -5171"
-				.split(" ");
-
-		logReader.addShapeFromLog(line);
+		addShapeFromLog();
 		assertTrue(model.doesContainShape(logReader.getHexagon()));
-		assertTrue(commandsStack.getExecutedCommands().contains(logReader.getCmdAdd()));
+		assertTrue(commandsHandler.getExecutedCommands().contains(logReader.getCmdAdd()));
 	}
 
 	@Test
 	public void testModifyShapeFromLog() {
-		String[] line = "Modify - HexagonAdapter from Center: (x: 609 , y: 141 , Border color: -360334 ), radius: 21 , Border color: -360334 , Fill color: -5171 to  Center: (x: 700 , y: 141 , Border color: -360334 ), radius: 21 , Border color: -360334 , Fill color: -5171"
+		String[] logLine = "Modify - HexagonAdapter from Center: (x: 609 , y: 141 , Border color: -360334 ), radius: 21 , Border color: -360334 , Fill color: -5171 to  Center: (x: 700 , y: 141 , Border color: -360334 ), radius: 21 , Border color: -360334 , Fill color: -5171"
 				.split(" ");
 
 		HexagonAdapter hexagon = new HexagonAdapter(new Hexagon(609, 141, 21), false, new Color(250, 128, 114),
 				new Color(255, 235, 205));
 
-		Point point = new Point(Integer.parseInt(line[29]), Integer.parseInt(line[32]), false,
-				(Integer.parseInt(line[36]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[36]))));
+		Point point = new Point(Integer.parseInt(logLine[29]), Integer.parseInt(logLine[32]), false,
+				new Color(Integer.parseInt(logLine[36])));
 
 		HexagonAdapter newState = new HexagonAdapter(
-				new Hexagon(point.getXcoordinate(), point.getYcoordinate(), Integer.parseInt(line[39])), true,
-				(Integer.parseInt(line[43]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[43]))),
-				(Integer.parseInt(line[47]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[47]))));
+				new Hexagon(point.getXcoordinate(), point.getYcoordinate(), Integer.parseInt(logLine[39])), true,
+				new Color(Integer.parseInt(logLine[43])), new Color(Integer.parseInt(logLine[47])));
 
 		HexagonAdapter originalState = hexagon.clone();
-		logReader.modifyShapeFromLog(line, hexagon);
+		logReader.modifyShapeFromLog(logLine, hexagon);
 		assertFalse(model.getSelectedShapes().contains(originalState));
 		assertTrue(model.getSelectedShapes().contains(newState));
 		assertEquals(hexagon, newState);
-		assertTrue(commandsStack.getExecutedCommands().contains(logReader.getCmdModifyHexagon()));
+		assertTrue(commandsHandler.getExecutedCommands().contains(logReader.getCmdModifyHexagon()));
 	}
 
 	@Test
 	public void testSelectShapeFromLog() {
-		String[] lineLogAdd = "Add - HexagonAdapter Center: (x: 609 , y: 141 , Border color: -360334 ), radius: 21 , Border color: -360334 , Fill color: -5171"
-				.split(" ");
-		
-		logReader.addShapeFromLog(lineLogAdd);
-		
-		String[] line = "Select - HexagonAdapter Center: (x: 609 , y: 141 , Border color: -360334 ), radius: 21 , Border color: -360334 , Fill color: -5171"
+		addShapeFromLog();
+
+		String[] lineLog = "Select - HexagonAdapter Center: (x: 609 , y: 141 , Border color: -360334 ), radius: 21 , Border color: -360334 , Fill color: -5171"
 				.split(" ");
 
-		logReader.selectShapeFromLog(line);
+		logReader.selectShapeFromLog(lineLog);
 		assertTrue(model.doesContainSelectedShape(logReader.getHexagon()));
-		assertTrue(commandsStack.getExecutedCommands().contains(logReader.getCmdSelect()));
+		assertTrue(commandsHandler.getExecutedCommands().contains(logReader.getCmdSelect()));
 	}
 
 	@Test
 	public void testDeselectShapeFromLog() {
-		String[] lineLogAdd = "Add - HexagonAdapter Center: (x: 609 , y: 141 , Border color: -360334 ), radius: 21 , Border color: -360334 , Fill color: -5171"
-				.split(" ");
-		
-		logReader.addShapeFromLog(lineLogAdd);
-		
-		String[] line = "Deselect - HexagonAdapter Center: (x: 609 , y: 141 , Border color: -360334 ), radius: 21 , Border color: -360334 , Fill color: -5171"
+		addShapeFromLog();
+
+		String[] lineLog = "Deselect - HexagonAdapter Center: (x: 609 , y: 141 , Border color: -360334 ), radius: 21 , Border color: -360334 , Fill color: -5171"
 				.split(" ");
 
-		logReader.deselectShapeFromLog(line);
+		logReader.deselectShapeFromLog(lineLog);
 		assertFalse(model.doesContainSelectedShape(logReader.getHexagon()));
-		assertTrue(commandsStack.getExecutedCommands().contains(logReader.getCmdDeselect()));
+		assertTrue(commandsHandler.getExecutedCommands().contains(logReader.getCmdDeselect()));
+	}
+
+	private void addShapeFromLog() {
+		String[] lineLog = "Add - HexagonAdapter Center: (x: 609 , y: 141 , Border color: -360334 ), radius: 21 , Border color: -360334 , Fill color: -5171"
+				.split(" ");
+
+		logReader.addShapeFromLog(lineLog);
 	}
 }

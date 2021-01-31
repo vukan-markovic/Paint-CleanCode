@@ -16,13 +16,13 @@ public class DialogDonutTests {
 	}
 
 	@Test
-	public void testBtnOuterColorClicked() {
-		dialogDonut.getBtnOuterColor().doClick();
-		assertEquals(dialogDonut.getBorderColor(), dialogDonut.getBtnOuterColor().getBackground());
+	public void testBtnBorderColorClicked() {
+		dialogDonut.getBtnBorderColor().doClick();
+		assertEquals(dialogDonut.getBorderColor(), dialogDonut.getBtnBorderColor().getBackground());
 	}
 
 	@Test
-	public void testBtnInnerColorClicked() throws AWTException {
+	public void testBtnFillColorClicked() throws AWTException {
 		dialogDonut.getBtnFillColor().doClick();
 		assertEquals(dialogDonut.getFillColor(), dialogDonut.getBtnFillColor().getBackground());
 	}
@@ -32,6 +32,28 @@ public class DialogDonutTests {
 		dialogDonut.getXcoordinate().setText("1");
 		dialogDonut.getYcoordinate().setText("2");
 		dialogDonut.getRadius().setText("3");
+		dialogDonut.getBtnOk().doClick();
+		assertFalse(dialogDonut.isAccepted());
+		assertFalse(dialogDonut.isVisible());
+	}
+
+	@Test
+	public void testBtnOkClickedInvalidValuesRadiusIsZero() {
+		dialogDonut.getXcoordinate().setText("1");
+		dialogDonut.getYcoordinate().setText("2");
+		dialogDonut.getRadius().setText("0");
+		dialogDonut.getInnerRadius().setText("4");
+		dialogDonut.getBtnOk().doClick();
+		assertFalse(dialogDonut.isAccepted());
+		assertFalse(dialogDonut.isVisible());
+	}
+
+	@Test
+	public void testBtnOkClickedInvalidValuesInnerRadiusIsZero() {
+		dialogDonut.getXcoordinate().setText("1");
+		dialogDonut.getYcoordinate().setText("2");
+		dialogDonut.getRadius().setText("3");
+		dialogDonut.getInnerRadius().setText("0");
 		dialogDonut.getBtnOk().doClick();
 		assertFalse(dialogDonut.isAccepted());
 		assertFalse(dialogDonut.isVisible());

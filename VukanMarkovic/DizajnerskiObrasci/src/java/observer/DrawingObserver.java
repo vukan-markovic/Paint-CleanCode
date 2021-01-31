@@ -11,7 +11,7 @@ public class DrawingObserver {
 	private boolean btnRedoEnabled;
 	private boolean btnToBackEnabled;
 	private boolean btnToFrontEnabled;
-	private boolean btnSendToBackEnabled;
+	private boolean btnBringToBackEnabled;
 	private boolean btnBringToFrontEnabled;
 
 	public DrawingObserver() {
@@ -30,7 +30,7 @@ public class DrawingObserver {
 		changeSupport.firePropertyChange("btnSelect", this.btnSelectEnabled, btnSelectEnabled);
 		this.btnSelectEnabled = btnSelectEnabled;
 	}
-	
+
 	public void setBtnDeleteEnabled(boolean btnDeleteEnabled) {
 		changeSupport.firePropertyChange("btnDelete", this.btnDeleteEnabled, btnDeleteEnabled);
 		this.btnDeleteEnabled = btnDeleteEnabled;
@@ -61,9 +61,9 @@ public class DrawingObserver {
 		this.btnToFrontEnabled = btnToFrontEnabled;
 	}
 
-	public void setBtnSendToBackEnabled(boolean btnSendToBackEnabled) {
-		changeSupport.firePropertyChange("btnSendToBack", this.btnSendToBackEnabled, btnSendToBackEnabled);
-		this.btnSendToBackEnabled = btnSendToBackEnabled;
+	public void setBtnBringToBackEnabled(boolean btnBringToBackEnabled) {
+		changeSupport.firePropertyChange("btnBringToBack", this.btnBringToBackEnabled, btnBringToBackEnabled);
+		this.btnBringToBackEnabled = btnBringToBackEnabled;
 	}
 
 	public void setBtnBringToFrontEnabled(boolean btnBringToFrontEnabled) {

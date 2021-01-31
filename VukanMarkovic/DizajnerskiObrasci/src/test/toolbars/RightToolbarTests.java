@@ -19,13 +19,13 @@ public class RightToolbarTests {
 	}
 
 	@Test
-	public void testBtnOuterColorClicked() {
+	public void testBtnBorderColorClicked() {
 		rightToolbar.getBtnBorderColor().doClick();
 		verify(optionsController).setBorderColor();
 	}
 
 	@Test
-	public void testBtnInnerColorClicked() {
+	public void testBtnFillColorClicked() {
 		rightToolbar.getBtnFillColor().doClick();
 		verify(optionsController).setFillColor();
 	}
@@ -45,20 +45,6 @@ public class RightToolbarTests {
 	}
 
 	@Test
-	public void testBtnSendToBackClicked() {
-		rightToolbar.getBtnSendToBack().setEnabled(true);
-		rightToolbar.getBtnSendToBack().doClick();
-		verify(optionsController).bringShapeToBack();
-	}
-
-	@Test
-	public void testBtnBringToFrontClicked() {
-		rightToolbar.getBtnBringToFront().setEnabled(true);
-		rightToolbar.getBtnBringToFront().doClick();
-		verify(optionsController).bringShapeToFront();
-	}
-
-	@Test
 	public void testBtnToBackClicked() {
 		rightToolbar.getBtnToBack().setEnabled(true);
 		rightToolbar.getBtnToBack().doClick();
@@ -73,9 +59,23 @@ public class RightToolbarTests {
 	}
 
 	@Test
+	public void testBtnBringToBackClicked() {
+		rightToolbar.getBtnBringToBack().setEnabled(true);
+		rightToolbar.getBtnBringToBack().doClick();
+		verify(optionsController).bringShapeToBack();
+	}
+
+	@Test
+	public void testBtnBringToFrontClicked() {
+		rightToolbar.getBtnBringToFront().setEnabled(true);
+		rightToolbar.getBtnBringToFront().doClick();
+		verify(optionsController).bringShapeToFront();
+	}
+
+	@Test
 	public void testBtnSaveClicked() {
 		rightToolbar.getBtnSave().doClick();
-		verify(fileController).save();
+		verify(fileController).saveDrawingAndLog();
 	}
 
 	@Test

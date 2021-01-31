@@ -35,8 +35,8 @@ public class DialogHexagon extends DialogCircle {
 
 		Color borderColor = hexagon.getBorderColor();
 		setBorderColor(borderColor);
-		getBtnOuterColor().setBackground(borderColor);
-		getBtnOuterColor().setVisible(true);
+		getBtnBorderColor().setBackground(borderColor);
+		getBtnBorderColor().setVisible(true);
 
 		Color fillColor = hexagon.getFillColor();
 		setFillColor(fillColor);

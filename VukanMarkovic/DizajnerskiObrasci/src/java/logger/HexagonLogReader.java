@@ -1,23 +1,23 @@
 package logger;
 
 import commands.*;
+import commandsHandler.CommandsHandler;
 import shapes.*;
 import hexagon.Hexagon;
 import model.DrawingModel;
-import stack.CommandsStack;
 
 public class HexagonLogReader extends CircleLogReader {
 	private DrawingModel model;
-	private CommandsStack commandsStack;
+	private CommandsHandler commandsHandler;
 	private CmdAdd cmdAdd;
 	private CmdModifyHexagon cmdModifyHexagon;
 	private CmdSelect cmdSelect;
 	private CmdDeselect cmdDeselect;
 	private HexagonAdapter hexagon;
 
-	public HexagonLogReader(DrawingModel model, CommandsStack commandsStack) {
+	public HexagonLogReader(DrawingModel model, CommandsHandler commandsHandler) {
 		this.model = model;
-		this.commandsStack = commandsStack;
+		this.commandsHandler = commandsHandler;
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public class HexagonLogReader extends CircleLogReader {
 
 		cmdAdd = new CmdAdd(model, hexagon);
 		cmdAdd.execute();
-		commandsStack.addCommand(cmdAdd);
+		commandsHandler.addExecutedCommand(cmdAdd);
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class HexagonLogReader extends CircleLogReader {
 		model.getSelectedShapes().add(hexagon);
 		cmdModifyHexagon = new CmdModifyHexagon(oldState, hexagon);
 		cmdModifyHexagon.execute();
-		commandsStack.addCommand(cmdModifyHexagon);
+		commandsHandler.addExecutedCommand(cmdModifyHexagon);
 	}
 
 	@Override
@@ -56,13 +56,13 @@ public class HexagonLogReader extends CircleLogReader {
 		setLogLine(logLine);
 		readCenter();
 		readShape();
-		
+
 		hexagon = new HexagonAdapter(new Hexagon(getxCoordinate(), getyCoordinate(), getRadius()), false,
 				getBorderColor(), getFillColor());
 
 		cmdSelect = new CmdSelect(model, hexagon);
 		cmdSelect.execute();
-		commandsStack.addCommand(cmdSelect);
+		commandsHandler.addExecutedCommand(cmdSelect);
 	}
 
 	@Override
@@ -70,15 +70,16 @@ public class HexagonLogReader extends CircleLogReader {
 		setLogLine(logLine);
 		readCenter();
 		readShape();
-		
+
 		hexagon = new HexagonAdapter(new Hexagon(getxCoordinate(), getyCoordinate(), getRadius()), false,
 				getBorderColor(), getFillColor());
 
 		cmdDeselect = new CmdDeselect(model, hexagon);
 		cmdDeselect.execute();
-		commandsStack.addCommand(cmdDeselect);
+		commandsHandler.addExecutedCommand(cmdDeselect);
 	}
 
+	@Override
 	public CmdAdd getCmdAdd() {
 		return cmdAdd;
 	}
@@ -87,10 +88,12 @@ public class HexagonLogReader extends CircleLogReader {
 		return cmdModifyHexagon;
 	}
 
+	@Override
 	public CmdSelect getCmdSelect() {
 		return cmdSelect;
 	}
 
+	@Override
 	public CmdDeselect getCmdDeselect() {
 		return cmdDeselect;
 	}

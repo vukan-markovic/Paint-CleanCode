@@ -1,24 +1,24 @@
 package commandsExecutors;
 
 import commands.CmdRemove;
+import commandsHandler.CommandsHandler;
 import frame.DrawingFrame;
 import logger.LogWriter;
 import model.DrawingModel;
 import shapes.Shape;
-import stack.CommandsStack;
 
 public class RemoveCommandExecutor {
 	private DrawingModel model;
 	private DrawingFrame frame;
-	private CommandsStack commandsStack;
+	private CommandsHandler commandsHandler;
 	private LogWriter logWriter;
 	private CmdRemove cmdRemove;
 
-	public RemoveCommandExecutor(DrawingModel model, DrawingFrame frame, CommandsStack commandsStack) {
+	public RemoveCommandExecutor(DrawingModel model, DrawingFrame frame, CommandsHandler commandsHandler) {
 		this.model = model;
 		this.frame = frame;
 		logWriter = new LogWriter(frame);
-		this.commandsStack = commandsStack;
+		this.commandsHandler = commandsHandler;
 	}
 
 	public void removeShapes() {
@@ -28,18 +28,14 @@ public class RemoveCommandExecutor {
 			removeShape(indexOfShape);
 
 		model.clearSelectedShapes();
+		frame.getView().repaint();
 	}
 
 	private void removeShape(int indexOfShape) {
 		Shape shape = model.getSelectedShapeByIndex(indexOfShape);
 		cmdRemove = new CmdRemove(model, shape);
 		cmdRemove.execute();
-		commandsStack.addCommand(cmdRemove);
+		commandsHandler.addExecutedCommand(cmdRemove);
 		logWriter.logRemoveCommand();
-		frame.getView().repaint();
-	}
-
-	public CmdRemove getCmdRemove() {
-		return cmdRemove;
 	}
 }

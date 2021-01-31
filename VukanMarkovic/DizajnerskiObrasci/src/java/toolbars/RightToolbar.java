@@ -7,14 +7,14 @@ import java.awt.Color;
 
 public class RightToolbar implements Toolbar {
 	private JToolBar toolBar;
-	private JButton btnOuterColor;
-	private JButton btnInnerColor;
+	private JButton btnBorderColor;
+	private JButton btnFillColor;
 	private JButton btnUndo;
 	private JButton btnRedo;
-	private JButton btnSendToBack;
-	private JButton btnBringToFront;
 	private JButton btnToBack;
 	private JButton btnToFront;
+	private JButton btnBringToBack;
+	private JButton btnBringToFront;
 	private JButton btnSave;
 	private JButton btnLoadLog;
 	private JButton btnLoadDrawing;
@@ -43,14 +43,14 @@ public class RightToolbar implements Toolbar {
 
 	@Override
 	public void initializeButtons() {
-		btnOuterColor = new JButton("Set border color");
-		btnInnerColor = new JButton("Set fill color");
+		btnBorderColor = new JButton("Set border color");
+		btnFillColor = new JButton("Set fill color");
 		btnUndo = new JButton("Undo");
 		btnRedo = new JButton("Redo");
-		btnSendToBack = new JButton("Send to back");
-		btnBringToFront = new JButton("Bring to front");
 		btnToBack = new JButton("To back");
 		btnToFront = new JButton("To front");
+		btnBringToBack = new JButton("Send to back");
+		btnBringToFront = new JButton("Bring to front");
 		btnSave = new JButton("Save");
 		btnLoadLog = new JButton("Load log");
 		btnLoadDrawing = new JButton("Load painting");
@@ -58,19 +58,20 @@ public class RightToolbar implements Toolbar {
 	}
 
 	private void setButtonsColor() {
-		btnOuterColor.setBackground(Color.BLACK);
-		btnInnerColor.setBackground(Color.WHITE);
+		btnBorderColor.setBackground(Color.BLACK);
+		btnFillColor.setBackground(Color.WHITE);
 	}
 
 	@Override
 	public void addButtonsListeners() {
-		btnOuterColor.addActionListener(new ActionListener() {
+		btnBorderColor.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent event) {
 				optionsController.setBorderColor();
 			}
 		});
 
-		btnInnerColor.addActionListener(new ActionListener() {
+		btnFillColor.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				optionsController.setFillColor();
@@ -91,20 +92,6 @@ public class RightToolbar implements Toolbar {
 			}
 		});
 
-		btnSendToBack.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				optionsController.bringShapeToBack();
-			}
-		});
-
-		btnBringToFront.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				optionsController.bringShapeToFront();
-			}
-		});
-
 		btnToBack.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
@@ -119,10 +106,24 @@ public class RightToolbar implements Toolbar {
 			}
 		});
 
+		btnBringToBack.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				optionsController.bringShapeToBack();
+			}
+		});
+
+		btnBringToFront.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				optionsController.bringShapeToFront();
+			}
+		});
+
 		btnSave.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				fileController.save();
+				fileController.saveDrawingAndLog();
 			}
 		});
 
@@ -152,23 +153,23 @@ public class RightToolbar implements Toolbar {
 	public void disableButtons() {
 		btnUndo.setEnabled(false);
 		btnRedo.setEnabled(false);
-		btnSendToBack.setEnabled(false);
-		btnBringToFront.setEnabled(false);
 		btnToBack.setEnabled(false);
 		btnToFront.setEnabled(false);
+		btnBringToBack.setEnabled(false);
+		btnBringToFront.setEnabled(false);
 		btnNextCommand.setEnabled(false);
 	}
 
 	@Override
 	public void addButtonsToToolbar() {
-		toolBar.add(btnOuterColor);
-		toolBar.add(btnInnerColor);
+		toolBar.add(btnBorderColor);
+		toolBar.add(btnFillColor);
 		toolBar.add(btnUndo);
 		toolBar.add(btnRedo);
-		toolBar.add(btnSendToBack);
-		toolBar.add(btnBringToFront);
 		toolBar.add(btnToBack);
 		toolBar.add(btnToFront);
+		toolBar.add(btnBringToBack);
+		toolBar.add(btnBringToFront);
 		toolBar.add(btnSave);
 		toolBar.add(btnLoadLog);
 		toolBar.add(btnLoadDrawing);
@@ -187,11 +188,11 @@ public class RightToolbar implements Toolbar {
 	}
 
 	public JButton getBtnBorderColor() {
-		return btnOuterColor;
+		return btnBorderColor;
 	}
 
 	public JButton getBtnFillColor() {
-		return btnInnerColor;
+		return btnFillColor;
 	}
 
 	public JButton getBtnUndo() {
@@ -202,20 +203,20 @@ public class RightToolbar implements Toolbar {
 		return btnRedo;
 	}
 
-	public JButton getBtnSendToBack() {
-		return btnSendToBack;
-	}
-
-	public JButton getBtnBringToFront() {
-		return btnBringToFront;
-	}
-
 	public JButton getBtnToBack() {
 		return btnToBack;
 	}
 
 	public JButton getBtnToFront() {
 		return btnToFront;
+	}
+
+	public JButton getBtnBringToBack() {
+		return btnBringToBack;
+	}
+
+	public JButton getBtnBringToFront() {
+		return btnBringToFront;
 	}
 
 	public JButton getBtnSave() {

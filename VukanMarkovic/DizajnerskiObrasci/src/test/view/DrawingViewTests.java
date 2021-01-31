@@ -24,7 +24,7 @@ public class DrawingViewTests {
 	}
 
 	@Test
-	public void testPaintComponent() {
+	public void testPaint() {
 		view.paint(graphics);
 		verify(point).draw(graphics);
 	}

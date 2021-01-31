@@ -1,20 +1,21 @@
 package commandsExecutors;
 
 import commands.*;
+import commandsHandler.CommandsHandler;
 import shapes.*;
 import java.awt.Color;
-import stack.CommandsStack;
+
 import dialogs.DialogRectangle;
 import logger.LogWriter;
 import model.DrawingModel;
 import controller.OptionsController;
 
 public class RectangleCommandsExecutor implements SurfaceShapeCommandsExecutor {
-	private DrawingModel model;
-	private LogWriter logWriter;
-	private CommandsStack commandsStack;
 	private DialogRectangle dialogRectangle;
 	private OptionsController optionsController;
+	private DrawingModel model;
+	private LogWriter logWriter;
+	private CommandsHandler commandsHandler;
 	private CmdAdd cmdAdd;
 	private CmdModifyRectangle cmdModifyRectangle;
 	private boolean isSelected;
@@ -23,11 +24,11 @@ public class RectangleCommandsExecutor implements SurfaceShapeCommandsExecutor {
 	private Rectangle rectangle;
 
 	public RectangleCommandsExecutor(DialogRectangle dialogRectangle, OptionsController optionsController) {
-		this.model = optionsController.getModel();
-		logWriter = new LogWriter(optionsController.getFrame());
-		this.commandsStack = optionsController.getCommandsStack();
 		this.dialogRectangle = dialogRectangle;
 		this.optionsController = optionsController;
+		model = optionsController.getModel();
+		logWriter = new LogWriter(optionsController.getFrame());
+		commandsHandler = optionsController.getCommandsHandler();
 	}
 
 	@Override
@@ -39,7 +40,7 @@ public class RectangleCommandsExecutor implements SurfaceShapeCommandsExecutor {
 
 		cmdAdd = new CmdAdd(model, rectangle);
 		cmdAdd.execute();
-		commandsStack.addCommand(cmdAdd);
+		commandsHandler.addExecutedCommand(cmdAdd);
 		logWriter.logAddCommand(rectangle);
 	}
 
@@ -54,7 +55,7 @@ public class RectangleCommandsExecutor implements SurfaceShapeCommandsExecutor {
 		logWriter.logModifyCommand(oldState, rectangle);
 		cmdModifyRectangle = new CmdModifyRectangle(oldState, rectangle);
 		cmdModifyRectangle.execute();
-		commandsStack.addCommand(cmdModifyRectangle);
+		commandsHandler.addExecutedCommand(cmdModifyRectangle);
 	}
 
 	private void createRectangle() {
@@ -65,7 +66,7 @@ public class RectangleCommandsExecutor implements SurfaceShapeCommandsExecutor {
 		Point upperLeftPoint = new Point(xCoordinate, yCoordinate, isSelected, outerColor);
 		rectangle = new Rectangle(upperLeftPoint, height, width, isSelected, outerColor, innerColor);
 	}
-	
+
 	public CmdAdd getCmdAdd() {
 		return cmdAdd;
 	}

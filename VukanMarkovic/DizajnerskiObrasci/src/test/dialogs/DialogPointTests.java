@@ -15,9 +15,9 @@ public class DialogPointTests {
 	}
 
 	@Test
-	public void testBtnOuterColorClicked() {
-		dialogPoint.getBtnOuterColor().doClick();
-		assertEquals(dialogPoint.getBorderColor(), dialogPoint.getBtnOuterColor().getBackground());
+	public void testBtnBorderColorClicked() {
+		dialogPoint.getBtnBorderColor().doClick();
+		assertEquals(dialogPoint.getBorderColor(), dialogPoint.getBtnBorderColor().getBackground());
 	}
 
 	@Test

@@ -1,20 +1,20 @@
 package commandsExecutors;
 
 import commands.*;
+import commandsHandler.CommandsHandler;
 import shapes.*;
 import java.awt.Color;
 import controller.OptionsController;
 import dialogs.DialogLine;
 import logger.LogWriter;
 import model.DrawingModel;
-import stack.CommandsStack;
 
 public class LineCommandsExecutor implements ShapeCommandsExecutor {
-	private DrawingModel model;
-	private LogWriter logWriter;
-	private CommandsStack commandsStack;
 	private DialogLine dialogLine;
 	private OptionsController optionsController;
+	private DrawingModel model;
+	private LogWriter logWriter;
+	private CommandsHandler commandsHandler;
 	private CmdAdd cmdAdd;
 	private CmdModifyLine cmdModifyLine;
 	private Color color;
@@ -22,11 +22,11 @@ public class LineCommandsExecutor implements ShapeCommandsExecutor {
 	private Line line;
 
 	public LineCommandsExecutor(DialogLine dialogLine, OptionsController optionsController) {
-		this.model = optionsController.getModel();
-		this.commandsStack = optionsController.getCommandsStack();
 		this.dialogLine = dialogLine;
 		this.optionsController = optionsController;
+		model = optionsController.getModel();
 		logWriter = new LogWriter(optionsController.getFrame());
+		commandsHandler = optionsController.getCommandsHandler();
 	}
 
 	@Override
@@ -42,9 +42,10 @@ public class LineCommandsExecutor implements ShapeCommandsExecutor {
 	private void addLine(int xCoordinate, int yCoordinate) {
 		Point endPoint = new Point(xCoordinate, yCoordinate, false, color);
 		line = new Line(startPoint, endPoint, false, color);
+
 		cmdAdd = new CmdAdd(model, line);
 		cmdAdd.execute();
-		commandsStack.addCommand(cmdAdd);
+		commandsHandler.addExecutedCommand(cmdAdd);
 		logWriter.logAddCommand(line);
 		startPoint = null;
 	}
@@ -64,18 +65,18 @@ public class LineCommandsExecutor implements ShapeCommandsExecutor {
 		logWriter.logModifyCommand(oldState, line);
 		cmdModifyLine = new CmdModifyLine(oldState, line);
 		cmdModifyLine.execute();
-		commandsStack.addCommand(cmdModifyLine);
+		commandsHandler.addExecutedCommand(cmdModifyLine);
 	}
 
 	public CmdAdd getCmdAdd() {
 		return cmdAdd;
 	}
 
-	public Line getLine() {
-		return line;
-	}
-
 	public CmdModifyLine getCmdModifyLine() {
 		return cmdModifyLine;
+	}
+
+	public Line getLine() {
+		return line;
 	}
 }

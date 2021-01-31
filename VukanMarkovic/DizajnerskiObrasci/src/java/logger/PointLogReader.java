@@ -1,28 +1,27 @@
 package logger;
 
 import commands.*;
+import commandsHandler.CommandsHandler;
 import shapes.*;
 import java.awt.Color;
 import model.DrawingModel;
-import stack.CommandsStack;
 
 public class PointLogReader implements LogReader {
 	private DrawingModel model;
-	private CommandsStack commandsStack;
+	private CommandsHandler commandsHandler;
+	private String[] logLine;
 	private CmdAdd cmdAdd;
 	private CmdModifyPoint cmdModifyPoint;
 	private CmdSelect cmdSelect;
 	private CmdDeselect cmdDeselect;
 	private int xCoordinate;
 	private int yCoordinate;
-	private int pointColorNumber;
 	private Color pointColor;
-	private String[] logLine;
 	private Point point;
 
-	public PointLogReader(DrawingModel model, CommandsStack commandsStack) {
+	public PointLogReader(DrawingModel model, CommandsHandler commandsHandler) {
 		this.model = model;
-		this.commandsStack = commandsStack;
+		this.commandsHandler = commandsHandler;
 	}
 
 	@Override
@@ -31,7 +30,7 @@ public class PointLogReader implements LogReader {
 		readPoint();
 		cmdAdd = new CmdAdd(model, point);
 		cmdAdd.execute();
-		commandsStack.addCommand(cmdAdd);
+		commandsHandler.addExecutedCommand(cmdAdd);
 	}
 
 	@Override
@@ -43,19 +42,13 @@ public class PointLogReader implements LogReader {
 		model.getSelectedShapes().add(point);
 		cmdModifyPoint = new CmdModifyPoint(oldState, point);
 		cmdModifyPoint.execute();
-		commandsStack.addCommand(cmdModifyPoint);
+		commandsHandler.addExecutedCommand(cmdModifyPoint);
 	}
 
 	private void readModifiedPoint() {
 		xCoordinate = Integer.parseInt(logLine[17]);
 		yCoordinate = Integer.parseInt(logLine[20]);
-		pointColorNumber = Integer.parseInt(logLine[24]);
-
-		if (pointColorNumber == 0)
-			pointColor = new Color(0, 0, 0, 0);
-		else
-			pointColor = new Color(pointColorNumber);
-
+		pointColor = new Color(Integer.parseInt(logLine[24]));
 		point = new Point(xCoordinate, yCoordinate, true, pointColor);
 	}
 
@@ -65,7 +58,7 @@ public class PointLogReader implements LogReader {
 		readPoint();
 		cmdSelect = new CmdSelect(model, point);
 		cmdSelect.execute();
-		commandsStack.addCommand(cmdSelect);
+		commandsHandler.addExecutedCommand(cmdSelect);
 	}
 
 	@Override
@@ -74,19 +67,13 @@ public class PointLogReader implements LogReader {
 		readPoint();
 		cmdDeselect = new CmdDeselect(model, point);
 		cmdDeselect.execute();
-		commandsStack.addCommand(cmdDeselect);
+		commandsHandler.addExecutedCommand(cmdDeselect);
 	}
 
 	private void readPoint() {
 		xCoordinate = Integer.parseInt(logLine[4]);
 		yCoordinate = Integer.parseInt(logLine[7]);
-		pointColorNumber = Integer.parseInt(logLine[11]);
-
-		if (pointColorNumber == 0)
-			pointColor = new Color(0, 0, 0, 0);
-		else
-			pointColor = new Color(pointColorNumber);
-
+		pointColor = new Color(Integer.parseInt(logLine[11]));
 		point = new Point(xCoordinate, yCoordinate, false, pointColor);
 	}
 

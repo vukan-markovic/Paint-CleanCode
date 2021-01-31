@@ -1,6 +1,7 @@
 package commandsExecutors;
 
 import commands.*;
+import commandsHandler.CommandsHandler;
 import shapes.*;
 import controller.OptionsController;
 import java.awt.Color;
@@ -8,14 +9,13 @@ import dialogs.DialogHexagon;
 import hexagon.Hexagon;
 import logger.LogWriter;
 import model.DrawingModel;
-import stack.CommandsStack;
 
 public class HexagonCommandsExecutor implements SurfaceShapeCommandsExecutor {
-	private DrawingModel model;
-	private LogWriter logWriter;
-	private CommandsStack commandsStack;
 	private DialogHexagon dialogHexagon;
 	private OptionsController optionsController;
+	private DrawingModel model;
+	private LogWriter logWriter;
+	private CommandsHandler commandsHandler;
 	private CmdAdd cmdAdd;
 	private CmdModifyHexagon cmdModifyHexagon;
 	private boolean isSelected;
@@ -24,11 +24,11 @@ public class HexagonCommandsExecutor implements SurfaceShapeCommandsExecutor {
 	private HexagonAdapter hexagonAdapter;
 
 	public HexagonCommandsExecutor(DialogHexagon dialogHexagon, OptionsController optionsController) {
-		this.model = optionsController.getModel();
-		logWriter = new LogWriter(optionsController.getFrame());
-		this.commandsStack = optionsController.getCommandsStack();
 		this.dialogHexagon = dialogHexagon;
 		this.optionsController = optionsController;
+		model = optionsController.getModel();
+		logWriter = new LogWriter(optionsController.getFrame());
+		commandsHandler = optionsController.getCommandsHandler();
 	}
 
 	@Override
@@ -40,7 +40,7 @@ public class HexagonCommandsExecutor implements SurfaceShapeCommandsExecutor {
 
 		cmdAdd = new CmdAdd(model, hexagonAdapter);
 		cmdAdd.execute();
-		commandsStack.addCommand(cmdAdd);
+		commandsHandler.addExecutedCommand(cmdAdd);
 		logWriter.logAddCommand(hexagonAdapter);
 	}
 
@@ -55,7 +55,7 @@ public class HexagonCommandsExecutor implements SurfaceShapeCommandsExecutor {
 		logWriter.logModifyCommand(oldState, hexagonAdapter);
 		cmdModifyHexagon = new CmdModifyHexagon(oldState, hexagonAdapter);
 		cmdModifyHexagon.execute();
-		commandsStack.addCommand(cmdModifyHexagon);
+		commandsHandler.addExecutedCommand(cmdModifyHexagon);
 	}
 
 	private void createHexagon() {
@@ -70,11 +70,11 @@ public class HexagonCommandsExecutor implements SurfaceShapeCommandsExecutor {
 		return cmdAdd;
 	}
 
-	public HexagonAdapter getHexagonAdapter() {
-		return hexagonAdapter;
-	}
-
 	public CmdModifyHexagon getCmdModifyHexagon() {
 		return cmdModifyHexagon;
+	}
+
+	public HexagonAdapter getHexagonAdapter() {
+		return hexagonAdapter;
 	}
 }

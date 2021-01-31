@@ -23,9 +23,9 @@ public class TopToolbarTests {
 	}
 
 	@Test
-	public void testBtnDeleteClicked() {
-		topToolbar.getBtnDelete().setEnabled(true);
-		topToolbar.getBtnDelete().doClick();
+	public void testBtnRemoveClicked() {
+		topToolbar.getBtnRemove().setEnabled(true);
+		topToolbar.getBtnRemove().doClick();
 		verify(controller).removeShapesIfUserConfirm();
 	}
 }

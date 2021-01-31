@@ -23,7 +23,7 @@ public class PropertyManager implements PropertyChangeListener {
 			topToolbar.getBtnSelect().setEnabled(newValue);
 			break;
 		case "btnDelete":
-			topToolbar.getBtnDelete().setEnabled(newValue);
+			topToolbar.getBtnRemove().setEnabled(newValue);
 			break;
 		case "btnModify":
 			topToolbar.getBtnModify().setEnabled(newValue);
@@ -40,8 +40,8 @@ public class PropertyManager implements PropertyChangeListener {
 		case "btnToFront":
 			rightToolbar.getBtnToFront().setEnabled(newValue);
 			break;
-		case "btnSendToBack":
-			rightToolbar.getBtnSendToBack().setEnabled(newValue);
+		case "btnBringToBack":
+			rightToolbar.getBtnBringToBack().setEnabled(newValue);
 			break;
 		case "btnBringToFront":
 			rightToolbar.getBtnBringToFront().setEnabled(newValue);

@@ -2,7 +2,7 @@ package files;
 
 public class FileManager {
 	private FileStrategy strategy;
-	
+
 	public FileManager(FileStrategy strategy) {
 		this.strategy = strategy;
 	}

@@ -2,18 +2,16 @@ package commandsExecutors;
 
 import static org.junit.Assert.*;
 import org.junit.*;
-
-import commands.CmdAdd;
-import commands.CmdSelect;
+import commands.*;
+import commandsHandler.CommandsHandler;
 import frame.DrawingFrame;
 import model.DrawingModel;
 import shapes.Point;
-import stack.CommandsStack;
 
 public class RemoveCommandExecutorTests {
 	private DrawingModel model;
 	private DrawingFrame frame;
-	private CommandsStack commandsStack;
+	private CommandsHandler commandsHandler;
 	private RemoveCommandExecutor commandsExecutor;
 	private CmdAdd cmdAdd;
 	private CmdSelect cmdSelect;
@@ -22,8 +20,8 @@ public class RemoveCommandExecutorTests {
 	public void setUp() {
 		model = new DrawingModel();
 		frame = new DrawingFrame();
-		commandsStack = new CommandsStack();
-		commandsExecutor = new RemoveCommandExecutor(model, frame, commandsStack);
+		commandsHandler = new CommandsHandler();
+		commandsExecutor = new RemoveCommandExecutor(model, frame, commandsHandler);
 	}
 
 	@Test

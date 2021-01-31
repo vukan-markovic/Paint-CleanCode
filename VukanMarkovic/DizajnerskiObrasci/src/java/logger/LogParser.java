@@ -1,15 +1,15 @@
 package logger;
 
 import commandsExecutors.RemoveCommandExecutor;
+import commandsHandler.CommandsHandler;
 import controller.OptionsController;
 import model.DrawingModel;
 import shapes.Shape;
-import stack.CommandsStack;
 
 public class LogParser {
 	private DrawingModel model;
 	private OptionsController optionsController;
-	private CommandsStack commandsStack;
+	private CommandsHandler commandsHandler;
 	private CircleLogReader circleLogReader;
 	private DonutLogReader donutLogReader;
 	private HexagonLogReader hexagonLogReader;
@@ -22,14 +22,14 @@ public class LogParser {
 	public LogParser(OptionsController optionsController) {
 		this.model = optionsController.getModel();
 		this.optionsController = optionsController;
-		this.commandsStack = optionsController.getCommandsStack();
-		circleLogReader = new CircleLogReader(model, commandsStack);
-		donutLogReader = new DonutLogReader(model, commandsStack);
-		hexagonLogReader = new HexagonLogReader(model, commandsStack);
-		lineLogReader = new LineLogReader(model, commandsStack);
-		pointLogReader = new PointLogReader(model, commandsStack);
-		rectangleLogReader = new RectangleLogReader(model, commandsStack);
-		removeCommandExecutor = new RemoveCommandExecutor(model, optionsController.getFrame(), commandsStack);
+		this.commandsHandler = optionsController.getCommandsHandler();
+		circleLogReader = new CircleLogReader(model, commandsHandler);
+		donutLogReader = new DonutLogReader(model, commandsHandler);
+		hexagonLogReader = new HexagonLogReader(model, commandsHandler);
+		lineLogReader = new LineLogReader(model, commandsHandler);
+		pointLogReader = new PointLogReader(model, commandsHandler);
+		rectangleLogReader = new RectangleLogReader(model, commandsHandler);
+		removeCommandExecutor = new RemoveCommandExecutor(model, optionsController.getFrame(), commandsHandler);
 	}
 
 	public void parse(String[] logLine) {
@@ -46,18 +46,18 @@ public class LogParser {
 		else if (logLine[0].equals("Deleted"))
 			removeCommandExecutor.removeShapes();
 		else if (logLine[0].equals("Undo"))
-			commandsStack.undoCommand();
+			commandsHandler.undoCommand();
 		else if (logLine[0].equals("Redo"))
-			commandsStack.redoCommand();
+			commandsHandler.redoCommand();
 		else if (logLine[0].equals("ToBack"))
 			optionsController.moveShapeToBack();
 		else if (logLine[0].equals("ToFront"))
 			optionsController.moveShapeToFront();
 		else if (logLine[0].equals("BringToFront"))
 			optionsController.bringShapeToFront();
-		else if (logLine[0].equals("SendToBack"))
+		else if (logLine[0].equals("BringToBack"))
 			optionsController.bringShapeToBack();
-		
+
 		optionsController.getFrame().getView().repaint();
 	}
 

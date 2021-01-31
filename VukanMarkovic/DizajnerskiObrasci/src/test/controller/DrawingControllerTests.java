@@ -6,7 +6,7 @@ import java.util.*;
 import org.junit.*;
 import commands.*;
 import shapes.*;
-import stack.CommandsStack;
+import commandsHandler.CommandsHandler;
 import frame.DrawingFrame;
 import java.awt.AWTException;
 import java.awt.Color;
@@ -16,13 +16,13 @@ import model.DrawingModel;
 import org.junit.rules.TemporaryFolder;
 
 public class DrawingControllerTests {
-	private OptionsController optionsController;
-	private DrawingController controller;
 	private DrawingModel model;
 	private DrawingFrame frame;
-	private MouseEvent click;
 	private Queue<String> commandsLog;
-	private CommandsStack commandsStack;
+	private CommandsHandler commandsHandler;
+	private OptionsController optionsController;
+	private DrawingController drawingController;
+	private MouseEvent click;
 
 	@Rule
 	public TemporaryFolder tempFolder = new TemporaryFolder();
@@ -32,11 +32,11 @@ public class DrawingControllerTests {
 		model = new DrawingModel();
 		frame = new DrawingFrame();
 		commandsLog = new LinkedList<String>();
-		commandsStack = new CommandsStack();
-		optionsController = new OptionsController(model, frame, commandsStack, commandsLog);
-		controller = new DrawingController(optionsController);
+		commandsHandler = new CommandsHandler();
+		optionsController = new OptionsController(model, frame, commandsHandler, commandsLog);
+		drawingController = new DrawingController(optionsController);
 		frame.getView().setModel(model);
-		frame.setController(controller);
+		frame.setController(drawingController);
 		click = mock(MouseEvent.class);
 	}
 
@@ -44,7 +44,7 @@ public class DrawingControllerTests {
 	public void testSelectShapeShapeIsNotSelected() {
 		Point point = new Point(1, 2, false, Color.BLACK);
 		new CmdAdd(model, point).execute();
-		controller.selectOrDeselectShapes(click);
+		drawingController.selectOrDeselectShapes(click);
 		assertTrue(point.isSelected());
 	}
 
@@ -53,7 +53,7 @@ public class DrawingControllerTests {
 		Point point = new Point(1, 2, false, Color.BLACK);
 		new CmdAdd(model, point).execute();
 		new CmdSelect(model, point).execute();
-		controller.selectOrDeselectShapes(click);
+		drawingController.selectOrDeselectShapes(click);
 		assertFalse(point.isSelected());
 	}
 
@@ -65,58 +65,58 @@ public class DrawingControllerTests {
 		Point secondPoint = new Point(1233, 2322, false, Color.BLACK);
 		new CmdAdd(model, secondPoint).execute();
 		new CmdSelect(model, secondPoint).execute();
-		controller.selectOrDeselectShapes(click);
+		drawingController.selectOrDeselectShapes(click);
 		assertFalse(firstPoint.isSelected());
 		assertFalse(secondPoint.isSelected());
 	}
 
 	@Test
 	public void testDrawPoint() {
-		controller.drawPoint(click);
-		assertTrue(model.doesContainShape(controller.getPointCommandsExecutor().getPoint()));
+		drawingController.drawPoint(click);
+		assertTrue(model.doesContainShape(drawingController.getPointCommandsExecutor().getPoint()));
 	}
 
 	@Test
 	public void testDrawLineStartPointIsNull() {
-		controller.drawLine(click);
-		assertFalse(model.doesContainShape(controller.getLineCommandsExecutor().getLine()));
+		drawingController.drawLine(click);
+		assertFalse(model.doesContainShape(drawingController.getLineCommandsExecutor().getLine()));
 	}
 
 	@Test
 	public void testDrawLine() {
-		controller.drawLine(click);
-		controller.drawLine(click);
-		assertTrue(model.doesContainShape(controller.getLineCommandsExecutor().getLine()));
+		drawingController.drawLine(click);
+		drawingController.drawLine(click);
+		assertTrue(model.doesContainShape(drawingController.getLineCommandsExecutor().getLine()));
 	}
 
 	@Test
 	public void testDrawRectangle() {
-		controller.getDialogRectangle().getheight().setText("1");
-		controller.getDialogRectangle().getwidth().setText("2");
-		controller.drawRectangle(click);
-		assertTrue(model.doesContainShape(controller.getRectangleCommandsExecutor().getRectangle()));
+		drawingController.getDialogRectangle().getheight().setText("1");
+		drawingController.getDialogRectangle().getwidth().setText("2");
+		drawingController.drawRectangle(click);
+		assertTrue(model.doesContainShape(drawingController.getRectangleCommandsExecutor().getRectangle()));
 	}
 
 	@Test
 	public void testDrawCircle() {
-		controller.getDialogCircle().getRadius().setText("3");
-		controller.drawCircle(click);
-		assertTrue(model.doesContainShape(controller.getCircleCommandsExecutor().getCircle()));
+		drawingController.getDialogCircle().getRadius().setText("3");
+		drawingController.drawCircle(click);
+		assertTrue(model.doesContainShape(drawingController.getCircleCommandsExecutor().getCircle()));
 	}
 
 	@Test
 	public void testDrawDonut() {
-		controller.getDialogDonut().getRadius().setText("3");
-		controller.getDialogDonut().getInnerRadius().setText("2");
-		controller.drawDonut(click);
-		assertTrue(model.doesContainShape(controller.getDonutCommandsExecutor().getDonut()));
+		drawingController.getDialogDonut().getRadius().setText("3");
+		drawingController.getDialogDonut().getInnerRadius().setText("2");
+		drawingController.drawDonut(click);
+		assertTrue(model.doesContainShape(drawingController.getDonutCommandsExecutor().getDonut()));
 	}
 
 	@Test
 	public void testDrawHexagon() {
-		controller.getDialogHexagon().getRadius().setText("3");
-		controller.drawHexagon(click);
-		assertTrue(model.doesContainShape(controller.getHexagonCommandsExecutor().getHexagonAdapter()));
+		drawingController.getDialogHexagon().getRadius().setText("3");
+		drawingController.drawHexagon(click);
+		assertTrue(model.doesContainShape(drawingController.getHexagonCommandsExecutor().getHexagonAdapter()));
 	}
 
 	@Test
@@ -124,10 +124,10 @@ public class DrawingControllerTests {
 		Point point = new Point(1, 2, false, Color.BLACK);
 		new CmdAdd(model, point).execute();
 		new CmdSelect(model, point).execute();
-		controller.modifyShape();
+		drawingController.modifyShape();
 
-		assertTrue(commandsStack.getExecutedCommands()
-				.contains(controller.getPointCommandsExecutor().getCmdModifyPoint()));
+		assertTrue(commandsHandler.getExecutedCommands()
+				.contains(drawingController.getPointCommandsExecutor().getCmdModifyPoint()));
 	}
 
 	@Test
@@ -136,10 +136,10 @@ public class DrawingControllerTests {
 				Color.BLACK);
 		new CmdAdd(model, line).execute();
 		new CmdSelect(model, line).execute();
-		controller.modifyShape();
+		drawingController.modifyShape();
 
-		assertTrue(
-				commandsStack.getExecutedCommands().contains(controller.getLineCommandsExecutor().getCmdModifyLine()));
+		assertTrue(commandsHandler.getExecutedCommands()
+				.contains(drawingController.getLineCommandsExecutor().getCmdModifyLine()));
 	}
 
 	@Test
@@ -147,10 +147,10 @@ public class DrawingControllerTests {
 		Rectangle rectangle = new Rectangle(new Point(1, 2, false, Color.BLACK), 3, 4, false, Color.BLACK, Color.WHITE);
 		new CmdAdd(model, rectangle).execute();
 		new CmdSelect(model, rectangle).execute();
-		controller.modifyShape();
+		drawingController.modifyShape();
 
-		assertTrue(commandsStack.getExecutedCommands()
-				.contains(controller.getRectangleCommandsExecutor().getCmdModifyRectangle()));
+		assertTrue(commandsHandler.getExecutedCommands()
+				.contains(drawingController.getRectangleCommandsExecutor().getCmdModifyRectangle()));
 	}
 
 	@Test
@@ -158,10 +158,10 @@ public class DrawingControllerTests {
 		Donut donut = new Donut(new Point(1, 2, false, Color.BLACK), 3, 2, false, Color.BLACK, Color.WHITE);
 		new CmdAdd(model, donut).execute();
 		new CmdSelect(model, donut).execute();
-		controller.modifyShape();
+		drawingController.modifyShape();
 
-		assertTrue(commandsStack.getExecutedCommands()
-				.contains(controller.getDonutCommandsExecutor().getCmdModifyDonut()));
+		assertTrue(commandsHandler.getExecutedCommands()
+				.contains(drawingController.getDonutCommandsExecutor().getCmdModifyDonut()));
 	}
 
 	@Test
@@ -169,10 +169,10 @@ public class DrawingControllerTests {
 		Circle circle = new Circle(new Point(1, 2, false, Color.BLACK), 3, false, Color.BLACK, Color.WHITE);
 		new CmdAdd(model, circle).execute();
 		new CmdSelect(model, circle).execute();
-		controller.modifyShape();
+		drawingController.modifyShape();
 
-		assertTrue(commandsStack.getExecutedCommands()
-				.contains(controller.getCircleCommandsExecutor().getCmdModifyCircle()));
+		assertTrue(commandsHandler.getExecutedCommands()
+				.contains(drawingController.getCircleCommandsExecutor().getCmdModifyCircle()));
 	}
 
 	@Test
@@ -180,10 +180,10 @@ public class DrawingControllerTests {
 		HexagonAdapter hexagon = new HexagonAdapter(new Hexagon(1, 2, 3), false, Color.BLACK, Color.WHITE);
 		new CmdAdd(model, hexagon).execute();
 		new CmdSelect(model, hexagon).execute();
-		controller.modifyShape();
+		drawingController.modifyShape();
 
-		assertTrue(commandsStack.getExecutedCommands()
-				.contains(controller.getHexagonCommandsExecutor().getCmdModifyHexagon()));
+		assertTrue(commandsHandler.getExecutedCommands()
+				.contains(drawingController.getHexagonCommandsExecutor().getCmdModifyHexagon()));
 	}
 
 	@Test
@@ -194,7 +194,7 @@ public class DrawingControllerTests {
 		Point secondPoint = new Point(1, 2, false, Color.BLACK);
 		new CmdAdd(model, secondPoint).execute();
 		new CmdSelect(model, secondPoint).execute();
-		controller.removeShapesIfUserConfirm();
+		drawingController.removeShapesIfUserConfirm();
 		assertFalse(model.doesContainShape(firstPoint));
 		assertFalse(model.doesContainShape(secondPoint));
 	}

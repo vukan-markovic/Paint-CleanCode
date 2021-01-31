@@ -30,7 +30,7 @@ public class CmdToBack implements Command {
 	private boolean isNotFirstShape() {
 		return indexOfShape != 0;
 	}
-	
+
 	private void swapShapes() {
 		Collections.swap(shapes, indexOfPreviousShape, indexOfShape);
 	}

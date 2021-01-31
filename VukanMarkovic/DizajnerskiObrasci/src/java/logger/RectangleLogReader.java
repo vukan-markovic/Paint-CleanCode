@@ -1,35 +1,32 @@
 package logger;
 
 import commands.*;
+import commandsHandler.CommandsHandler;
 import shapes.*;
 import java.awt.Color;
 import model.DrawingModel;
-import stack.CommandsStack;
 
 public class RectangleLogReader implements LogReader {
 	private DrawingModel model;
-	private CommandsStack commandsStack;
+	private CommandsHandler commandsHandler;
+	private String[] logLine;
 	private CmdAdd cmdAdd;
 	private CmdModifyRectangle cmdModifyRectangle;
 	private CmdSelect cmdSelect;
 	private CmdDeselect cmdDeselect;
 	private int xCoordinate;
 	private int yCoordinate;
-	private String[] logLine;
 	private Point upperLeftPoint;
+	private Color upperLeftPointColor;
 	private int width;
 	private int height;
-	private int borderColorNumber;
 	private Color borderColor;
-	private int fillColorNumber;
 	private Color fillColor;
 	private Rectangle rectangle;
-	private int upperLeftPointColorNumber;
-	private Color upperLeftPointColor;
 
-	public RectangleLogReader(DrawingModel model, CommandsStack commandsStack) {
+	public RectangleLogReader(DrawingModel model, CommandsHandler commandsHandler) {
 		this.model = model;
-		this.commandsStack = commandsStack;
+		this.commandsHandler = commandsHandler;
 	}
 
 	@Override
@@ -39,7 +36,7 @@ public class RectangleLogReader implements LogReader {
 		readRectangle();
 		cmdAdd = new CmdAdd(model, rectangle);
 		cmdAdd.execute();
-		commandsStack.addCommand(cmdAdd);
+		commandsHandler.addExecutedCommand(cmdAdd);
 	}
 
 	@Override
@@ -52,40 +49,21 @@ public class RectangleLogReader implements LogReader {
 		model.getSelectedShapes().add(rectangle);
 		cmdModifyRectangle = new CmdModifyRectangle(oldState, rectangle);
 		cmdModifyRectangle.execute();
-		commandsStack.addCommand(cmdModifyRectangle);
+		commandsHandler.addExecutedCommand(cmdModifyRectangle);
 	}
 
 	private void readModifiedCenter() {
 		xCoordinate = Integer.parseInt(logLine[36]);
 		yCoordinate = Integer.parseInt(logLine[39]);
-		upperLeftPointColorNumber = Integer.parseInt(logLine[43]);
-
-//		if (upperLeftPointColorNumber == 0)
-//			upperLeftPointColor = new Color(0, 0, 0, 0);
-//		else
-			upperLeftPointColor = new Color(upperLeftPointColorNumber);
-
+		upperLeftPointColor = new Color(Integer.parseInt(logLine[43]));
 		upperLeftPoint = new Point(xCoordinate, yCoordinate, true, upperLeftPointColor);
 	}
 
 	private void readModifiedRectangle() {
 		height = Integer.parseInt(logLine[46]);
 		width = Integer.parseInt(logLine[49]);
-
-		borderColorNumber = Integer.parseInt(logLine[53]);
-
-//		if (borderColorNumber == 0)
-//			borderColor = new Color(0, 0, 0, 0);
-//		else
-			borderColor = new Color(borderColorNumber);
-
-		fillColorNumber = Integer.parseInt(logLine[57]);
-
-//		if (fillColorNumber == 0)
-//			fillColor = new Color(0, 0, 0, 0);
-//		else
-			fillColor = new Color(fillColorNumber);
-
+		borderColor = new Color(Integer.parseInt(logLine[53]));
+		fillColor = new Color(Integer.parseInt(logLine[57]));
 		rectangle = new Rectangle(upperLeftPoint, height, width, true, borderColor, fillColor);
 	}
 
@@ -96,7 +74,7 @@ public class RectangleLogReader implements LogReader {
 		readRectangle();
 		cmdSelect = new CmdSelect(model, rectangle);
 		cmdSelect.execute();
-		commandsStack.addCommand(cmdSelect);
+		commandsHandler.addExecutedCommand(cmdSelect);
 	}
 
 	@Override
@@ -106,40 +84,21 @@ public class RectangleLogReader implements LogReader {
 		readRectangle();
 		cmdDeselect = new CmdDeselect(model, rectangle);
 		cmdDeselect.execute();
-		commandsStack.addCommand(cmdDeselect);
+		commandsHandler.addExecutedCommand(cmdDeselect);
 	}
 
 	private void readCenter() {
 		xCoordinate = Integer.parseInt(logLine[7]);
 		yCoordinate = Integer.parseInt(logLine[10]);
-		upperLeftPointColorNumber = Integer.parseInt(logLine[14]);
-
-//		if (upperLeftPointColorNumber == 0)
-//			upperLeftPointColor = new Color(0, 0, 0, 0);
-//		else
-			upperLeftPointColor = new Color(upperLeftPointColorNumber);
-
+		upperLeftPointColor = new Color(Integer.parseInt(logLine[14]));
 		upperLeftPoint = new Point(xCoordinate, yCoordinate, false, upperLeftPointColor);
 	}
 
 	private void readRectangle() {
 		height = Integer.parseInt(logLine[17]);
 		width = Integer.parseInt(logLine[20]);
-
-		borderColorNumber = Integer.parseInt(logLine[24]);
-
-//		if (borderColorNumber == 0)
-//			borderColor = new Color(0, 0, 0, 0);
-//		else
-			borderColor = new Color(borderColorNumber);
-
-		fillColorNumber = Integer.parseInt(logLine[28]);
-//
-//		if (fillColorNumber == 0)
-//			fillColor = new Color(0, 0, 0, 0);
-//		else
-			fillColor = new Color(fillColorNumber);
-
+		borderColor = new Color(Integer.parseInt(logLine[24]));
+		fillColor = new Color(Integer.parseInt(logLine[28]));
 		rectangle = new Rectangle(upperLeftPoint, height, width, false, borderColor, fillColor);
 	}
 

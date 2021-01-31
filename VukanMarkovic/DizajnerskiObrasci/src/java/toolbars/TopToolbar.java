@@ -15,7 +15,7 @@ public class TopToolbar implements Toolbar {
 	private JToggleButton btnHexagon;
 	private JToggleButton btnSelect;
 	private JButton btnModify;
-	private JButton btnDelete;
+	private JButton btnRemove;
 	private DrawingController controller;
 
 	public TopToolbar() {
@@ -46,18 +46,20 @@ public class TopToolbar implements Toolbar {
 		btnHexagon = new JToggleButton("Hexagon");
 		btnSelect = new JToggleButton("Select");
 		btnModify = new JButton("Modify");
-		btnDelete = new JButton("Delete");
+		btnRemove = new JButton("Remove");
 	}
 
 	@Override
 	public void addButtonsListeners() {
 		btnModify.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent event) {
 				controller.modifyShape();
 			}
 		});
 
-		btnDelete.addActionListener(new ActionListener() {
+		btnRemove.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent event) {
 				controller.removeShapesIfUserConfirm();
 			}
@@ -68,7 +70,7 @@ public class TopToolbar implements Toolbar {
 	public void disableButtons() {
 		btnSelect.setEnabled(false);
 		btnModify.setEnabled(false);
-		btnDelete.setEnabled(false);
+		btnRemove.setEnabled(false);
 	}
 
 	@Override
@@ -81,7 +83,7 @@ public class TopToolbar implements Toolbar {
 		toolBar.add(btnHexagon);
 		toolBar.add(btnSelect);
 		toolBar.add(btnModify);
-		toolBar.add(btnDelete);
+		toolBar.add(btnRemove);
 	}
 
 	private void addButtonsToBtnGroup() {
@@ -93,7 +95,7 @@ public class TopToolbar implements Toolbar {
 		btnGroup.add(btnHexagon);
 		btnGroup.add(btnSelect);
 		btnGroup.add(btnModify);
-		btnGroup.add(btnDelete);
+		btnGroup.add(btnRemove);
 	}
 
 	public JToolBar getToolBar() {
@@ -132,8 +134,8 @@ public class TopToolbar implements Toolbar {
 		return btnModify;
 	}
 
-	public JButton getBtnDelete() {
-		return btnDelete;
+	public JButton getBtnRemove() {
+		return btnRemove;
 	}
 
 	public void setController(DrawingController controller) {

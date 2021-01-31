@@ -54,7 +54,7 @@ public class LineTests {
 	}
 
 	@Test
-	public void testMiddleOfLine() {
+	public void testGetMiddleOfLine() {
 		assertEquals(
 				new Point((xCoordinateOfStartPoint + xCoordinateOfEndPoint) / 2,
 						(yCoordinateOfStartPoint + yCoordinateOfEndPoint) / 2, false, borderColor),
@@ -72,7 +72,7 @@ public class LineTests {
 	}
 
 	@Test
-	public void testLength() {
+	public void testCalculateLength() {
 		assertEquals(line.getStartPoint().calculateDistance(xCoordinateOfEndPoint, yCoordinateOfEndPoint),
 				line.calculateLength(), 0);
 	}

@@ -23,7 +23,7 @@ public class DrawingObserverTests {
 	@Test
 	public void testSetBtnDeleteEnabled() {
 		observer.setBtnDeleteEnabled(true);
-		assertTrue(topToolbar.getBtnDelete().isEnabled());
+		assertTrue(topToolbar.getBtnRemove().isEnabled());
 	}
 
 	@Test
@@ -57,9 +57,9 @@ public class DrawingObserverTests {
 	}
 
 	@Test
-	public void testSetBtnSendToBackEnabled() {
-		observer.setBtnSendToBackEnabled(true);
-		assertTrue(rightToolbar.getBtnSendToBack().isEnabled());
+	public void testSetBtnBringToBackEnabled() {
+		observer.setBtnBringToBackEnabled(true);
+		assertTrue(rightToolbar.getBtnBringToBack().isEnabled());
 	}
 
 	@Test

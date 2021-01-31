@@ -1,36 +1,36 @@
 package commandsExecutors;
 
 import commands.*;
+import commandsHandler.CommandsHandler;
 import frame.DrawingFrame;
 import logger.LogWriter;
 import model.DrawingModel;
 import shapes.Shape;
-import stack.CommandsStack;
 
 public class SelectionCommandsExecutor {
 	private DrawingModel model;
 	private LogWriter logWriter;
-	private CommandsStack commandsStack;
+	private CommandsHandler commandsHandler;
 	private CmdSelect cmdSelect;
 	private CmdDeselect cmdDeselect;
 
-	public SelectionCommandsExecutor(DrawingModel model, DrawingFrame frame, CommandsStack commandsStack) {
+	public SelectionCommandsExecutor(DrawingModel model, DrawingFrame frame, CommandsHandler commandsHandler) {
 		this.model = model;
 		logWriter = new LogWriter(frame);
-		this.commandsStack = commandsStack;
+		this.commandsHandler = commandsHandler;
 	}
 
 	public void selectShape(Shape shape) {
 		cmdSelect = new CmdSelect(model, shape);
 		cmdSelect.execute();
-		commandsStack.addCommand(cmdSelect);
+		commandsHandler.addExecutedCommand(cmdSelect);
 		logWriter.logSelectCommand(shape);
 	}
 
 	public void deselectShape(Shape shape) {
 		cmdDeselect = new CmdDeselect(model, shape);
 		cmdDeselect.execute();
-		commandsStack.addCommand(cmdDeselect);
+		commandsHandler.addExecutedCommand(cmdDeselect);
 		logWriter.logDeselectCommand(shape);
 	}
 

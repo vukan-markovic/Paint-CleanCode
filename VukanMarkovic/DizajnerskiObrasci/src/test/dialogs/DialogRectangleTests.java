@@ -15,13 +15,13 @@ public class DialogRectangleTests {
 	}
 
 	@Test
-	public void testBtnOuterColorClicked() {
-		dialogRectangle.getBtnOuterColor().doClick();
-		assertEquals(dialogRectangle.getBorderColor(), dialogRectangle.getBtnOuterColor().getBackground());
+	public void testBtnBorderColorClicked() {
+		dialogRectangle.getBtnBorderColor().doClick();
+		assertEquals(dialogRectangle.getBorderColor(), dialogRectangle.getBtnBorderColor().getBackground());
 	}
 
 	@Test
-	public void testBtnInnerColorClicked() {
+	public void testBtnFillColorClicked() {
 		dialogRectangle.getBtnFillColor().doClick();
 		assertEquals(dialogRectangle.getFillColor(), dialogRectangle.getBtnFillColor().getBackground());
 	}
@@ -30,6 +30,28 @@ public class DialogRectangleTests {
 	public void testBtnOkClickedInvalidValues() {
 		dialogRectangle.getXcoordinate().setText("1");
 		dialogRectangle.getYcoordinate().setText("2");
+		dialogRectangle.getBtnOk().doClick();
+		assertFalse(dialogRectangle.isAccepted());
+		assertFalse(dialogRectangle.isVisible());
+	}
+
+	@Test
+	public void testBtnOkClickedWidthIsZero() {
+		dialogRectangle.getXcoordinate().setText("1");
+		dialogRectangle.getYcoordinate().setText("2");
+		dialogRectangle.getwidth().setText("0");
+		dialogRectangle.getheight().setText("4");
+		dialogRectangle.getBtnOk().doClick();
+		assertFalse(dialogRectangle.isAccepted());
+		assertFalse(dialogRectangle.isVisible());
+	}
+
+	@Test
+	public void testBtnOkClickedHeightIsZero() {
+		dialogRectangle.getXcoordinate().setText("1");
+		dialogRectangle.getYcoordinate().setText("2");
+		dialogRectangle.getwidth().setText("3");
+		dialogRectangle.getheight().setText("0");
 		dialogRectangle.getBtnOk().doClick();
 		assertFalse(dialogRectangle.isAccepted());
 		assertFalse(dialogRectangle.isVisible());

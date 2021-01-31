@@ -15,13 +15,13 @@ public class DialogCircleTests {
 	}
 
 	@Test
-	public void testBtnOuterColorClicked() {
-		dialogCircle.getBtnOuterColor().doClick();
-		assertEquals(dialogCircle.getBorderColor(), dialogCircle.getBtnOuterColor().getBackground());
+	public void testBtnBorderColorClicked() {
+		dialogCircle.getBtnBorderColor().doClick();
+		assertEquals(dialogCircle.getBorderColor(), dialogCircle.getBtnBorderColor().getBackground());
 	}
 
 	@Test
-	public void testBtnInnerColorClicked() {
+	public void testBtnFillColorClicked() {
 		dialogCircle.getBtnFillColor().doClick();
 		assertEquals(dialogCircle.getFillColor(), dialogCircle.getBtnFillColor().getBackground());
 	}
@@ -30,6 +30,16 @@ public class DialogCircleTests {
 	public void testBtnOkClickedInvalidValues() {
 		dialogCircle.getXcoordinate().setText("1");
 		dialogCircle.getYcoordinate().setText("2");
+		dialogCircle.getBtnOk().doClick();
+		assertFalse(dialogCircle.isAccepted());
+		assertFalse(dialogCircle.isVisible());
+	}
+
+	@Test
+	public void testBtnOkClickedRadiusZero() {
+		dialogCircle.getXcoordinate().setText("1");
+		dialogCircle.getYcoordinate().setText("2");
+		dialogCircle.getRadius().setText("0");
 		dialogCircle.getBtnOk().doClick();
 		assertFalse(dialogCircle.isAccepted());
 		assertFalse(dialogCircle.isVisible());

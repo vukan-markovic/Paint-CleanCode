@@ -1,20 +1,20 @@
 package commandsExecutors;
 
 import commands.*;
+import commandsHandler.CommandsHandler;
 import shapes.*;
 import controller.OptionsController;
 import java.awt.Color;
 import dialogs.DialogDonut;
 import logger.LogWriter;
 import model.DrawingModel;
-import stack.CommandsStack;
 
 public class DonutCommandsExecutor implements SurfaceShapeCommandsExecutor {
-	private DrawingModel model;
-	private LogWriter logWriter;
-	private CommandsStack commandsStack;
 	private DialogDonut dialogDonut;
 	private OptionsController optionsController;
+	private DrawingModel model;
+	private LogWriter logWriter;
+	private CommandsHandler commandsHandler;
 	private CmdAdd cmdAdd;
 	private CmdModifyDonut cmdModifyDonut;
 	private boolean isSelected;
@@ -23,11 +23,11 @@ public class DonutCommandsExecutor implements SurfaceShapeCommandsExecutor {
 	private Donut donut;
 
 	public DonutCommandsExecutor(DialogDonut dialogDonut, OptionsController optionsController) {
-		this.model = optionsController.getModel();
-		logWriter = new LogWriter(optionsController.getFrame());
-		this.commandsStack = optionsController.getCommandsStack();
 		this.dialogDonut = dialogDonut;
 		this.optionsController = optionsController;
+		model = optionsController.getModel();
+		logWriter = new LogWriter(optionsController.getFrame());
+		commandsHandler = optionsController.getCommandsHandler();
 	}
 
 	@Override
@@ -39,7 +39,7 @@ public class DonutCommandsExecutor implements SurfaceShapeCommandsExecutor {
 
 		cmdAdd = new CmdAdd(model, donut);
 		cmdAdd.execute();
-		commandsStack.addCommand(cmdAdd);
+		commandsHandler.addExecutedCommand(cmdAdd);
 		logWriter.logAddCommand(donut);
 	}
 
@@ -54,7 +54,7 @@ public class DonutCommandsExecutor implements SurfaceShapeCommandsExecutor {
 		logWriter.logModifyCommand(oldState, donut);
 		cmdModifyDonut = new CmdModifyDonut(oldState, donut);
 		cmdModifyDonut.execute();
-		commandsStack.addCommand(cmdModifyDonut);
+		commandsHandler.addExecutedCommand(cmdModifyDonut);
 	}
 
 	private void createDonut() {
@@ -70,11 +70,11 @@ public class DonutCommandsExecutor implements SurfaceShapeCommandsExecutor {
 		return cmdAdd;
 	}
 
-	public Donut getDonut() {
-		return donut;
-	}
-
 	public CmdModifyDonut getCmdModifyDonut() {
 		return cmdModifyDonut;
+	}
+
+	public Donut getDonut() {
+		return donut;
 	}
 }

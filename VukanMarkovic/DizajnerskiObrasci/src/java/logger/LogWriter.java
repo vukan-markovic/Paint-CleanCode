@@ -37,7 +37,7 @@ public class LogWriter {
 	}
 
 	public void logBringToBackCommand(Shape shape) {
-		commandsListModel.addElement("SendToBack - " + shape.getClassName() + " " + shape.toString());
+		commandsListModel.addElement("BringToBack - " + shape.getClassName() + " " + shape.toString());
 	}
 
 	public void logSelectCommand(Shape shape) {

@@ -8,42 +8,42 @@ import java.util.Queue;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import commandsExecutors.PositionCommandsExecutor;
+import commandsHandler.CommandsHandler;
 import frame.DrawingFrame;
 import model.DrawingModel;
-import stack.CommandsStack;
 import toolbars.RightToolbar;
 
 public class OptionsController {
 	private DrawingModel model;
 	private DrawingFrame frame;
-	private CommandsStack commandsStack;
+	private CommandsHandler commandsHandler;
 	private Queue<String> commandsLog;
 	private PositionCommandsExecutor positionCommandsExecutor;
 	private LogWriter logWriter;
 	private DrawingObserver observer;
 	private PropertyManager manager;
-	private Color fillColor;
 	private Color borderColor;
+	private Color fillColor;
 	private LogParser parser;
 
-	public OptionsController(DrawingModel model, DrawingFrame frame, CommandsStack commandsStack,
+	public OptionsController(DrawingModel model, DrawingFrame frame, CommandsHandler commandsHandler,
 			Queue<String> commandsLog) {
 		this.model = model;
 		this.frame = frame;
-		this.commandsStack = commandsStack;
+		this.commandsHandler = commandsHandler;
 		this.commandsLog = commandsLog;
-		positionCommandsExecutor = new PositionCommandsExecutor(model, frame, commandsStack);
+		positionCommandsExecutor = new PositionCommandsExecutor(model, frame, commandsHandler);
 		logWriter = new LogWriter(frame);
 		observer = new DrawingObserver();
 		manager = new PropertyManager(frame);
 		observer.addPropertyChangeListener(manager);
-		fillColor = Color.WHITE;
 		borderColor = Color.BLACK;
+		fillColor = Color.WHITE;
 		parser = new LogParser(this);
 	}
 
 	public void undoCommand() {
-		commandsStack.undoCommand();
+		commandsHandler.undoCommand();
 		logWriter.logUndoCommand();
 		frame.getView().repaint();
 		fireEventsForOptionsButtons();
@@ -51,7 +51,7 @@ public class OptionsController {
 	}
 
 	public void redoCommand() {
-		commandsStack.redoCommand();
+		commandsHandler.redoCommand();
 		logWriter.logRedoCommand();
 		frame.getView().repaint();
 		fireEventsForOptionsButtons();
@@ -78,16 +78,16 @@ public class OptionsController {
 		observer.setBtnModifyEnabled(isNumberOfSelectedShapesOne);
 		observer.setBtnToBackEnabled(isNumberOfSelectedShapesOne);
 		observer.setBtnToFrontEnabled(isNumberOfSelectedShapesOne);
-		observer.setBtnSendToBackEnabled(isNumberOfSelectedShapesOne);
+		observer.setBtnBringToBackEnabled(isNumberOfSelectedShapesOne);
 		observer.setBtnBringToFrontEnabled(isNumberOfSelectedShapesOne);
 	}
 
 	public void fireEventsForUndoAndRedoButtons() {
-		int numberOfExecutedCommands = commandsStack.getExecutedCommands().size();
+		int numberOfExecutedCommands = commandsHandler.getExecutedCommands().size();
 		boolean isNumberOfExecutedCommandsGreaterThanZero = numberOfExecutedCommands > 0;
 		observer.setBtnUndoEnabled(isNumberOfExecutedCommandsGreaterThanZero);
 
-		int numberOfUnexecutedCommands = commandsStack.getUnexecutedCommands().size();
+		int numberOfUnexecutedCommands = commandsHandler.getUnexecutedCommands().size();
 		boolean isNumberOfUnexecutedCommandsGreaterThanZero = numberOfUnexecutedCommands > 0;
 		observer.setBtnRedoEnabled(isNumberOfUnexecutedCommandsGreaterThanZero);
 	}
@@ -126,22 +126,22 @@ public class OptionsController {
 
 	public void moveShapeToBack() {
 		positionCommandsExecutor.toBack();
-		commandsStack.clearUnexecutedCommands();
+		commandsHandler.clearUnexecutedCommands();
 	}
 
 	public void moveShapeToFront() {
 		positionCommandsExecutor.toFront();
-		commandsStack.clearUnexecutedCommands();
+		commandsHandler.clearUnexecutedCommands();
 	}
 
 	public void bringShapeToBack() {
 		positionCommandsExecutor.bringToBack();
-		commandsStack.clearUnexecutedCommands();
+		commandsHandler.clearUnexecutedCommands();
 	}
 
 	public void bringShapeToFront() {
 		positionCommandsExecutor.bringToFront();
-		commandsStack.clearUnexecutedCommands();
+		commandsHandler.clearUnexecutedCommands();
 	}
 
 	public DrawingModel getModel() {
@@ -152,23 +152,23 @@ public class OptionsController {
 		return frame;
 	}
 
-	public CommandsStack getCommandsStack() {
-		return commandsStack;
+	public CommandsHandler getCommandsHandler() {
+		return commandsHandler;
 	}
 
 	public Queue<String> getCommandsLog() {
 		return commandsLog;
 	}
 
-	public Color getFillColor() {
-		return fillColor;
+	public PositionCommandsExecutor getPositionCommandsExecutor() {
+		return positionCommandsExecutor;
 	}
 
 	public Color getBorderColor() {
 		return borderColor;
 	}
 
-	public PositionCommandsExecutor getPositionCommandsExecutor() {
-		return positionCommandsExecutor;
+	public Color getFillColor() {
+		return fillColor;
 	}
 }

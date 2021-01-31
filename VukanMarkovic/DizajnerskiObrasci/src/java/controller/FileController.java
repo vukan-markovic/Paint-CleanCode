@@ -28,7 +28,7 @@ public class FileController {
 		this.commandsLog = commandsLog;
 	}
 
-	public void save() {
+	public void saveDrawingAndLog() {
 		if (model.getNumberOfShapes() == 0) {
 			JOptionPane.showMessageDialog(frame, "You can't save because you haven't draw anythig yet!", "Error",
 					JOptionPane.ERROR_MESSAGE);

@@ -1,16 +1,16 @@
 package commandsExecutors;
 
 import commands.*;
+import commandsHandler.CommandsHandler;
 import frame.DrawingFrame;
 import logger.LogWriter;
 import model.DrawingModel;
 import shapes.Shape;
-import stack.CommandsStack;
 
 public class PositionCommandsExecutor {
 	private DrawingModel model;
 	private DrawingFrame frame;
-	private CommandsStack commandsStack;
+	private CommandsHandler commandsHandler;
 	private LogWriter logWriter;
 	private CmdToBack cmdToBack;
 	private CmdToFront cmdToFront;
@@ -18,10 +18,10 @@ public class PositionCommandsExecutor {
 	private CmdBringToFront cmdBringToFront;
 	private Shape shape;
 
-	public PositionCommandsExecutor(DrawingModel model, DrawingFrame frame, CommandsStack commandsStack) {
+	public PositionCommandsExecutor(DrawingModel model, DrawingFrame frame, CommandsHandler commandsHandler) {
 		this.model = model;
 		this.frame = frame;
-		this.commandsStack = commandsStack;
+		this.commandsHandler = commandsHandler;
 		logWriter = new LogWriter(frame);
 	}
 
@@ -29,7 +29,7 @@ public class PositionCommandsExecutor {
 		shape = model.getFirstSelectedShape();
 		cmdToBack = new CmdToBack(model, shape);
 		cmdToBack.execute();
-		commandsStack.addCommand(cmdToBack);
+		commandsHandler.addExecutedCommand(cmdToBack);
 		logWriter.logToBackCommand(shape);
 		frame.getView().repaint();
 	}
@@ -38,7 +38,7 @@ public class PositionCommandsExecutor {
 		shape = model.getFirstSelectedShape();
 		cmdToFront = new CmdToFront(model, shape);
 		cmdToFront.execute();
-		commandsStack.addCommand(cmdToFront);
+		commandsHandler.addExecutedCommand(cmdToFront);
 		logWriter.logToFrontCommand(shape);
 		frame.getView().repaint();
 	}
@@ -47,7 +47,7 @@ public class PositionCommandsExecutor {
 		shape = model.getFirstSelectedShape();
 		cmdBringToBack = new CmdBringToBack(model, shape);
 		cmdBringToBack.execute();
-		commandsStack.addCommand(cmdBringToBack);
+		commandsHandler.addExecutedCommand(cmdBringToBack);
 		logWriter.logBringToBackCommand(shape);
 		frame.getView().repaint();
 	}
@@ -56,7 +56,7 @@ public class PositionCommandsExecutor {
 		shape = model.getFirstSelectedShape();
 		cmdBringToFront = new CmdBringToFront(model, shape);
 		cmdBringToFront.execute();
-		commandsStack.addCommand(cmdBringToFront);
+		commandsHandler.addExecutedCommand(cmdBringToFront);
 		logWriter.logBringToFrontCommand(shape);
 		frame.getView().repaint();
 	}
@@ -69,11 +69,11 @@ public class PositionCommandsExecutor {
 		return cmdToFront;
 	}
 
-	public CmdBringToFront getCmdBringToFront() {
-		return cmdBringToFront;
+	public CmdBringToBack getCmdBringToBack() {
+		return cmdBringToBack;
 	}
 
-	public CmdBringToBack getCmdSendToBack() {
-		return cmdBringToBack;
+	public CmdBringToFront getCmdBringToFront() {
+		return cmdBringToFront;
 	}
 }

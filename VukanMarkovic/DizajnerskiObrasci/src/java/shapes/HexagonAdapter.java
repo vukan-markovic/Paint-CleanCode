@@ -74,10 +74,12 @@ public class HexagonAdapter extends Shape {
 		return hexagon.getAreaColor();
 	}
 
+	@Override
 	public Color getBorderColor() {
 		return hexagon.getBorderColor();
 	}
 
+	@Override
 	public boolean isSelected() {
 		return hexagon.isSelected();
 	}

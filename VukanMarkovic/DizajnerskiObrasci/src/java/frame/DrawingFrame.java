@@ -53,7 +53,7 @@ public class DrawingFrame extends JFrame {
 
 	private void setFrame() {
 		setTitle("Vukan Markoviæ I7 18/2020");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setBounds(100, 100, 580, 600);
 		setContentPane(contentPanel);
 	}
@@ -78,7 +78,8 @@ public class DrawingFrame extends JFrame {
 					controller.drawHexagon(click);
 
 				view.repaint();
-				controller.getOptionsController().fireEventsForUndoAndRedoButtons();;
+				controller.getOptionsController().fireEventsForUndoAndRedoButtons();
+				;
 			}
 		});
 	}

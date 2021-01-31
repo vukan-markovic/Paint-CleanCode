@@ -2,21 +2,22 @@ package logger;
 
 import static org.junit.Assert.*;
 import org.junit.*;
+
+import commandsHandler.CommandsHandler;
 import shapes.*;
 import model.DrawingModel;
 import java.awt.Color;
-import stack.CommandsStack;
 
 public class CircleLogReaderTests {
 	private DrawingModel model;
-	private CommandsStack commandsStack;
+	private CommandsHandler commandsHandler;
 	private CircleLogReader logReader;
 
 	@Before
 	public void setUp() {
 		model = new DrawingModel();
-		commandsStack = new CommandsStack();
-		logReader = new CircleLogReader(model, commandsStack);
+		commandsHandler = new CommandsHandler();
+		logReader = new CircleLogReader(model, commandsHandler);
 	}
 
 	@Test
@@ -25,7 +26,7 @@ public class CircleLogReaderTests {
 				.split(" ");
 		logReader.addShapeFromLog(line);
 		assertTrue(model.doesContainShape(logReader.getCircle()));
-		assertTrue(commandsStack.getExecutedCommands().contains(logReader.getCmdAdd()));
+		assertTrue(commandsHandler.getExecutedCommands().contains(logReader.getCmdAdd()));
 	}
 
 	@Test
@@ -36,18 +37,17 @@ public class CircleLogReaderTests {
 		Circle circle = new Circle(new Point(521, 256), 21, false, new Color(250, 128, 114), new Color(255, 235, 205));
 
 		Point point = new Point(Integer.parseInt(line[29]), Integer.parseInt(line[32]), false,
-				(Integer.parseInt(line[36]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[36]))));
+				new Color(Integer.parseInt(line[36])));
 
-		Circle newState = new Circle(point, Integer.parseInt(line[39]), true,
-				(Integer.parseInt(line[43]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[43]))),
-				(Integer.parseInt(line[47]) == 0 ? new Color(0, 0, 0, 0) : new Color(Integer.parseInt(line[47]))));
+		Circle newState = new Circle(point, Integer.parseInt(line[39]), true, new Color(Integer.parseInt(line[43])),
+				new Color(Integer.parseInt(line[47])));
 
 		Circle originalState = circle.clone();
 		logReader.modifyShapeFromLog(line, circle);
 		assertFalse(model.getSelectedShapes().contains(originalState));
 		assertTrue(model.getSelectedShapes().contains(newState));
 		assertEquals(circle, newState);
-		assertTrue(commandsStack.getExecutedCommands().contains(logReader.getCmdModifyCircle()));
+		assertTrue(commandsHandler.getExecutedCommands().contains(logReader.getCmdModifyCircle()));
 	}
 
 	@Test
@@ -55,13 +55,13 @@ public class CircleLogReaderTests {
 		String[] lineLogAdd = "Add - Circle Center: (x: 521 , y: 256 , Border color: -360334 ), radius: 21 , Border color: -360334 , Fill color: -5171"
 				.split(" ");
 		logReader.addShapeFromLog(lineLogAdd);
-		
+
 		String[] line = "Select - Circle Center: (x: 521 , y: 256 , Border color: -360334 ), radius: 21 , Border color: -360334 , Fill color: -5171"
 				.split(" ");
-		
+
 		logReader.selectShapeFromLog(line);
 		assertTrue(model.doesContainSelectedShape(logReader.getCircle()));
-		assertTrue(commandsStack.getExecutedCommands().contains(logReader.getCmdSelect()));
+		assertTrue(commandsHandler.getExecutedCommands().contains(logReader.getCmdSelect()));
 	}
 
 	@Test
@@ -69,12 +69,12 @@ public class CircleLogReaderTests {
 		String[] lineLogAdd = "Add - Circle Center: (x: 521 , y: 256 , Border color: -360334 ), radius: 21 , Border color: -360334 , Fill color: -5171"
 				.split(" ");
 		logReader.addShapeFromLog(lineLogAdd);
-		
+
 		String[] line = "Deselect - Circle Center: (x: 521 , y: 256 , Border color: -360334 ), radius: 21 , Border color: -360334 , Fill color: -5171"
 				.split(" ");
-		
+
 		logReader.deselectShapeFromLog(line);
 		assertFalse(model.doesContainSelectedShape(logReader.getCircle()));
-		assertTrue(commandsStack.getExecutedCommands().contains(logReader.getCmdDeselect()));
+		assertTrue(commandsHandler.getExecutedCommands().contains(logReader.getCmdDeselect()));
 	}
 }

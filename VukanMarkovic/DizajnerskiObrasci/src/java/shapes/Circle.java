@@ -35,7 +35,7 @@ public class Circle extends SurfaceShape {
 	@Override
 	protected void fillShape(Graphics graphics) {
 		graphics.setColor(getFillColor());
-		
+
 		graphics.fillOval(center.getXcoordinate() - radius + 1, center.getYcoordinate() - radius + 1, 2 * radius - 2,
 				2 * radius - 2);
 	}
@@ -46,11 +46,21 @@ public class Circle extends SurfaceShape {
 		int xCoordinate = center.getXcoordinate();
 		int yCoordinate = center.getYcoordinate();
 		int radius = getRadius();
-		graphics.drawRect(xCoordinate - 3, yCoordinate - 3, 6, 6);
-		graphics.drawRect(xCoordinate + radius - 3, yCoordinate - 3, 6, 6);
-		graphics.drawRect(xCoordinate - radius - 3, yCoordinate - 3, 6, 6);
-		graphics.drawRect(xCoordinate - 3, yCoordinate + radius - 3, 6, 6);
-		graphics.drawRect(xCoordinate - 3, yCoordinate - radius - 3, 6, 6);
+
+		graphics.drawRect(xCoordinate - SELECT_RECTANGLE_GAP, yCoordinate - SELECT_RECTANGLE_GAP,
+				SELECT_RECTANGLE_SIDE_LENGTH, SELECT_RECTANGLE_SIDE_LENGTH);
+
+		graphics.drawRect(xCoordinate + radius - SELECT_RECTANGLE_GAP, yCoordinate - SELECT_RECTANGLE_GAP,
+				SELECT_RECTANGLE_SIDE_LENGTH, SELECT_RECTANGLE_SIDE_LENGTH);
+
+		graphics.drawRect(xCoordinate - radius - SELECT_RECTANGLE_GAP, yCoordinate - SELECT_RECTANGLE_GAP,
+				SELECT_RECTANGLE_SIDE_LENGTH, SELECT_RECTANGLE_SIDE_LENGTH);
+
+		graphics.drawRect(xCoordinate - SELECT_RECTANGLE_GAP, yCoordinate + radius - SELECT_RECTANGLE_GAP,
+				SELECT_RECTANGLE_SIDE_LENGTH, SELECT_RECTANGLE_SIDE_LENGTH);
+
+		graphics.drawRect(xCoordinate - SELECT_RECTANGLE_GAP, yCoordinate - radius - SELECT_RECTANGLE_GAP,
+				SELECT_RECTANGLE_SIDE_LENGTH, SELECT_RECTANGLE_SIDE_LENGTH);
 	}
 
 	@Override

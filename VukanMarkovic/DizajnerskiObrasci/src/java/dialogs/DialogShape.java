@@ -8,17 +8,17 @@ import javax.swing.border.EmptyBorder;
 public abstract class DialogShape extends JDialog implements Dialog {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPanel;
-	private GroupLayout glContentPanel;
 	private JLabel lblIcon;
 	private JTextField xCoordinate;
 	private JLabel lblXcoodinate;
 	private JTextField yCoordinate;
 	private JLabel lblYcoordinate;
-	private KeyAdapter inputListener;
-	private JButton btnOuterColor;
+	private Color borderColor;
+	private JButton btnBorderColor;
 	private JButton btnOk;
 	private JButton btnCancel;
-	private Color borderColor = Color.BLACK;
+	private KeyAdapter inputListener;
+	private GroupLayout glContentPanel;
 	private boolean accepted;
 
 	public DialogShape() {
@@ -28,9 +28,10 @@ public abstract class DialogShape extends JDialog implements Dialog {
 		lblXcoodinate = new JLabel("X coodinate:");
 		yCoordinate = new JTextField();
 		lblYcoordinate = new JLabel("Y coodinate:");
-		btnOuterColor = new JButton("Border color");
+		btnBorderColor = new JButton("Border color");
 		btnOk = new JButton("OK");
 		btnCancel = new JButton("Cancel");
+		borderColor = Color.BLACK;
 		initializeCharListener();
 		buildBasicLayout();
 		addBtnBorderColorListener();
@@ -46,10 +47,10 @@ public abstract class DialogShape extends JDialog implements Dialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		glContentPanel = new GroupLayout(getContentPanel());
 		lblIcon.setHorizontalAlignment(SwingConstants.CENTER);
-		
+
 		xCoordinate.setColumns(10);
 		xCoordinate.addKeyListener(inputListener);
-		
+
 		yCoordinate.setColumns(10);
 		yCoordinate.addKeyListener(inputListener);
 
@@ -89,16 +90,16 @@ public abstract class DialogShape extends JDialog implements Dialog {
 	}
 
 	private void addBtnBorderColorListener() {
-		btnOuterColor.addActionListener(new ActionListener() {
+		btnBorderColor.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				borderColor = JColorChooser.showDialog(getContentPane(), "Choose border color", borderColor);
-				btnOuterColor.setBackground(borderColor);
+				btnBorderColor.setBackground(borderColor);
 			}
 		});
 	}
 
-	public void addBtnOkListener() {
+	private void addBtnOkListener() {
 		btnOk.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
@@ -106,8 +107,8 @@ public abstract class DialogShape extends JDialog implements Dialog {
 					JOptionPane.showMessageDialog(new JFrame(), "You have not filled in all the fields, try again!",
 							"Error!", JOptionPane.ERROR_MESSAGE);
 				else if (!areValuesValid())
-					JOptionPane.showMessageDialog(new JFrame(), "Values are invalid, try again!",
-							"Error!", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(new JFrame(), "Values are invalid, try again!", "Error!",
+							JOptionPane.ERROR_MESSAGE);
 				else {
 					setAccepted(true);
 					setVisible(false);
@@ -127,10 +128,6 @@ public abstract class DialogShape extends JDialog implements Dialog {
 
 	public JPanel getContentPanel() {
 		return contentPanel;
-	}
-
-	public GroupLayout getGlContentPanel() {
-		return glContentPanel;
 	}
 
 	public JLabel getLblIcon() {
@@ -165,8 +162,12 @@ public abstract class DialogShape extends JDialog implements Dialog {
 		return inputListener;
 	}
 
-	public JButton getBtnOuterColor() {
-		return btnOuterColor;
+	public Color getBorderColor() {
+		return borderColor;
+	}
+
+	public JButton getBtnBorderColor() {
+		return btnBorderColor;
 	}
 
 	public JButton getBtnOk() {
@@ -177,8 +178,8 @@ public abstract class DialogShape extends JDialog implements Dialog {
 		return btnCancel;
 	}
 
-	public Color getBorderColor() {
-		return borderColor;
+	public GroupLayout getGlContentPanel() {
+		return glContentPanel;
 	}
 
 	public boolean isAccepted() {

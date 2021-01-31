@@ -32,7 +32,7 @@ public class CmdToFront implements Command {
 	private boolean isNotLastShape() {
 		return indexOfShape != indexOfLastShape;
 	}
-	
+
 	private void swapShapes() {
 		Collections.swap(shapes, indexOfNextShape, indexOfShape);
 	}

@@ -2,16 +2,16 @@ package commandsExecutors;
 
 import static org.junit.Assert.*;
 import org.junit.*;
+import commandsHandler.CommandsHandler;
 import java.awt.Color;
 import frame.DrawingFrame;
 import model.DrawingModel;
 import shapes.Point;
-import stack.CommandsStack;
 
 public class SelectionCommandsExecutorTests {
 	private DrawingModel model;
 	private DrawingFrame frame;
-	private CommandsStack commandsStack;
+	private CommandsHandler commandsHandler;
 	private SelectionCommandsExecutor commandExecutor;
 	private Point point;
 
@@ -19,8 +19,8 @@ public class SelectionCommandsExecutorTests {
 	public void setUp() {
 		model = new DrawingModel();
 		frame = new DrawingFrame();
-		commandsStack = new CommandsStack();
-		commandExecutor = new SelectionCommandsExecutor(model, frame, commandsStack);
+		commandsHandler = new CommandsHandler();
+		commandExecutor = new SelectionCommandsExecutor(model, frame, commandsHandler);
 		point = new Point(1, 2, false, Color.BLACK);
 	}
 
@@ -29,7 +29,7 @@ public class SelectionCommandsExecutorTests {
 		model.addShape(point);
 		commandExecutor.selectShape(point);
 		assertTrue(model.doesContainSelectedShape(point));
-		assertTrue(commandsStack.getExecutedCommands().contains(commandExecutor.getCmdSelect()));
+		assertTrue(commandsHandler.getExecutedCommands().contains(commandExecutor.getCmdSelect()));
 	}
 
 	@Test
@@ -37,6 +37,6 @@ public class SelectionCommandsExecutorTests {
 		commandExecutor.deselectShape(point);
 		assertFalse(point.isSelected());
 		assertFalse(model.doesContainSelectedShape(point));
-		assertTrue(commandsStack.getExecutedCommands().contains(commandExecutor.getCmdDeselect()));
+		assertTrue(commandsHandler.getExecutedCommands().contains(commandExecutor.getCmdDeselect()));
 	}
 }

@@ -1,20 +1,20 @@
 package commandsExecutors;
 
 import static org.junit.Assert.*;
-import java.awt.Color;
 import java.util.*;
 import org.junit.*;
 import shapes.*;
+import java.awt.Color;
+import commandsHandler.CommandsHandler;
 import controller.OptionsController;
 import dialogs.DialogCircle;
 import frame.DrawingFrame;
 import model.DrawingModel;
-import stack.CommandsStack;
 
 public class CircleCommandsExecutorTests {
 	private DrawingModel model;
 	private DrawingFrame frame;
-	private CommandsStack commandsStack;
+	private CommandsHandler commandsHandler;
 	private DialogCircle dialogCircle;
 	private Queue<String> commandsLog;
 	private OptionsController optionsController;
@@ -24,13 +24,13 @@ public class CircleCommandsExecutorTests {
 	public void setUp() {
 		model = new DrawingModel();
 		frame = new DrawingFrame();
-		commandsStack = new CommandsStack();
+		commandsHandler = new CommandsHandler();
 		dialogCircle = new DialogCircle();
 		dialogCircle.getXcoordinate().setText("1");
 		dialogCircle.getYcoordinate().setText("2");
 		dialogCircle.getRadius().setText("3");
 		commandsLog = new LinkedList<String>();
-		optionsController = new OptionsController(model, frame, commandsStack, commandsLog);
+		optionsController = new OptionsController(model, frame, commandsHandler, commandsLog);
 		commandsExecutor = new CircleCommandsExecutor(dialogCircle, optionsController);
 	}
 
@@ -38,7 +38,7 @@ public class CircleCommandsExecutorTests {
 	public void testAddShape() {
 		commandsExecutor.addShape();
 		assertTrue(model.doesContainShape(commandsExecutor.getCircle()));
-		assertTrue(commandsStack.getExecutedCommands().contains(commandsExecutor.getCmdAdd()));
+		assertTrue(commandsHandler.getExecutedCommands().contains(commandsExecutor.getCmdAdd()));
 	}
 
 	@Test
@@ -46,6 +46,6 @@ public class CircleCommandsExecutorTests {
 		Circle oldState = new Circle(new Point(1, 2, true, Color.BLACK), 3, true, Color.BLACK, Color.WHITE);
 		commandsExecutor.modifyShape(oldState);
 		assertEquals(oldState, commandsExecutor.getCircle());
-		assertTrue(commandsStack.getExecutedCommands().contains(commandsExecutor.getCmdModifyCircle()));
+		assertTrue(commandsHandler.getExecutedCommands().contains(commandsExecutor.getCmdModifyCircle()));
 	}
 }
