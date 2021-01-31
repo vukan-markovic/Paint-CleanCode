@@ -1,13 +1,12 @@
 package dialogs;
 
+import javax.swing.*;
+import shapes.*;
 import java.awt.Color;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
-import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import shapes.*;
 
 public class DialogDonut extends DialogSurfaceShape {
 	private static final long serialVersionUID = 1L;

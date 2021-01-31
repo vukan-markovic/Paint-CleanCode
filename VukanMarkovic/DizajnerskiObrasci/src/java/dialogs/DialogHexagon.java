@@ -1,8 +1,8 @@
 package dialogs;
 
-import java.awt.Color;
 import javax.swing.*;
 import shapes.*;
+import java.awt.Color;
 
 public class DialogHexagon extends DialogCircle {
 	private static final long serialVersionUID = 1L;
