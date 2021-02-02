@@ -67,22 +67,22 @@ public class DrawingController {
 
 	private void deselectShape(Shape shape) {
 		selectionCommandsExecutor.deselectShape(shape);
-		optionsController.fireEventsForOptionsButtons();
+		updateStateAfterDrawRemoveOrSelection();
 	}
 
 	private void selectShape(Shape shape) {
 		selectionCommandsExecutor.selectShape(shape);
-		optionsController.fireEventsForOptionsButtons();
+		updateStateAfterDrawRemoveOrSelection();
 	}
 
 	public void drawPoint(MouseEvent click) {
 		pointCommandsExecutor.addShape(click.getX(), click.getY());
-		updateStateAfterDrawOrRemove();
+		updateStateAfterDrawRemoveOrSelection();
 	}
 
 	public void drawLine(MouseEvent click) {
 		lineCommandsExecutor.addShape(click.getX(), click.getY());
-		updateStateAfterDrawOrRemove();
+		updateStateAfterDrawRemoveOrSelection();
 	}
 
 	public void drawRectangleIfAccepted(MouseEvent click) {
@@ -91,7 +91,7 @@ public class DrawingController {
 
 		if (dialogRectangle.isAccepted()) {
 			rectangleCommandsExecutor.addShape();
-			updateStateAfterDrawOrRemove();
+			updateStateAfterDrawRemoveOrSelection();
 		}
 	}
 
@@ -101,7 +101,7 @@ public class DrawingController {
 
 		if (dialogCircle.isAccepted()) {
 			circleCommandsExecutor.addShape();
-			updateStateAfterDrawOrRemove();
+			updateStateAfterDrawRemoveOrSelection();
 		}
 	}
 
@@ -111,7 +111,7 @@ public class DrawingController {
 
 		if (dialogDonut.isAccepted()) {
 			donutCommandsExecutor.addShape();
-			updateStateAfterDrawOrRemove();
+			updateStateAfterDrawRemoveOrSelection();
 		}
 	}
 
@@ -121,7 +121,7 @@ public class DrawingController {
 
 		if (dialogHexagon.isAccepted()) {
 			hexagonCommandsExecutor.addShape();
-			updateStateAfterDrawOrRemove();
+			updateStateAfterDrawRemoveOrSelection();
 		}
 	}
 
@@ -206,11 +206,11 @@ public class DrawingController {
 		if (JOptionPane.showConfirmDialog(new JFrame(), "Are you sure you want to delete selected shape/shapes?",
 				"Delete it?", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 			removeCommandExecutor.removeShapes();
-			updateStateAfterDrawOrRemove();
+			updateStateAfterDrawRemoveOrSelection();
 		}
 	}
 
-	private void updateStateAfterDrawOrRemove() {
+	private void updateStateAfterDrawRemoveOrSelection() {
 		optionsController.fireEventsForOptionsButtons();
 		commandsHandler.clearUnexecutedCommands();
 	}
