@@ -1,9 +1,7 @@
 package commandsHandler;
 
+import commands.*;
 import java.util.Stack;
-
-import commands.CmdRemove;
-import commands.Command;
 
 public class CommandsHandler {
 	private Stack<Command> executedCommands;

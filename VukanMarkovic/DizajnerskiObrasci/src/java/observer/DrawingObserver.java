@@ -5,7 +5,7 @@ import java.beans.*;
 public class DrawingObserver {
 	private PropertyChangeSupport changeSupport;
 	private boolean btnSelectEnabled;
-	private boolean btnDeleteEnabled;
+	private boolean btnRemoveEnabled;
 	private boolean btnModifyEnabled;
 	private boolean btnUndoEnabled;
 	private boolean btnRedoEnabled;
@@ -31,9 +31,9 @@ public class DrawingObserver {
 		this.btnSelectEnabled = btnSelectEnabled;
 	}
 
-	public void setBtnDeleteEnabled(boolean btnDeleteEnabled) {
-		changeSupport.firePropertyChange("btnDelete", this.btnDeleteEnabled, btnDeleteEnabled);
-		this.btnDeleteEnabled = btnDeleteEnabled;
+	public void setBtnRemoveEnabled(boolean btnRemoveEnabled) {
+		changeSupport.firePropertyChange("btnRemove", this.btnRemoveEnabled, btnRemoveEnabled);
+		this.btnRemoveEnabled = btnRemoveEnabled;
 	}
 
 	public void setBtnModifyEnabled(boolean btnModifyEnabled) {

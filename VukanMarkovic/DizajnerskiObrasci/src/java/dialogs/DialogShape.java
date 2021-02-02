@@ -139,9 +139,6 @@ public abstract class DialogShape extends JDialog implements Dialog {
 	}
 
 	public int getXcoordinateValue() {
-		if (xCoordinate.getText().length() > 3)
-			return 0;
-
 		return Integer.parseInt(xCoordinate.getText());
 	}
 
@@ -154,9 +151,6 @@ public abstract class DialogShape extends JDialog implements Dialog {
 	}
 
 	public int getYcoordinateValue() {
-		if (yCoordinate.getText().length() > 3)
-			return 0;
-
 		return Integer.parseInt(yCoordinate.getText());
 	}
 

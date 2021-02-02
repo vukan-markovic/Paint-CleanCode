@@ -22,7 +22,7 @@ public class PropertyManager implements PropertyChangeListener {
 		case "btnSelect":
 			topToolbar.getBtnSelect().setEnabled(newValue);
 			break;
-		case "btnDelete":
+		case "btnRemove":
 			topToolbar.getBtnRemove().setEnabled(newValue);
 			break;
 		case "btnModify":

@@ -1,8 +1,8 @@
 package commandsExecutors;
 
 import commands.*;
-import commandsHandler.CommandsHandler;
 import shapes.*;
+import commandsHandler.CommandsHandler;
 import java.awt.Color;
 import controller.OptionsController;
 import dialogs.DialogLine;

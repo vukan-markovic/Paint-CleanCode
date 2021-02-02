@@ -21,8 +21,8 @@ public class DrawingObserverTests {
 	}
 
 	@Test
-	public void testSetBtnDeleteEnabled() {
-		observer.setBtnDeleteEnabled(true);
+	public void testSetBtnRemoveEnabled() {
+		observer.setBtnRemoveEnabled(true);
 		assertTrue(topToolbar.getBtnRemove().isEnabled());
 	}
 

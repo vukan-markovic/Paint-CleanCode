@@ -80,7 +80,7 @@ public class OptionsController {
 		int numberOfSelectedShapes = model.getNumberOfSelectedShapes();
 		boolean isNumberOfSelectedShapesOne = numberOfSelectedShapes == 1;
 		observer.setBtnSelectEnabled(model.getNumberOfShapes() > 0);
-		observer.setBtnDeleteEnabled(numberOfSelectedShapes > 0);
+		observer.setBtnRemoveEnabled(numberOfSelectedShapes > 0);
 		observer.setBtnModifyEnabled(isNumberOfSelectedShapesOne);
 		observer.setBtnToBackEnabled(isNumberOfSelectedShapesOne);
 		observer.setBtnToFrontEnabled(isNumberOfSelectedShapesOne);

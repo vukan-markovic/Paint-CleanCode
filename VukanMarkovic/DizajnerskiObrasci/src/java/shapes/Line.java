@@ -39,7 +39,7 @@ public class Line extends Shape {
 		getMiddleOfLine().drawSelection(graphics);
 	}
 
-	public Point getMiddleOfLine() {
+	protected Point getMiddleOfLine() {
 		int xCoordinate = (startPoint.getXcoordinate() + endPoint.getXcoordinate()) / 2;
 		int yCoordinate = (startPoint.getYcoordinate() + endPoint.getYcoordinate()) / 2;
 		return new Point(xCoordinate, yCoordinate);
@@ -52,7 +52,7 @@ public class Line extends Shape {
 		return startPointDistance + endPointDistance - calculateLength() <= LINE_CLICK_TRESHOLD;
 	}
 
-	public double calculateLength() {
+	protected double calculateLength() {
 		return startPoint.calculateDistance(endPoint.getXcoordinate(), endPoint.getYcoordinate());
 	}
 

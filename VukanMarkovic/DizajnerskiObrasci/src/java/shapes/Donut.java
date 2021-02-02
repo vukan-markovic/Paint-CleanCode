@@ -34,7 +34,7 @@ public class Donut extends Circle {
 			drawSelection(graphics);
 	}
 
-	public void calculateArea() {
+	protected void calculateArea() {
 		int outerAreaXcoordinate = getCenter().getXcoordinate() - getRadius();
 		int outerAreaYcoordinate = getCenter().getYcoordinate() - getRadius();
 

@@ -43,7 +43,7 @@ public class Point extends Shape {
 		return calculateDistance(xCoordinate, yCoordinate) <= POINT_CLICK_TRESHOLD;
 	}
 
-	public double calculateDistance(int xCoodinate, int yCoodinate) {
+	protected double calculateDistance(int xCoodinate, int yCoodinate) {
 		double distanceXsquare = Math.pow(xCoordinate - xCoodinate, 2);
 		double distanceYsquare = Math.pow(yCoordinate - yCoodinate, 2);
 		return Math.sqrt(distanceXsquare + distanceYsquare);

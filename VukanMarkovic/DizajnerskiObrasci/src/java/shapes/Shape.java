@@ -5,8 +5,8 @@ import java.io.Serializable;
 
 public abstract class Shape implements Cloneable, Serializable {
 	private static final long serialVersionUID = 1L;
-	public final int SELECT_RECTANGLE_GAP = 3;
-	public final int SELECT_RECTANGLE_SIDE_LENGTH = 6;
+	protected final int SELECT_RECTANGLE_GAP = 3;
+	protected final int SELECT_RECTANGLE_SIDE_LENGTH = 6;
 	private boolean selected;
 	private Color borderColor;
 
@@ -19,7 +19,7 @@ public abstract class Shape implements Cloneable, Serializable {
 
 	protected abstract void drawSelection(Graphics graphics);
 
-	public Color getSelectionColor() {
+	protected Color getSelectionColor() {
 		return Color.BLUE;
 	}
 
