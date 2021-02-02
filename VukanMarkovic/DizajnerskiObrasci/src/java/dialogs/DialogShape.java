@@ -39,6 +39,29 @@ public abstract class DialogShape extends JDialog implements Dialog {
 		addBtnCancelListener();
 	}
 
+	private void initializeCharListener() {
+		inputListener = new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent event) {
+				preventInvalidChar(event);
+			}
+		};
+	}
+
+	private void preventInvalidChar(KeyEvent event) {
+		char charInput = event.getKeyChar();
+
+		if (isCharInvalid(charInput)) {
+			getToolkit().beep();
+			event.consume();
+		}
+	}
+
+	private boolean isCharInvalid(char charInput) {
+		return charInput < '0' || charInput > '9' || charInput == KeyEvent.VK_BACK_SPACE
+				|| charInput == KeyEvent.VK_DELETE;
+	}
+
 	private void buildBasicLayout() {
 		setModal(true);
 		setBounds(100, 100, 450, 300);
@@ -64,29 +87,6 @@ public abstract class DialogShape extends JDialog implements Dialog {
 
 		btnCancel.setActionCommand("Cancel");
 		btnPanel.add(btnCancel);
-	}
-
-	private void initializeCharListener() {
-		inputListener = new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent event) {
-				preventInvalidChar(event);
-			}
-		};
-	}
-
-	private void preventInvalidChar(KeyEvent event) {
-		char charInput = event.getKeyChar();
-
-		if (isCharInvalid(charInput)) {
-			getToolkit().beep();
-			event.consume();
-		}
-	}
-
-	private boolean isCharInvalid(char charInput) {
-		return charInput < '0' || charInput > '9' || charInput == KeyEvent.VK_BACK_SPACE
-				|| charInput == KeyEvent.VK_DELETE;
 	}
 
 	private void addBtnBorderColorListener() {

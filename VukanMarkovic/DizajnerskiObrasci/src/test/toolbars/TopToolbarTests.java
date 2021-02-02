@@ -12,14 +12,14 @@ public class TopToolbarTests {
 	public void setUp() {
 		controller = mock(DrawingController.class);
 		topToolbar = new TopToolbar();
-		topToolbar.setController(controller);
+		topToolbar.setDrawingController(controller);
 	}
 
 	@Test
 	public void testBtnModifyClicked() {
 		topToolbar.getBtnModify().setEnabled(true);
 		topToolbar.getBtnModify().doClick();
-		verify(controller).modifyShape();
+		verify(controller).modifyShapeIfAccepted();
 	}
 
 	@Test

@@ -2,13 +2,11 @@ package controller;
 
 import javax.swing.*;
 import commandsExecutors.*;
-import commandsHandler.CommandsHandler;
 import dialogs.*;
-import observer.*;
 import shapes.*;
+import commandsHandler.CommandsHandler;
 import frame.DrawingFrame;
 import model.DrawingModel;
-
 import java.awt.event.MouseEvent;
 
 public class DrawingController {
@@ -16,8 +14,6 @@ public class DrawingController {
 	private DrawingModel model;
 	private DrawingFrame frame;
 	private CommandsHandler commandsHandler;
-	private DrawingObserver observer;
-	private PropertyManager manager;
 	private DialogPoint dialogPoint;
 	private DialogLine dialogLine;
 	private DialogRectangle dialogRectangle;
@@ -39,9 +35,6 @@ public class DrawingController {
 		model = optionsController.getModel();
 		frame = optionsController.getFrame();
 		commandsHandler = optionsController.getCommandsHandler();
-		observer = new DrawingObserver();
-		manager = new PropertyManager(frame);
-		observer.addPropertyChangeListener(manager);
 		dialogPoint = new DialogPoint();
 		dialogLine = new DialogLine();
 		dialogRectangle = new DialogRectangle();
@@ -58,7 +51,7 @@ public class DrawingController {
 		selectionCommandsExecutor = new SelectionCommandsExecutor(model, frame, commandsHandler);
 	}
 
-	public void selectOrDeselectShapes(MouseEvent click) {
+	public void selectOrDeselectShape(MouseEvent click) {
 		for (int indexOfShape = model.getNumberOfShapes() - 1; indexOfShape >= 0; indexOfShape--) {
 			Shape shape = model.getShapeByIndex(indexOfShape);
 
@@ -66,18 +59,9 @@ public class DrawingController {
 				deselectShape(shape);
 				break;
 			} else if (shape.contains(click.getX(), click.getY()) && !shape.isSelected()) {
-				selectionCommandsExecutor.selectShape(shape);
-				optionsController.fireEventsForOptionsButtons();
+				selectShape(shape);
 				break;
-			} else if (indexOfShape == 0)
-				deselectShapes();
-		}
-	}
-
-	private void deselectShapes() {
-		for (int shapeIndex = 0; model.getSelectedShapes().size() > 0;) {
-			Shape shape = model.getSelectedShapeByIndex(shapeIndex);
-			deselectShape(shape);
+			}
 		}
 	}
 
@@ -86,113 +70,149 @@ public class DrawingController {
 		optionsController.fireEventsForOptionsButtons();
 	}
 
+	private void selectShape(Shape shape) {
+		selectionCommandsExecutor.selectShape(shape);
+		optionsController.fireEventsForOptionsButtons();
+	}
+
 	public void drawPoint(MouseEvent click) {
 		pointCommandsExecutor.addShape(click.getX(), click.getY());
-		optionsController.fireEventsForOptionsButtons();
-		commandsHandler.clearUnexecutedCommands();
+		updateStateAfterDrawOrRemove();
 	}
 
 	public void drawLine(MouseEvent click) {
 		lineCommandsExecutor.addShape(click.getX(), click.getY());
-		optionsController.fireEventsForOptionsButtons();
-		commandsHandler.clearUnexecutedCommands();
+		updateStateAfterDrawOrRemove();
 	}
 
-	public void drawRectangle(MouseEvent click) {
+	public void drawRectangleIfAccepted(MouseEvent click) {
 		pointClick = new Point(click.getX(), click.getY(), false, optionsController.getBorderColor());
 		dialogRectangle.setCreateDialog(pointClick);
 
 		if (dialogRectangle.isAccepted()) {
 			rectangleCommandsExecutor.addShape();
-			optionsController.fireEventsForOptionsButtons();
+			updateStateAfterDrawOrRemove();
 		}
-
-		commandsHandler.clearUnexecutedCommands();
 	}
 
-	public void drawCircle(MouseEvent click) {
+	public void drawCircleIfAccepted(MouseEvent click) {
 		pointClick = new Point(click.getX(), click.getY(), false, optionsController.getBorderColor());
 		dialogCircle.setCreateDialog(pointClick);
 
 		if (dialogCircle.isAccepted()) {
 			circleCommandsExecutor.addShape();
-			optionsController.fireEventsForOptionsButtons();
+			updateStateAfterDrawOrRemove();
 		}
-
-		commandsHandler.clearUnexecutedCommands();
 	}
 
-	public void drawDonut(MouseEvent click) {
+	public void drawDonutIfAccepted(MouseEvent click) {
 		pointClick = new Point(click.getX(), click.getY(), false, optionsController.getBorderColor());
 		dialogDonut.setCreateDialog(pointClick);
 
 		if (dialogDonut.isAccepted()) {
 			donutCommandsExecutor.addShape();
-			optionsController.fireEventsForOptionsButtons();
+			updateStateAfterDrawOrRemove();
 		}
-
-		commandsHandler.clearUnexecutedCommands();
 	}
 
-	public void drawHexagon(MouseEvent click) {
+	public void drawHexagonIfAccepted(MouseEvent click) {
 		pointClick = new Point(click.getX(), click.getY(), false, optionsController.getBorderColor());
 		dialogHexagon.setCreateDialog(pointClick);
 
 		if (dialogHexagon.isAccepted()) {
 			hexagonCommandsExecutor.addShape();
-			optionsController.fireEventsForOptionsButtons();
+			updateStateAfterDrawOrRemove();
 		}
-
-		commandsHandler.clearUnexecutedCommands();
 	}
 
-	public void modifyShape() {
+	public void modifyShapeIfAccepted() {
 		Shape selectedShape = model.getFirstSelectedShape();
 
-		if (selectedShape instanceof Point) {
-			dialogPoint.setModifyDialog(selectedShape);
+		if (selectedShape instanceof Point)
+			modifyPointIfAccepted(selectedShape);
+		else if (selectedShape instanceof Line)
+			modifyLineIfAccepted(selectedShape);
+		else if (selectedShape instanceof Rectangle)
+			modifyRectangleIfAccepted(selectedShape);
+		else if (selectedShape instanceof Donut)
+			modifyDonutIfAccepted(selectedShape);
+		else if (selectedShape instanceof Circle)
+			modifyCircleIfAccepted(selectedShape);
+		else if (selectedShape instanceof HexagonAdapter)
+			modifyHexagonIfAccepted(selectedShape);
+	}
 
-			if (dialogPoint.isAccepted())
-				pointCommandsExecutor.modifyShape(selectedShape);
-		} else if (selectedShape instanceof Line) {
-			dialogLine.setModifyDialog(selectedShape);
+	private void modifyHexagonIfAccepted(Shape selectedShape) {
+		dialogHexagon.setModifyDialog(selectedShape);
 
-			if (dialogLine.isAccepted())
-				lineCommandsExecutor.modifyShape(selectedShape);
-		} else if (selectedShape instanceof Rectangle) {
-			dialogRectangle.setModifyDialog(selectedShape);
-
-			if (dialogRectangle.isAccepted())
-				rectangleCommandsExecutor.modifyShape(selectedShape);
-		} else if (selectedShape instanceof Donut) {
-			dialogDonut.setModifyDialog(selectedShape);
-
-			if (dialogDonut.isAccepted())
-				donutCommandsExecutor.modifyShape(selectedShape);
-		} else if (selectedShape instanceof Circle) {
-			dialogCircle.setModifyDialog(selectedShape);
-
-			if (dialogCircle.isAccepted())
-				circleCommandsExecutor.modifyShape(selectedShape);
-		} else if (selectedShape instanceof HexagonAdapter) {
-			dialogHexagon.setModifyDialog(selectedShape);
-
-			if (dialogHexagon.isAccepted())
-				hexagonCommandsExecutor.modifyShape(selectedShape);
+		if (dialogHexagon.isAccepted()) {
+			hexagonCommandsExecutor.modifyShape(selectedShape);
+			updateStateAfterModify();
 		}
+	}
 
+	private void modifyCircleIfAccepted(Shape selectedShape) {
+		dialogCircle.setModifyDialog(selectedShape);
+
+		if (dialogCircle.isAccepted()) {
+			circleCommandsExecutor.modifyShape(selectedShape);
+			updateStateAfterModify();
+		}
+	}
+
+	private void modifyDonutIfAccepted(Shape selectedShape) {
+		dialogDonut.setModifyDialog(selectedShape);
+
+		if (dialogDonut.isAccepted()) {
+			donutCommandsExecutor.modifyShape(selectedShape);
+			updateStateAfterModify();
+		}
+	}
+
+	private void modifyRectangleIfAccepted(Shape selectedShape) {
+		dialogRectangle.setModifyDialog(selectedShape);
+
+		if (dialogRectangle.isAccepted()) {
+			rectangleCommandsExecutor.modifyShape(selectedShape);
+			updateStateAfterModify();
+		}
+	}
+
+	private void modifyLineIfAccepted(Shape selectedShape) {
+		dialogLine.setModifyDialog(selectedShape);
+
+		if (dialogLine.isAccepted()) {
+			lineCommandsExecutor.modifyShape(selectedShape);
+			updateStateAfterModify();
+		}
+	}
+
+	private void modifyPointIfAccepted(Shape selectedShape) {
+		dialogPoint.setModifyDialog(selectedShape);
+
+		if (dialogPoint.isAccepted()) {
+			pointCommandsExecutor.modifyShape(selectedShape);
+			updateStateAfterModify();
+		}
+	}
+
+	private void updateStateAfterModify() {
 		commandsHandler.clearUnexecutedCommands();
-		frame.getView().repaint();
 		optionsController.fireEventsForUndoAndRedoButtons();
+		frame.getView().repaint();
 	}
 
 	public void removeShapesIfUserConfirm() {
 		if (JOptionPane.showConfirmDialog(new JFrame(), "Are you sure you want to delete selected shape/shapes?",
 				"Delete it?", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 			removeCommandExecutor.removeShapes();
-			commandsHandler.clearUnexecutedCommands();
-			optionsController.fireEventsForOptionsButtons();
+			updateStateAfterDrawOrRemove();
 		}
+	}
+
+	private void updateStateAfterDrawOrRemove() {
+		optionsController.fireEventsForOptionsButtons();
+		commandsHandler.clearUnexecutedCommands();
 	}
 
 	public OptionsController getOptionsController() {

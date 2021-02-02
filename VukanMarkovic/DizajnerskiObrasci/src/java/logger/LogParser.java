@@ -32,7 +32,7 @@ public class LogParser {
 		removeCommandExecutor = new RemoveCommandExecutor(model, optionsController.getFrame(), commandsHandler);
 	}
 
-	public void parse(String[] logLine) {
+	public void parseLogCommand(String[] logLine) {
 		this.logLine = logLine;
 
 		if (logLine[0].equals("Add"))
@@ -43,12 +43,12 @@ public class LogParser {
 			parseDeselectCommand();
 		else if (logLine[0].equals("Modify"))
 			parseModifyCommand();
-		else if (logLine[0].equals("Deleted"))
+		else if (logLine[0].equals("Removed"))
 			removeCommandExecutor.removeShapes();
 		else if (logLine[0].equals("Undo"))
-			commandsHandler.undoCommand();
+			optionsController.undoExecutedCommand();
 		else if (logLine[0].equals("Redo"))
-			commandsHandler.redoCommand();
+			optionsController.redoUnexecutedCommand();
 		else if (logLine[0].equals("ToBack"))
 			optionsController.moveShapeToBack();
 		else if (logLine[0].equals("ToFront"))
@@ -57,8 +57,6 @@ public class LogParser {
 			optionsController.bringShapeToFront();
 		else if (logLine[0].equals("BringToBack"))
 			optionsController.bringShapeToBack();
-
-		optionsController.getFrame().getView().repaint();
 	}
 
 	private void parseAddCommand() {

@@ -54,7 +54,7 @@ public class TopToolbar implements Toolbar {
 		btnModify.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				controller.modifyShape();
+				controller.modifyShapeIfAccepted();
 			}
 		});
 
@@ -138,7 +138,7 @@ public class TopToolbar implements Toolbar {
 		return btnRemove;
 	}
 
-	public void setController(DrawingController controller) {
+	public void setDrawingController(DrawingController controller) {
 		this.controller = controller;
 	}
 }

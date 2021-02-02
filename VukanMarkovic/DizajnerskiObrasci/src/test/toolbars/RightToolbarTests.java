@@ -21,27 +21,27 @@ public class RightToolbarTests {
 	@Test
 	public void testBtnBorderColorClicked() {
 		rightToolbar.getBtnBorderColor().doClick();
-		verify(optionsController).setBorderColor();
+		verify(optionsController).setBorderColorIfChoosen();
 	}
 
 	@Test
 	public void testBtnFillColorClicked() {
 		rightToolbar.getBtnFillColor().doClick();
-		verify(optionsController).setFillColor();
+		verify(optionsController).setFillColorIfChoosen();
 	}
 
 	@Test
 	public void testBtnUndoClicked() {
 		rightToolbar.getBtnUndo().setEnabled(true);
 		rightToolbar.getBtnUndo().doClick();
-		verify(optionsController).undoCommand();
+		verify(optionsController).undoExecutedCommand();
 	}
 
 	@Test
 	public void testBtnRedoClicked() {
 		rightToolbar.getBtnRedo().setEnabled(true);
 		rightToolbar.getBtnRedo().doClick();
-		verify(optionsController).redoCommand();
+		verify(optionsController).redoUnexecutedCommand();
 	}
 
 	@Test

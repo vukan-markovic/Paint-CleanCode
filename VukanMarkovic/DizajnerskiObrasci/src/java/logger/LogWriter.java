@@ -21,7 +21,7 @@ public class LogWriter {
 	}
 
 	public void logRemoveCommand() {
-		commandsListModel.addElement("Deleted");
+		commandsListModel.addElement("Removed");
 	}
 
 	public void logToFrontCommand(Shape shape) {

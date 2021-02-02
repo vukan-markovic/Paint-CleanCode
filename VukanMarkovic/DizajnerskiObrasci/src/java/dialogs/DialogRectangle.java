@@ -131,6 +131,7 @@ public class DialogRectangle extends DialogSurfaceShape {
 
 	@Override
 	public void setCreateDialog(Point upperLeftPoint) {
+		setAccepted(false);
 		String xCoordinateValue = String.valueOf(upperLeftPoint.getXcoordinate());
 		getXcoordinate().setText(xCoordinateValue);
 		getXcoordinate().setEditable(false);

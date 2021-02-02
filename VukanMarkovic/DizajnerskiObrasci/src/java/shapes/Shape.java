@@ -19,20 +19,20 @@ public abstract class Shape implements Cloneable, Serializable {
 
 	protected abstract void drawSelection(Graphics graphics);
 
-	public boolean isSelected() {
-		return selected;
-	}
-
-	public Color getBorderColor() {
-		return borderColor;
-	}
-
 	public Color getSelectionColor() {
 		return Color.BLUE;
 	}
 
 	public String getClassName() {
 		return this.getClass().getSimpleName();
+	}
+
+	public boolean isSelected() {
+		return selected;
+	}
+
+	public Color getBorderColor() {
+		return borderColor;
 	}
 
 	public void setSelected(boolean selected) {

@@ -42,7 +42,7 @@ public class OptionsController {
 		parser = new LogParser(this);
 	}
 
-	public void undoCommand() {
+	public void undoExecutedCommand() {
 		commandsHandler.undoCommand();
 		logWriter.logUndoCommand();
 		frame.getView().repaint();
@@ -50,7 +50,7 @@ public class OptionsController {
 		fireEventsForUndoAndRedoButtons();
 	}
 
-	public void redoCommand() {
+	public void redoUnexecutedCommand() {
 		commandsHandler.redoCommand();
 		logWriter.logRedoCommand();
 		frame.getView().repaint();
@@ -59,7 +59,7 @@ public class OptionsController {
 	}
 
 	public void executeCommandFromLog() {
-		parser.parse(commandsLog.peek().split(" "));
+		parser.parseLogCommand(commandsLog.peek().split(" "));
 
 		if (commandsLog.size() == 1)
 			disableButton();
@@ -68,6 +68,12 @@ public class OptionsController {
 		fireEventsForUndoAndRedoButtons();
 		frame.getView().repaint();
 		frame.getCommandsListModel().addElement(commandsLog.poll());
+	}
+
+	private void disableButton() {
+		RightToolbar toolbar = frame.getRightToolbar();
+		JButton btnNext = toolbar.getBtnNextCommand();
+		btnNext.setEnabled(false);
 	}
 
 	public void fireEventsForOptionsButtons() {
@@ -92,13 +98,7 @@ public class OptionsController {
 		observer.setBtnRedoEnabled(isNumberOfUnexecutedCommandsGreaterThanZero);
 	}
 
-	private void disableButton() {
-		RightToolbar toolbar = frame.getRightToolbar();
-		JButton btnNext = toolbar.getBtnNextCommand();
-		btnNext.setEnabled(false);
-	}
-
-	public void setBorderColor() {
+	public void setBorderColorIfChoosen() {
 		borderColor = JColorChooser.showDialog(frame, "Choose a color!", borderColor);
 
 		if (borderColor != null)
@@ -111,7 +111,7 @@ public class OptionsController {
 		btnBorderColor.setBackground(borderColor);
 	}
 
-	public void setFillColor() {
+	public void setFillColorIfChoosen() {
 		fillColor = JColorChooser.showDialog(frame, "Choose a color!", fillColor);
 
 		if (fillColor != null)

@@ -21,7 +21,7 @@ public class DrawingApp {
 
 		DrawingView view = frame.getView();
 		view.setModel(model);
-		frame.setController(drawingController);
+		frame.setDrawingController(drawingController);
 		frame.setFileController(fileController);
 		frame.setOptionsController(optionsController);
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

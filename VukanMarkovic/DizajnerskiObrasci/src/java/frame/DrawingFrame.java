@@ -63,23 +63,22 @@ public class DrawingFrame extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent click) {
 				if (topToolbar.getBtnSelect().isSelected())
-					controller.selectOrDeselectShapes(click);
+					controller.selectOrDeselectShape(click);
 				else if (topToolbar.getBtnPoint().isSelected())
 					controller.drawPoint(click);
 				else if (topToolbar.getBtnLine().isSelected())
 					controller.drawLine(click);
 				else if (topToolbar.getBtnRectangle().isSelected())
-					controller.drawRectangle(click);
+					controller.drawRectangleIfAccepted(click);
 				else if (topToolbar.getBtnCircle().isSelected())
-					controller.drawCircle(click);
+					controller.drawCircleIfAccepted(click);
 				else if (topToolbar.getBtnDonut().isSelected())
-					controller.drawDonut(click);
+					controller.drawDonutIfAccepted(click);
 				else if (topToolbar.getBtnHexagon().isSelected())
-					controller.drawHexagon(click);
+					controller.drawHexagonIfAccepted(click);
 
 				view.repaint();
 				controller.getOptionsController().fireEventsForUndoAndRedoButtons();
-				;
 			}
 		});
 	}
@@ -100,9 +99,9 @@ public class DrawingFrame extends JFrame {
 		return rightToolbar;
 	}
 
-	public void setController(DrawingController controller) {
+	public void setDrawingController(DrawingController controller) {
 		this.controller = controller;
-		topToolbar.setController(controller);
+		topToolbar.setDrawingController(controller);
 	}
 
 	public void setFileController(FileController fileController) {

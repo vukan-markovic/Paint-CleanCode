@@ -136,6 +136,7 @@ public class DialogDonut extends DialogSurfaceShape {
 
 	@Override
 	public void setCreateDialog(Point center) {
+		setAccepted(false);
 		String xCoordinateValue = String.valueOf(center.getXcoordinate());
 		getXcoordinate().setText(xCoordinateValue);
 		getXcoordinate().setEditable(false);

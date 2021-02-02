@@ -28,38 +28,38 @@ public class OptionsControllerTests {
 	}
 
 	@Test
-	public void testUndoCommand() {
+	public void testUndoExecutedCommand() {
 		commandsHandler.addExecutedCommand(new CmdAdd(model, new Point(1, 2)));
-		optionsController.undoCommand();
+		optionsController.undoExecutedCommand();
 		verify(commandsHandler).undoCommand();
 	}
 
 	@Test
-	public void testUndoRemoveCommands() {
+	public void testUndoExecutedRemoveCommands() {
 		commandsHandler.addExecutedCommand(new CmdAdd(model, new Point(1, 2)));
 		commandsHandler.addExecutedCommand(new CmdAdd(model, new Point(1, 3)));
 		commandsHandler.addExecutedCommand(new CmdRemove(model, new Point(1, 2)));
 		commandsHandler.addExecutedCommand(new CmdRemove(model, new Point(1, 2)));
-		optionsController.undoCommand();
+		optionsController.undoExecutedCommand();
 		verify(commandsHandler).undoCommand();
 	}
 
 	@Test
-	public void testRedoCommand() {
+	public void testRedoUnexecutedCommand() {
 		commandsHandler.addExecutedCommand(new CmdAdd(model, new Point(1, 2)));
-		optionsController.undoCommand();
-		optionsController.redoCommand();
+		optionsController.undoExecutedCommand();
+		optionsController.redoUnexecutedCommand();
 		verify(commandsHandler).redoCommand();
 	}
 
 	@Test
-	public void testRedoRemoveCommands() {
+	public void testRedoUnexecutedRemoveCommands() {
 		commandsHandler.addExecutedCommand(new CmdAdd(model, new Point(1, 2)));
 		commandsHandler.addExecutedCommand(new CmdAdd(model, new Point(1, 3)));
 		commandsHandler.addExecutedCommand(new CmdRemove(model, new Point(1, 2)));
 		commandsHandler.addExecutedCommand(new CmdRemove(model, new Point(1, 2)));
-		optionsController.undoCommand();
-		optionsController.redoCommand();
+		optionsController.undoExecutedCommand();
+		optionsController.redoUnexecutedCommand();
 		verify(commandsHandler).redoCommand();
 	}
 
@@ -84,16 +84,16 @@ public class OptionsControllerTests {
 	}
 
 	@Test
-	public void testSetBorderColor() {
-		optionsController.setBorderColor();
+	public void testSetBorderColorIfChoosen() {
+		optionsController.setBorderColorIfChoosen();
 
 		assertEquals(optionsController.getBorderColor(),
 				optionsController.getFrame().getRightToolbar().getBtnBorderColor().getBackground());
 	}
 
 	@Test
-	public void testSetFillColor() {
-		optionsController.setFillColor();
+	public void testSetFillColorIfChoosen() {
+		optionsController.setFillColorIfChoosen();
 
 		assertEquals(optionsController.getFillColor(),
 				optionsController.getFrame().getRightToolbar().getBtnFillColor().getBackground());

@@ -49,12 +49,12 @@ public class RightToolbar implements Toolbar {
 		btnRedo = new JButton("Redo");
 		btnToBack = new JButton("To back");
 		btnToFront = new JButton("To front");
-		btnBringToBack = new JButton("Send to back");
+		btnBringToBack = new JButton("Bring to back");
 		btnBringToFront = new JButton("Bring to front");
 		btnSave = new JButton("Save");
 		btnLoadLog = new JButton("Load log");
 		btnLoadDrawing = new JButton("Load painting");
-		btnNextCommand = new JButton("Next");
+		btnNextCommand = new JButton("Next command");
 	}
 
 	private void setButtonsColor() {
@@ -67,28 +67,28 @@ public class RightToolbar implements Toolbar {
 		btnBorderColor.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				optionsController.setBorderColor();
+				optionsController.setBorderColorIfChoosen();
 			}
 		});
 
 		btnFillColor.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				optionsController.setFillColor();
+				optionsController.setFillColorIfChoosen();
 			}
 		});
 
 		btnUndo.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				optionsController.undoCommand();
+				optionsController.undoExecutedCommand();
 			}
 		});
 
 		btnRedo.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				optionsController.redoCommand();
+				optionsController.redoUnexecutedCommand();
 			}
 		});
 
